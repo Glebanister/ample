@@ -5,8 +5,10 @@ project(Ample VERSION 1.0.0 DESCRIPTION "Ample - the game engine")
 find_package(SDL2 REQUIRED)
 
 set(DRAW_SOURCES Draw/src/*.cpp)
+set(ENGINE_SOURCES Engine/src/*.cpp)
 
-file(GLOB AMPLE_SOURCES . ${DRAW_SOURCES})
+file(GLOB AMPLE_SOURCES . ${DRAW_SOURCES} ${ENGINE_SOURCES})
 include_directories(Draw/include)
+include_directories(Engine/include)
 set(SOURCE_LIB ${AMPLE_SOURCES})
 add_library(Ample SHARED ${SOURCE_LIB})
