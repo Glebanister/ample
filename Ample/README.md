@@ -2,5 +2,4 @@ Ample: for the game
 ===================
 
 
-
-![logo](logo/pinterest_profile_image.png)
+ ![logo](logo/linkedin_banner_image_2.png)
