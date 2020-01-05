@@ -154,7 +154,7 @@ int main()
     ConsoleActivity *console = new ConsoleActivity;
     User *user = new User;
     UserInfoGetter *getter = new UserInfoGetter(user);
-    console->addCondition(getter);
+    console->addCondition(nullptr);
     console->run();
 
     return 0;

@@ -1,3 +1,6 @@
+#include <cassert>
+#include <exception>
+
 #include "Activity.h"
 #include "Storage.h"
 #include "Condition.h"
@@ -25,6 +28,10 @@ Storage Activity::run()
 
 void Activity::addCondition(Condition *cond)
 {
+    if (!cond)
+    {
+        throw std::runtime_error("Invalid argument in addCondition");
+    }
     conditions.push_back(cond);
 }
 
