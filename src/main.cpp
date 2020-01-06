@@ -3,159 +3,133 @@
 #include <unordered_map>
 #include <memory>
 #include <cassert>
+#include <SDL2/SDL.h>
 
 #include "Storage.h"
 #include "Condition.h"
 #include "Activity.h"
 
-class ConsoleActivity : public ample::Activity
+namespace control
+{
+class EventHandler
 {
 public:
-    void processInput() override
-    {
-        std::cin >> this->input;
-        this->hasInput = true;
-    }
+    virtual void handleEvent(const SDL_Event &event) = 0;
+};
 
-    void generateOutput() override
+class KeyHandler final : public EventHandler
+{
+public:
+    KeyHandler() = delete;
+    KeyHandler(const key_t &trigger)
+        : trigger(trigger) {}
+
+    virtual void onKeyDown();
+    virtual void onKeyUp();
+
+    void handleEvent(const SDL_Event &event) override
     {
-        for (auto &string : this->outputs)
+        if (event.type == SDL_KEYDOWN)
         {
-            std::cout << string << std::endl;
+            this->onKeyDown();
         }
-        this->clearOutputs();
-    }
-
-    void addString(const std::string string)
-    {
-        this->outputs.push_back(string);
-    }
-
-    void clearOutputs()
-    {
-        this->outputs.clear();
-    }
-
-    bool hasNewInput()
-    {
-        return this->hasInput;
-    }
-
-    std::string getInput()
-    {
-        this->hasInput = false;
-        return this->input;
+        else if (event.type == SDL_KEYUP)
+        {
+            this->onKeyUp();
+        }
     }
 
 private:
-    bool hasInput = false;
-    std::string input = "";
-    std::vector<std::string> outputs;
+    key_t trigger;
 };
 
-class User
+class KeyboardManager final : public EventHandler
 {
 public:
-    int defaultAge = -1;
-    int defaultId = -1;
-    std::string defaultName = "Username";
+    void addKeyHandler(const key_t &key, KeyHandler *handler)
+    {
+        if (!handler)
+        {
+            throw std::runtime_error(__PRETTY_FUNCTION__);
+        }
+        handlers[key].push_back(handler);
+    }
 
-    User()
-        : age(defaultAge), id(defaultId), name(defaultName) {}
+    void clearKey(const key_t &key)
+    {
+        handlers[key].clear();
+    }
 
-    void setId(const int &_id)
+    void handleEvent(const SDL_Event &event) override
     {
-        id = _id;
-    }
-    void setAge(const int &_age)
-    {
-        age = _age;
-    }
-    void setName(const std::string &_name)
-    {
-        name = _name;
-    }
-    int getId() const
-    {
-        return id;
-    }
-    int getAge() const
-    {
-        return age;
-    }
-    std::string getName() const
-    {
-        return name;
+        for (auto handler : handlers[event.key.keysym.sym])
+        {
+            handler->handleEvent(event);
+        }
     }
 
 private:
-    int id, age;
-    std::string name;
+    std::unordered_map<key_t, std::vector<KeyHandler *>> handlers;
 };
 
-class UserInfoGetter : public ample::Condition
+class EventManager final
 {
 public:
-    UserInfoGetter(User *user)
-        : user(user) {}
-
-    int init(ample::Activity *activity) override
+    EventManager()
     {
-        ConsoleActivity *console = static_cast<ConsoleActivity *>(activity);
-        console->addString("Your name: ");
-        this->st = 0;
-        console->generateOutput();
-        return 0;
+        if (!SDL_WasInit(SDL_INIT_EVERYTHING))
+        {
+            throw std::logic_error(__PRETTY_FUNCTION__);
+        }
+        this->addKeyboard();
     }
 
-    int update(ample::Activity *activity) override
+    void update()
     {
-        ConsoleActivity *console = static_cast<ConsoleActivity *>(activity);
-        if (console->hasNewInput())
+        while (SDL_PollEvent(&this->ev))
         {
-            if (st == 0)
+            if (this->handlerByType[this->ev.type])
             {
-                user->setName(console->getInput());
-            }
-            else if (st == 1)
-            {
-                user->setId(stoi(console->getInput()));
-            }
-            else if (st == 2)
-            {
-                user->setAge(stoi(console->getInput()));
+                this->handlerByType[this->ev.type]->handleEvent(this->ev);
             }
         }
-        if (st == 0)
-        {
-            console->addString("Your Id: ");
-            this->st = 1;
-        }
-        else if (st == 1)
-        {
-            console->addString("Your Age: ");
-            this->st = 2;
-        }
-        else if (st == 2)
-        {
-            console->addString("Hello, " + user->getName());
-            console->stop();
-        }
-        return 0;
+    }
+
+    void addKeyHandler(const key_t &key, KeyHandler *handler)
+    {
+        keyboard->addKeyHandler(key, handler);
+    }
+    ~EventManager()
+    {
+        delete keyboard;
     }
 
 private:
-    User *user;
-    int st = -1;
+    SDL_Event ev;
+    KeyboardManager *keyboard;
+    std::unordered_map<int, EventHandler *> handlerByType;
+
+    // TODO commented events
+
+    void addKeyboard()
+    {
+        keyboard = new KeyboardManager;
+        handlerByType[SDL_KEYDOWN] = keyboard;
+        handlerByType[SDL_KEYUP] = keyboard;
+    }
 };
+
+} // control
+
+namespace keyboard
+{
+int w = SDLK_w;
+int a = SDLK_a;
+int s = SDLK_s;
+int d = SDLK_d;
+} // namespace keyboard
 
 int main()
 {
-    ConsoleActivity *console = new ConsoleActivity;
-    User *user = new User;
-    UserInfoGetter *getter = new UserInfoGetter(user);
-    console->addCondition(nullptr);
-    console->run();
-
     return 0;
 }
