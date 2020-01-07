@@ -40,9 +40,6 @@ protected:
     int flags;
 
     void initSDL();
-
     void quitSDL();
-
-    int &windowsCount();
 };
 } // namespace window

@@ -16,11 +16,8 @@ Window::Window(const int &width,
 
 void Window::open()
 {
-    if (this->windowsCount() == 0)
-    {
-        this->initSDL();
-    }
-    windowsCount()++;
+    this->initSDL();
+
     window = SDL_CreateWindow(name,
                               SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                               width, height,
@@ -30,12 +27,7 @@ void Window::open()
 
 void Window::close()
 {
-    windowsCount()--;
     SDL_DestroyWindow(this->window);
-    if (this->windowsCount() == 0)
-    {
-        this->quitSDL();
-    }
     SDL_Log("Close window %s\n", this->name);
 }
 
@@ -60,11 +52,5 @@ void Window::quitSDL()
 {
     SDL_Quit();
     SDL_Log("Quit SDL\n");
-}
-
-int &Window::windowsCount()
-{
-    static int windowsCounter(0);
-    return windowsCounter;
 }
 } // namespace window

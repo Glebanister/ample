@@ -26,6 +26,7 @@ class WindowActivity : public ample::Activity
 {
 public:
     control::EventManager *eventManager;
+
     WindowActivity() = delete;
     WindowActivity(Window *window);
 
