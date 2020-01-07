@@ -3,3 +3,6 @@
 
 # build
 build/
+
+# temp
+src/main.cpp

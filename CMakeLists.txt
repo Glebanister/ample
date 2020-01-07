@@ -11,6 +11,6 @@ include_directories(Ample/include)
 
 add_subdirectory(Ample)
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -std=c++17")
 
 target_link_libraries(${APP_NAME} Ample)

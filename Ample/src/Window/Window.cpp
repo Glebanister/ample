@@ -11,7 +11,7 @@ Window::Window(const int &width,
                const int &flags)
     : width(width), height(height), name(name), flags(flags)
 {
-    std::cerr << "Init window" << ' ' << name << std::endl;
+    SDL_Log("Init window %s\n", name);
 }
 
 void Window::open()
@@ -25,7 +25,7 @@ void Window::open()
                               SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                               width, height,
                               flags | SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
-    std::cerr << "Open window" << ' ' << this->name << std::endl;
+    SDL_Log("Open window %s\n", this->name);
 }
 
 void Window::close()
@@ -36,12 +36,12 @@ void Window::close()
     {
         this->quitSDL();
     }
-    std::cerr << "Close window" << ' ' << this->name << std::endl;
+    SDL_Log("Close window %s\n", this->name);
 }
 
 Window::~Window()
 {
-    std::cerr << "Delete window" << ' ' << this->name << std::endl;
+    SDL_Log("Delete window %s\n", this->name);
     return;
 }
 
@@ -49,15 +49,17 @@ void Window::initSDL()
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
     {
+        SDL_LogError(0, "Error initialization SDL %s\n", SDL_GetError());
         throw std::runtime_error(SDL_GetError());
     }
-    std::cerr << "Init SDL" << std::endl;
+
+    SDL_Log("Init SDL\n");
 }
 
 void Window::quitSDL()
 {
     SDL_Quit();
-    std::cerr << "Quit SDL" << std::endl;
+    SDL_Log("Quit SDL\n");
 }
 
 int &Window::windowsCount()

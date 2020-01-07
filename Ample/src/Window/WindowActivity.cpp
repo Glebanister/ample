@@ -11,7 +11,6 @@ QuitHandler::QuitHandler(ample::Activity *windowActivity)
 void QuitHandler::handleEvent(const SDL_Event &event)
 {
     activity->stop();
-    std::cerr << "Quit event" << std::endl;
 }
 
 WindowActivity::WindowActivity(Window *window)
