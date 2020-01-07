@@ -11,7 +11,9 @@ enum mode
     NORMAL = 0,
     FULLSCREEN = SDL_WINDOW_FULLSCREEN,
     BORDERLESS = SDL_WINDOW_BORDERLESS,
-    RESIZABLE = SDL_WINDOW_RESIZABLE
+    RESIZABLE = SDL_WINDOW_RESIZABLE,
+    MAXIMIZED = SDL_WINDOW_MAXIMIZED,
+    MINIMIZED = SDL_WINDOW_MINIMIZED,
 };
 
 class Window
@@ -24,6 +26,7 @@ public:
            const int &flags);
 
     void open();
+    void close();
 
     Window(const Window &other) = delete;
     Window &operator=(const Window &other) = delete;

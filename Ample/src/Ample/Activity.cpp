@@ -15,6 +15,11 @@ void Activity::init()
     return;
 }
 
+void Activity::terminate()
+{
+    return;
+}
+
 Storage Activity::run()
 {
     this->init();
@@ -29,6 +34,7 @@ Storage Activity::run()
         this->updateConditions();
         this->generateOutput();
     }
+    this->terminate();
     return this->storage;
 }
 

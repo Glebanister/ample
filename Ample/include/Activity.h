@@ -15,6 +15,8 @@ class Activity
 public:
     Activity();
     virtual void init();
+    virtual void terminate();
+
     virtual Storage run();
     void stop();
 

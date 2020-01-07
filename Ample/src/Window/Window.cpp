@@ -10,29 +10,34 @@ Window::Window(const int &width,
                const int &flags)
     : width(width), height(height), name(name), flags(flags)
 {
-    if (this->windowsCount() == 0)
-    {
-        this->initSDL();
-    }
-    windowsCount()++;
 }
 
 void Window::open()
 {
+    windowsCount()++;
+    if (this->windowsCount() == 0)
+    {
+        this->initSDL();
+    }
     window = SDL_CreateWindow(name,
                               SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                               width, height,
                               flags | SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 }
 
-Window::~Window()
+void Window::close()
 {
     windowsCount()--;
-    if (windowsCount() == 0)
+    SDL_DestroyWindow(this->window);
+    if (this->windowsCount() == 0)
     {
         this->quitSDL();
     }
-    SDL_DestroyWindow(this->window);
+}
+
+Window::~Window()
+{
+    this->close();
 }
 
 void Window::initSDL()
