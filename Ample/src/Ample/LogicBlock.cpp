@@ -1,11 +1,11 @@
 #include "Activity.h"
-#include "Condition.h"
+#include "LogicBlock.h"
 
 namespace ample
 {
 class Activity;
 
-int Condition::init(Activity *activity)
+int LogicBlock::init(Activity *activity)
 {
     return 0;
 }

@@ -3,12 +3,12 @@
 #include <vector>
 
 #include "Storage.h"
-#include "Condition.h"
+#include "LogicBlock.h"
 
 namespace ample
 {
 
-class Condition;
+class LogicBlock;
 
 class Activity
 {
@@ -17,10 +17,10 @@ public:
     virtual void init();
     virtual void terminate();
 
-    virtual Storage run();
+    virtual Storage mainLoop();
     void stop();
 
-    void addCondition(Condition *cond);
+    void addLogicBlock(LogicBlock *cond);
     void clearConditions();
 
     virtual void processInput() = 0;
@@ -29,7 +29,7 @@ public:
 
 protected:
     bool onRun;
-    std::vector<Condition *> conditions;
+    std::vector<LogicBlock *> conditions;
     Storage storage;
 };
 

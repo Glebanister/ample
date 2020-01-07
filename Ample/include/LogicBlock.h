@@ -6,7 +6,7 @@ namespace ample
 {
 class Activity;
 
-class Condition
+class LogicBlock
 {
 public:
     virtual int init(Activity *);

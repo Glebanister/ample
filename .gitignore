@@ -6,3 +6,6 @@ build/
 
 # temp
 src/main.cpp
+
+# planner
+Ample/TODOLIST.md

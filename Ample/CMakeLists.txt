@@ -7,7 +7,7 @@ find_package(SDL2 REQUIRED)
 set(AMPLE_SOURCES
 
     src/Ample/Storage.cpp
-    src/Ample/Condition.cpp
+    src/Ample/LogicBlock.cpp
     src/Ample/Activity.cpp
 
     src/Control/EventManager.cpp

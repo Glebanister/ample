@@ -2,6 +2,7 @@
 #include <string>
 
 #include "Storage.h"
+
 namespace ample
 {
 std::string &Storage::getStr(const std::string &key)

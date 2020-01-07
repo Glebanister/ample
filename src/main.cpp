@@ -31,7 +31,7 @@ int main()
     auto a = A();
     auto act = window::WindowActivity(&window);
     act.eventManager->addKeyHandler(control::KEY_a, &a);
-    act.run();
+    act.mainLoop();
 
     return 0;
 }

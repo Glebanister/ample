@@ -3,7 +3,7 @@
 
 #include "Activity.h"
 #include "Storage.h"
-#include "Condition.h"
+#include "LogicBlock.h"
 
 namespace ample
 {
@@ -20,7 +20,7 @@ void Activity::terminate()
     return;
 }
 
-Storage Activity::run()
+Storage Activity::mainLoop()
 {
     this->init();
     for (auto cond : this->conditions)
@@ -38,7 +38,7 @@ Storage Activity::run()
     return this->storage;
 }
 
-void Activity::addCondition(Condition *cond)
+void Activity::addLogicBlock(LogicBlock *cond)
 {
     if (!cond)
     {
