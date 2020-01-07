@@ -6,17 +6,19 @@ find_package(SDL2 REQUIRED)
 
 set(AMPLE_SOURCES
 
-    Ample/src/Storage.cpp
-    Ample/src/Condition.cpp
-    Ample/src/Activity.cpp
+    src/Ample/Storage.cpp
+    src/Ample/Condition.cpp
+    src/Ample/Activity.cpp
 
-    Control/src/EventManager.cpp
-    Control/src/EventHandler.cpp
+    src/Control/EventManager.cpp
+    src/Control/EventHandler.cpp
+
+    src/Window/Window.cpp
+    src/Window/WindowActivity.cpp
     )
 
 include_directories(${SDL2_INCLUDE_DIRS})
-include_directories(Ample/include/)
-include_directories(Control/include/)
+include_directories(include)
 
 set(SOURCE_LIB ${AMPLE_SOURCES})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -fPIC")

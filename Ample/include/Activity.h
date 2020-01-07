@@ -14,6 +14,7 @@ class Activity
 {
 public:
     Activity();
+    virtual void init();
     virtual Storage run();
     void stop();
 

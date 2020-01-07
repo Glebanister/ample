@@ -7,8 +7,7 @@ set(APP_NAME test_ample)
 set(SOURCE_EXE src/main.cpp)
 add_executable(${APP_NAME} ${SOURCE_EXE})
 
-include_directories(Ample/Ample/include)
-include_directories(Ample/Control/include)
+include_directories(Ample/include)
 
 add_subdirectory(Ample)
 

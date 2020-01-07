@@ -10,8 +10,14 @@ namespace ample
 Activity::Activity()
     : onRun(false){};
 
+void Activity::init()
+{
+    return;
+}
+
 Storage Activity::run()
 {
+    this->init();
     for (auto cond : this->conditions)
     {
         cond->init(this);

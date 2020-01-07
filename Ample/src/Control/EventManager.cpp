@@ -8,20 +8,18 @@ namespace control
 {
 EventManager::EventManager()
 {
-    if (!SDL_WasInit(SDL_INIT_EVERYTHING))
-    {
-        throw std::logic_error(__PRETTY_FUNCTION__);
-    }
-    this->addKeyboard();
+    keyboard = new KeyboardManager;
+    this->handlerByType[SDL_KEYDOWN].push_back(keyboard);
+    this->handlerByType[SDL_KEYUP].push_back(keyboard);
 }
 
 void EventManager::update()
 {
     while (SDL_PollEvent(&this->ev))
     {
-        if (this->handlerByType[this->ev.type])
+        for (auto handler : this->handlerByType[this->ev.type])
         {
-            this->handlerByType[this->ev.type]->handleEvent(this->ev);
+            handler->handleEvent(this->ev);
         }
     }
 }
@@ -31,9 +29,14 @@ void EventManager::addKeyHandler(const key_t &key, KeyHandler *handler)
     keyboard->addKeyHandler(key, handler);
 }
 
-EventManager::~EventManager()
+void EventManager::addEventHandler(const int &eventType, EventHandler *handler)
 {
-    delete keyboard;
+    this->handlerByType[eventType].push_back(handler);
+}
+
+void EventManager::clearType(const int &eventType)
+{
+    this->handlerByType[eventType].clear();
 }
 
 void EventManager::KeyboardManager::addKeyHandler(const key_t &key, KeyHandler *handler)
@@ -58,10 +61,8 @@ void EventManager::KeyboardManager::handleEvent(const SDL_Event &event)
     }
 }
 
-void EventManager::addKeyboard()
+EventManager::~EventManager()
 {
-    keyboard = new KeyboardManager;
-    this->handlerByType[SDL_KEYDOWN] = keyboard;
-    this->handlerByType[SDL_KEYUP] = keyboard;
+    delete keyboard;
 }
 } // namespace control
