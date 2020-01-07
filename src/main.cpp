@@ -57,19 +57,17 @@ class MouseMotion : public control::EventHandler
     }
 };
 
-// TODO sdgsdf
-
 int main()
 {
     auto window = window::Window(512, 256,
                                      "Hello, World!",
                                      window::mode::MAXIMIZED |
                                      window::mode::RESIZABLE);
-    // auto window2 = window::Window(512, 256,
-    //                                  "Second one!",
-    //                                  window::mode::RESIZABLE);
+    auto window2 = window::Window(512, 256,
+                                     "Second one!",
+                                     window::mode::RESIZABLE);
     auto act = window::WindowActivity(&window);
-    // auto act2 = window::WindowActivity(&window2);
+    auto act2 = window::WindowActivity(&window2);
     auto a = A();
     auto b = B();
     auto c = C();
@@ -80,7 +78,7 @@ int main()
     act.eventManager->addKeyHandler(control::KEY_c, &c);
     act.eventManager->addEventHandler(control::MOUSEWHEEL, &mouse);
     act.run();
-    // act2.run();
+    act2.run();
 
     return 0;
 }

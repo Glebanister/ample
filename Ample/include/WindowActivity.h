@@ -31,6 +31,8 @@ public:
 
     virtual void init() override;
 
+    virtual void terminate() override;
+
     virtual void processInput() override;
 
     virtual void generateOutput() override;

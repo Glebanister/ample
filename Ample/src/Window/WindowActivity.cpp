@@ -1,4 +1,7 @@
 #include "WindowActivity.h"
+#include "Window.h"
+
+#include <iostream>
 
 namespace window
 {
@@ -8,6 +11,7 @@ QuitHandler::QuitHandler(ample::Activity *windowActivity)
 void QuitHandler::handleEvent(const SDL_Event &event)
 {
     activity->stop();
+    std::cerr << "Quit event" << std::endl;
 }
 
 WindowActivity::WindowActivity(Window *window)
@@ -22,6 +26,11 @@ WindowActivity::WindowActivity(Window *window)
 void WindowActivity::init()
 {
     this->window->open();
+}
+
+void WindowActivity::terminate()
+{
+    this->window->close();
 }
 
 void WindowActivity::processInput()
