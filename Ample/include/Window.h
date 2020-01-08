@@ -28,6 +28,8 @@ public:
     void open();
     void close();
 
+    void refresh();
+
     Window(const Window &other) = delete;
     Window &operator=(const Window &other) = delete;
 
@@ -35,11 +37,9 @@ public:
 
 protected:
     SDL_Window *window;
+    SDL_GLContext glContext;
     int width, height;
     const char *name;
     int flags;
-
-    void initSDL();
-    void quitSDL();
 };
 } // namespace window
