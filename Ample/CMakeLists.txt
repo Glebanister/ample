@@ -17,6 +17,9 @@ set(AMPLE_SOURCES
 
     src/Window/Window.cpp
     src/Window/WindowActivity.cpp
+
+    src/Os/OsManager.cpp
+    src/Os/Logger.cpp
     )
 
 include_directories(${SDL2_INCLUDE_DIRS})
