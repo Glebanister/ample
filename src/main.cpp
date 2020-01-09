@@ -9,6 +9,7 @@
 #include "EventManager.h"
 #include "Window.h"
 #include "WindowActivity.h"
+#include "Logger.h"
 
 class A : public control::KeyHandler
 {
@@ -25,6 +26,7 @@ class A : public control::KeyHandler
 
 int main()
 {
+    auto log = os::Logger();
     window::Window window = window::Window(512, 256,
                                            "First one!",
                                            window::mode::RESIZABLE);
