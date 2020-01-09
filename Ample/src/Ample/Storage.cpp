@@ -3,7 +3,7 @@
 
 #include "Storage.h"
 
-namespace ample
+namespace basic
 {
 std::string &Storage::getStr(const std::string &key)
 {

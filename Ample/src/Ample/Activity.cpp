@@ -3,10 +3,18 @@
 
 #include "Activity.h"
 #include "Storage.h"
-#include "LogicBlock.h"
+#include "OsManager.h"
+#include "EventHandler.h"
+#include "EventManager.h"
 
-namespace ample
+namespace activity
 {
+
+int LogicBlock::init(Activity *activity)
+{
+    return 0;
+}
+
 Activity::Activity()
     : onRun(false){};
 
@@ -20,7 +28,7 @@ void Activity::terminate()
     return;
 }
 
-Storage Activity::mainLoop()
+basic::Storage Activity::mainLoop()
 {
     this->init();
     for (auto cond : this->conditions)
@@ -38,7 +46,7 @@ Storage Activity::mainLoop()
     return this->storage;
 }
 
-void Activity::addLogicBlock(LogicBlock *cond)
+void Activity::addLogicBlock(activity::LogicBlock *cond)
 {
     if (!cond)
     {
@@ -49,7 +57,7 @@ void Activity::addLogicBlock(LogicBlock *cond)
 
 void Activity::clearConditions()
 {
-    conditions.clear();    
+    conditions.clear();
 }
 
 void Activity::stop()
@@ -64,4 +72,57 @@ void Activity::updateConditions()
         condition->update(this);
     }
 }
-} // namespace ample
+
+QuitHandler::QuitHandler(Activity *windowActivity)
+    : activity(windowActivity) {}
+
+void QuitHandler::handleEvent(const SDL_Event &event)
+{
+    activity->stop();
+}
+
+WindowActivity::WindowActivity(os::Window *window)
+    : Activity(),
+      eventManager(new control::EventManager),
+      window(window),
+      quitHandler(new QuitHandler(this))
+{
+    this->eventManager->addEventHandler(SDL_QUIT, this->quitHandler);
+}
+
+void WindowActivity::init()
+{
+    this->window->open();
+}
+
+void WindowActivity::terminate()
+{
+    this->window->close();
+}
+
+void WindowActivity::processInput()
+{
+    eventManager->update();
+}
+
+void WindowActivity::generateOutput()
+{
+    glClearColor(0, 0, 0, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glColor3f(1, 1, 1);
+    glBegin(GL_LINE_LOOP);
+    glVertex2f(1.0, 0.0);
+    glVertex2f(0.0, 0.0);
+    glVertex2f(0.0, 1.0);
+    glEnd();
+
+    this->window->refresh();
+}
+
+WindowActivity::~WindowActivity()
+{
+    delete quitHandler;
+    delete eventManager;
+}
+} // namespace activity

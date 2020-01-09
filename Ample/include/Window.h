@@ -1,12 +1,54 @@
 #pragma once
 
 #include <SDL2/SDL.h>
-#include <stdexcept>
+#include <GL/gl.h>
 
-namespace window
+#include "Logger.h"
+
+namespace os
 {
+class OsManager;
 
-enum mode
+class Window final
+{
+public:
+    Window(const char *name,
+           const int &x,
+           const int &y,
+           const int &width,
+           const int &height,
+           const int &posFlags,
+           const int &modeFlags);
+
+    Window() = delete;
+    Window(const Window &) = delete;
+    Window &operator=(const Window &) = delete;
+
+    void open();
+    void close();
+
+    void refresh();
+
+    ~Window();
+
+private:
+    SDL_Window *winPtr = nullptr;
+    OsManager *manager;
+    const char *name;
+    int x, y;
+    int width, height;
+    int modeFlags;
+    SDL_GLContext glContext;
+};
+
+enum winpos
+{
+    UNDEFINED = 0b0,
+    CENTERED_X = 0b1,
+    CENTERED_Y = 0b10,
+};
+
+enum winmode
 {
     NORMAL = 0,
     FULLSCREEN = SDL_WINDOW_FULLSCREEN,
@@ -16,30 +58,4 @@ enum mode
     MINIMIZED = SDL_WINDOW_MINIMIZED,
 };
 
-class Window
-{
-public:
-    Window() = delete;
-    Window(const int &width,
-           const int &height,
-           const char *name,
-           const int &flags);
-
-    void open();
-    void close();
-
-    void refresh();
-
-    Window(const Window &other) = delete;
-    Window &operator=(const Window &other) = delete;
-
-    ~Window();
-
-protected:
-    SDL_Window *window;
-    SDL_GLContext glContext;
-    int width, height;
-    const char *name;
-    int flags;
-};
-} // namespace window
+} // namespace os

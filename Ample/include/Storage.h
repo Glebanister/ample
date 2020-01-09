@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <string>
 
-namespace ample
+namespace basic
 {
 class Storage
 {
