@@ -5,7 +5,7 @@
 build/
 
 # temp
-src/main.cpp
+src/test.cpp
 
 # planner
 Ample/TODOLIST.md
