@@ -8,12 +8,13 @@ find_package(glm REQUIRED)
 
 set(AMPLE_SOURCES
 
-    src/Ample/Storage.cpp
-    src/Ample/Activity.cpp
+    src/Basic/Storage.cpp
+    src/Basic/Activity.cpp
 
     src/Control/EventManager.cpp
     src/Control/EventHandler.cpp
 
+    src/Os/Clock.cpp
     src/Os/OsManager.cpp
     src/Os/Window.cpp
     src/Os/Logger.cpp

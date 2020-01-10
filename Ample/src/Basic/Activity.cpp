@@ -50,7 +50,7 @@ void Activity::addLogicBlock(activity::LogicBlock *cond)
 {
     if (!cond)
     {
-        throw std::runtime_error(__FUNCTION__);
+        throw std::runtime_error(__PRETTY_FUNCTION__);
     }
     conditions.push_back(cond);
 }
@@ -85,6 +85,7 @@ WindowActivity::WindowActivity(os::Window *window)
     : Activity(),
       eventManager(new control::EventManager),
       window(window),
+      clock(new os::Clock),
       quitHandler(new QuitHandler(this))
 {
     this->eventManager->addEventHandler(SDL_QUIT, this->quitHandler);
@@ -103,6 +104,7 @@ void WindowActivity::terminate()
 void WindowActivity::processInput()
 {
     eventManager->update();
+    clock->update();
 }
 
 void WindowActivity::generateOutput()
@@ -124,5 +126,6 @@ WindowActivity::~WindowActivity()
 {
     delete quitHandler;
     delete eventManager;
+    delete clock;
 }
 } // namespace activity

@@ -6,6 +6,7 @@
 #include "EventManager.h"
 #include "EventHandler.h"
 #include "Window.h"
+#include "Clock.h"
 
 namespace activity
 {
@@ -77,6 +78,7 @@ public:
 
 protected:
     os::Window *window;
+    os::Clock *clock;
     QuitHandler *quitHandler;
 };
 } // namespace activity
