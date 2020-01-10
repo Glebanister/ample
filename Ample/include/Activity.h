@@ -6,6 +6,7 @@
 #include "EventManager.h"
 #include "EventHandler.h"
 #include "Window.h"
+#include "Clock.h"
 
 namespace activity
 {
@@ -24,18 +25,21 @@ class Activity
 public:
     Activity();
 
-    virtual basic::Storage mainLoop();
+    virtual basic::Storage onCreate();
     void stop();
 
     void addLogicBlock(activity::LogicBlock *cond);
     void clearConditions();
 
 protected:
-    virtual void init();
-    virtual void terminate();
-    virtual void processInput() = 0;
+    virtual void onInitialization();
+    virtual void onTermination();
+
+    virtual void onInput() = 0;
+    virtual void onOutput() = 0;
+
     virtual void updateConditions();
-    virtual void generateOutput() = 0;
+
     bool onRun;
     std::vector<activity::LogicBlock *> conditions;
     basic::Storage storage;
@@ -61,19 +65,20 @@ public:
     WindowActivity() = delete;
     WindowActivity(os::Window *window);
 
-
     WindowActivity(const WindowActivity &other) = delete;
     WindowActivity &operator=(const WindowActivity &other) = delete;
 
     virtual ~WindowActivity();
 
 protected:
-    virtual void init() override;
-    virtual void terminate() override;
-    virtual void processInput() override;
-    virtual void generateOutput() override;
+    virtual void onInitialization() override;
+    virtual void onTermination() override;
+
+    virtual void onInput() override;
+    virtual void onOutput() override;
 
     os::Window *window;
+    os::Clock *clock;
     QuitHandler *quitHandler;
 };
 } // namespace activity
