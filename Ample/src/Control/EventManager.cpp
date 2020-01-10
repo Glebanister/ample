@@ -3,12 +3,14 @@
 
 #include "EventHandler.h"
 #include "EventManager.h"
+#include "OsManager.h"
 
 namespace control
 {
 EventManager::EventManager()
 {
     keyboard = new KeyboardManager;
+    manager = new os::OsManager;
     this->handlerByType[SDL_KEYDOWN].push_back(keyboard);
     this->handlerByType[SDL_KEYUP].push_back(keyboard);
 }
@@ -43,7 +45,7 @@ void EventManager::KeyboardManager::addKeyHandler(const key_t &key, KeyHandler *
 {
     if (!handler)
     {
-        throw std::runtime_error(__PRETTY_FUNCTION__);
+        throw std::runtime_error(errEventManagerMessage[ERR_EMPTY_HANDLER]);
     }
     this->handlers[key].push_back(handler);
 }
@@ -64,5 +66,6 @@ void EventManager::KeyboardManager::handleEvent(const SDL_Event &event)
 EventManager::~EventManager()
 {
     delete keyboard;
+    delete manager;
 }
 } // namespace control

@@ -43,14 +43,14 @@ private:
 
 enum winpos
 {
-    UNDEFINED = 0b0,
+    UNDEFINED_POS = 0b0,
     CENTERED_X = 0b1,
     CENTERED_Y = 0b10,
 };
 
 enum winmode
 {
-    NORMAL = 0,
+    UNDEFINED_MODE = 0,
     FULLSCREEN = SDL_WINDOW_FULLSCREEN,
     BORDERLESS = SDL_WINDOW_BORDERLESS,
     RESIZABLE = SDL_WINDOW_RESIZABLE,

@@ -28,7 +28,7 @@ Window::Window(const char *name,
     {
         this->y = SDL_WINDOWPOS_CENTERED;
     }
-    if (modeFlags & winpos::UNDEFINED)
+    if (modeFlags & winpos::UNDEFINED_POS)
     {
         this->x = SDL_WINDOWPOS_UNDEFINED;
         this->y = SDL_WINDOWPOS_UNDEFINED;

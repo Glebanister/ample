@@ -7,6 +7,7 @@
 
 #include "EventHandler.h"
 #include "EventManager.h"
+#include "OsManager.h"
 
 namespace control
 {
@@ -44,5 +45,18 @@ private:
     std::unordered_map<int, std::vector<EventHandler *>> handlerByType;
 
     KeyboardManager *keyboard;
+
+    os::OsManager *manager;
+};
+
+enum errEventManager
+{
+    ERR_NO_EVENT_MANAGER,
+    ERR_EMPTY_HANDLER,
+};
+
+static const char *errEventManagerMessage[] = {
+    "Success\n",
+    "Empty handler given\n"
 };
 } // namespace control
