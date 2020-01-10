@@ -23,8 +23,6 @@ class Activity
 {
 public:
     Activity();
-    virtual void init();
-    virtual void terminate();
 
     virtual basic::Storage mainLoop();
     void stop();
@@ -32,11 +30,12 @@ public:
     void addLogicBlock(activity::LogicBlock *cond);
     void clearConditions();
 
+protected:
+    virtual void init();
+    virtual void terminate();
     virtual void processInput() = 0;
     virtual void updateConditions();
     virtual void generateOutput() = 0;
-
-protected:
     bool onRun;
     std::vector<activity::LogicBlock *> conditions;
     basic::Storage storage;
@@ -62,13 +61,6 @@ public:
     WindowActivity() = delete;
     WindowActivity(os::Window *window);
 
-    virtual void init() override;
-
-    virtual void terminate() override;
-
-    virtual void processInput() override;
-
-    virtual void generateOutput() override;
 
     WindowActivity(const WindowActivity &other) = delete;
     WindowActivity &operator=(const WindowActivity &other) = delete;
@@ -76,6 +68,11 @@ public:
     virtual ~WindowActivity();
 
 protected:
+    virtual void init() override;
+    virtual void terminate() override;
+    virtual void processInput() override;
+    virtual void generateOutput() override;
+
     os::Window *window;
     QuitHandler *quitHandler;
 };

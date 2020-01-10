@@ -50,6 +50,5 @@ int main()
     act.eventManager->addKeyHandler(control::KEY_e, &e);
     act.mainLoop();
 
-
     return 0;
 }
