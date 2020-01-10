@@ -18,19 +18,19 @@ int LogicBlock::init(Activity *activity)
 Activity::Activity()
     : onRun(false){};
 
-void Activity::init()
+void Activity::onInitialization()
 {
     return;
 }
 
-void Activity::terminate()
+void Activity::onTermination()
 {
     return;
 }
 
-basic::Storage Activity::mainLoop()
+basic::Storage Activity::onCreate()
 {
-    this->init();
+    this->onInitialization();
     for (auto cond : this->conditions)
     {
         cond->init(this);
@@ -38,11 +38,11 @@ basic::Storage Activity::mainLoop()
     this->onRun = true;
     while (this->onRun)
     {
-        this->processInput();
+        this->onInput();
         this->updateConditions();
-        this->generateOutput();
+        this->onOutput();
     }
-    this->terminate();
+    this->onTermination();
     return this->storage;
 }
 
@@ -91,23 +91,23 @@ WindowActivity::WindowActivity(os::Window *window)
     this->eventManager->addEventHandler(SDL_QUIT, this->quitHandler);
 }
 
-void WindowActivity::init()
+void WindowActivity::onInitialization()
 {
     this->window->open();
 }
 
-void WindowActivity::terminate()
+void WindowActivity::onTermination()
 {
     this->window->close();
 }
 
-void WindowActivity::processInput()
+void WindowActivity::onInput()
 {
     eventManager->update();
     clock->update();
 }
 
-void WindowActivity::generateOutput()
+void WindowActivity::onOutput()
 {
     glClearColor(0, 0, 0, 0);
     glClear(GL_COLOR_BUFFER_BIT);

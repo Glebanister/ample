@@ -24,18 +24,18 @@ class Activity
 {
 public:
     Activity();
-    virtual void init();
-    virtual void terminate();
+    virtual void onInitialization();
+    virtual void onTermination();
 
-    virtual basic::Storage mainLoop();
+    virtual basic::Storage onCreate();
     void stop();
 
     void addLogicBlock(activity::LogicBlock *cond);
     void clearConditions();
 
-    virtual void processInput() = 0;
+    virtual void onInput() = 0;
     virtual void updateConditions();
-    virtual void generateOutput() = 0;
+    virtual void onOutput() = 0;
 
 protected:
     bool onRun;
@@ -63,13 +63,13 @@ public:
     WindowActivity() = delete;
     WindowActivity(os::Window *window);
 
-    virtual void init() override;
+    virtual void onInitialization() override;
 
-    virtual void terminate() override;
+    virtual void onTermination() override;
 
-    virtual void processInput() override;
+    virtual void onInput() override;
 
-    virtual void generateOutput() override;
+    virtual void onOutput() override;
 
     WindowActivity(const WindowActivity &other) = delete;
     WindowActivity &operator=(const WindowActivity &other) = delete;

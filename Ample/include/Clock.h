@@ -39,7 +39,7 @@ public:
     Timer(int);
     bool check();
 
-    virtual void onEnd() = 0;
+    virtual void onTimeUp() = 0;
     void start();
     void stop();
     milliseconds timeLeft();

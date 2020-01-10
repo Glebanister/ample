@@ -122,7 +122,7 @@ bool Timer::check()
     }
     if (startTime + delta <= curTime)
     {
-        onEnd();
+        onTimeUp();
         stopped = true;
         return true;
     }
