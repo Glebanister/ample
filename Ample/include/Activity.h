@@ -25,7 +25,7 @@ class Activity
 public:
     Activity();
 
-    virtual basic::Storage onCreate();
+    virtual basic::Storage start();
     void stop();
 
     void addLogicBlock(activity::LogicBlock *cond);
