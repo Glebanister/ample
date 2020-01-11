@@ -19,7 +19,29 @@ void KeyHandler::onKeyUp()
     return;
 }
 
+int KeyHandler::getStatus()
+{
+    return this->pressed;
+}
+
 void KeyHandler::handleEvent(const SDL_Event &event)
+{
+    if (event.type == SDL_KEYDOWN)
+    {
+        this->onKeyDown();
+        this->pressed = event::KEY_DOWN;
+    }
+    else if (event.type == SDL_KEYUP)
+    {
+        this->onKeyUp();
+        this->pressed = event::KEY_UP;
+    }
+}
+
+KeyHandlerSingleDown::KeyHandlerSingleDown()
+    : KeyHandler() {}
+
+void KeyHandlerSingleDown::handleEvent(const SDL_Event &event)
 {
     if (event.type == SDL_KEYDOWN)
     {
@@ -38,10 +60,4 @@ void KeyHandler::handleEvent(const SDL_Event &event)
         this->pressed = event::KEY_UP;
     }
 }
-
-int KeyHandler::getStatus()
-{
-    return this->pressed;
-}
-
 } // namespace control

@@ -149,13 +149,22 @@ class KeyHandler : public EventHandler
 {
 public:
     KeyHandler();
+
     virtual void onKeyDown();
     virtual void onKeyUp();
-
-    void handleEvent(const SDL_Event &event) override;
     int getStatus();
 
-private:
+    virtual void handleEvent(const SDL_Event &event) override;
+
+protected:
     int pressed;
+};
+
+class KeyHandlerSingleDown : public KeyHandler
+{
+public:
+    KeyHandlerSingleDown();
+    void handleEvent(const SDL_Event &event) override;
+
 };
 } // namespace control

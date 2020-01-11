@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <stdexcept>
 #include <cassert>
+#include <iostream>
 
 #include "OsManager.h"
 #include "Window.h"
@@ -20,15 +21,16 @@ Window::Window(const char *name,
       modeFlags(modeFlags)
 {
     this->manager = new OsManager();
-    if (modeFlags & winpos::CENTERED_X)
+    if (posFlags & winpos::CENTERED_X)
     {
+        std::cout << "X centered" << std::endl;
         this->x = SDL_WINDOWPOS_CENTERED;
     }
-    if (modeFlags & winpos::CENTERED_Y)
+    if (posFlags & winpos::CENTERED_Y)
     {
         this->y = SDL_WINDOWPOS_CENTERED;
     }
-    if (modeFlags & winpos::UNDEFINED_POS)
+    if (posFlags & winpos::UNDEFINED_POS)
     {
         this->x = SDL_WINDOWPOS_UNDEFINED;
         this->y = SDL_WINDOWPOS_UNDEFINED;
