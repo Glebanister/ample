@@ -23,7 +23,6 @@ Window::Window(const char *name,
     this->manager = new OsManager();
     if (posFlags & winpos::CENTERED_X)
     {
-        std::cout << "X centered" << std::endl;
         this->x = SDL_WINDOWPOS_CENTERED;
     }
     if (posFlags & winpos::CENTERED_Y)
