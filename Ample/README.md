@@ -1,4 +1,4 @@
- ![logo](logo/logo_transparent.png)
+ <!-- ![logo](  logo/logo_transparent.png) -->
 Ample
 ===================
 **What is this?**\
