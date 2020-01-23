@@ -1,0 +1,19 @@
+os:
+  - linux
+
+dist: trusty
+sudo: require
+
+language: cpp
+compiler: g++
+
+install:
+  - sudo apt install cmake
+  - sudo apt install libsdl2-dev
+  - sudo apt install libgl-dev
+  - sudo apt install libglm-dev
+
+script:
+  - mkdir build && cd build
+  - cmake .. && make
+  - ./Ample/test/test_ample
