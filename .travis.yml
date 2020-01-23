@@ -8,7 +8,11 @@ language: cpp
 compiler: g++
 
 install:
+  - sudo apt-get update
   - sudo apt-get install cmake
+  - sudo apt install libgl-dev
+  - sudo apt install libglm-dev
+  - sudo apt install libsdl2-dev
 
 script:
   - mkdir build && cd build
