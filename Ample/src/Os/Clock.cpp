@@ -12,6 +12,7 @@ time_point Clock::curTime;
 std::vector<Timer *> Clock::timers;
 milliseconds Clock::liveTime;
 milliseconds Clock::delta;
+double Clock::timeFlow;
 
 Clock::Clock()
 {
@@ -24,7 +25,13 @@ Clock::Clock()
         wasInit = true;
         delta = std::chrono::duration_cast<milliseconds>(curTime - creationTime);
         liveTime = delta;
+        timeFlow = 1.0;
     }
+}
+
+double Clock::deltaTimeMs()
+{
+    return delta.count() * timeFlow;
 }
 
 milliseconds Clock::globalTime()
@@ -40,6 +47,21 @@ int Clock::globalTimeMs()
 double Clock::globalTimeSec()
 {
     return globalTimeMs() / 1000.0;
+}
+
+void Clock::multiplyTimeFlow(const double coef)
+{
+    timeFlow *= coef;
+}
+
+void Clock::resetTimeFlow()
+{
+    timeFlow = 1.0;
+}
+
+double Clock::getTimeFlow()
+{
+    return timeFlow;
 }
 
 void Clock::update()

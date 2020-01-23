@@ -2,120 +2,170 @@
 #include <exception>
 
 #include "Activity.h"
-#include "Storage.h"
 #include "OsManager.h"
 #include "EventHandler.h"
 #include "EventManager.h"
+#include "Error.h"
 
 namespace activity
 {
 
-int LogicBlock::init(Activity *activity)
-{
-    return 0;
-}
+void LogicBlock::onInitialization() {}
+void LogicBlock::onTermination() {}
 
 Activity::Activity()
-    : onRun(false){};
+    : _onRun(false){};
 
-void Activity::onInitialization()
+bool Activity::onStart() { return true; }
+void Activity::onInitialization() {}
+void Activity::onInput() {}
+void Activity::onUpdate() {}
+void Activity::onOutput() {}
+bool Activity::onStop() { return true; }
+void Activity::onTermination() {}
+
+void Activity::init()
 {
+    for (auto block : _conditions)
+    {
+        block->onInitialization();
+    }
+    onInitialization();
+}
+
+void Activity::input()
+{
+    onInput();
     return;
 }
 
-void Activity::onTermination()
+void Activity::update()
 {
+    for (auto block : _conditions)
+    {
+        block->onUpdate();
+    }
+    onUpdate();
     return;
 }
 
-basic::Storage Activity::start()
+void Activity::output()
 {
-    this->onInitialization();
-    for (auto cond : this->conditions)
-    {
-        cond->init(this);
-    }
-    this->onRun = true;
-    while (this->onRun)
-    {
-        this->onInput();
-        this->updateConditions();
-        this->onOutput();
-    }
-    this->onTermination();
-    return this->storage;
+    onOutput();
 }
 
-void Activity::addLogicBlock(activity::LogicBlock *cond)
+void Activity::terminate()
 {
-    if (!cond)
-    {
-        throw std::runtime_error(__PRETTY_FUNCTION__);
-    }
-    conditions.push_back(cond);
-}
-
-void Activity::clearConditions()
-{
-    conditions.clear();
+    onTermination();
+    return;
 }
 
 void Activity::stop()
 {
-    this->onRun = false;
-}
-
-void Activity::updateConditions()
-{
-    for (auto condition : this->conditions)
+    if (onStop())
     {
-        condition->update(this);
+        _onRun = false;
     }
 }
 
+void Activity::start()
+{
+    if (!onStart())
+    {
+        return;
+    }
+    init();
+    _onRun = true;
+    while (_onRun)
+    {
+        input();
+        update();
+        output();
+    }
+    terminate();
+}
+
+void Activity::addLogicBlock(activity::LogicBlock *block)
+{
+    if (!block)
+    {
+        throw exception::Exception(
+            exception::exId::NULLPTR,
+            exception::exType::CRITICAL);
+    }
+    _conditions.push_back(block);
+}
+
+void Activity::clearLogicBlocks()
+{
+    _conditions.clear();
+}
+
 QuitHandler::QuitHandler(Activity *windowActivity)
-    : activity(windowActivity) {}
+    : _activity(windowActivity) {}
 
 void QuitHandler::handleEvent(const SDL_Event &event)
 {
-    activity->stop();
+    _activity->stop();
+}
+
+WindowEventHandler::WindowEventHandler(WindowActivity *activity, os::Window *window)
+    : _window(window), _activity(activity) {}
+
+void WindowEventHandler::handleEvent(const SDL_Event &event)
+{
+    if (event.window.event == SDL_WINDOWEVENT_RESIZED)
+    {
+        _window->resize(event.window.data1, event.window.data2);
+        _activity->onResize();
+    }
 }
 
 WindowActivity::WindowActivity(os::Window *window)
     : Activity(),
       eventManager(new control::EventManager),
-      window(window),
-      clock(new os::Clock),
-      quitHandler(new QuitHandler(this))
+      _window(window),
+      _clock(new os::Clock),
+      _quitHandler(new QuitHandler(this)),
+      _windowEventHandler(new WindowEventHandler(this, _window))
 {
-    this->eventManager->addEventHandler(SDL_QUIT, this->quitHandler);
+    eventManager->addEventHandler(SDL_QUIT, _quitHandler);
+    eventManager->addEventHandler(SDL_WINDOWEVENT, _windowEventHandler);
 }
 
-void WindowActivity::onInitialization()
+void WindowActivity::init()
 {
-    this->window->open();
+    _window->open();
+    for (auto block : _conditions)
+    {
+        block->onInitialization();
+    }
+    onInitialization();
 }
 
-void WindowActivity::onTermination()
-{
-    this->window->close();
-}
-
-void WindowActivity::onInput()
+void WindowActivity::input()
 {
     eventManager->update();
-    clock->update();
+    _clock->update();
+    onInput();
 }
 
-void WindowActivity::onOutput()
+void WindowActivity::terminate()
+{
+    _window->close();
+    onTermination();
+}
+
+void WindowActivity::onResize()
 {
     return;
 }
 
 WindowActivity::~WindowActivity()
 {
-    delete quitHandler;
     delete eventManager;
-    delete clock;
+    delete _windowEventHandler;
+    delete _quitHandler;
+    delete _clock;
 }
 } // namespace activity

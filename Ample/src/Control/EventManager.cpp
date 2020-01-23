@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <stdexcept>
+#include <iostream>
 
 #include "EventHandler.h"
 #include "EventManager.h"

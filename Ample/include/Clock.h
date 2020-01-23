@@ -20,8 +20,12 @@ public:
     static int globalTimeMs();
     static double globalTimeSec();
     static milliseconds deltaTime();
+    static double deltaTimeMs();
     static void update();
     static void addTimer(Timer *timer);
+    static void multiplyTimeFlow(const double coef);
+    static void resetTimeFlow();
+    static double getTimeFlow();
 
 private:
     static time_point creationTime;
@@ -29,6 +33,7 @@ private:
     static std::vector<Timer *> timers;
     static milliseconds delta;
     static milliseconds liveTime;
+    static double timeFlow;
 };
 
 class Timer

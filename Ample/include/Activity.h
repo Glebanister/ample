@@ -16,8 +16,9 @@ class Activity;
 class LogicBlock
 {
 public:
-    virtual int init(Activity *);
-    virtual int update(Activity *) = 0;
+    virtual void onInitialization();
+    virtual void onUpdate() = 0;
+    virtual void onTermination();
 };
 
 class Activity
@@ -25,24 +26,29 @@ class Activity
 public:
     Activity();
 
-    virtual basic::Storage start();
+    void start();
     void stop();
 
     void addLogicBlock(activity::LogicBlock *cond);
-    void clearConditions();
+    void clearLogicBlocks();
 
 protected:
+    virtual void init();
+    virtual void input();
+    virtual void update();
+    virtual void output();
+    virtual void terminate();
+
+    virtual bool onStart();
     virtual void onInitialization();
+    virtual void onInput();
+    virtual void onUpdate();
+    virtual void onOutput();
+    virtual bool onStop();
     virtual void onTermination();
 
-    virtual void onInput() = 0;
-    virtual void onOutput() = 0;
-
-    virtual void updateConditions();
-
-    bool onRun;
-    std::vector<activity::LogicBlock *> conditions;
-    basic::Storage storage;
+    bool _onRun;
+    std::vector<activity::LogicBlock *> _conditions;
 };
 
 class QuitHandler : public control::EventHandler
@@ -54,7 +60,22 @@ public:
     void handleEvent(const SDL_Event &event) override;
 
 private:
-    Activity *activity;
+    Activity *_activity;
+};
+
+class WindowActivity;
+
+class WindowEventHandler : public control::EventHandler
+{
+public:
+    WindowEventHandler() = delete;
+    WindowEventHandler(WindowActivity *activity, os::Window *window);
+
+    void handleEvent(const SDL_Event &event) override;
+
+private:
+    os::Window *_window;
+    WindowActivity *_activity;
 };
 
 class WindowActivity : public Activity
@@ -71,14 +92,17 @@ public:
     virtual ~WindowActivity();
 
 protected:
-    virtual void onInitialization() override;
-    virtual void onTermination() override;
+    virtual void init() override;
+    virtual void input() override;
+    virtual void terminate() override;
 
-    virtual void onInput() override;
-    virtual void onOutput() override;
+    virtual void onResize();
 
-    os::Window *window;
-    os::Clock *clock;
-    QuitHandler *quitHandler;
+    os::Window *_window;
+    os::Clock *_clock;
+    QuitHandler *_quitHandler;
+    WindowEventHandler *_windowEventHandler;
+
+    friend void activity::WindowEventHandler::handleEvent(const SDL_Event &event);
 };
 } // namespace activity
