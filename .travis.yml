@@ -9,9 +9,6 @@ compiler: g++
 
 install:
   - sudo apt-get install cmake
-  - sudo apt-get install libsdl2-dev
-  - sudo apt-get install libgl-dev
-  - sudo apt-get install libglm-dev
 
 script:
   - mkdir build && cd build
