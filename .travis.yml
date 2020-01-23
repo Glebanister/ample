@@ -12,6 +12,8 @@ install:
   - sudo apt-get install cmake
   - sudo apt-get install libgl1-mesa-dev
   - sudo apt install libglm-dev
+  - sudo apt install libgles2-mesa-dev
+  - sudo apt install libegl1-mesa-dev
   - sudo apt install libsdl2-dev
 
 script:
