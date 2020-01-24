@@ -57,6 +57,10 @@ void Activity::output()
 
 void Activity::terminate()
 {
+    for (auto block : _conditions)
+    {
+        block->onTermination();
+    }
     onTermination();
     return;
 }
@@ -155,6 +159,14 @@ void WindowActivity::input()
 void WindowActivity::terminate()
 {
     _window->close();
+    for (auto block : _conditions)
+    {
+        block->onTermination();
+    }
+    for (auto block : _conditions)
+    {
+        block->onTermination();
+    }
     onTermination();
 }
 
