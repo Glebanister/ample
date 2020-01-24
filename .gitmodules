@@ -1,0 +1,3 @@
+[submodule "Ample/lib/googletest"]
+	path = Ample/lib/googletest
+	url = https://github.com/google/googletest
