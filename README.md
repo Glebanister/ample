@@ -1,4 +1,4 @@
-https://travis-ci.org/Glebanister/littleEngine.svg?branch=master
+![](https://travis-ci.org/Glebanister/littleEngine.svg?branch=master)
 
 ## Ample - little engine
 
