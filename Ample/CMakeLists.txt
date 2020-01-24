@@ -12,15 +12,6 @@ set(SDL2_INCLUDE_DIRS /usr/include/SDL2/)
 
 set(GLU_LIBRARY /usr/lib/x86_64-linux-gnu/libGLU.so)
 
-# find_library(GLU_LIBRARY
-#              NAMES libGLU.so
-#              PATHS /usr/lib/)
-# find_library(OPENGL_gl_LIBRARY
-#              NAMES libGL.so
-#              PATHS /usr/lib/)
-# find_library(SDL2_LIBRARY
-#              NAMES libSDL2.so
-#              PATHS /usr/lib/)
 
 set(AMPLE_SOURCES
 

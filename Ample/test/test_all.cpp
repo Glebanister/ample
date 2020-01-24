@@ -35,7 +35,7 @@ TEST(MyTest, test2)
     {
         EXPECT_EQ(100, 100);
     }
-    EXPECT_EQ(20, 19);
+    EXPECT_EQ(20, 20);
 }
 
 int main(int argc, char **argv)
