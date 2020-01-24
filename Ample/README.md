@@ -1,3 +1,4 @@
+ ![build_status](https://travis-ci.org/Glebanister/littleEngine.svg?branch=master)
  <!-- ![logo](  logo/logo_transparent.png) -->
 Ample
 ===================
