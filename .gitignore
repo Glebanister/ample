@@ -4,11 +4,5 @@
 # build
 build/
 
-# temp
-src/test.cpp
-
 # planner
 Ample/TODOLIST.md
-
-#tutorials :)
-tutor/
