@@ -11,7 +11,6 @@ const std::string TEST_FILES_DIR = "TestingDir";
 
 #define TEST_FILE(name) (TEST_FILES_DIR + "/" + name)
 
-
 class Writer : public activity::LogicBlock
 {
 public:
@@ -44,11 +43,11 @@ public:
     void onUpdate() override
     {
         cnt++;
-        if (cnt == max)
+        if (cnt >= max)
         {
             act->stop();
         }
-        if (cnt > max)
+        if (cnt > max + 10)
         {
             FAIL();
         }
@@ -253,6 +252,60 @@ TEST(test_activity, ActivityIntegrateInitInputOutputTerminate1)
     EXPECT_EQ(s, "term");
 
     res.close();
-    
+}
 
+class StartStop : public activity::Activity
+{
+public:
+    StartStop() = default;
+
+    ~StartStop() override
+    {
+        EXPECT_TRUE(wasStart);
+        EXPECT_TRUE(wasStop);
+    }
+
+    bool getStart()
+    {
+        return wasStart;
+    }
+
+    bool getStop()
+    {
+        return wasStop;
+    }
+
+protected:
+    bool onStart() override
+    {
+        if (wasStart)
+        {
+            return 1;
+        }
+        wasStart = 1;
+        return 0;
+    }
+
+    bool onStop() override
+    {
+        if (wasStop)
+        {
+            return 1;
+        }
+        wasStop = 1;
+        return 0;
+    }
+
+    bool wasStart = false;
+    bool wasStop = false;
+};
+
+TEST(test_activity, ActivityIntegrateStartStop)
+{
+    StartStop act;
+    iterationsCounter counter(&act, 3);
+    act.addLogicBlock(&counter);
+    act.start();
+    act.start();
+    EXPECT_TRUE(act.getStart() && act.getStop());
 }
