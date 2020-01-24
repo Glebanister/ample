@@ -22,7 +22,7 @@ CMAKE_TAR=cmake-$CMAKE_VERSION-$CMAKE_OS.tar.gz
 CMAKE_URL=http://www.cmake.org/files/$CMAKE_VERSION_DIR/$CMAKE_TAR
 CMAKE_DIR=$(pwd)/cmake-$CMAKE_VERSION
 
-wget $CMAKE_URL
+wget --quiet $CMAKE_URL
 mkdir -p $CMAKE_DIR
 tar --strip-components=1 -xzf $CMAKE_TAR -C $CMAKE_DIR
 export PATH=$CMAKE_DIR/bin:$PATH
@@ -35,10 +35,3 @@ sudo apt install libglm-dev
 sudo apt install libgles2-mesa-dev
 sudo apt install libegl1-mesa-dev
 sudo apt install libsdl2-dev
-
-locate libSDL2.so
-locate libGL.so
-
-assert_neq locate SDL2/SDL.h
-locate GL/gl.h
-locate GL/glu.h
