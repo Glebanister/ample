@@ -89,8 +89,8 @@ void LayeredWindowActivity::terminate()
     {
         layer->terminate();
     }
-    onTermination();
     _window->close();
+    onTermination();
 }
 
 void LayeredWindowActivity::addLayer(Layer *layer)
