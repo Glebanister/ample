@@ -239,20 +239,20 @@ TEST(test_activity, ActivityIntegrateInitInputOutputTerminate1)
     EXPECT_TRUE(actOut.eof());
     actOut.close();
 
-    // std::ifstream res(TEST_FILE(wName));
-    // assert(res.good());
-    // std::getline(res, s);
-    // EXPECT_EQ(s, "init");
-    // std::getline(res, s);
-    // EXPECT_EQ(s, "TESTing");
-    // std::getline(res, s);
-    // EXPECT_EQ(s, "TESTing");
-    // std::getline(res, s);
-    // EXPECT_EQ(s, "TESTing");
-    // std::getline(res, s);
-    // EXPECT_EQ(s, "term");
+    std::ifstream res(wName);
+    assert(res.good());
+    std::getline(res, s);
+    EXPECT_EQ(s, "init");
+    std::getline(res, s);
+    EXPECT_EQ(s, "TESTing");
+    std::getline(res, s);
+    EXPECT_EQ(s, "TESTing");
+    std::getline(res, s);
+    EXPECT_EQ(s, "TESTing");
+    std::getline(res, s);
+    EXPECT_EQ(s, "term");
 
-    // res.close();
+    res.close();
     
 
 }
