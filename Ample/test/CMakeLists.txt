@@ -1,10 +1,12 @@
 set(BINARY test_ample)
 
 include_directories(Ample/include)
+include_directories(Ample/lib/googletest)
 
 set(TEST_SOURCES
 
     test_all.cpp
+    testActivity.cpp
 
     )
 
