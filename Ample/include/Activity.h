@@ -19,6 +19,8 @@ public:
     virtual void onInitialization();
     virtual void onUpdate() = 0;
     virtual void onTermination();
+
+    virtual ~LogicBlock() = default;
 };
 
 class Activity
