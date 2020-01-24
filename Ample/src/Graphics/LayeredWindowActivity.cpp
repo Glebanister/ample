@@ -90,6 +90,14 @@ void LayeredWindowActivity::terminate()
         layer->terminate();
     }
     _window->close();
+    for (auto block : _conditions)
+    {
+        block->onTermination();
+    }
+    for (auto block : _conditions)
+    {
+        block->onTermination();
+    }
     onTermination();
 }
 
