@@ -17,11 +17,11 @@ public:
     Writer(const std::string &outfile)
     {
         file.open(outfile);
-        assert(file.good());
     }
 
     void onUpdate() override
     {
+        ASSERT_TRUE(file.good());
         file << "TESTing" << std::endl;
     }
 
