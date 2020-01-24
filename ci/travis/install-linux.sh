@@ -30,9 +30,15 @@ rm -rf cmake-$CMAKE_VERSION*
 
 cmake --version
 
-# sudo apt-get install libgl1-mesa-dev
-# sudo apt install libglm-dev
-# sudo apt install libgles2-mesa-dev
-# sudo apt install libegl1-mesa-dev
-# sudo apt install libsdl2-dev
+sudo apt-get install libgl1-mesa-dev
+sudo apt install libglm-dev
+sudo apt install libgles2-mesa-dev
+sudo apt install libegl1-mesa-dev
+sudo apt install libsdl2-dev
 
+locate libSDL2.so
+locate libGL.so
+
+assert_neq locate SDL2/SDL.h
+locate GL/gl.h
+locate GL/glu.h

@@ -12,21 +12,30 @@ TEST(UselessTest, test2)
 {
     EXPECT_EQ(1, 1);
     EXPECT_EQ(20, 20);
-    EXPECT_EQ(100, 100);
+    for (int i = 0; i < 10000000; i++)
+    {
+        EXPECT_EQ(100, 100);
+    }
 }
 
 TEST(MyTest, test1)
 {
     EXPECT_EQ(1, 1);
     EXPECT_EQ(20, 20);
-    EXPECT_EQ(100, 100);
+    for (int i = 0; i < 10000000; i++)
+    {
+        EXPECT_EQ(100, 100);
+    }
 }
 
 TEST(MyTest, test2)
 {
     EXPECT_EQ(1, 1);
-    EXPECT_EQ(20, 20);
-    EXPECT_EQ(100, 100);
+    for (int i = 0; i < 10000000; i++)
+    {
+        EXPECT_EQ(100, 100);
+    }
+    EXPECT_EQ(20, 19);
 }
 
 int main(int argc, char **argv)

@@ -48,15 +48,4 @@ private:
 
     os::OsManager *manager;
 };
-
-enum errEventManager
-{
-    ERR_NO_EVENT_MANAGER,
-    ERR_EMPTY_HANDLER,
-};
-
-static const char *errEventManagerMessage[] = {
-    "Success\n",
-    "Empty handler given\n"
-};
 } // namespace control

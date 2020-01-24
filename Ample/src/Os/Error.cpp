@@ -38,4 +38,4 @@ exType Exception::getType()
     return _type;
 }
 
-}; // namespace exception
+} // namespace exception

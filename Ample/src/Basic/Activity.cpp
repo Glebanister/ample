@@ -6,6 +6,7 @@
 #include "EventHandler.h"
 #include "EventManager.h"
 #include "Error.h"
+#include "Utils.h"
 
 namespace activity
 {
@@ -14,7 +15,7 @@ void LogicBlock::onInitialization() {}
 void LogicBlock::onTermination() {}
 
 Activity::Activity()
-    : _onRun(false){};
+    : _onRun(false){}
 
 bool Activity::onStart() { return true; }
 void Activity::onInitialization() {}
@@ -106,6 +107,7 @@ QuitHandler::QuitHandler(Activity *windowActivity)
 
 void QuitHandler::handleEvent(const SDL_Event &event)
 {
+    ignore(event);
     _activity->stop();
 }
 

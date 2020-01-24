@@ -145,6 +145,7 @@ class EventHandler
 {
 public:
     virtual void handleEvent(const SDL_Event &event) = 0;
+    virtual ~EventHandler() = default;
 };
 
 class KeyHandler : public EventHandler

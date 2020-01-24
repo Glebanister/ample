@@ -1,4 +1,5 @@
 #include "WindowObject.h"
+#include "Utils.h"
 
 namespace graphics
 {
@@ -26,7 +27,7 @@ void WindowObject2d::rotate(const double &rotAngle)
 
 void WindowObject2d::scale(const double &scaleCoef)
 {
-    this->scaleDegree += scaleDegree;
+    this->scaleDegree += scaleCoef;
 }
 
 } // namespace graphics

@@ -11,8 +11,7 @@ include_directories(Ample/include)
 
 add_subdirectory(Ample)
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic -std=c++17")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
-find_package(GLUT REQUIRED)
 include_directories(${GLUT_INCLUDE_DIRS})
 target_link_libraries(${APP_NAME} Ample ${GLUT_LIBRARY})

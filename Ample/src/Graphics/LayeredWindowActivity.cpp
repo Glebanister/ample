@@ -8,9 +8,9 @@
 
 namespace graphics
 {
-void Layer::onInitialization(){};
-void Layer::onDraw(){};
-void Layer::onTermination(){};
+void Layer::onInitialization(){}
+void Layer::onDraw(){}
+void Layer::onTermination(){}
 
 void Layer::init()
 {
@@ -102,4 +102,4 @@ void LayeredWindowActivity::clearLayers()
 {
     _layers.clear();
 }
-}; // namespace graphics
+} // namespace graphics

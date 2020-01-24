@@ -62,8 +62,8 @@ Window::Window(const std::string &name,
 
 void Window::setGlViewport(const size_t x, const size_t y, const size_t w, const size_t h)
 {
-    bool xFit = (0 <= x + w && x + w <= _width);
-    bool yFit = (0 <= _contextY + _contextH && _contextY + _contextH <= _height);
+    // bool xFit = (0 <= x + w && x + w <= _width);
+    // bool yFit = (0 <= _contextY + _contextH && _contextY + _contextH <= _height);
 
     // if (!(xFit && yFit))
     // {

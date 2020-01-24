@@ -44,10 +44,6 @@ void EventManager::clearType(const int &eventType)
 
 void EventManager::KeyboardManager::addKeyHandler(const key_t &key, KeyHandler *handler)
 {
-    if (!handler)
-    {
-        throw std::runtime_error(errEventManagerMessage[ERR_EMPTY_HANDLER]);
-    }
     this->handlers[key].push_back(handler);
 }
 

@@ -22,6 +22,7 @@ Vector2d &Vector2d::operator=(const Vector2d &other)
 {
     x = other.x;
     y = other.y;
+
     return *this;
 }
 
@@ -29,23 +30,31 @@ Vector2d &Vector2d::operator+(const Vector2d &other)
 {
     x += other.x;
     y += other.y;
+
+    return *this;
 }
 
 Vector2d &Vector2d::operator-(const Vector2d &other)
 {
     x -= other.x;
     y -= other.y;
+
+    return *this;
 }
 
 Vector2d &Vector2d::operator+=(const Vector2d &other)
 {
     x += other.x;
     y += other.y;
+
+    return *this;
 }
 
 Vector2d &Vector2d::operator-=(const Vector2d &other)
 {
     x -= other.x;
     y -= other.y;
+
+    return *this;
 }
 } // namespace geometry
