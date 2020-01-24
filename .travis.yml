@@ -1,22 +1,18 @@
-os:
-  - linux
-
 dist: trusty
 sudo: require
 
 language: cpp
+
 compiler: g++
 
+os: linux
+
 install:
-  - sudo apt-get update
-  - sudo apt-get install cmake
-  - sudo apt-get install libgl1-mesa-dev
-  - sudo apt install libglm-dev
-  - sudo apt install libgles2-mesa-dev
-  - sudo apt install libegl1-mesa-dev
-  - sudo apt install libsdl2-dev
+  - ./ci/travis/install-linux.sh
 
 script:
-  - mkdir build && cd build
-  - cmake .. && make
+  - mkdir build 
+  - cd build
+  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DTARGET_CPU=$TARGET_CPU
+  - cmake --build .
   - ./Ample/test/test_ample
