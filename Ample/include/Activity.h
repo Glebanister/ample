@@ -34,6 +34,8 @@ public:
     void addLogicBlock(activity::LogicBlock *cond);
     void clearLogicBlocks();
 
+    virtual ~Activity() = default;
+
 protected:
     virtual void init();
     virtual void input();
