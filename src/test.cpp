@@ -354,14 +354,19 @@ private:
 
 int main()
 {
-    os::Window window("Particles", 0, 0, 1024, 1024, os::winpos::UNDEFINED_POS, os::winmode::FULLSCREEN);
+    os::Window window("Particles",
+                      0, 0,
+                      1920, 1080,
+                      os::winpos::UNDEFINED_POS,
+                      os::winmode::RESIZABLE);
+
     auto activity = graphics::LayeredWindowActivity(&window);
 
     auto layer = graphics::Layer2d(window.getWidth(), window.getHeight());
     auto system = ParticleEmitter(-M_PI, M_PI,                    // direction min/max
-                                  0.5, 0.9,                       // speed min/max
-                                  -0.006, -0.009,                 // speed decrease min/max
-                                  0.003, 0.03,                    // radius min/max
+                                  200, 600,                       // speed min/max
+                                  -2, -1,                         // speed decrease min/max
+                                  3, 30,                          // radius min/max
                                   1,                              // particles per ms
                                   0.1, 0.8, 0.8, 0.9,             // rgba
                                   -0.002, -0.002, -0.002, -0.001, // color changing speed
@@ -376,7 +381,7 @@ int main()
     updater.addObject(&system);
     activity.addLogicBlock(&updater);
 
-    auto timeSlower = TimeSlower(0.4);
+    auto timeSlower = TimeSlower(0.1);
     activity.eventManager->addKeyHandler(control::keysym::SPACE, &timeSlower);
 
     auto activator = Activator(&system);
