@@ -109,9 +109,8 @@ void Activity::clearLogicBlocks()
 QuitHandler::QuitHandler(Activity *windowActivity)
     : _activity(windowActivity) {}
 
-void QuitHandler::handleEvent(const SDL_Event &event)
+void QuitHandler::handleEvent(const SDL_Event &)
 {
-    ignore(event);
     _activity->stop();
 }
 
@@ -172,6 +171,7 @@ void WindowActivity::terminate()
 
 void WindowActivity::onResize()
 {
+    // std::cout << _window->getWidth() << 'X' << _window->getHeight() << std::endl;
     return;
 }
 
