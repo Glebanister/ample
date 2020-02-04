@@ -8,9 +8,9 @@
 
 namespace graphics
 {
-void Layer::onInitialization(){}
-void Layer::onDraw(){}
-void Layer::onTermination(){}
+void Layer::onInitialization() {}
+void Layer::onDraw() {}
+void Layer::onTermination() {}
 
 void Layer::init()
 {
@@ -48,7 +48,8 @@ void Layer2d::init()
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(0, 0, _w, _h);
+    // gluOrtho2D(0, 0, _w, _h);
+    glOrtho(0.f, _w, _h, 0.f, 0.f, 1.f);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
 }
