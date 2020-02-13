@@ -8,14 +8,14 @@
 
 namespace os
 {
-enum class winpos : uint32_t
+enum winpos : uint32_t
 {
     UNDEFINED_POS = 0b0,
     CENTERED_X = 0b1,
     CENTERED_Y = 0b10,
 };
 
-enum class winmode : uint32_t
+enum winmode : uint32_t
 {
     UNDEFINED_MODE = 0,
     FULLSCREEN = SDL_WINDOW_FULLSCREEN,
@@ -24,6 +24,7 @@ enum class winmode : uint32_t
     MAXIMIZED = SDL_WINDOW_MAXIMIZED,
     MINIMIZED = SDL_WINDOW_MINIMIZED,
 };
+
 class OsManager;
 
 class Window final
@@ -36,20 +37,8 @@ public:
            const size_t &y,
            const size_t &width,
            const size_t &height,
-           const os::winpos &posFlags,
-           const os::winmode &modeFlags);
-
-    Window(const std::string &name,
-           const size_t &x,
-           const size_t &y,
-           const size_t &width,
-           const size_t &height,
-           const os::winpos &posFlags,
-           const os::winmode &modeFlags,
-           const size_t &contextX,
-           const size_t &contextY,
-           const size_t &contextW,
-           const size_t &contextH);
+           const uint32_t &posFlags,
+           const uint32_t &modeFlags);
 
     Window(const Window &other) = delete;
     Window &operator=(const Window &) = delete;

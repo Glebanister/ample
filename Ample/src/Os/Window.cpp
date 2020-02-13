@@ -14,50 +14,31 @@ Window::Window(const std::string &name,
                const size_t &y,
                const size_t &width,
                const size_t &height,
-               const os::winpos &posFlags,
-               const os::winmode &modeFlags)
+               const uint32_t &posFlags,
+               const uint32_t &modeFlags)
     : _winPtr(nullptr),
       _manager(new OsManager),
       _name(name),
       _x(x), _y(y),
       _width(width), _height(height),
-      _modeFlags(static_cast<size_t>(modeFlags)),
+      _modeFlags(modeFlags),
       _glContext(nullptr),
       _contextX(0), _contextY(0),
       _contextW(width), _contextH(height)
 {
-    if (static_cast<size_t>(posFlags) & static_cast<uint32_t>(winpos::CENTERED_X))
+    if (posFlags & winpos::CENTERED_X)
     {
         _x = SDL_WINDOWPOS_CENTERED;
     }
-    if (static_cast<size_t>(posFlags) & static_cast<uint32_t>(winpos::CENTERED_Y))
+    if (posFlags & winpos::CENTERED_Y)
     {
         _y = SDL_WINDOWPOS_CENTERED;
     }
-    if (static_cast<size_t>(posFlags) & static_cast<uint32_t>(winpos::UNDEFINED_POS))
+    if (posFlags & winpos::UNDEFINED_POS)
     {
         _x = SDL_WINDOWPOS_UNDEFINED;
         _y = SDL_WINDOWPOS_UNDEFINED;
     }
-}
-
-Window::Window(const std::string &name,
-               const size_t &x,
-               const size_t &y,
-               const size_t &width,
-               const size_t &height,
-               const os::winpos &posFlags,
-               const os::winmode &modeFlags,
-               const size_t &contextX,
-               const size_t &contextY,
-               const size_t &contextW,
-               const size_t &contextH)
-    : Window(name, x, y, width, height, posFlags, modeFlags)
-{
-    _contextX = contextX;
-    _contextY = contextY;
-    _contextW = contextW;
-    _contextH = contextH;
 }
 
 void Window::setGlViewport(const size_t x, const size_t y, const size_t w, const size_t h)
