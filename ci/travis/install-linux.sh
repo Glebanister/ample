@@ -35,3 +35,5 @@ sudo apt install libglm-dev
 sudo apt install libgles2-mesa-dev
 sudo apt install libegl1-mesa-dev
 sudo apt install libsdl2-dev
+
+sudo apt-get install python3.8
