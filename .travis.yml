@@ -17,3 +17,10 @@ script:
   - mkdir TestingDir
   - ./Ample/test/test_ample
   - rm -rf TestingDir
+  - cd script
+  - mkdir MyGame
+  - cd MyGame
+  - python3 ../ample.py init MyGame
+  - python3 ../ample.py build --release
+  - cd ..
+  - rm -rf MyGame

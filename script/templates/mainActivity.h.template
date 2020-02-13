@@ -1,0 +1,8 @@
+#include "LayeredWindowActivity.h"
+#include "Window.h"
+
+class $project_name : public graphics::LayeredWindowActivity
+{
+public:
+    $project_name(os::Window *window);
+};

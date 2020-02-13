@@ -1,0 +1,4 @@
+#include "$project_name.h"
+
+$project_name::$project_name(os::Window *window)
+    : graphics::LayeredWindowActivity(window) {}
