@@ -38,6 +38,7 @@ sudo apt install libgles2-mesa-dev > output
 sudo apt install libegl1-mesa-dev > output
 sudo apt install libsdl2-dev > output
 
-echo python
+echo python3
 sudo apt-get install python3 > output
+python3 --version
 rm -rf output
