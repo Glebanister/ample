@@ -21,7 +21,7 @@ script:
   - cd script
   - mkdir MyGame
   - cd MyGame
-  - python3 ../ample.py init MyGame
-  - python3 ../ample.py build --release
+  - python3.8 ../ample.py init MyGame
+  - python3.8 ../ample.py build --release
   - cd ..
   - rm -rf MyGame
