@@ -104,9 +104,7 @@ class AmpleProject:
         except Exception:
             os.mkdir('build')
             os.chdir('build')
-        try:
-            os.system('cmake .. && cmake --build .')
-        except Exception:
+        if os.system('cmake .. && cmake --build .') != 0:
             raise Exception('build unsuccessfull')
 
     def run(self):
@@ -195,6 +193,7 @@ def main(args_str):
                          borderless=False)
         except Exception as exc:
             print(f'Error: {exc.args[0]}')
+            exit(1)
         else:
             print('Ample directory initialized successfully')
 
@@ -203,6 +202,7 @@ def main(args_str):
             project.build(args.build_type)
         except Exception as exc:
             print(f'Error: {exc.args[0]}')
+            exit(1)
         else:
             print('Build completed')
 
