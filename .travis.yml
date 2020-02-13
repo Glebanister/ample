@@ -1,6 +1,8 @@
 dist: trusty
 
-language: cpp
+language: cpp python
+python:
+  - "3.7"
 
 compiler: g++
 
