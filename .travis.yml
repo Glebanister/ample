@@ -15,7 +15,7 @@ script:
   - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DTARGET_CPU=$TARGET_CPU
   - cmake --build .
   - mkdir TestingDir
-  - ./Ample/test/test_ample
+  - ./test/test_ample
   - rm -rf TestingDir
   - cd script
   - mkdir MyGame
