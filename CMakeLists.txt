@@ -1,17 +1,10 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.3)
 
-project(WhatIsAmple)
+project(Ample)
 
-set(APP_NAME what_is_ample)
+include_directories(${CMAKE_PROJECT_NAME}/include)
+include_directories(${CMAKE_PROJECT_NAME}/googletest/include)
 
-set(SOURCE_EXE src/test.cpp)
-add_executable(${APP_NAME} ${SOURCE_EXE})
-
-include_directories(Ample/include)
-
-add_subdirectory(Ample)
-
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic -std=c++17")
-
-include_directories(${GLUT_INCLUDE_DIRS})
-target_link_libraries(${APP_NAME} Ample ${GLUT_LIBRARY})
+add_subdirectory(lib/googletest)
+add_subdirectory(${CMAKE_PROJECT_NAME})
+add_subdirectory(test)
