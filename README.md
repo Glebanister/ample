@@ -1,6 +1,6 @@
 ## Ample - little engine
 
-![travis](https://travis-ci.com/Glebanister/ample.svg?branch=master) engine is a linux-based game engine.
+![travis](https://travis-ci.com/Glebanister/ample.svg?branch=master) engine is a linux-based game engine. \
 
 ### Engine
 2D, physics-friendly
