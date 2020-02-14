@@ -1,7 +1,6 @@
 dist: trusty
 
 language: cpp
-language: python
 python:
   - "3.6"
 
