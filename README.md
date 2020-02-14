@@ -19,5 +19,3 @@ doing my best :)
 
 -------
 
-![](https://travis-ci.org/Glebanister/ample.svg?branch=master)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f0a35ddeb80f40b3aff728c19aa412ac)](https://www.codacy.com/manual/glebmar2001/ample?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Glebanister/ample&amp;utm_campaign=Badge_Grade)
