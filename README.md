@@ -1,6 +1,8 @@
 ## Ample - little engine
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/bfb66781f2fc499ca6bbad09ed5d43c6)](https://app.codacy.com/manual/Glebanister/ample?utm_source=github.com&utm_medium=referral&utm_content=Glebanister/ample&utm_campaign=Badge_Grade_Dashboard)
+![travis](https://travis-ci.com/Glebanister/ample.svg?branch=master)
+
 
 Ample engine is a linux-based game engine.
 
@@ -23,6 +25,3 @@ You can create ample directories anywhere, using ample script.
 `$ ../ample.py init [your-project-name]` \
 `$ ../ample.py build [your-project-name]` \
 `$ ../ample.py run [your-project-name]`
-
--------
-![travis](https://travis-ci.com/Glebanister/ample.svg?branch=master)
