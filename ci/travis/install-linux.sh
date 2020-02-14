@@ -41,4 +41,11 @@ sudo apt install libsdl2-dev > output
 echo python3
 sudo apt-get install python3 > output
 python3 --version
+
+echo pip3
+sudo apt install python3-pip > output
+
+echo linters
+pip3 install --user pytest pytest-cov pytest-mock flake8 pep8-naming flake8-quotes mypy pylint > output
+
 rm -rf output
