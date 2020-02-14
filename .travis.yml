@@ -10,6 +10,7 @@ os: linux
 
 install:
   - ./ci/travis/install-linux.sh
+  - pip3 install --user pytest pytest-cov pytest-mock flake8 pep8-naming flake8-quotes mypy pylint
 
 script:
   - mkdir build 
@@ -27,3 +28,5 @@ script:
   - python3 ../ample.py build --release
   - cd ..
   - rm -rf MyGame
+  - pylint ample.py
+  - cd ..
