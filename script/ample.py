@@ -143,6 +143,52 @@ class AmpleProject:
         template.close()
 
 
+def init_handler(project_name):
+    project = AmpleProject()
+    if os.listdir('.'):
+        user_resp = ''
+        while user_resp not in ['y', 'n']:
+            user_resp = input(
+                'Current directory is not empty. Continue? [y/n] ').lower()
+        if user_resp == 'n':
+            return
+    try:
+        project.init(project_name=project_name,
+                        activity_name=project_name,
+                        include_dir='include',
+                        source_dir='src',
+                        main_file='main',
+                        window_name=project_name,
+                        window_w=1920, window_h=1080,
+                        fullscreen=False,
+                        resizable=True,
+                        borderless=False)
+    except Exception as exc:
+        print(f'Error: {exc.args[0]}')
+        exit(1)
+    else:
+        print('Ample directory initialized successfully')
+
+
+def build_handler(build_type):
+    project = AmpleProject()
+    try:
+        project.build(build_type)
+    except Exception as exc:
+        print(f'Error: {exc.args[0]}')
+        exit(1)
+    else:
+        print('Build completed')
+
+
+def run_handler():
+    project = AmpleProject()
+    try:
+        project.run()
+    except Exception as exc:
+        print(f'Error: {exc.args[0]}')
+
+
 def main(args_str):
     parser = argparse.ArgumentParser(
         description='ample project manager')
@@ -170,47 +216,15 @@ def main(args_str):
     parser.set_defaults(run=False)
 
     args = parser.parse_args(args_str)
-    project = AmpleProject()
 
     if args.init:
-        if os.listdir('.'):
-            user_resp = ''
-            while user_resp not in ['y', 'n']:
-                user_resp = input(
-                    'Current directory is not empty. Continue? [y/n] ').lower()
-            if user_resp == 'n':
-                return
-        try:
-            project.init(project_name=args.init_project_name,
-                         activity_name=args.init_project_name,
-                         include_dir='include',
-                         source_dir='src',
-                         main_file='main',
-                         window_name=args.init_project_name,
-                         window_w=1920, window_h=1080,
-                         fullscreen=False,
-                         resizable=True,
-                         borderless=False)
-        except Exception as exc:
-            print(f'Error: {exc.args[0]}')
-            exit(1)
-        else:
-            print('Ample directory initialized successfully')
+        init_handler(args.project_name)
 
     if args.build:
-        try:
-            project.build(args.build_type)
-        except Exception as exc:
-            print(f'Error: {exc.args[0]}')
-            exit(1)
-        else:
-            print('Build completed')
+        build_handler(args.build_type)
 
     if args.run:
-        try:
-            project.run()
-        except Exception as exc:
-            print(f'Error: {exc.args[0]}')
+        run_handler()
 
 
 if __name__ == '__main__':
