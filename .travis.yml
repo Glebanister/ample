@@ -8,7 +8,6 @@ os: linux
 
 install:
   - ./ci/travis/install-linux.sh
-  - sudo apt install pylint3
 
 script:
   - mkdir build 
