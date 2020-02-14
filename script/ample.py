@@ -1,29 +1,96 @@
 #!/usr/bin/env python3
+
+# -*- coding: utf-8 -*-
+"""Ample project manager
+
+This designed to manage Ample projects.
+Ample is a game engine and framework: https://github.com/Glebanister/ample
+
+Current feautures:
+    * ample init [project_name]                 - init ample project in current directory
+    * ample build {--debug, --release, --clear} - build ample project
+    * ample run                                 - run ample project
+
+This project manager suggests that your project structure will be like:
+    ├── build                       - cmake's build files
+    ├── CMakeLists.txt              - automatically generated file for building your project
+    ├── include                     - contains listed headers and your custom ones
+    │   └── [activity_name].h
+    └── src                         - contains listed source files and your custom ones
+        ├── [main_file].cpp
+        └── [activity_name].cpp
+
+After 'ample init [project_name]' ample will genetate folder '.ample' (hidden), it contains
+config.json file. This is actual settings of your project.
+{
+    "ready": true,
+    "project_name": "MyGame",       - your project name
+    "activity_name": "MyGame",      - name of main activity. I don't reccomend you to
+                                      change it to other, otherwise you have to
+                                      change automatilcally generated
+                                      [source_dir]/[activity_name].cpp
+                                      file name to actual.
+    "include_dir": "include",       - headers path. If changed, you have to rename your
+                                      include path to actual one.
+    "source_dir": "src",            - same, but sources
+    "main_file": "main",            - called to run your project. The file itself generates
+                                      automatically, so you can't actually change it.
+    "window_name": "MyGame",        - name of window, that opens on your game borned.
+    "window_w": 1920,               - width of window
+    "window_h": 1080,               - height
+    "fullscreen": false,            - if fullscreen
+    "resizable": true,              - if resizable
+    "borderless": false,            - if borderless
+    "cxx_flags": "-std=c++17",      - compilation flags, you may add some.
+    "sources": [                    - all your sources. When you add one,
+                                      you HAVE TO register it here.
+        "src/main.cpp",
+        "src/MyGame.cpp"
+    ]
+}
+
+So, once you initialized your project, then you just implement your game in [activity_name]
+
+There is no engine documentation so far, work is in progress.
+
+TODO:
+    * Fix pylint: disable=too-many-instance-attributes by wrapping members into dict
+"""
+
 import argparse
 import os
 import sys
 import json
-from collections import namedtuple
 
 
-'''
-TODO:
-    - command: run
-    - command: source
-'''
+class AmpleProject:  # pylint: disable=too-many-instance-attributes
+    """
+    Representation of your project
+    """
 
-
-class AmpleProject:
     def __init__(self):
         self.ready = False
+        self.ready = None
+        self.project_name = None
+        self.activity_name = None
+        self.include_dir = None
+        self.source_dir = None
+        self.main_file = None
+        self.window_name = None
+        self.window_w = None
+        self.window_h = None
+        self.fullscreen = None
+        self.resizable = None
+        self.borderless = None
+        self.cxx_flags = None
+        self.sources = None
         if os.path.exists(f'.ample'):
             self.__from_json()
 
     def __from_json(self):
-        data = {}
-        with open('.ample/config.json') as f:
-            data = json.load(f)
-        try:
+        with open('.ample/config.json') as config_file:
+            data = json.load(config_file)
+            self.ready = data['ready']
             self.project_name = data['project_name']
             self.activity_name = data['activity_name']
             self.include_dir = data['include_dir']
@@ -35,15 +102,15 @@ class AmpleProject:
             self.fullscreen = data['fullscreen']
             self.resizable = data['resizable']
             self.borderless = data['borderless']
-        except KeyError as exc:
-            raise Exception(f'{exc.args[0]} not found in .ample/config.json')
-        self.ready = True
+            self.cxx_flags = data['cxx_flags']
+            self.sources = data['sources']
 
     def __to_json(self):
-        with open('.ample/config.json', 'w') as fp:
-            json.dump(self.__dict__, fp)
+        # dump project to .json
+        with open('.ample/config.json', 'w') as config_file:
+            json.dump(self.__dict__, config_file)
 
-    def init(self,
+    def init(self,         # pylint: disable=too-many-arguments
              project_name,
              activity_name,
              include_dir,
@@ -54,10 +121,12 @@ class AmpleProject:
              window_h,
              fullscreen,
              resizable,
-             borderless):
+             borderless,
+             cxx_flags):
+        """init project in current directory"""
 
         if os.path.exists(f'.ample'):
-            raise Exception('current directory is ample already')
+            raise EnvironmentError('current directory is ample already')
 
         self.project_name = project_name
         self.activity_name = project_name
@@ -70,6 +139,9 @@ class AmpleProject:
         self.fullscreen = fullscreen
         self.resizable = resizable
         self.borderless = borderless
+        self.cxx_flags = cxx_flags
+        self.sources = [f'{source_dir}/{main_file}.cpp',
+                        f'{source_dir}/{activity_name}.cpp']
 
         try:
             os.mkdir(f'{include_dir}')
@@ -77,41 +149,66 @@ class AmpleProject:
             os.mkdir(f'build')
             os.mkdir(f'.ample')
         except FileExistsError:
-            raise Exception('file already exists')
-        except Exception as e:
-            raise Exception('can not init ample directory here')
+            raise EnvironmentError('file already exists')
+        except Exception:
+            raise EnvironmentError('can not init ample directory here')
 
         self.__write_file_from_template(
-            f'{include_dir}/{project_name}.h', '../templates/mainActivity.h.template')
+            f'{include_dir}/{project_name}.h',
+            '../templates/mainActivity.h.template')
         self.__write_file_from_template(
-            f'{source_dir}/{project_name}.cpp', '../templates/mainActivity.cpp.template')
+            f'{source_dir}/{project_name}.cpp',
+            '../templates/mainActivity.cpp.template')
         self.__write_file_from_template(
-            f'{source_dir}/{main_file}.cpp', '../templates/main.cpp.template')
+            f'{source_dir}/{main_file}.cpp',
+            '../templates/main.cpp.template')
         self.__write_file_from_template(
-            f'CMakeLists.txt', '../templates/CMakeLists.txt.template')
+            f'CMakeLists.txt',
+            '../templates/CMakeLists.txt.template')
 
+        self.ready = True
         self.__to_json()
 
-    def build(self, type):
+    def build(self, build_type):
+        """ build project """
+
         if not self.ready:
-            raise Exception('not an ample directory')
+            raise EnvironmentError('not an ample directory')
+
+        if build_type == 'clean':
+            if os.system('rm -rf build/*'):
+                raise EnvironmentError('build unsuccessfull')
+            return
+
+        build_flags = ''
+        if build_type == 'debug':
+            build_flags += '-DCMAKE_BUILD_TYPE=Debug'
+        if build_type == 'release':
+            build_flags += '-DCMAKE_BUILD_TYPE=Release'
+
         self.__write_file_from_template(
-            f'{self.source_dir}/{self.main_file}.cpp', '../templates/main.cpp.template')
+            f'{self.source_dir}/{self.main_file}.cpp',
+            '../templates/main.cpp.template')
         self.__write_file_from_template(
-            f'CMakeLists.txt', '../templates/CMakeLists.txt.template')
+            f'CMakeLists.txt',
+            '../templates/CMakeLists.txt.template')
         try:
             os.chdir('build')
-        except Exception:
+        except OSError:
             os.mkdir('build')
             os.chdir('build')
-        if os.system('cmake .. && cmake --build .') != 0:
-            raise Exception('build unsuccessfull')
+        if os.system(f'cmake {build_flags} ..') != 0:
+            raise EnvironmentError('build unsuccessfull')
+        if os.system(f'cmake --build .') != 0:
+            raise EnvironmentError('build unsuccessfull')
 
     def run(self):
+        """ run project """
+
         if not self.ready:
-            raise Exception('not an ample directory')
+            raise EnvironmentError('not an ample directory')
         if not os.path.isfile(f'build/{self.project_name}'):
-            raise Exception('build not ready')
+            raise EnvironmentError('build not ready')
         os.system(f'build/{self.project_name}')
 
     def __write_file_from_template(self, out_file, template_file):
@@ -119,7 +216,8 @@ class AmpleProject:
         try:
             template = open(template_file, 'r')
         except FileNotFoundError:
-            raise Exception(f'could not find template file {template_file}')
+            raise EnvironmentError(
+                f'could not find template file {template_file}')
 
         window_param = 'os::winmode::UNDEFINED_MODE'
         if self.fullscreen:
@@ -131,19 +229,24 @@ class AmpleProject:
 
         for line in template.readlines():
             out.write(line.replace('$project_name', self.project_name)
-                          .replace('$activity_name', self.activity_name)
-                          .replace('$window_name', self.window_name)
-                          .replace('$window_w', str(self.window_w))
-                          .replace('$window_h', str(self.window_h))
-                          .replace('$window_param', window_param)
-                          .replace('$main', self.main_file)
-                          .replace('$include_dir', self.include_dir)
-                          .replace('$source_dir', self.source_dir))
+                      .replace('$activity_name', self.activity_name)
+                      .replace('$window_name', self.window_name)
+                      .replace('$window_w', str(self.window_w))
+                      .replace('$window_h', str(self.window_h))
+                      .replace('$window_param', window_param)
+                      .replace('$main', self.main_file)
+                      .replace('$include_dir', self.include_dir)
+                      .replace('$source_dir', self.source_dir)
+                      .replace('$cxx_flags', self.cxx_flags)
+                      .replace('$sources', '\n'.join(self.sources))
+                      )
         out.close()
         template.close()
 
 
 def init_handler(project_name):
+    """ initialization command handler """
+
     project = AmpleProject()
     if os.listdir('.'):
         user_resp = ''
@@ -154,42 +257,48 @@ def init_handler(project_name):
             return
     try:
         project.init(project_name=project_name,
-                        activity_name=project_name,
-                        include_dir='include',
-                        source_dir='src',
-                        main_file='main',
-                        window_name=project_name,
-                        window_w=1920, window_h=1080,
-                        fullscreen=False,
-                        resizable=True,
-                        borderless=False)
-    except Exception as exc:
+                     activity_name=project_name,
+                     include_dir='include',
+                     source_dir='src',
+                     main_file='main',
+                     window_name=project_name,
+                     window_w=1920, window_h=1080,
+                     fullscreen=False,
+                     resizable=True,
+                     borderless=False,
+                     cxx_flags='-std=c++17')
+    except EnvironmentError as exc:
         print(f'Error: {exc.args[0]}')
-        exit(1)
+        sys.exit(1)
     else:
         print('Ample directory initialized successfully')
 
 
 def build_handler(build_type):
+    """ building command handler """
+
     project = AmpleProject()
     try:
         project.build(build_type)
-    except Exception as exc:
+    except EnvironmentError as exc:
         print(f'Error: {exc.args[0]}')
-        exit(1)
+        sys.exit(1)
     else:
         print('Build completed')
 
 
 def run_handler():
+    """ running command handler """
+
     project = AmpleProject()
     try:
         project.run()
-    except Exception as exc:
+    except EnvironmentError as exc:
         print(f'Error: {exc.args[0]}')
 
 
 def main(args_str):
+    """ Entry point """
     parser = argparse.ArgumentParser(
         description='ample project manager')
 
@@ -204,10 +313,22 @@ def main(args_str):
     parser.set_defaults(init=False)
 
     build_parser = subparsers.add_parser('build', help='build ample project')
-    build_parser.add_argument('--debug', dest='build_type',
-                              action='store_const', const='debug', default='debug', help='build type: debug')
-    build_parser.add_argument('--release', dest='build_type',
-                              action='store_const', const='release', help='build type: release')
+    build_parser.add_argument('-d', '--debug',
+                              dest='build_type',
+                              action='store_const',
+                              const='debug',
+                              default='debug',
+                              help='build type: debug')
+    build_parser.add_argument('-r', '--release',
+                              dest='build_type',
+                              action='store_const',
+                              const='release',
+                              help='build type: release')
+    build_parser.add_argument('-c', '--clean',
+                              dest='build_type',
+                              action='store_const',
+                              const='clean',
+                              help='build type: clear')
     build_parser.set_defaults(build=True)
     parser.set_defaults(build=False)
 
@@ -218,7 +339,7 @@ def main(args_str):
     args = parser.parse_args(args_str)
 
     if args.init:
-        init_handler(args.project_name)
+        init_handler(args.init_project_name)
 
     if args.build:
         build_handler(args.build_type)
