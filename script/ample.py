@@ -239,7 +239,7 @@ class AmpleProject:  # pylint: disable=too-many-instance-attributes
                       .replace('$source_dir', self.source_dir)
                       .replace('$cxx_flags', self.cxx_flags)
                       .replace('$sources', '\n'.join(self.sources))
-                      )
+                     )
         out.close()
         template.close()
 

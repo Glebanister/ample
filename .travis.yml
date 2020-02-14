@@ -1,8 +1,6 @@
-dist: trusty
+dist: bionic
 
-language: cpp
-python:
-  - "3.6"
+language: shell
 
 compiler: g++
 
@@ -10,6 +8,7 @@ os: linux
 
 install:
   - ./ci/travis/install-linux.sh
+  - sudo apt install pylint3
 
 script:
   - mkdir build 
@@ -27,5 +26,5 @@ script:
   - python3 ../ample.py build --release
   - cd ..
   - rm -rf MyGame
-  - pylint ample.py
+  - pylint3 ample.py
   - cd ..
