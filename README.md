@@ -17,9 +17,9 @@ You can create ample directories anywhere, using ample script.
 
 ### Run
 `$ cd script`
-`$ mkdir [your-project-name] && cd [your-project-name]`
-`$ ../ample.py init [your-project-name]`
-`$ ../ample.py build [your-project-name]`
+`$ mkdir [your-project-name] && cd [your-project-name]` \
+`$ ../ample.py init [your-project-name]` \
+`$ ../ample.py build [your-project-name]` \
 `$ ../ample.py run [your-project-name]`
 
 -------
