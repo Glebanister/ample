@@ -1,21 +1,25 @@
-Ample - little engine
-=====================
+## Ample - little engine
 
-In developing at the moment. I am so inspired, so you may check out Ample sources!
+Ample engine is a linux-based game engine.
 
-#### To install (Linux):
+### Engine
+2D, physics-friendly
 
-`$ ./ci/travis/install-linux.sh`
+### Project manager
+You can create ample directories anywhere, using ample script.
 
-#### To run:
-`$ ./build/what_is_ample`
+### Install (Linux)
 
-#### What?
-And press `b` to explode ice, `space` to slow down time. \
-This is just an example of current powers of this engine.
-You may run into main and change some parameters (can you create fire?).
-This is not so powerful at this moment, but i am
-doing my best :)
+`$ ./ci/travis/install-linux.sh` \
+`$ mkdir build && cd build` \
+`$ cmake .. && cmake --build`
+
+
+### Run
+`$ cd script`
+`$ mkdir [your-project-name] && cd [your-project-name]`
+`$ ../ample.py init [your-project-name]`
+`$ ../ample.py build [your-project-name]`
+`$ ../ample.py run [your-project-name]`
 
 -------
-
