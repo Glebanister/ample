@@ -23,3 +23,4 @@ You can create ample directories anywhere, using ample script.
 `$ ../ample.py run [your-project-name]`
 
 -------
+![travis](https://travis-ci.com/Glebanister/ample.svg?branch=master)
