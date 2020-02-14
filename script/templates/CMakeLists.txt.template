@@ -1,18 +1,21 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.5)
 
-project(Project)
+project($project_name)
 set(APP_NAME $project_name)
 
-set(SOURCES src/main.cpp
-            src/$activity_name.cpp)
-set(AMPLE_HEADERS /home/gleb/Documents/projects/engine/Ample/include)
-set(AMPLE_LIBRARY /home/gleb/Documents/projects/engine/build/Ample/libAmple.so)
+set(SOURCES $sources)
+find_library(AMPLE_LIBRARY NAMES Ample HINTS ../../build/Ample)
+find_path(AMPLE_INCLUDE_DIR NAMES Activity.h PATHS ../../Ample/include)
+
+message(STATUS "ample library found in ${AMPLE_LIBRARY}")
+message(STATUS "ample headers found in ${AMPLE_INCLUDE_DIR}")
+message(STATUS "sources list: ${SOURCES}")
 
 add_executable(${APP_NAME} ${SOURCES})
 
-include_directories(include)
-include_directories(${AMPLE_HEADERS})
+include_directories($include_dir)
+include_directories(${AMPLE_INCLUDE_DIR})
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} $cxx_flags")
 
 target_link_libraries(${APP_NAME} ${AMPLE_LIBRARY})
