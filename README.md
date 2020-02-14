@@ -1,5 +1,7 @@
 ## Ample - little engine
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/bfb66781f2fc499ca6bbad09ed5d43c6)](https://app.codacy.com/manual/Glebanister/ample?utm_source=github.com&utm_medium=referral&utm_content=Glebanister/ample&utm_campaign=Badge_Grade_Dashboard)
+
 Ample engine is a linux-based game engine.
 
 ### Engine
