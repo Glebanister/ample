@@ -43,28 +43,23 @@ Window::Window(const std::string &name,
 
 void Window::setGlViewport(const size_t x, const size_t y, const size_t w, const size_t h)
 {
-    // bool xFit = (0 <= x + w && x + w <= _width);
-    // bool yFit = (0 <= _contextY + _contextH && _contextY + _contextH <= _height);
-
-    // if (!(xFit && yFit))
-    // {
-    //     throw exception::Exception(exception::exId::OPENGL_NOT_FIT,
-    //                                exception::exType::CRITICAL);
-    // }
-
     glViewport(x, y, w, h);
 }
 
 void Window::open()
 {
+    setGlViewport(_contextX, _contextY, _contextW, _contextH);
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     _winPtr = OsManager::createWindow(_name.c_str(),
-                                            _x, _y,
-                                            _width, _height,
-                                            _modeFlags);
+                                      _x, _y,
+                                      _width, _height,
+                                      _modeFlags);
 
     _glContext = SDL_GL_CreateContext(_winPtr);
-
-    setGlViewport(_contextX, _contextY, _contextW, _contextH);
 }
 
 void Window::swapBuffer()

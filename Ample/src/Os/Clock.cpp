@@ -64,6 +64,11 @@ double Clock::getTimeFlow()
     return timeFlow;
 }
 
+double Clock::getFPS()
+{
+    return 1000.0 / delta.count();
+}
+
 void Clock::update()
 {
     auto oldTime = curTime;

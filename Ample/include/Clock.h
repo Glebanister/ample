@@ -26,6 +26,7 @@ public:
     static void multiplyTimeFlow(const double coef);
     static void resetTimeFlow();
     static double getTimeFlow();
+    static double getFPS();
 
 private:
     static time_point creationTime;

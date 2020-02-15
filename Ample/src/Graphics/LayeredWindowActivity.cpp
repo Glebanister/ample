@@ -48,10 +48,10 @@ void Layer2d::init()
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    // gluOrtho2D(0, 0, _w, _h);
     glOrtho(0.f, _w, _h, 0.f, 0.f, 1.f);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
+    glEnable(GL_TEXTURE_2D);
 }
 
 LayeredWindowActivity::LayeredWindowActivity(os::Window *window)
@@ -73,7 +73,7 @@ void LayeredWindowActivity::init()
 
 void LayeredWindowActivity::output()
 {
-    glClearColor(0, 0, 0, 0);
+    glClearColor(0.2, 0.2, 0.2, 0);
     glClear(GL_COLOR_BUFFER_BIT);
     for (auto layer : _layers)
     {

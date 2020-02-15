@@ -26,6 +26,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Graphics/LayeredWindowActivity.cpp
     src/Graphics/WindowObject.cpp
     src/Graphics/Colors.cpp
+    src/Graphics/GraphicShape.cpp
 
     src/Geometry/Vector.cpp
 
