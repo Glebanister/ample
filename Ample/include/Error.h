@@ -53,12 +53,16 @@ static std::string exTypeInfo[] = {
 class Exception : public std::exception
 {
 public:
-    Exception(const exId &id, const exType &type, const std::string &message = "");
+    explicit Exception(const exId &id,
+                       const exType &type,
+                       const std::string &message = "");
 
-    void report();
+    const char *what() const throw();
 
-    exId getId();
-    exType getType();
+    void report() const;
+
+    exId getId() const;
+    exType getType() const;
 
 private:
     exId _id = exId::UNSPECIFIED;

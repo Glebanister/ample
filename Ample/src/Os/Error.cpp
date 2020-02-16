@@ -10,13 +10,9 @@ namespace exception
 Exception::Exception(const exId &id, const exType &type, const std::string &message)
     : _id(id), _type(type), _message(message) {}
 
-void Exception::report()
+void Exception::report() const
 {
-    std::string message = _message;
-    if (_message == "")
-    {
-        message = exIdInfo[int(_id)];
-    }
+    std::string message = exIdInfo[int(_id)] + ' ' + _message;
 
     if (_type == exType::CASUAL)
     {
@@ -28,12 +24,17 @@ void Exception::report()
     }
 }
 
-exId Exception::getId()
+const char *Exception::what() const throw()
+{
+    return _message.c_str();
+}
+
+exId Exception::getId() const
 {
     return _id;
 }
 
-exType Exception::getType()
+exType Exception::getType() const
 {
     return _type;
 }
