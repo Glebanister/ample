@@ -3,17 +3,16 @@
 #include <cassert>
 #include <iostream>
 
-#include "OsManager.h"
-#include "Window.h"
+#include "WindowActivity.h"
 #include "Error.h"
 
-namespace os
+namespace ample::window
 {
 Window::Window(const std::string &name,
-               const size_t &x,
-               const size_t &y,
-               const size_t &width,
-               const size_t &height,
+               const pixel_t &x,
+               const pixel_t &y,
+               const pixel_t &width,
+               const pixel_t &height,
                const uint32_t &posFlags,
                const uint32_t &modeFlags)
     : _winPtr(nullptr),
@@ -21,9 +20,7 @@ Window::Window(const std::string &name,
       _x(x), _y(y),
       _width(width), _height(height),
       _modeFlags(modeFlags),
-      _glContext(nullptr),
-      _contextX(0), _contextY(0),
-      _contextW(width), _contextH(height)
+      _glContext(nullptr)
 {
     if (posFlags & winpos::CENTERED_X)
     {
@@ -79,25 +76,20 @@ Window::Window(const std::string &name,
 
 void Window::swapBuffer()
 {
-    if (!_winPtr)
-    {
-        throw exception::Exception(exception::exId::WINDOW_NOT_READY,
-                                   exception::exType::CRITICAL);
-    }
     SDL_GL_SwapWindow(_winPtr);
 }
 
-size_t Window::getHeight()
+pixel_t Window::getHeight() const
 {
     return _height;
 }
 
-size_t Window::getWidth()
+pixel_t Window::getWidth() const
 {
     return _width;
 }
 
-void Window::resize(const size_t w, const size_t &h)
+void Window::resize(const pixel_t w, const pixel_t &h)
 {
     _width = w;
     _height = h;
@@ -109,4 +101,43 @@ Window::~Window()
     SDL_GL_DeleteContext(_glContext);
     SDL_Quit();
 }
-} // namespace os
+
+QuitHandler::QuitHandler(activity::Activity &windowActivity)
+    : _activity(windowActivity) {}
+
+void QuitHandler::handleEvent(const SDL_Event &)
+{
+    _activity.kill();
+}
+
+WindowEventHandler::WindowEventHandler(WindowActivity &activity, Window &window)
+    : _window(window), _activity(activity) {}
+
+void WindowEventHandler::handleEvent(const SDL_Event &event)
+{
+    if (event.window.event == SDL_WINDOWEVENT_RESIZED)
+    {
+        _window.resize(event.window.data1, event.window.data2);
+        _activity.onResize();
+    }
+}
+
+WindowActivity::WindowActivity(Window &window)
+    : eventManager(new control::EventManager),
+      _window(window),
+      _quitHandler(new QuitHandler(*this)),
+      _windowEventHandler(new WindowEventHandler(*this, _window))
+{
+    eventManager->addEventHandler(SDL_QUIT, *_quitHandler);
+    eventManager->addEventHandler(SDL_WINDOWEVENT, *_windowEventHandler);
+}
+
+void WindowActivity::onActive()
+{
+    activity::Activity::onActive();
+    os::Clock::update();
+    eventManager->update();
+}
+
+void WindowActivity::onResize() {}
+} // namespace ample::window

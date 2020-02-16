@@ -7,7 +7,7 @@
 #include "Error.h"
 #include "Utils.h"
 
-namespace activity
+namespace ample::activity
 {
 void Activity::loop()
 {
@@ -53,4 +53,4 @@ bool onPause() { return true; }
 
 bool _alive = false;
 bool _running = false;
-} // namespace activity
+} // namespace ample::activity
