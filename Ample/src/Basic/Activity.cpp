@@ -9,176 +9,48 @@
 
 namespace activity
 {
-
-void LogicBlock::onInitialization() {}
-void LogicBlock::onTermination() {}
-
-Activity::Activity()
-    : _onRun(false){}
-
-bool Activity::onStart() { return true; }
-void Activity::onInitialization() {}
-void Activity::onInput() {}
-void Activity::onUpdate() {}
-void Activity::onOutput() {}
-bool Activity::onStop() { return true; }
-void Activity::onTermination() {}
-
-void Activity::init()
+void Activity::loop()
 {
-    for (auto block : _conditions)
+    onAwake();
+    _alive = true;
+    while (_alive)
     {
-        block->onInitialization();
+        onStart();
+        _running = true;
+        while (_running)
+        {
+            onActive();
+        }
+        onStop();
     }
-    onInitialization();
+    onDestroy();
 }
 
-void Activity::input()
+void Activity::pause()
 {
-    onInput();
-    return;
-}
-
-void Activity::update()
-{
-    for (auto block : _conditions)
+    if (onPause())
     {
-        block->onUpdate();
-    }
-    onUpdate();
-    return;
-}
-
-void Activity::output()
-{
-    onOutput();
-}
-
-void Activity::terminate()
-{
-    for (auto block : _conditions)
-    {
-        block->onTermination();
-    }
-    onTermination();
-    return;
-}
-
-void Activity::stop()
-{
-    if (onStop())
-    {
-        _onRun = false;
+        _running = false;
     }
 }
 
-void Activity::start()
+void Activity::kill()
 {
-    if (!onStart())
+    if (onKill())
     {
-        return;
-    }
-    init();
-    _onRun = true;
-    while (_onRun)
-    {
-        input();
-        update();
-        output();
-    }
-    terminate();
-}
-
-void Activity::addLogicBlock(activity::LogicBlock *block)
-{
-    if (!block)
-    {
-        throw exception::Exception(
-            exception::exId::NULLPTR,
-            exception::exType::CRITICAL);
-    }
-    _conditions.push_back(block);
-}
-
-void Activity::clearLogicBlocks()
-{
-    _conditions.clear();
-}
-
-QuitHandler::QuitHandler(Activity *windowActivity)
-    : _activity(windowActivity) {}
-
-void QuitHandler::handleEvent(const SDL_Event &)
-{
-    _activity->stop();
-}
-
-WindowEventHandler::WindowEventHandler(WindowActivity *activity, os::Window *window)
-    : _window(window), _activity(activity) {}
-
-void WindowEventHandler::handleEvent(const SDL_Event &event)
-{
-    if (event.window.event == SDL_WINDOWEVENT_RESIZED)
-    {
-        _window->resize(event.window.data1, event.window.data2);
-        _activity->onResize();
+        _alive = false;
     }
 }
 
-WindowActivity::WindowActivity(os::Window *window)
-    : Activity(),
-      eventManager(new control::EventManager),
-      _window(window),
-      _clock(new os::Clock),
-      _quitHandler(new QuitHandler(this)),
-      _windowEventHandler(new WindowEventHandler(this, _window))
-{
-    eventManager->addEventHandler(SDL_QUIT, _quitHandler);
-    eventManager->addEventHandler(SDL_WINDOWEVENT, _windowEventHandler);
-}
+void onAwake() {}
+void onStart() {}
+void onActive() {}
+void onStop() {}
+void onDestroy() {}
 
-void WindowActivity::init()
-{
-    _window->open();
-    for (auto block : _conditions)
-    {
-        block->onInitialization();
-    }
-    onInitialization();
-}
+bool onKill() { return true; }
+bool onPause() { return true; }
 
-void WindowActivity::input()
-{
-    eventManager->update();
-    _clock->update();
-    onInput();
-}
-
-void WindowActivity::terminate()
-{
-    _window->close();
-    for (auto block : _conditions)
-    {
-        block->onTermination();
-    }
-    for (auto block : _conditions)
-    {
-        block->onTermination();
-    }
-    onTermination();
-}
-
-void WindowActivity::onResize()
-{
-    // std::cout << _window->getWidth() << 'X' << _window->getHeight() << std::endl;
-    return;
-}
-
-WindowActivity::~WindowActivity()
-{
-    delete eventManager;
-    delete _windowEventHandler;
-    delete _quitHandler;
-    delete _clock;
-}
+bool _alive = false;
+bool _running = false;
 } // namespace activity
