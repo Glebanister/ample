@@ -106,9 +106,7 @@ public:
 protected:
     virtual void onResize();
 
-    virtual void onAwake() override;
     virtual void onActive() override;
-    virtual void onDestroy() override;
 
     Window &_window;
     std::unique_ptr<QuitHandler> _quitHandler;

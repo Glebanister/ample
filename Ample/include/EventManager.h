@@ -9,7 +9,7 @@
 #include "EventHandler.h"
 #include "EventManager.h"
 
-namespace control
+namespace ample::control
 {
 typedef SDL_Event Event;
 
@@ -21,7 +21,7 @@ public:
     void handleEvent(const SDL_Event &event) override;
 
 private:
-    std::unordered_map<key_t, std::vector<KeyHandler &>> handlers;
+    std::unordered_map<key_t, std::vector<KeyHandler *>> handlers;
 };
 
 class EventManager final
@@ -42,7 +42,7 @@ public:
 
 private:
     SDL_Event ev;
-    std::unordered_map<int, std::vector<EventHandler &>> handlerByType;
+    std::unordered_map<int, std::vector<EventHandler *>> handlerByType;
 
     std::unique_ptr<KeyboardManager> keyboard;
 };

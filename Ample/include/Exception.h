@@ -4,7 +4,7 @@
 #include <exception>
 #include <iostream>
 
-namespace exception
+namespace ample::exception
 {
 enum class exId : size_t
 {

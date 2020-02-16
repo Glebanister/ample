@@ -2,9 +2,9 @@
 #include <exception>
 #include <iostream>
 
-#include "Error.h"
+#include "Exception.h"
 
-namespace exception
+namespace ample::exception
 {
 
 Exception::Exception(const exId &id, const exType &type, const std::string &message)

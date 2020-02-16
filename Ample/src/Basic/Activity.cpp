@@ -4,7 +4,7 @@
 #include "Activity.h"
 #include "EventHandler.h"
 #include "EventManager.h"
-#include "Error.h"
+#include "Exception.h"
 #include "Utils.h"
 
 namespace ample::activity
@@ -38,18 +38,19 @@ void Activity::kill()
 {
     if (onKill())
     {
+        _running = false;
         _alive = false;
     }
 }
 
-void onAwake() {}
-void onStart() {}
-void onActive() {}
-void onStop() {}
-void onDestroy() {}
+void Activity::onAwake() {}
+void Activity::onStart() {}
+void Activity::onActive() {}
+void Activity::onStop() {}
+void Activity::onDestroy() {}
 
-bool onKill() { return true; }
-bool onPause() { return true; }
+bool Activity::onKill() { return true; }
+bool Activity::onPause() { return true; }
 
 bool _alive = false;
 bool _running = false;

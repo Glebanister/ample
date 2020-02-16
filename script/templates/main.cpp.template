@@ -1,14 +1,14 @@
 #include "$project_name.h"
-#include "Window.h"
+#include "WindowActivity.h"
 
 int main()
 {
-    os::Window window("$window_name",
+    ample::window::Window window("$window_name",
                       0, 0,
                       $window_w, $window_h,
-                      os::winpos::CENTERED_X | os::winpos::CENTERED_Y,
+                      ample::window::winpos::CENTERED_X | ample::window::winpos::CENTERED_Y,
                       $window_param);
-    auto activity = $project_name(&window);
-    activity.start();
+    auto activity = $project_name(window);
+    activity.loop();
     return 0;
 }

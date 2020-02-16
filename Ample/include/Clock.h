@@ -4,7 +4,7 @@
 #include <chrono>
 #include <vector>
 
-namespace os
+namespace ample::time
 {
 typedef std::chrono::_V2::system_clock::time_point time_point;
 typedef std::chrono::milliseconds milliseconds;

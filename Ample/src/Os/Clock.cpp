@@ -3,7 +3,7 @@
 
 #include "Clock.h"
 
-namespace os
+namespace ample::time
 {
 class Timer;
 
@@ -75,7 +75,7 @@ void Clock::update()
     curTime = std::chrono::system_clock::now();
     delta = std::chrono::duration_cast<milliseconds>(curTime - oldTime);
     liveTime = std::chrono::duration_cast<milliseconds>(curTime - creationTime);
-    std::vector<os::Timer *> newTimers;
+    std::vector<Timer *> newTimers;
     int cnt = 0;
     for (auto timer : timers)
     {
@@ -95,7 +95,7 @@ void Clock::update()
     }
 }
 
-void Clock::addTimer(os::Timer *timer)
+void Clock::addTimer(Timer *timer)
 {
     timers.push_back(timer);
 }

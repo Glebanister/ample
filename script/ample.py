@@ -219,13 +219,13 @@ class AmpleProject:  # pylint: disable=too-many-instance-attributes
             raise EnvironmentError(
                 f'could not find template file {template_file}')
 
-        window_param = 'os::winmode::UNDEFINED_MODE'
+        window_param = 'ample::window::winmode::UNDEFINED_MODE'
         if self.fullscreen:
-            window_param += ' | os::winmode::FULLSCREEN'
+            window_param += ' | ample::window::winmode::FULLSCREEN'
         if self.resizable:
-            window_param += ' | os::winmode::RESIZABLE'
+            window_param += ' | ample::window::winmode::RESIZABLE'
         if self.borderless:
-            window_param += ' | os::winmode::BORDERLESS'
+            window_param += ' | ample::window::winmode::BORDERLESS'
 
         for line in template.readlines():
             out.write(line.replace('$project_name', self.project_name)

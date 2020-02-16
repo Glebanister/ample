@@ -5,20 +5,20 @@
 #include "EventHandler.h"
 #include "EventManager.h"
 
-namespace control
+namespace ample::control
 {
 EventManager::EventManager()
     : keyboard(std::make_unique<KeyboardManager>())
 {
-    handlerByType[SDL_KEYDOWN].push_back(*keyboard);
-    handlerByType[SDL_KEYUP].push_back(*keyboard);
+    handlerByType[SDL_KEYDOWN].push_back(keyboard.get());
+    handlerByType[SDL_KEYUP].push_back(keyboard.get());
 }
 
 void EventManager::update()
 {
     while (SDL_PollEvent(&ev))
     {
-        for (auto handler : this->handlerByType[this->ev.type])
+        for (auto handler : handlerByType[ev.type])
         {
             handler->handleEvent(this->ev);
         }
@@ -32,7 +32,7 @@ void EventManager::addKeyHandler(const key_t key, KeyHandler &handler)
 
 void EventManager::addEventHandler(const int eventType, EventHandler &handler)
 {
-    handlerByType[eventType].push_back(handler);
+    handlerByType[eventType].push_back(&handler);
 }
 
 void EventManager::clearType(const int &eventType)
@@ -42,7 +42,7 @@ void EventManager::clearType(const int &eventType)
 
 void KeyboardManager::addKeyHandler(const key_t key, KeyHandler &handler)
 {
-    handlers[key].push_back(handler);
+    handlers[key].push_back(&handler);
 }
 
 void KeyboardManager::clearKey(const key_t key)
@@ -52,9 +52,9 @@ void KeyboardManager::clearKey(const key_t key)
 
 void KeyboardManager::handleEvent(const SDL_Event &event)
 {
-    for (EventHandler &handler : handlers[event.key.keysym.sym])
+    for (EventHandler *handler : handlers[event.key.keysym.sym])
     {
-        handler.handleEvent(event);
+        handler->handleEvent(event);
     }
 }
 } // namespace control

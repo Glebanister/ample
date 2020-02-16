@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "WindowActivity.h"
-#include "Error.h"
+#include "Exception.h"
 
 namespace ample::window
 {
@@ -135,8 +135,18 @@ WindowActivity::WindowActivity(Window &window)
 void WindowActivity::onActive()
 {
     activity::Activity::onActive();
-    os::Clock::update();
+    time::Clock::update();
     eventManager->update();
+}
+
+pixel_t WindowActivity::getWidth() const
+{
+    return _window.getWidth();
+}
+
+pixel_t WindowActivity::getHeight() const
+{
+    return _window.getHeight();
 }
 
 void WindowActivity::onResize() {}

@@ -2,7 +2,7 @@
 
 #include "EventHandler.h"
 
-namespace control
+namespace ample::control
 {
 KeyHandler::KeyHandler()
 {
@@ -19,7 +19,7 @@ void KeyHandler::onKeyUp()
     return;
 }
 
-int KeyHandler::getStatus()
+int KeyHandler::getStatus() const
 {
     return this->pressed;
 }

@@ -2,7 +2,7 @@
 
 #include <SDL2/SDL.h>
 
-namespace control
+namespace ample::control
 {
 
 enum event

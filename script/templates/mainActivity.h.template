@@ -1,8 +1,7 @@
-#include "LayeredWindowActivity.h"
-#include "Window.h"
+#include "WindowActivity.h"
 
-class $project_name : public graphics::LayeredWindowActivity
+class $project_name : public ample::window::WindowActivity
 {
 public:
-    $project_name(os::Window *window);
+    $project_name(ample::window::Window &window);
 };

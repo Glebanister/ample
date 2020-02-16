@@ -13,22 +13,13 @@ set(GLU_LIBRARY /usr/lib/x86_64-linux-gnu/libGLU.so)
 set(${CMAKE_PROJECT_NAME}_SOURCES
 
     src/Basic/Activity.cpp
-    src/Basic/Storage.cpp
 
     src/Control/EventManager.cpp
     src/Control/EventHandler.cpp
     
-    src/Os/Window.cpp
-    src/Os/OsManager.cpp
+    src/Os/WindowActivity.cpp
     src/Os/Clock.cpp
-    src/Os/Error.cpp
-
-    src/Graphics/LayeredWindowActivity.cpp
-    src/Graphics/WindowObject.cpp
-    src/Graphics/Colors.cpp
-    src/Graphics/GraphicShape.cpp
-
-    src/Geometry/Vector.cpp
+    src/Os/Exception.cpp
 
     src/Utils/Utils.cpp
     )
