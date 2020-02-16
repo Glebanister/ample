@@ -1,8 +1,6 @@
-## Ample - little engine
-
 ![travis](https://travis-ci.com/Glebanister/ample.svg?branch=master)
 
-### Engine
+### Ample - Game engine
 2D, physics-friendly
 
 ### Project manager
