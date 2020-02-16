@@ -4,8 +4,6 @@
 #include <GL/gl.h>
 #include <string>
 
-#include "OsManager.h"
-
 namespace os
 {
 enum winpos : uint32_t
@@ -25,8 +23,6 @@ enum winmode : uint32_t
     MINIMIZED = SDL_WINDOW_MINIMIZED,
 };
 
-class OsManager;
-
 class Window final
 {
 public:
@@ -43,11 +39,6 @@ public:
     Window(const Window &other) = delete;
     Window &operator=(const Window &) = delete;
 
-    void setGlViewport(const size_t x, const size_t y, const size_t w, const size_t h);
-
-    void open();
-    void close();
-
     void swapBuffer();
 
     size_t getWidth();
@@ -59,7 +50,6 @@ public:
 
 private:
     SDL_Window *_winPtr = nullptr;
-    OsManager *_manager = nullptr;
     std::string _name;
     size_t _x, _y;
     size_t _width, _height;

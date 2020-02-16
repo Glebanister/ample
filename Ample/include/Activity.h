@@ -2,7 +2,6 @@
 
 #include <vector>
 
-#include "Storage.h"
 #include "EventManager.h"
 #include "EventHandler.h"
 #include "Window.h"

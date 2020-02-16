@@ -2,7 +2,6 @@
 #include <exception>
 
 #include "Activity.h"
-#include "OsManager.h"
 #include "EventHandler.h"
 #include "EventManager.h"
 #include "Error.h"

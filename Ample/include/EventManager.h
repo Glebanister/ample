@@ -7,7 +7,6 @@
 
 #include "EventHandler.h"
 #include "EventManager.h"
-#include "OsManager.h"
 
 namespace control
 {
