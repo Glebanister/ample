@@ -4,10 +4,9 @@
 
 #include "EventManager.h"
 #include "EventHandler.h"
-#include "Window.h"
 #include "Clock.h"
 
-namespace activity
+namespace ample::activity
 {
 class Activity
 {
@@ -31,4 +30,4 @@ protected:
     bool _alive = false;
     bool _running = false;
 };
-} // namespace activity
+} // namespace ample::activity

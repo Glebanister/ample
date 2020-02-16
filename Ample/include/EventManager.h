@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <vector>
 #include <algorithm>
+#include <memory>
 
 #include "EventHandler.h"
 #include "EventManager.h"
@@ -11,6 +12,17 @@
 namespace control
 {
 typedef SDL_Event Event;
+
+class KeyboardManager : public EventHandler
+{
+public:
+    void addKeyHandler(const key_t key, KeyHandler &handler);
+    void clearKey(const key_t key);
+    void handleEvent(const SDL_Event &event) override;
+
+private:
+    std::unordered_map<key_t, std::vector<KeyHandler &>> handlers;
+};
 
 class EventManager final
 {
@@ -22,29 +34,16 @@ public:
 
     void update();
 
-    void addKeyHandler(const key_t &key, KeyHandler *handler);
-    void addEventHandler(const int &eventType, EventHandler *handler);
+    void addKeyHandler(const key_t key, KeyHandler &handler);
+    void addEventHandler(const int eventType, EventHandler &handler);
     void clearType(const int &eventType);
 
-    ~EventManager();
+    ~EventManager() = default;
 
 private:
-    class KeyboardManager : public EventHandler
-    {
-    public:
-        void addKeyHandler(const key_t &key, KeyHandler *handler);
-        void clearKey(const key_t &key);
-        void handleEvent(const SDL_Event &event) override;
-
-    private:
-        std::unordered_map<key_t, std::vector<KeyHandler *>> handlers;
-    };
-
     SDL_Event ev;
-    std::unordered_map<int, std::vector<EventHandler *>> handlerByType;
+    std::unordered_map<int, std::vector<EventHandler &>> handlerByType;
 
-    KeyboardManager *keyboard;
-
-    os::OsManager *manager;
+    std::unique_ptr<KeyboardManager> keyboard;
 };
 } // namespace control

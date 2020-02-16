@@ -155,7 +155,7 @@ public:
 
     virtual void onKeyDown();
     virtual void onKeyUp();
-    int getStatus();
+    int getStatus() const;
 
     virtual void handleEvent(const SDL_Event &event) override;
 
