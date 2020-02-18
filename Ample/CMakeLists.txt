@@ -23,6 +23,9 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Os/Window.cpp
 
     src/Utils/Utils.cpp
+
+    src/Graphics/GraphicalObject.cpp
+    src/Graphics/GraphicalObject2d.cpp
     )
 
 include_directories(${SDL2_INCLUDE_DIRS})
