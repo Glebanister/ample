@@ -1,9 +1,6 @@
-## Ample - little engine
-
 ![travis](https://travis-ci.com/Glebanister/ample.svg?branch=master)
-engine is a linux-based game engine
 
-### Engine
+### Ample - Game engine
 2D, physics-friendly
 
 ### Project manager

@@ -1,6 +1,4 @@
 #include "gtest/gtest.h"
-#include "Activity.h"
-#include "Error.h"
 
 int main(int argc, char **argv)
 {
