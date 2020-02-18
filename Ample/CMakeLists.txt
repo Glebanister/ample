@@ -20,6 +20,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Os/WindowActivity.cpp
     src/Os/Clock.cpp
     src/Os/Exception.cpp
+    src/Os/Window.cpp
 
     src/Utils/Utils.cpp
     )
