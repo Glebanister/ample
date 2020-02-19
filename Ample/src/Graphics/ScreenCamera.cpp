@@ -32,7 +32,7 @@ void ScreenCamera::look()
         wasInit = true;
     }
     _viewport.set();
-    glClearColor(0.3, 0.3, 0.3, 0.5);
+    glClearColor(0.1, 0.1, 0.1, 0.5);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glPushMatrix();
@@ -41,9 +41,9 @@ void ScreenCamera::look()
     glLoadIdentity();
     glOrtho(0.f, _camSizes.x, _camSizes.y, 0.f, 0.f, 1.f);
 
+    glTranslated(_camPos.x, _camPos.y, 0);
     glScaled(_scaleX, _scaleY, 1.0);
     glRotated(_angle, 0.0, 0.0, 1.0);
-    glTranslated(_camPos.x, _camPos.y, 0);
 }
 
 void ScreenCamera::unlook()

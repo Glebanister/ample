@@ -25,7 +25,7 @@ void GraphicalObject2d::draw()
 void GraphicalObject2d::drawSelf()
 {
     glBegin(GL_POLYGON);
-    glColor3d(0.3, 0.3, 0.3);
+    glColor3d(0.8, 0.8, 0.8);
     for (auto vert : _graphicalShape)
     {
         glVertex2d(vert.x, vert.y);
