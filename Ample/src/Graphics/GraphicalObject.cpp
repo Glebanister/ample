@@ -1,6 +1,6 @@
 #include "GraphicalObject.h"
 
-namespace graphics
+namespace ample::graphics
 {
 void GraphicalObject::addSubObject(std::shared_ptr<GraphicalObject> object)
 {
