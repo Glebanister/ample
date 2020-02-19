@@ -10,12 +10,15 @@ typedef double pixel_t;
 class ScreenCamera : public Camera2d
 {
 public:
-    ScreenCamera(Vector2d position, pixel_t width, pixel_t height);
+    ScreenCamera(Vector2d camPos, Vector2d camSizes,
+                 Vector2d viewportPos, Vector2d viewportSizes);
 
-    ScreenCamera(pixel_t width, pixel_t height);
+    ScreenCamera(Vector2d camSizes, Vector2d viewportSizes);
+    ScreenCamera(Vector2d viewportSizes);
 
     void look() override;
     void unlook() override;
+
     void scaleX(double) override;
     void scaleY(double) override;
     void translateX(pixel_t) override;
@@ -29,9 +32,9 @@ public:
     double getAngleZ() const override;
 
 private:
-    Vector2d _position;
     double _angle = 0.0;
     double _scaleX = 1.0, _scaleY = 1.0;
-    pixel_t _width, _height;
+    Vector2d _camSizes;
+    Vector2d _camPos{0.0, 0.0};
 };
 } // namespace ample::graphics
