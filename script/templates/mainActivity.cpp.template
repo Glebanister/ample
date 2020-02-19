@@ -1,4 +1,28 @@
-#include "$project_name.h"
+#include "$activity_name.h"
+#include "ScreenCamera.h"
+#include "Clock.h"
 
-$project_name::$project_name(ample::window::Window &window)
+$activity_name::$activity_name(ample::window::Window &window)
     : ample::window::WindowActivity(window) {}
+
+void $activity_name::onAwake()
+{
+    WindowActivity::onAwake();
+    std::cout << getWidth() << ' ' << getHeight() << std::endl;
+    camera.translateX(getWidth() / 2);
+    camera.translateY(getHeight() / 2);
+}
+
+void $activity_name::onActive()
+{
+    WindowActivity::onActive();
+    camera.look();
+    object.draw();
+    camera.unlook();
+    this->_window.swapBuffer();
+    std::cout << ample::time::Clock::getFPS() << std::endl;
+    camera.scaleX(1.01);
+    camera.scaleY(1.01);
+    camera.translateX(1);
+    camera.rotateZ(0.1);
+}
