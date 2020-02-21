@@ -10,6 +10,9 @@ public:
     Camera2d(pixel_t xView, pixel_t yView, pixel_t wView, pixel_t hView);
     Camera2d(pixel_t wView, pixel_t hView);
 
+    void look() override;
+    void unlook() override;
+
     virtual void scaleX(double) = 0;
     virtual void scaleY(double) = 0;
     virtual void scaleZ(double) = 0;
@@ -33,5 +36,13 @@ public:
     virtual double getAngleX() const = 0;
     virtual double getAngleY() const = 0;
     virtual double getAngleZ() const = 0;
+
+protected:
+    virtual pixel_t getLeft() const = 0;
+    virtual pixel_t getRight() const = 0;
+    virtual pixel_t getBottom() const = 0;
+    virtual pixel_t getTop() const = 0;
+    virtual pixel_t getNear() const = 0;
+    virtual pixel_t getFar() const = 0;
 };
 } // namespace ample::graphics
