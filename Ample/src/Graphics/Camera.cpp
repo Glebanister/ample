@@ -6,7 +6,7 @@
 namespace ample::graphics
 {
 Camera::Viewport::Viewport(pixel_t xv, pixel_t yv, pixel_t wv, pixel_t hv)
-    : position(xv, yv), size(wv, hv) {}
+    : size(wv, hv), position(xv, yv) {}
 
 Camera::Viewport::Viewport(pixel_t wv, pixel_t hv)
     : Viewport(0, 0, wv, hv) {}
@@ -20,7 +20,8 @@ Camera::Camera(pixel_t wView, pixel_t hView)
 void Camera::Viewport::set()
 {
     glViewport(position.x, position.y,
-               position.x, position.y);
+               size.x, size.y);
+
 }
 
 void Camera::setViewport(pixel_t x, pixel_t y, pixel_t w, pixel_t h)
