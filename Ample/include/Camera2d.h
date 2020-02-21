@@ -12,14 +12,26 @@ public:
 
     virtual void scaleX(double) = 0;
     virtual void scaleY(double) = 0;
+    virtual void scaleZ(double) = 0;
+
     virtual void translateX(pixel_t) = 0;
     virtual void translateY(pixel_t) = 0;
+    virtual void translateZ(pixel_t) = 0;
+
+    virtual void rotateX(double) = 0;
+    virtual void rotateY(double) = 0;
     virtual void rotateZ(double) = 0;
 
     virtual double getScaleX() const = 0;
     virtual double getScaleY() const = 0;
+    virtual double getScaleZ() const = 0;
+
     virtual pixel_t getX() const = 0;
     virtual pixel_t getY() const = 0;
+    virtual pixel_t getZ() const = 0;
+
+    virtual double getAngleX() const = 0;
+    virtual double getAngleY() const = 0;
     virtual double getAngleZ() const = 0;
 };
 } // namespace ample::graphics
