@@ -2,13 +2,16 @@
 
 namespace ample::graphics
 {
-typedef double pixel_t;
+using pixel_t = double;
 
+template <typename T>
 struct Vector2d
 {
-    Vector2d(pixel_t xp, pixel_t yp);
+    Vector2d(T xp, T yp)
+        : x(xp), y(yp) {}
+
     Vector2d();
 
-    pixel_t x, y;
+    T x, y;
 };
-}
+} // namespace ample::graphics
