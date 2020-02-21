@@ -12,9 +12,9 @@ void GraphicalObject2d::draw()
 {
     glPushMatrix();
     glScaled(getScaleX(), getScaleY(), getScaleZ());
-    glRotated(getAngleX(), 0.0, 0.0, 1.0);
+    glRotated(getAngleX(), 1.0, 0.0, 0.0);
     glRotated(getAngleY(), 0.0, 1.0, 0.0);
-    glRotated(getAngleZ(), 1.0, 0.0, 0.0);
+    glRotated(getAngleZ(), 0.0, 0.0, 1.0);
     glTranslated(getX(), getY(), getZ());
     drawSelf();
     for (auto subObject : _subObjects)
