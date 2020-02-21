@@ -5,15 +5,17 @@
 
 namespace ample::graphics
 {
-GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d> &graphicalShape)
+GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<pixel_t>> &graphicalShape)
     : _graphicalShape(graphicalShape) {}
 
 void GraphicalObject2d::draw()
 {
     glPushMatrix();
-    glScaled(getScaleX(), getScaleY(), 1);
-    glRotated(getAngle(), 0, 0, 1);
-    glTranslated(getX(), getY(), 0);
+    glScaled(getScaleX(), getScaleY(), getScaleZ());
+    glRotated(getAngleX(), 0.0, 0.0, 1.0);
+    glRotated(getAngleY(), 0.0, 1.0, 0.0);
+    glRotated(getAngleZ(), 1.0, 0.0, 0.0);
+    glTranslated(getX(), getY(), getZ());
     drawSelf();
     for (auto subObject : _subObjects)
     {
