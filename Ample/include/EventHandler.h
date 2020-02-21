@@ -15,6 +15,13 @@ enum event
     MOUSEBUTTON_UP = SDL_MOUSEBUTTONUP
 };
 
+enum mouse
+{
+    BUTTON_LEFT = SDL_BUTTON_LEFT,
+    BUTTON_MIDDLE = SDL_BUTTON_MIDDLE,
+    BUTTON_RIGHT = SDL_BUTTON_RIGHT,
+};
+
 enum keysym
 {
     UNKNOWN = SDLK_UNKNOWN,
@@ -168,6 +175,5 @@ class KeyHandlerSingleDown : public KeyHandler
 public:
     KeyHandlerSingleDown();
     void handleEvent(const SDL_Event &event) override;
-
 };
-} // namespace control
+} // namespace ample::control
