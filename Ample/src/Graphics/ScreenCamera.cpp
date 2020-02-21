@@ -20,11 +20,11 @@ ScreenCamera::ScreenCamera(Vector3d<pixel_t> cameraPosition, Vector2d<pixel_t> c
 
 ScreenCamera::ScreenCamera(Vector2d<pixel_t> cameraPosition, Vector2d<pixel_t> cameraSize,
                            Vector2d<pixel_t> viewportPosition, Vector2d<pixel_t> viewportSize)
-    : ScreenCamera({cameraPosition.x, cameraPosition.y, 0.0}, cameraSize,
+    : ScreenCamera({cameraPosition.x, cameraPosition.y, -1.0}, cameraSize,
                    viewportPosition, viewportSize) {}
 
 ScreenCamera::ScreenCamera(Vector2d<pixel_t> cameraSize, Vector2d<pixel_t> viewportSize)
-    : ScreenCamera({0.0, 0.0, 0.0}, cameraSize, {0.0, 0.0}, viewportSize) {}
+    : ScreenCamera({0.0, 0.0, -1.0}, cameraSize, {0.0, 0.0}, viewportSize) {}
 
 ScreenCamera::ScreenCamera(Vector2d<pixel_t> viewportSize)
     : ScreenCamera(viewportSize, viewportSize) {}
