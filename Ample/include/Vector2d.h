@@ -2,8 +2,6 @@
 
 namespace ample::graphics
 {
-using pixel_t = double;
-
 template <typename T>
 struct Vector2d
 {
