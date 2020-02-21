@@ -1,18 +1,23 @@
 #pragma once
 
+#include "Vector2d.h"
+
 namespace ample::graphics
 {
-typedef double pixel_t;
+using pixel_t = double;
 
 class Camera
 {
 protected:
     struct Viewport final
     {
-        pixel_t x, y, w, h;
         Viewport(pixel_t xv, pixel_t yv, pixel_t wv, pixel_t hv);
         Viewport(pixel_t wv, pixel_t hv);
+        
         void set();
+        
+        Vector2d<pixel_t> size;
+        Vector2d<pixel_t> position;
     };
 
 public:
@@ -21,7 +26,6 @@ public:
 
     virtual void look() = 0;
     virtual void unlook() = 0;
-    void setViewport(const Viewport &viewport);
     void setViewport(pixel_t x, pixel_t y, pixel_t w, pixel_t h);
     void setViewport(pixel_t w, pixel_t h);
 

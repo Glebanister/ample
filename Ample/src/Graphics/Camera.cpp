@@ -6,7 +6,7 @@
 namespace ample::graphics
 {
 Camera::Viewport::Viewport(pixel_t xv, pixel_t yv, pixel_t wv, pixel_t hv)
-    : x(xv), y(yv), w(wv), h(hv) {}
+    : position(xv, yv), size(wv, hv) {}
 
 Camera::Viewport::Viewport(pixel_t wv, pixel_t hv)
     : Viewport(0, 0, wv, hv) {}
@@ -19,41 +19,40 @@ Camera::Camera(pixel_t wView, pixel_t hView)
 
 void Camera::Viewport::set()
 {
-    glViewport(x, y, w, h);
-}
-
-void Camera::setViewport(const Viewport &viewport)
-{
-    _viewport = viewport;
+    glViewport(position.x, position.y,
+               position.x, position.y);
 }
 
 void Camera::setViewport(pixel_t x, pixel_t y, pixel_t w, pixel_t h)
 {
-    _viewport = Viewport(x, y, w, h);
+    _viewport.position.x = x;
+    _viewport.position.y = y;
+    _viewport.size.x = w;
+    _viewport.size.y = h;
 }
 
 void Camera::setViewport(pixel_t w, pixel_t h)
 {
-    _viewport = Viewport(w, h);
+    setViewport(0, 0, w, h);
 }
 
 pixel_t Camera::getViewportX() const
 {
-    return _viewport.x;
+    return _viewport.position.x;
 }
 
 pixel_t Camera::getViewportY() const
 {
-    return _viewport.y;
+    return _viewport.position.y;
 }
 
 pixel_t Camera::getViewportW() const
 {
-    return _viewport.w;
+    return _viewport.size.x;
 }
 
 pixel_t Camera::getViewportH() const
 {
-    return _viewport.h;
+    return _viewport.size.y;
 }
 } // namespace ample::graphics
