@@ -3,7 +3,7 @@
 
 int main()
 {
-    ample::window::Window window("$window_name",
+    ample::window::Window window("DemoGame",
                       0, 0,
                       1920, 1080,
                       ample::window::winpos::CENTERED_X | ample::window::winpos::CENTERED_Y,
