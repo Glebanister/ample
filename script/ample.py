@@ -88,22 +88,25 @@ class AmpleProject:  # pylint: disable=too-many-instance-attributes
             self.__from_json()
 
     def __from_json(self):
-        with open('.ample/config.json') as config_file:
-            data = json.load(config_file)
-            self.ready = data['ready']
-            self.project_name = data['project_name']
-            self.activity_name = data['activity_name']
-            self.include_dir = data['include_dir']
-            self.source_dir = data['source_dir']
-            self.main_file = data['main_file']
-            self.window_name = data['window_name']
-            self.window_w = data['window_w']
-            self.window_h = data['window_h']
-            self.fullscreen = data['fullscreen']
-            self.resizable = data['resizable']
-            self.borderless = data['borderless']
-            self.cxx_flags = data['cxx_flags']
-            self.sources = data['sources']
+        try:
+            with open('.ample/config.json') as config_file:
+                data = json.load(config_file)
+                self.ready = data['ready']
+                self.project_name = data['project_name']
+                self.activity_name = data['activity_name']
+                self.include_dir = data['include_dir']
+                self.source_dir = data['source_dir']
+                self.main_file = data['main_file']
+                self.window_name = data['window_name']
+                self.window_w = data['window_w']
+                self.window_h = data['window_h']
+                self.fullscreen = data['fullscreen']
+                self.resizable = data['resizable']
+                self.borderless = data['borderless']
+                self.cxx_flags = data['cxx_flags']
+                self.sources = data['sources']
+        except FileNotFoundError:
+            raise EnvironmentError('could not find .ample/config.json')
 
     def __to_json(self):
         # dump project to .json
@@ -239,7 +242,7 @@ class AmpleProject:  # pylint: disable=too-many-instance-attributes
                       .replace('$source_dir', self.source_dir)
                       .replace('$cxx_flags', self.cxx_flags)
                       .replace('$sources', '\n'.join(self.sources))
-                     )
+                      )
         out.close()
         template.close()
 
@@ -247,7 +250,6 @@ class AmpleProject:  # pylint: disable=too-many-instance-attributes
 def init_handler(project_name):
     """ initialization command handler """
 
-    project = AmpleProject()
     if os.listdir('.'):
         user_resp = ''
         while user_resp not in ['y', 'n']:
@@ -256,6 +258,7 @@ def init_handler(project_name):
         if user_resp == 'n':
             return
     try:
+        project = AmpleProject()
         project.init(project_name=project_name,
                      activity_name=project_name,
                      include_dir='include',
@@ -276,9 +279,8 @@ def init_handler(project_name):
 
 def build_handler(build_type):
     """ building command handler """
-
-    project = AmpleProject()
     try:
+        project = AmpleProject()
         project.build(build_type)
     except EnvironmentError as exc:
         print(f'Error: {exc.args[0]}')
@@ -290,8 +292,8 @@ def build_handler(build_type):
 def run_handler():
     """ running command handler """
 
-    project = AmpleProject()
     try:
+        project = AmpleProject()
         project.run()
     except EnvironmentError as exc:
         print(f'Error: {exc.args[0]}')
