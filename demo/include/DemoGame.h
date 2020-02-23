@@ -16,11 +16,15 @@ private:
     void onAwake() override;
     void onActive() override;
 
-    ample::graphics::CameraOrtho camera{{1960, 1080}};
-    ample::graphics::ScreenObject object{{{-20, -20},
-                                          {20, -20},
-                                          {20, 20},
-                                          {-20, 20}}};
+    ample::graphics::CameraPerspective camera{{1960, 1080}};
+    ample::graphics::ScreenObject objectSmall{{{-20, -20},
+                                               {20, -20},
+                                               {20, 20},
+                                               {-20, 20}}};
+    ample::graphics::ScreenObject objectBig{{{-30, -30},
+                                             {30, -30},
+                                             {30, 30},
+                                             {-30, 30}}};
     ample::random::PerlinNoise xNoise{103};
     ample::random::PerlinNoise yNoise{23};
 };
