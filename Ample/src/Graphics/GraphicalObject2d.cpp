@@ -28,7 +28,8 @@ void GraphicalObject2d::draw()
 void GraphicalObject2d::drawSelf()
 {
     glBegin(GL_POLYGON);
-    glColor3d(0.8, 0.8, 0.8);
+    double cl = 0.5 - std::abs((getZ())) / 6.0;
+    glColor3d(cl, cl, cl);
     for (auto vert : _graphicalShape)
     {
         glVertex2d(vert.x, vert.y);
