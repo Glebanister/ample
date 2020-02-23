@@ -16,7 +16,7 @@ void GraphicalObject2d::draw()
     glRotated(getAngleX(), 1.0, 0.0, 0.0);
     glRotated(getAngleY(), 0.0, 1.0, 0.0);
     glRotated(getAngleZ(), 0.0, 0.0, 1.0);
-    glTranslated(getX(), getY(), getZ());
+    glTranslated(getX() * _ratio, getY() * _ratio, getZ() * _ratio);
     drawSelf();
     for (auto subObject : _subObjects)
     {
@@ -34,5 +34,15 @@ void GraphicalObject2d::drawSelf()
         glVertex2d(vert.x, vert.y);
     }
     glEnd();
+}
+
+void GraphicalObject2d::setRatio(double ratio)
+{
+    _ratio = ratio;
+}
+
+double GraphicalObject2d::getRatio() const
+{
+    return _ratio;
 }
 } // namespace ample::graphics

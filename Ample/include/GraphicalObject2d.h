@@ -26,9 +26,12 @@ public:
     virtual double getScaleZ() const = 0;
 
     void draw() override;
+    void setRatio(double);
+    double getRatio() const;
 
 protected:
     void drawSelf() override;
     std::vector<Vector2d<double>> _graphicalShape;
+    double _ratio = 1.0;
 };
 } // namespace graphics
