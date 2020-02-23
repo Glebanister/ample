@@ -3,7 +3,7 @@
 namespace ample::graphics
 {
 
-ScreenObject::ScreenObject(const std::vector<Vector2d<pixel_t>> &shape, Vector3d<pixel_t> position)
+ScreenObject::ScreenObject(const std::vector<Vector2d<pixel_t>> &shape, Vector3d<double> position)
     : _position(position)
 {
     _graphicalShape.resize(shape.size());
@@ -63,7 +63,7 @@ void ScreenObject::rotate(radian_t x, radian_t y, radian_t z)
     _angle.z += z;
 }
 
-void ScreenObject::translate(pixel_t x, pixel_t y, pixel_t z)
+void ScreenObject::translate(double x, double y, double z)
 {
     _position.x += x;
     _position.y += y;
@@ -84,7 +84,7 @@ void ScreenObject::setAngle(radian_t x, radian_t y, radian_t z)
     _angle.z = z;
 }
 
-void ScreenObject::setPosition(pixel_t x, pixel_t y, pixel_t z)
+void ScreenObject::setPosition(double x, double y, double z)
 {
     _position.x = x;
     _position.y = y;
