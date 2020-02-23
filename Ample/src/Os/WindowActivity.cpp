@@ -43,6 +43,7 @@ void WindowActivity::onActive()
     activity::Activity::onActive();
     time::Clock::update();
     eventManager->update();
+    this->_window.swapBuffer();
 }
 
 pixel_t WindowActivity::getWidth() const
