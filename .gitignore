@@ -2,3 +2,5 @@
 build/
 TODOLIST.md
 .bashrc
+.idea/
+cmake-build-debug/
