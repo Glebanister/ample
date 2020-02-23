@@ -8,20 +8,21 @@
 
 #include "EventHandler.h"
 #include "EventManager.h"
+#include "Vector2d.h"
 
 namespace ample::control
 {
-typedef SDL_Event Event;
+using Event = SDL_Event;
 
 class KeyboardManager : public EventHandler
 {
 public:
-    void addKeyHandler(const key_t key, KeyHandler &handler);
-    void clearKey(const key_t key);
+    void addKeyHandler(const keysym key, KeyHandler &handler);
+    void clearKey(const keysym key);
     void handleEvent(const SDL_Event &event) override;
 
 private:
-    std::unordered_map<key_t, std::vector<KeyHandler *>> handlers;
+    std::unordered_map<int32_t, std::vector<std::shared_ptr<KeyHandler>>> _handlers;
 };
 
 class EventManager final
@@ -34,7 +35,7 @@ public:
 
     void update();
 
-    void addKeyHandler(const key_t key, KeyHandler &handler);
+    void addKeyHandler(const keysym key, KeyHandler &handler);
     void addEventHandler(const int eventType, EventHandler &handler);
     void clearType(const int &eventType);
 
@@ -42,8 +43,7 @@ public:
 
 private:
     SDL_Event ev;
-    std::unordered_map<int, std::vector<EventHandler *>> handlerByType;
-
-    std::unique_ptr<KeyboardManager> keyboard;
+    std::unordered_map<int, std::vector<std::shared_ptr<EventHandler>>> _handlerByType;
+    std::shared_ptr<KeyboardManager> _keyboard;
 };
 } // namespace control
