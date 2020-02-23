@@ -18,9 +18,4 @@ void $activity_name::onActive()
     object.draw();
     camera.unlook();
     this->_window.swapBuffer();
-    std::cout << ample::time::Clock::getFPS() << std::endl;
-    camera.scaleX(1.01);
-    camera.scaleY(1.01);
-    camera.translateX(1);
-    camera.rotateZ(0.1);
 }
