@@ -1,11 +1,13 @@
 #pragma once
 
+#include <cstdint>
+
 #include "Vector2d.h"
+#include "Vector3d.h"
 
 namespace ample::graphics
 {
-using pixel_t = double;
-
+using pixel_t = __int32_t;
 class Camera
 {
 protected:
@@ -13,28 +15,61 @@ protected:
     {
         Viewport(pixel_t xv, pixel_t yv, pixel_t wv, pixel_t hv);
         Viewport(pixel_t wv, pixel_t hv);
-        
+        Viewport &operator=(const Viewport &) = default;
+        Viewport(const Viewport &) = default;
+
         void set();
-        
+
         Vector2d<pixel_t> size;
         Vector2d<pixel_t> position;
     };
 
 public:
-    Camera(pixel_t xView, pixel_t yView, pixel_t wView, pixel_t hView);
-    Camera(pixel_t wView, pixel_t hView);
+    Camera(pixel_t xView, pixel_t yView, pixel_t wView, pixel_t hView, double ratio = 1.0);
+    Camera(pixel_t wView, pixel_t hView, double ratio = 1.0);
 
     virtual void look() = 0;
     virtual void unlook() = 0;
+
     void setViewport(pixel_t x, pixel_t y, pixel_t w, pixel_t h);
     void setViewport(pixel_t w, pixel_t h);
+
+    void setRatio(double ratio);
+
+    void scale(double x, double y, double z);
+    void translate(double x, double y, double z);
+    void rotate(double x, double y, double z);
+
+    void scaleSet(double x, double y, double z);
+    void translateSet(double x, double y, double z);
+    void rotateSet(double x, double y, double z);
+
+    double getScaleX() const;
+    double getScaleY() const;
+    double getScaleZ() const;
+
+    double getX() const;
+    double getY() const;
+    double getZ() const;
+
+    double getAngleX() const;
+    double getAngleY() const;
+    double getAngleZ() const;
 
     pixel_t getViewportX() const;
     pixel_t getViewportY() const;
     pixel_t getViewportW() const;
     pixel_t getViewportH() const;
 
+    double getWidth() const;
+    double getHeight() const;
+
 protected:
     Viewport _viewport;
+    Vector2d<double> _size;
+    Vector3d<double> _position{0.0, 0.0, 0.0};
+    Vector3d<double> _scale{1.0, 1.0, 1.0};
+    Vector3d<double> _angle{0.0, 0.0, 0.0};
+    double _ratio = 1.0;
 };
 } // namespace ample::graphics
