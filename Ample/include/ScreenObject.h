@@ -33,6 +33,10 @@ public:
     void translateY(pixel_t dy);
     void translateZ(pixel_t dz);
 
+    void setX(pixel_t x);
+    void setY(pixel_t y);
+    void setZ(pixel_t z);
+
     void scaleX(double coef);
     void scaleY(double coef);
     void scaleZ(double coef);

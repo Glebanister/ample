@@ -86,4 +86,19 @@ void ScreenObject::scaleZ(double coef)
 {
     _scale.z *= coef;
 }
+
+void ScreenObject::setX(pixel_t x)
+{
+    _position.x = x;
+}
+
+void ScreenObject::setY(pixel_t y)
+{
+    _position.y = y;
+}
+
+void ScreenObject::setZ(pixel_t z)
+{
+    _position.z = z;
+}
 } // namespace ample::graphics
