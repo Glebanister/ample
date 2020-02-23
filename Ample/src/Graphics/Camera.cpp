@@ -60,9 +60,9 @@ void Camera::scale(double x, double y, double z)
 }
 void Camera::translate(double x, double y, double z)
 {
-    _position.x *= x;
-    _position.y *= y;
-    _position.z *= z;
+    _position.x += x;
+    _position.y += y;
+    _position.z += z;
 }
 void Camera::rotate(double x, double y, double z)
 {
