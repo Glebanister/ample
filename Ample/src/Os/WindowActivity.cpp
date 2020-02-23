@@ -29,13 +29,13 @@ void WindowEventHandler::handleEvent(const SDL_Event &event)
 }
 
 WindowActivity::WindowActivity(Window &window)
-    : eventManager(new control::EventManager),
+    : eventManager(std::make_shared<control::EventManager>()),
       _window(window),
-      _quitHandler(new QuitHandler(*this)),
-      _windowEventHandler(new WindowEventHandler(*this, _window))
+      _quitHandler(std::make_shared<QuitHandler>(*this)),
+      _windowEventHandler(std::make_shared<WindowEventHandler>(*this, _window))
 {
-    eventManager->addEventHandler(SDL_QUIT, *_quitHandler);
-    eventManager->addEventHandler(SDL_WINDOWEVENT, *_windowEventHandler);
+    eventManager->addEventHandler(SDL_QUIT, _quitHandler);
+    eventManager->addEventHandler(SDL_WINDOWEVENT, _windowEventHandler);
 }
 
 void WindowActivity::onActive()

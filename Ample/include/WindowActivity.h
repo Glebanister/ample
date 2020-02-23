@@ -41,7 +41,7 @@ private:
 class WindowActivity : public activity::Activity
 {
 public:
-    std::unique_ptr<control::EventManager> eventManager;
+    std::shared_ptr<control::EventManager> eventManager;
 
     WindowActivity() = delete;
     WindowActivity(Window &window);
@@ -57,8 +57,8 @@ protected:
     virtual void onActive() override;
 
     Window &_window;
-    std::unique_ptr<QuitHandler> _quitHandler;
-    std::unique_ptr<WindowEventHandler> _windowEventHandler;
+    std::shared_ptr<QuitHandler> _quitHandler;
+    std::shared_ptr<WindowEventHandler> _windowEventHandler;
 
     friend void WindowEventHandler::handleEvent(const SDL_Event &event);
 };

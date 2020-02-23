@@ -185,7 +185,6 @@ public:
 class MouseHandler : public EventHandler
 {
 public:
-    MouseHandler(mouseButton button);
     void handleEvent(const SDL_Event &event) final;
 
     virtual void onButtonDown();

@@ -30,14 +30,14 @@ void EventManager::update()
     }
 }
 
-void EventManager::addKeyHandler(const keysym key, KeyHandler &handler)
+void EventManager::addKeyHandler(const keysym key, std::shared_ptr<KeyHandler> handler)
 {
     _keyboard->addKeyHandler(key, handler);
 }
 
-void EventManager::addEventHandler(const int eventType, EventHandler &handler)
+void EventManager::addEventHandler(const int eventType, std::shared_ptr<EventHandler> handler)
 {
-    _handlerByType[eventType].push_back(std::make_shared<EventHandler>(handler));
+    _handlerByType[eventType].push_back(handler);
 }
 
 void EventManager::clearType(const int &eventType)
@@ -85,9 +85,9 @@ bool EventManager::isDoubleClick() const
     return _mouse->isDouble();
 }
 
-void KeyboardManager::addKeyHandler(const keysym key, KeyHandler &handler)
+void KeyboardManager::addKeyHandler(const keysym key, std::shared_ptr<KeyHandler> handler)
 {
-    _handlers[key].push_back(std::make_shared<KeyHandler>(handler));
+    _handlers[key].push_back(handler);
 }
 
 void KeyboardManager::clearKey(const keysym key)
