@@ -4,33 +4,41 @@ namespace ample::graphics
 {
 
 ScreenObject::ScreenObject(const std::vector<Vector2d<pixel_t>> &shape, Vector3d<pixel_t> position)
-    : GraphicalObject2d(shape), _position(position) {}
+    : _position(position)
+{
+    _graphicalShape.resize(shape.size());
+    for (size_t i = 0; i < shape.size(); ++i)
+    {
+        _graphicalShape[i].x = shape[i].x;
+        _graphicalShape[i].y = shape[i].y;
+    }
+}
 
 ScreenObject::ScreenObject(const std::vector<Vector2d<pixel_t>> &shape)
-    : GraphicalObject2d(shape) {}
+    : ScreenObject(shape, {0, 0, 0}) {}
 
-pixel_t ScreenObject::getX() const
+double ScreenObject::getX() const
 {
     return _position.x;
 }
-pixel_t ScreenObject::getY() const
+double ScreenObject::getY() const
 {
     return _position.y;
 }
-pixel_t ScreenObject::getZ() const
+double ScreenObject::getZ() const
 {
     return _position.z;
 }
 
-radians_t ScreenObject::getAngleX() const
+double ScreenObject::getAngleX() const
 {
     return _angle.x;
 }
-radians_t ScreenObject::getAngleY() const
+double ScreenObject::getAngleY() const
 {
     return _angle.y;
 }
-radians_t ScreenObject::getAngleZ() const
+double ScreenObject::getAngleZ() const
 {
     return _angle.z;
 }
@@ -48,57 +56,46 @@ double ScreenObject::getScaleZ() const
     return _scale.z;
 }
 
-void ScreenObject::rotateX(radians_t angle)
+void ScreenObject::rotate(radian_t x, radian_t y, radian_t z)
 {
-    _angle.x += angle;
-}
-void ScreenObject::rotateY(radians_t angle)
-{
-    _angle.y += angle;
-}
-void ScreenObject::rotateZ(radians_t angle)
-{
-    _angle.z += angle;
+    _angle.x += x;
+    _angle.y += y;
+    _angle.z += z;
 }
 
-void ScreenObject::translateX(pixel_t dx)
+void ScreenObject::translate(pixel_t x, pixel_t y, pixel_t z)
 {
-    _position.x += dx;
-}
-void ScreenObject::translateY(pixel_t dy)
-{
-    _position.y += dy;
-}
-void ScreenObject::translateZ(pixel_t dz)
-{
-    _position.z += dz;
+    _position.x += x;
+    _position.y += y;
+    _position.z += z;
 }
 
-void ScreenObject::scaleX(double coef)
+void ScreenObject::scale(double x, double y, double z)
 {
-    _scale.x *= coef;
-}
-void ScreenObject::scaleY(double coef)
-{
-    _scale.y *= coef;
-}
-void ScreenObject::scaleZ(double coef)
-{
-    _scale.z *= coef;
+    _scale.x *= x;
+    _scale.y *= y;
+    _scale.z *= z;
 }
 
-void ScreenObject::setX(pixel_t x)
+void ScreenObject::setAngle(radian_t x, radian_t y, radian_t z)
+{
+    _angle.x = x;
+    _angle.y = y;
+    _angle.z = z;
+}
+
+void ScreenObject::setPosition(pixel_t x, pixel_t y, pixel_t z)
 {
     _position.x = x;
-}
-
-void ScreenObject::setY(pixel_t y)
-{
     _position.y = y;
-}
-
-void ScreenObject::setZ(pixel_t z)
-{
     _position.z = z;
 }
+
+void ScreenObject::setScale(double x, double y, double z)
+{
+    _scale.x = x;
+    _scale.y = y;
+    _scale.z = z;
+}
+
 } // namespace ample::graphics

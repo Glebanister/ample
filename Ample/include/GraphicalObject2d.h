@@ -7,21 +7,19 @@
 
 namespace ample::graphics
 {
-using pixel_t = double;
-using radians_t = double;
-
 class GraphicalObject2d : public GraphicalObject
 {
 public:
-    GraphicalObject2d(const std::vector<Vector2d<pixel_t>> &);
+    GraphicalObject2d() = default;
+    GraphicalObject2d(const std::vector<Vector2d<double>> &);
 
-    virtual pixel_t getX() const = 0;
-    virtual pixel_t getY() const = 0;
-    virtual pixel_t getZ() const = 0;
+    virtual double getX() const = 0;
+    virtual double getY() const = 0;
+    virtual double getZ() const = 0;
 
-    virtual radians_t getAngleX() const = 0;
-    virtual radians_t getAngleY() const = 0;
-    virtual radians_t getAngleZ() const = 0;
+    virtual double getAngleX() const = 0;
+    virtual double getAngleY() const = 0;
+    virtual double getAngleZ() const = 0;
 
     virtual double getScaleX() const = 0;
     virtual double getScaleY() const = 0;
@@ -31,6 +29,6 @@ public:
 
 protected:
     void drawSelf() override;
-    std::vector<Vector2d<pixel_t>> _graphicalShape;
+    std::vector<Vector2d<double>> _graphicalShape;
 };
 } // namespace graphics

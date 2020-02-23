@@ -6,7 +6,7 @@
 
 namespace ample::control
 {
-using pixel_t = double;
+using pixel_t = int32_t;
 using Event = SDL_Event;
 
 enum eventType

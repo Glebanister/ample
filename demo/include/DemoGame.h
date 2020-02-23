@@ -1,7 +1,8 @@
 #pragma once
 
 #include "WindowActivity.h"
-#include "ScreenCamera.h"
+#include "CameraOrtho.h"
+#include "CameraPerspective.h"
 #include "GraphicalObject2d.h"
 #include "ScreenObject.h"
 #include "PerlinNoise.h"
@@ -15,7 +16,7 @@ private:
     void onAwake() override;
     void onActive() override;
 
-    ample::graphics::ScreenCamera camera{{1960, 1080}, {1960, 1080}};
+    ample::graphics::CameraOrtho camera{{1960, 1080}};
     ample::graphics::ScreenObject object{{{-20, -20},
                                           {20, -20},
                                           {20, 20},

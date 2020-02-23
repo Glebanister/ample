@@ -1,11 +1,12 @@
 #include <GL/gl.h>
+#include <GL/glu.h>
 #include <iostream>
 
 #include "GraphicalObject2d.h"
 
 namespace ample::graphics
 {
-GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<pixel_t>> &graphicalShape)
+GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<double>> &graphicalShape)
     : _graphicalShape(graphicalShape) {}
 
 void GraphicalObject2d::draw()
