@@ -45,6 +45,46 @@ void EventManager::clearType(const int &eventType)
     _handlerByType[eventType].clear();
 }
 
+bool EventManager::keyIsDown(keysym key) const
+{
+    return _keyboard->keyIsDown(key);
+}
+
+pixel_t EventManager::getMouseX() const
+{
+    return _mouse->getMouseX();
+}
+
+pixel_t EventManager::getMouseY() const
+{
+    return _mouse->getMouseY();
+}
+
+pixel_t EventManager::getMouseXRel() const
+{
+    return _mouse->getMouseXRel();
+}
+
+pixel_t EventManager::getMouseYRel() const
+{
+    return _mouse->getMouseYRel();
+}
+
+int32_t EventManager::getWheelX() const
+{
+    return _mouse->getWheelX();
+}
+
+int32_t EventManager::getWheelY() const
+{
+    return _mouse->getWheelY();
+}
+
+bool EventManager::isDoubleClick() const
+{
+    return _mouse->isDouble();
+}
+
 void KeyboardManager::addKeyHandler(const keysym key, KeyHandler &handler)
 {
     _handlers[key].push_back(std::make_shared<KeyHandler>(handler));

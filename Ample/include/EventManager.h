@@ -41,6 +41,15 @@ public:
     void addEventHandler(const int eventType, EventHandler &handler);
     void clearType(const int &eventType);
 
+    bool keyIsDown(keysym key) const;
+    pixel_t getMouseX() const;
+    pixel_t getMouseY() const;
+    pixel_t getMouseXRel() const;
+    pixel_t getMouseYRel() const;
+    int32_t getWheelX() const;
+    int32_t getWheelY() const;
+    bool isDoubleClick() const;
+
     ~EventManager() = default;
 
 private:
@@ -49,4 +58,4 @@ private:
     std::shared_ptr<KeyboardManager> _keyboard;
     std::shared_ptr<MouseHandler> _mouse;
 };
-} // namespace control
+} // namespace ample::control
