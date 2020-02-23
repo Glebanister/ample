@@ -14,15 +14,17 @@ namespace ample::control
 {
 using Event = SDL_Event;
 
-class KeyboardManager : public EventHandler
+class KeyboardManager final : public EventHandler
 {
 public:
     void addKeyHandler(const keysym key, KeyHandler &handler);
     void clearKey(const keysym key);
     void handleEvent(const SDL_Event &event) override;
+    bool keyIsDown(keysym key);
 
 private:
     std::unordered_map<int32_t, std::vector<std::shared_ptr<KeyHandler>>> _handlers;
+    std::unordered_map<int32_t, int32_t> _keymap;
 };
 
 class EventManager final

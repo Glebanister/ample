@@ -149,7 +149,8 @@ enum keysym
     KP_9 = SDLK_KP_9,
     KP_0 = SDLK_KP_0,
 
-    KP_PERIOD = SDLK_KP_PERIOD
+    KP_PERIOD = SDLK_KP_PERIOD,
+    _KEYSYM_TOTAL,
 };
 
 class EventHandler

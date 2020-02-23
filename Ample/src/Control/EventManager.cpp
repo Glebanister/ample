@@ -57,9 +57,15 @@ void KeyboardManager::clearKey(const keysym key)
 
 void KeyboardManager::handleEvent(const SDL_Event &event)
 {
+    _keymap[event.key.keysym.sym] = event.type;
     for (auto &handler : _handlers[event.key.keysym.sym])
     {
         handler->handleEvent(event);
     }
 }
-} // namespace control
+
+bool KeyboardManager::keyIsDown(keysym key)
+{
+    return _keymap[key] == KEY_DOWN;
+}
+} // namespace ample::control
