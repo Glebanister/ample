@@ -5,11 +5,26 @@
 
 namespace ample::graphics
 {
-CameraPerspective::CameraPerspective(pixel_t xView, pixel_t yView, pixel_t wView, pixel_t hView, double ratio)
-    : Camera(xView, yView, wView, hView) {}
+CameraPerspective::CameraPerspective(Vector2d<pixel_t> viewSize, Vector2d<pixel_t> viewPosition,
+                                     Vector2d<double> cameraSize, Vector3d<double> cameraPosition,
+                                     double ratio)
+    : Camera(viewSize, viewPosition, cameraSize, cameraPosition, ratio)
+{
+    setPerspective(-cameraSize.x / 2.0, cameraSize.x / 2.0, -cameraSize.y / 2.0, cameraSize.y / 2.0, 1.0, 500);
+}
 
-CameraPerspective::CameraPerspective(pixel_t wView, pixel_t hView, double ratio)
-    : Camera(wView, hView, ratio) {}
+CameraPerspective::CameraPerspective(Vector2d<pixel_t> viewSize, Vector2d<pixel_t> viewPosition,
+                                     Vector2d<double> cameraSize, Vector2d<double> cameraPosition,
+                                     double ratio)
+    : CameraPerspective(viewSize, viewPosition, cameraSize, {cameraPosition.x, cameraPosition.y, -1.0}, ratio) {}
+
+CameraPerspective::CameraPerspective(Vector2d<pixel_t> viewSize,
+                                     Vector2d<double> cameraSize,
+                                     double ratio)
+    : CameraPerspective(viewSize, {0, 0}, cameraSize, {0, 0}, ratio) {}
+
+CameraPerspective::CameraPerspective(Vector2d<pixel_t> viewSize, double ratio)
+    : CameraPerspective(viewSize, {static_cast<double>(viewSize.x), static_cast<double>(viewSize.y)}, ratio) {}
 
 void CameraPerspective::look()
 {
@@ -33,8 +48,8 @@ void CameraPerspective::look()
               _bottom, _top,
               _near, _far);
 
-    glTranslated(_position.x * raito,
-                 _position.y * raito,
+    glTranslated(_position.x * _ratio,
+                 _position.y * _ratio,
                  _position.z * _ratio);
     glScaled(_scale.x, _scale.y, _scale.z);
     glRotated(_angle.x, 1.0, 0.0, 0.0);
@@ -45,40 +60,5 @@ void CameraPerspective::look()
 void CameraPerspective::unlook()
 {
     glPopMatrix();
-}
-
-double CameraPerspective::getLeft() const
-{
-    return _left;
-}
-double CameraPerspective::getRight() const
-{
-    return _right;
-}
-double CameraPerspective::getBottom() const
-{
-    return _bottom;
-}
-double CameraPerspective::getTop() const
-{
-    return _top;
-}
-double CameraPerspective::getNear() const
-{
-    return _bottom;
-}
-double CameraPerspective::getFar() const
-{
-    return _far;
-}
-
-void CameraPerspective::setPerspective(double left, double right, double bottom, double top, double near, double far)
-{
-    _left = left;
-    _right = right;
-    _bottom = bottom;
-    _top = top;
-    _near = near;
-    _far = far;
 }
 } // namespace ample::graphics
