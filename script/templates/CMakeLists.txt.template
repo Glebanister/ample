@@ -4,12 +4,14 @@ project($project_name)
 set(APP_NAME $project_name)
 
 set(SOURCES $sources)
-find_library(AMPLE_LIBRARY NAMES Ample HINTS ../../build/Ample)
-find_path(AMPLE_INCLUDE_DIR NAMES Activity.h PATHS ../../Ample/include)
 
-message(STATUS "ample library found in ${AMPLE_LIBRARY}")
-message(STATUS "ample headers found in ${AMPLE_INCLUDE_DIR}")
-message(STATUS "sources list: ${SOURCES}")
+set(AMPLE_LIBRARY $lib_path)
+set(AMPLE_INCLUDE_DIR $include_path)
+
+message(INFO " ${CMAKE_ROOT}")
+message(INFO " ample library found in ${AMPLE_LIBRARY}")
+message(INFO " ample headers found in ${AMPLE_INCLUDE_DIR}")
+message(INFO " sources list: ${SOURCES}")
 
 add_executable(${APP_NAME} ${SOURCES})
 

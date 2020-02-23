@@ -155,19 +155,19 @@ class AmpleProject:  # pylint: disable=too-many-instance-attributes
             raise EnvironmentError('file already exists')
         except Exception:
             raise EnvironmentError('can not init ample directory here')
-
+        root = os.path.dirname(sys.argv[0])
         self.__write_file_from_template(
             f'{include_dir}/{project_name}.h',
-            '../templates/mainActivity.h.template')
+            f'{root}/templates/mainActivity.h.template')
         self.__write_file_from_template(
             f'{source_dir}/{project_name}.cpp',
-            '../templates/mainActivity.cpp.template')
+            f'{root}/templates/mainActivity.cpp.template')
         self.__write_file_from_template(
             f'{source_dir}/{main_file}.cpp',
-            '../templates/main.cpp.template')
+            f'{root}/templates/main.cpp.template')
         self.__write_file_from_template(
             f'CMakeLists.txt',
-            '../templates/CMakeLists.txt.template')
+            f'{root}/templates/CMakeLists.txt.template')
 
         self.ready = True
         self.__to_json()
@@ -189,12 +189,13 @@ class AmpleProject:  # pylint: disable=too-many-instance-attributes
         if build_type == 'release':
             build_flags += '-DCMAKE_BUILD_TYPE=Release'
 
+        root = os.path.dirname(sys.argv[0])
         self.__write_file_from_template(
             f'{self.source_dir}/{self.main_file}.cpp',
-            '../templates/main.cpp.template')
+            f'{root}/templates/main.cpp.template')
         self.__write_file_from_template(
             f'CMakeLists.txt',
-            '../templates/CMakeLists.txt.template')
+            f'{root}/templates/CMakeLists.txt.template')
         try:
             os.chdir('build')
         except OSError:
@@ -230,6 +231,14 @@ class AmpleProject:  # pylint: disable=too-many-instance-attributes
         if self.borderless:
             window_param += ' | ample::window::winmode::BORDERLESS'
 
+        lib_path = include_path = ""
+        for root, dirs, files in os.walk("../"):
+            for file in files:
+                if file.endswith('libAmple.so'):
+                    lib_path = root
+                if file.endswith('Activity.h'):
+                    include_path = root
+
         for line in template.readlines():
             out.write(line.replace('$project_name', self.project_name)
                       .replace('$activity_name', self.activity_name)
@@ -242,6 +251,8 @@ class AmpleProject:  # pylint: disable=too-many-instance-attributes
                       .replace('$source_dir', self.source_dir)
                       .replace('$cxx_flags', self.cxx_flags)
                       .replace('$sources', '\n'.join(self.sources))
+                      .replace('$lib_path', lib_path)
+                      .replace('$include_path', include_path)
                       )
         out.close()
         template.close()
