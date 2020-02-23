@@ -18,12 +18,12 @@ script:
   - ./test/test_Ample
   - rm -rf TestingDir
   - cd ..
-  - cd script
-  - mkdir MyGame
-  - cd MyGame
-  - python3 ../ample.py init MyGame
-  - python3 ../ample.py build --release
-  - cd ..
-  - rm -rf MyGame
-  - pylint3 ample.py
-  - cd ..
+  # - cd script
+  # - mkdir MyGame
+  # - cd MyGame
+  # - python3 ../ample.py init MyGame
+  # - python3 ../ample.py build --release
+  # - cd ..
+  # - rm -rf MyGame
+  # - pylint3 ample.py
+  # - cd ..
