@@ -16,15 +16,31 @@ void Camera::Viewport::set()
     glViewport(position.x, position.y, size.x, size.y);
 }
 
-Camera::Camera(pixel_t xView, pixel_t yView, pixel_t wView, pixel_t hView, double ratio)
-    : _viewport(xView, yView, wView, hView), _ratio(ratio) {}
+Camera::Camera(Vector2d<pixel_t> viewSize, Vector2d<pixel_t> viewPosition,
+               Vector2d<double> cameraSize, Vector3d<double> cameraPosition,
+               double ratio)
+    : _viewport(viewPosition.x, viewPosition.y, viewSize.x, viewSize.y),
+      _size(cameraSize), _position(cameraPosition), _ratio(ratio) {}
 
-Camera::Camera(pixel_t wView, pixel_t hView, double ratio)
-    : Camera(0, 0, wView, hView, ratio) {}
+Camera::Camera(Vector2d<pixel_t> viewSize, Vector2d<pixel_t> viewPosition,
+               Vector2d<double> cameraSize, Vector2d<double> cameraPosition,
+               double ratio)
+    : Camera(viewSize, viewPosition, cameraSize, {cameraPosition.x, cameraPosition.y, 0}, ratio) {}
+
+Camera::Camera(Vector2d<pixel_t> viewSize,
+               Vector2d<double> cameraSize,
+               double ratio)
+    : Camera(viewSize, {0, 0}, cameraSize, {0, 0}, ratio) {}
+
+Camera::Camera(Vector2d<pixel_t> cameraSize, double ratio)
+    : Camera(cameraSize, {static_cast<double>(cameraSize.x), static_cast<double>(cameraSize.y)}, ratio) {}
 
 void Camera::setViewport(pixel_t x, pixel_t y, pixel_t w, pixel_t h)
 {
-    _viewport = Viewport(x, y, w, h);
+    _viewport.position.x = x;
+    _viewport.position.y = y;
+    _viewport.size.x = w;
+    _viewport.size.y = h;
 }
 void Camera::setViewport(pixel_t w, pixel_t h)
 {
@@ -136,5 +152,39 @@ double Camera::getWidth() const
 double Camera::getHeight() const
 {
     return _size.y;
+}
+double Camera::getLeft() const
+{
+    return _left;
+}
+double Camera::getRight() const
+{
+    return _right;
+}
+double Camera::getBottom() const
+{
+    return _bottom;
+}
+double Camera::getTop() const
+{
+    return _top;
+}
+double Camera::getNear() const
+{
+    return _bottom;
+}
+double Camera::getFar() const
+{
+    return _far;
+}
+
+void Camera::setPerspective(double left, double right, double bottom, double top, double near, double far)
+{
+    _left = left;
+    _right = right;
+    _bottom = bottom;
+    _top = top;
+    _near = near;
+    _far = far;
 }
 } // namespace ample::graphics

@@ -25,8 +25,16 @@ protected:
     };
 
 public:
-    Camera(pixel_t xView, pixel_t yView, pixel_t wView, pixel_t hView, double ratio = 1.0);
-    Camera(pixel_t wView, pixel_t hView, double ratio = 1.0);
+    Camera(Vector2d<pixel_t> viewSize, Vector2d<pixel_t> viewPosition,
+           Vector2d<double> cameraSize, Vector3d<double> cameraPosition,
+           double ratio = 1.0);
+    Camera(Vector2d<pixel_t> viewSize, Vector2d<pixel_t> viewPosition,
+           Vector2d<double> cameraSize, Vector2d<double> cameraPosition,
+           double ratio = 1.0);
+    Camera(Vector2d<pixel_t> viewSize,
+           Vector2d<double> cameraSize,
+           double ratio = 1.0);
+    Camera(Vector2d<pixel_t> cameraSize, double ratio = 1.0);
 
     virtual void look() = 0;
     virtual void unlook() = 0;
@@ -64,6 +72,15 @@ public:
     double getWidth() const;
     double getHeight() const;
 
+    double getLeft() const;
+    double getRight() const;
+    double getBottom() const;
+    double getTop() const;
+    double getNear() const;
+    double getFar() const;
+
+    void setPerspective(double left, double right, double bottom, double top, double near, double far);
+
 protected:
     Viewport _viewport;
     Vector2d<double> _size;
@@ -71,5 +88,6 @@ protected:
     Vector3d<double> _scale{1.0, 1.0, 1.0};
     Vector3d<double> _angle{0.0, 0.0, 0.0};
     double _ratio = 1.0;
+    double _left, _right, _bottom, _top, _near, _far;
 };
 } // namespace ample::graphics
