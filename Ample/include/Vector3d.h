@@ -8,7 +8,8 @@ struct Vector3d
     Vector3d(T xp, T yp, T zp)
         : x(xp), y(yp), z(zp) {}
 
-    Vector3d();
+    Vector3d()
+        : Vector3d(0, 0, 0) {}
 
     T x, y, z;
 };
