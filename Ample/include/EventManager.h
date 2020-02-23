@@ -45,5 +45,6 @@ private:
     SDL_Event ev;
     std::unordered_map<int, std::vector<std::shared_ptr<EventHandler>>> _handlerByType;
     std::shared_ptr<KeyboardManager> _keyboard;
+    std::shared_ptr<MouseHandler> _mouse;
 };
 } // namespace control

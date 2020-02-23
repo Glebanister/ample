@@ -8,10 +8,15 @@
 namespace ample::control
 {
 EventManager::EventManager()
-    : _keyboard(std::make_unique<KeyboardManager>())
+    : _keyboard(std::make_shared<KeyboardManager>()),
+      _mouse(std::make_shared<MouseHandler>())
 {
     _handlerByType[SDL_KEYDOWN].push_back(_keyboard);
     _handlerByType[SDL_KEYUP].push_back(_keyboard);
+    _handlerByType[SDL_MOUSEBUTTONDOWN].push_back(_mouse);
+    _handlerByType[SDL_MOUSEBUTTONUP].push_back(_mouse);
+    _handlerByType[SDL_MOUSEWHEEL].push_back(_mouse);
+    _handlerByType[SDL_MOUSEMOTION].push_back(_mouse);
 }
 
 void EventManager::update()
