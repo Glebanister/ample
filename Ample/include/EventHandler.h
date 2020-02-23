@@ -2,10 +2,14 @@
 
 #include <SDL2/SDL.h>
 
+#include "Vector2d.h"
+
 namespace ample::control
 {
+using pixel_t = double;
+using Event = SDL_Event;
 
-enum event
+enum eventType
 {
     KEY_DOWN = SDL_KEYDOWN,
     KEY_UP = SDL_KEYUP,
@@ -15,7 +19,7 @@ enum event
     MOUSEBUTTON_UP = SDL_MOUSEBUTTONUP
 };
 
-enum mouse
+enum mouseButton
 {
     BUTTON_LEFT = SDL_BUTTON_LEFT,
     BUTTON_MIDDLE = SDL_BUTTON_MIDDLE,
@@ -175,5 +179,29 @@ class KeyHandlerSingleDown : public KeyHandler
 public:
     KeyHandlerSingleDown();
     void handleEvent(const SDL_Event &event) override;
+};
+
+class MouseHandler : public EventHandler
+{
+public:
+    MouseHandler(mouseButton button);
+    void handleEvent(const SDL_Event &event) final;
+
+    virtual void onButtonDown();
+    virtual void onButtonUp();
+    virtual void onMotion();
+    virtual void onWheel();
+
+    pixel_t getMouseX() const;
+    pixel_t getMouseY() const;
+    pixel_t getMouseXRel() const;
+    pixel_t getMouseYRel() const;
+    int32_t getWheelX() const;
+    int32_t getWheelY() const;
+    bool isDouble() const;
+
+private:
+    mouseButton _trigger;
+    Event _event;
 };
 } // namespace ample::control
