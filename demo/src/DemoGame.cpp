@@ -9,29 +9,61 @@ void DemoGame::onAwake()
 {
     WindowActivity::onAwake();
     std::cout << getWidth() << ' ' << getHeight() << std::endl;
+    current->setColor256(200, 100, 100);
+    objectBig.translate(0, 0, -150);
+    objectSmall.translate(0, 0, -150);
 }
 
 void DemoGame::onActive()
 {
     WindowActivity::onActive();
     camera.look();
-    objectBig.draw();
     objectSmall.draw();
+    objectBig.draw();
     camera.unlook();
-    if (eventManager->keyIsDown(ample::control::keysym::ARROW_LEFT))
+    if (eventManager->keyboard()->isKeyPressed(ample::control::keysym::KEY_q))
     {
-        camera.translate(-5, 0, 0);
+        if (isBig)
+        {
+            objectBig.setColor256(100, 100, 100);
+            objectSmall.setColor256(200, 100, 100);
+            current = &objectSmall;
+            isBig = false;
+        }
+        else
+        {
+            objectBig.setColor256(200, 100, 100);
+            objectSmall.setColor256(100, 100, 100);
+            current = &objectBig;
+            isBig = true;
+        }
     }
-    else if (eventManager->keyIsDown(ample::control::keysym::ARROW_RIGHT))
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_LEFT))
     {
-        camera.translate(5, 0, 0);
+        current->translate(-5, 0, 0);
     }
-    if (eventManager->keyIsDown(ample::control::keysym::ARROW_UP))
+    else if (eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_RIGHT))
     {
-        objectBig.translate(0, 0, 0.02);
+        current->translate(5, 0, 0);
     }
-    if (eventManager->keyIsDown(ample::control::keysym::ARROW_DOWN))
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_UP))
     {
-        objectBig.translate(0, 0, -0.02);
+        current->translate(0, 0, 0.01);
+    }
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_DOWN))
+    {
+        current->translate(0, 0, -0.01);
+    }
+    if (eventManager->mouse()->getWheelY() < 0)
+    {
+        current->scale(1.05, 1.05, 1.05);
+    }
+    else if (eventManager->mouse()->getWheelY() > 0)
+    {
+        current->scale(1 / 1.05, 1 / 1.05, 1 / 1.05);
+    }
+    if (eventManager->mouse()->isLeftDown())
+    {
+        current->rotate(1, 2, 3);
     }
 }
