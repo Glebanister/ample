@@ -13,9 +13,16 @@ You can create ample directories anywhere, using ample script.
 `$ cmake .. && cmake --build`
 
 
-### Run
-`$ cd script`
+### Run (your project)
+`$ cd script` \
 `$ mkdir [your-project-name] && cd [your-project-name]` \
 `$ ../ample.py init [your-project-name]` \
 `$ ../ample.py build [your-project-name]` \
 `$ ../ample.py run [your-project-name]`
+
+
+### Run (demo)
+`$ cd demo` \
+`$ mkdir build && cd build` \
+`$ cmake .. && cmake --build .` \
+`$ ./DemoGame`
