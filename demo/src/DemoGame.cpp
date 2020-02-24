@@ -13,6 +13,7 @@ void DemoGame::onAwake()
     current->setColor256(200, 100, 100);
     objectBig.translate(0, 0, -150);
     objectSmall.translate(0, 0, -150);
+    _window.disableCursor();
 }
 
 void DemoGame::onActive()
@@ -42,11 +43,11 @@ void DemoGame::onActive()
     static ample::graphics::Vector2d<int> startPos{0, 0};
     if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_a))
     {
-        camera.translate(-5, 0, 0);
+        camera.translate(5, 0, 0);
     }
     if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_d))
     {
-        camera.translate(5, 0, 0);
+        camera.translate(-5, 0, 0);
     }
     if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_w))
     {
@@ -58,8 +59,12 @@ void DemoGame::onActive()
     }
     if (!eventManager->mouse()->isLeftDown())
     {
-        camera.rotate(startPos.x - eventManager->mouse()->getMouseYRel() / getHeight() * 200,
-                         startPos.y - eventManager->mouse()->getMouseXRel() / getWidth() * 200,
-                         0);
+        camera.rotate(-eventManager->mouse()->getMouseYRel() / getHeight() * 300,
+                      -eventManager->mouse()->getMouseXRel() / getWidth() * 300,
+                      0);
     }
+    screenCamera.look();
+    ample::graphics::ScreenObject({{-3, -3}, {3, -3}, {3, 3}, {-3, 3}}, {0, 0, 0}).draw();
+    screenCamera.unlook();
+    _window.moveCursor(0, 0);
 }
