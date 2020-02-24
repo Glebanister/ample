@@ -7,7 +7,7 @@
 
 namespace ample::graphics
 {
-using pixel_t = __int32_t;
+using pixel_t = std::int32_t;
 class Camera
 {
 protected:
