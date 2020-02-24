@@ -65,10 +65,11 @@ void KeyHandlerSingleDown::handleEvent(const SDL_Event &event)
 void MouseHandler::handleEvent(const SDL_Event &event)
 {
     _event = event;
-    _position = {event.motion.x, event.motion.y};
     switch (event.type)
     {
     case MOUSEMOTION:
+        _position = {event.motion.x, event.motion.y};
+        _positionRel = {event.motion.xrel, event.motion.yrel};
         onMotion();
         break;
     case MOUSEWHEEL:
@@ -126,12 +127,12 @@ pixel_t MouseHandler::getMouseY() const
 
 pixel_t MouseHandler::getMouseXRel() const
 {
-    return _event.motion.xrel;
+    return _positionRel.x;
 }
 
 pixel_t MouseHandler::getMouseYRel() const
 {
-    return _event.motion.yrel;
+    return _positionRel.y;
 }
 
 bool MouseHandler::isDouble() const
@@ -200,6 +201,7 @@ void MouseHandler::clear()
     _rightPressed = _rightReleased = false;
     _middlePressed = _middleReleased = false;
     _wheel = {0, 0};
+    _positionRel = {0, 0};
 }
 
 void MouseHandler::onButtonDown() {}

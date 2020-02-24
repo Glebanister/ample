@@ -220,6 +220,7 @@ public:
 private:
     Event _event;
     graphics::Vector2d<pixel_t> _position;
+    graphics::Vector2d<pixel_t> _positionRel;
     graphics::Vector2d<int32_t> _wheel;
     bool _leftPressed, _leftReleased, _leftDown;
     bool _rightPressed, _rightReleased, _rightDown;
