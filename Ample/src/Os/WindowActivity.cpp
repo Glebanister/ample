@@ -29,7 +29,7 @@ void WindowEventHandler::handleEvent(const SDL_Event &event)
 }
 
 WindowActivity::WindowActivity(Window &window)
-    : eventManager(std::make_shared<control::EventManager>()),
+    : eventManager(std::make_shared<control::EventManager>(window)),
       _window(window),
       _quitHandler(std::make_shared<QuitHandler>(*this)),
       _windowEventHandler(std::make_shared<WindowEventHandler>(*this, _window))
