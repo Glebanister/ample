@@ -29,9 +29,12 @@ public:
     void setRatio(double);
     double getRatio() const;
 
+    void setColor256(double r, double g, double b);
+
 protected:
     void drawSelf() override;
     std::vector<Vector2d<double>> _graphicalShape;
     double _ratio = 1.0;
+    double _r = 0.5, _g = 0.5, _b = 0.5;
 };
 } // namespace graphics
