@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 
 #include "Vector2d.h"
+#include "Window.h"
 
 namespace ample::control
 {
@@ -198,10 +199,30 @@ public:
     pixel_t getMouseYRel() const;
     int32_t getWheelX() const;
     int32_t getWheelY() const;
+
     bool isDouble() const;
+    bool isSingle() const;
+
+    bool isLeftPressed() const;
+    bool isLeftReleased() const;
+    bool isLeftDown() const;
+
+    bool isRightPressed() const;
+    bool isRightReleased() const;
+    bool isRightDown() const;
+
+    bool isMiddlePressed() const;
+    bool isMiddleReleased() const;
+    bool isMiddleDown() const;
+
+    void clear();
 
 private:
-    mouseButton _trigger;
     Event _event;
+    graphics::Vector2d<pixel_t> _position;
+    graphics::Vector2d<int32_t> _wheel;
+    bool _leftPressed, _leftReleased, _leftDown;
+    bool _rightPressed, _rightReleased, _rightDown;
+    bool _middlePressed, _middleReleased, _middleDown;
 };
 } // namespace ample::control
