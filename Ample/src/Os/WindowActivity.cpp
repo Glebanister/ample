@@ -44,6 +44,8 @@ void WindowActivity::onActive()
     time::Clock::update();
     eventManager->update();
     this->_window.swapBuffer();
+    glClearColor(20.0 / 256.0, 60.0 / 256.0, 80.0 / 256.0, 0.5);
+    glClear(GL_COLOR_BUFFER_BIT);
 }
 
 pixel_t WindowActivity::getWidth() const

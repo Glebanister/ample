@@ -28,26 +28,11 @@ CameraOrtho::CameraOrtho(Vector2d<pixel_t> cameraSize, double ratio)
 
 void CameraOrtho::look()
 {
-    static bool wasInit = false;
-    if (!wasInit)
-    {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glEnable(GL_BLEND);
-        glEnable(GL_TEXTURE_2D);
-        glPolygonMode(GL_FRONT | GL_BACK, GL_FILL);
-        wasInit = true;
-    }
     _viewport.set();
-    glClearColor(0.1, 0.1, 0.1, 0.5);
-    glClear(GL_COLOR_BUFFER_BIT);
     glPushMatrix();
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-
     glOrtho(_left, _right,
             _bottom, _top,
             _near, _far);
-
     glScaled(_scale.x, _scale.y, _scale.z);
     glRotated(_angle.x, 1.0, 0.0, 0.0);
     glRotated(_angle.y, 0.0, 1.0, 0.0);

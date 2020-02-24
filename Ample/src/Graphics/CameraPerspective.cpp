@@ -10,7 +10,7 @@ CameraPerspective::CameraPerspective(Vector2d<pixel_t> viewSize, Vector2d<pixel_
                                      double ratio)
     : Camera(viewSize, viewPosition, cameraSize, cameraPosition, ratio)
 {
-    setPerspective(-cameraSize.x / 2.0, cameraSize.x / 2.0, -cameraSize.y / 2.0, cameraSize.y / 2.0, 100.0, 200.0);
+    setPerspective(-cameraSize.x / 2.0, cameraSize.x / 2.0, -cameraSize.y / 2.0, cameraSize.y / 2.0, 100.0, 2000.0);
 }
 
 CameraPerspective::CameraPerspective(Vector2d<pixel_t> viewSize, Vector2d<pixel_t> viewPosition,
@@ -28,23 +28,11 @@ CameraPerspective::CameraPerspective(Vector2d<pixel_t> viewSize, double ratio)
 
 void CameraPerspective::look()
 {
-    static bool wasInit = false;
-    if (!wasInit)
-    {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glEnable(GL_BLEND);
-        glEnable(GL_TEXTURE_2D);
-        glPolygonMode(GL_FRONT | GL_BACK, GL_FILL);
-        wasInit = true;
-    }
     _viewport.set();
-    glClearColor(20.0 / 256.0, 60.0 / 256.0, 80.0 / 256.0, 0.5);
-    glClear(GL_COLOR_BUFFER_BIT);
     glPushMatrix();
     glFrustum(_left, _right,
               _bottom, _top,
               _near, _far);
-
     glScaled(_scale.x, _scale.y, _scale.z);
     glRotated(_angle.x, 1.0, 0.0, 0.0);
     glRotated(_angle.y, 0.0, 1.0, 0.0);

@@ -1,5 +1,6 @@
 #include <string>
 #include <SDL2/SDL.h>
+#include <GL/gl.h>
 
 #include "Window.h"
 #include "Exception.h"
@@ -70,6 +71,10 @@ Window::Window(const std::string &name,
             exception::exType::CRITICAL,
             SDL_GetError());
     }
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glEnable(GL_TEXTURE_2D);
+    glPolygonMode(GL_FRONT | GL_BACK, GL_FILL);
 }
 
 void Window::swapBuffer()
