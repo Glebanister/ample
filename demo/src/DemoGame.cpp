@@ -1,5 +1,6 @@
 #include "DemoGame.h"
 #include "Clock.h"
+#include "Vector2d.h"
 #include "PerlinNoise.h"
 
 DemoGame::DemoGame(ample::window::Window &window)
@@ -38,32 +39,27 @@ void DemoGame::onActive()
             isBig = true;
         }
     }
-    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_LEFT))
+    static ample::graphics::Vector2d<int> startPos{0, 0};
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_a))
     {
-        current->translate(-5, 0, 0);
+        camera.translate(-5, 0, 0);
     }
-    else if (eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_RIGHT))
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_d))
     {
-        current->translate(5, 0, 0);
+        camera.translate(5, 0, 0);
     }
-    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_UP))
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_w))
     {
-        current->translate(0, 0, 0.01);
+        camera.translate(0, 0, 5);
     }
-    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_DOWN))
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_s))
     {
-        current->translate(0, 0, -0.01);
+        camera.translate(0, 0, -5);
     }
-    if (eventManager->mouse()->getWheelY() < 0)
+    if (!eventManager->mouse()->isLeftDown())
     {
-        current->scale(1.05, 1.05, 1.05);
-    }
-    else if (eventManager->mouse()->getWheelY() > 0)
-    {
-        current->scale(1 / 1.05, 1 / 1.05, 1 / 1.05);
-    }
-    if (eventManager->mouse()->isLeftDown())
-    {
-        current->rotate(1, 2, 3);
+        camera.rotate(startPos.x - eventManager->mouse()->getMouseYRel() / getHeight() * 200,
+                         startPos.y - eventManager->mouse()->getMouseXRel() / getWidth() * 200,
+                         0);
     }
 }
