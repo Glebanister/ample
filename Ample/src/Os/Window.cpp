@@ -87,6 +87,19 @@ pixel_t Window::getWidth() const
     return _width;
 }
 
+void Window::disableCursor() const
+{
+    SDL_ShowCursor(SDL_DISABLE);
+}
+void Window::enableCursor() const
+{
+    SDL_ShowCursor(SDL_ENABLE);
+}
+void Window::moveCursor(pixel_t x, pixel_t y) const
+{
+    SDL_WarpMouseInWindow(_winPtr, x + getWidth() / 2, -y + getHeight() / 2);
+}
+
 void Window::resize(const pixel_t w, const pixel_t &h)
 {
     _width = w;

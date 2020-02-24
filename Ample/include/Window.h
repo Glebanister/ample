@@ -45,6 +45,10 @@ public:
     pixel_t getWidth() const;
     pixel_t getHeight() const;
 
+    void disableCursor() const;
+    void enableCursor() const;
+    void moveCursor(pixel_t x, pixel_t y) const;
+
     void resize(const pixel_t w, const pixel_t &h);
 
     ~Window();
