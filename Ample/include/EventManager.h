@@ -9,6 +9,7 @@
 #include "EventHandler.h"
 #include "EventManager.h"
 #include "Vector2d.h"
+#include "Window.h"
 
 namespace ample::control
 {
@@ -20,17 +21,22 @@ public:
     void addKeyHandler(const keysym key, std::shared_ptr<KeyHandler> handler);
     void clearKey(const keysym key);
     void handleEvent(const SDL_Event &event) override;
-    bool keyIsDown(keysym key);
+    bool isKeyPressed(keysym key);
+    bool isKeyReleased(keysym key);
+    bool isKeyDown(keysym key);
+    void clear();
 
 private:
     std::unordered_map<int32_t, std::vector<std::shared_ptr<KeyHandler>>> _handlers;
-    std::unordered_map<int32_t, int32_t> _keymap;
+    std::unordered_map<int32_t, int32_t> _keymapWasUp;
+    std::unordered_map<int32_t, int32_t> _keymapWasDown;
+    std::unordered_map<int32_t, int32_t> _keymapPressed;
 };
 
 class EventManager final
 {
 public:
-    EventManager();
+    EventManager(window::Window &window);
     EventManager(const EventManager &other) = delete;
 
     EventManager &operator=(const EventManager &other) = delete;
@@ -41,21 +47,16 @@ public:
     void addEventHandler(const int eventType, std::shared_ptr<EventHandler> handler);
     void clearType(const int &eventType);
 
-    bool keyIsDown(keysym key) const;
-    pixel_t getMouseX() const;
-    pixel_t getMouseY() const;
-    pixel_t getMouseXRel() const;
-    pixel_t getMouseYRel() const;
-    int32_t getWheelX() const;
-    int32_t getWheelY() const;
-    bool isDoubleClick() const;
-
     ~EventManager() = default;
 
+    std::shared_ptr<KeyboardManager> keyboard() const;
+    std::shared_ptr<MouseHandler> mouse() const;
+
 private:
-    SDL_Event ev;
-    std::unordered_map<int, std::vector<std::shared_ptr<EventHandler>>> _handlerByType;
     std::shared_ptr<KeyboardManager> _keyboard;
     std::shared_ptr<MouseHandler> _mouse;
+    SDL_Event ev;
+    std::unordered_map<int, std::vector<std::shared_ptr<EventHandler>>> _handlerByType;
+    window::Window &_window;
 };
 } // namespace ample::control

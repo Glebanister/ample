@@ -7,9 +7,10 @@
 
 namespace ample::control
 {
-EventManager::EventManager()
+EventManager::EventManager(window::Window &window)
     : _keyboard(std::make_shared<KeyboardManager>()),
-      _mouse(std::make_shared<MouseHandler>())
+      _mouse(std::make_shared<MouseHandler>()),
+      _window(window)
 {
     _handlerByType[SDL_KEYDOWN].push_back(_keyboard);
     _handlerByType[SDL_KEYUP].push_back(_keyboard);
@@ -21,6 +22,8 @@ EventManager::EventManager()
 
 void EventManager::update()
 {
+    _mouse->clear();
+    _keyboard->clear();
     while (SDL_PollEvent(&ev))
     {
         for (auto &handler : _handlerByType[ev.type])
@@ -45,44 +48,13 @@ void EventManager::clearType(const int &eventType)
     _handlerByType[eventType].clear();
 }
 
-bool EventManager::keyIsDown(keysym key) const
+std::shared_ptr<KeyboardManager> EventManager::keyboard() const
 {
-    return _keyboard->keyIsDown(key);
+    return _keyboard;
 }
-
-pixel_t EventManager::getMouseX() const
+std::shared_ptr<MouseHandler> EventManager::mouse() const
 {
-    return _mouse->getMouseX();
-}
-
-pixel_t EventManager::getMouseY() const
-{
-    return _mouse->getMouseY();
-}
-
-pixel_t EventManager::getMouseXRel() const
-{
-    return _mouse->getMouseXRel();
-}
-
-pixel_t EventManager::getMouseYRel() const
-{
-    return _mouse->getMouseYRel();
-}
-
-int32_t EventManager::getWheelX() const
-{
-    return _mouse->getWheelX();
-}
-
-int32_t EventManager::getWheelY() const
-{
-    return _mouse->getWheelY();
-}
-
-bool EventManager::isDoubleClick() const
-{
-    return _mouse->isDouble();
+    return _mouse;
 }
 
 void KeyboardManager::addKeyHandler(const keysym key, std::shared_ptr<KeyHandler> handler)
@@ -97,15 +69,33 @@ void KeyboardManager::clearKey(const keysym key)
 
 void KeyboardManager::handleEvent(const SDL_Event &event)
 {
-    _keymap[event.key.keysym.sym] = event.type;
+    _keymapWasDown[event.key.keysym.sym] = event.type;
+    _keymapWasUp[event.key.keysym.sym] = event.type;
+    _keymapPressed[event.key.keysym.sym] = event.type;
     for (auto &handler : _handlers[event.key.keysym.sym])
     {
         handler->handleEvent(event);
     }
 }
 
-bool KeyboardManager::keyIsDown(keysym key)
+bool KeyboardManager::isKeyPressed(keysym key)
 {
-    return _keymap[key] == KEY_DOWN;
+    return _keymapWasDown[key] == KEY_DOWN;
+}
+
+bool KeyboardManager::isKeyReleased(keysym key)
+{
+    return _keymapWasUp[key] == KEY_UP;
+}
+
+bool KeyboardManager::isKeyDown(keysym key)
+{
+    return _keymapPressed[key] == KEY_DOWN;
+}
+
+void KeyboardManager::clear()
+{
+    _keymapWasDown.clear();
+    _keymapWasUp.clear();
 }
 } // namespace ample::control
