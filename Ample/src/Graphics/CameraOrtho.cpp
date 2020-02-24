@@ -10,7 +10,7 @@ CameraOrtho::CameraOrtho(Vector2d<pixel_t> viewSize, Vector2d<pixel_t> viewPosit
                          double ratio)
     : Camera(viewSize, viewPosition, cameraSize, cameraPosition, ratio)
 {
-    setPerspective(-cameraSize.x / 2.0, cameraSize.x / 2.0, -cameraSize.y / 2.0, cameraSize.y / 2.0, 0.0, 1.0);
+    setPerspective(-cameraSize.x / 2.0, cameraSize.x / 2.0, -cameraSize.y / 2.0, cameraSize.y / 2.0, -100.0, 100.0);
 }
 
 CameraOrtho::CameraOrtho(Vector2d<pixel_t> viewSize, Vector2d<pixel_t> viewPosition,
@@ -48,13 +48,13 @@ void CameraOrtho::look()
             _bottom, _top,
             _near, _far);
 
-    glTranslated(_position.x * _ratio,
-                 _position.y * _ratio,
-                 _position.z * _ratio);
     glScaled(_scale.x, _scale.y, _scale.z);
     glRotated(_angle.x, 1.0, 0.0, 0.0);
     glRotated(_angle.y, 0.0, 1.0, 0.0);
     glRotated(_angle.z, 0.0, 0.0, 1.0);
+    glTranslated(_position.x * _ratio,
+                 _position.y * _ratio,
+                 _position.z * _ratio);
 }
 
 void CameraOrtho::unlook()
