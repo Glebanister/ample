@@ -35,7 +35,7 @@ Window::Window(const std::string &name,
         _y = SDL_WINDOWPOS_UNDEFINED;
     }
 
-    if (!SDL_WasInit(SDL_INIT_EVERYTHING))
+    if (SDL_WasInit(SDL_INIT_EVERYTHING))
     {
         if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
         {
@@ -52,7 +52,7 @@ Window::Window(const std::string &name,
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     _winPtr = SDL_CreateWindow(_name.c_str(), _x, _y,
                                _width, _height,
-                               _modeFlags | SDL_WINDOW_OPENGL);
+                               _modeFlags | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI);
     if (!_winPtr)
     {
         SDL_Quit();
@@ -68,6 +68,15 @@ Window::Window(const std::string &name,
         SDL_Quit();
         throw exception::Exception(
             exception::exId::OPENGL_INIT,
+            exception::exType::CRITICAL,
+            SDL_GetError());
+    }
+    if (SDL_GL_SetSwapInterval(1) < 0)
+    {
+        SDL_DestroyWindow(_winPtr);
+        SDL_Quit();
+        throw exception::Exception(
+            exception::exId::SDL_INIT,
             exception::exType::CRITICAL,
             SDL_GetError());
     }
