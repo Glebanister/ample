@@ -34,4 +34,5 @@ private:
     ample::graphics::ScreenObject *current = &objectBig;
     ample::graphics::CameraOrtho screenCamera{{1920, 1080}};
     CameraBehavior cameraBeh{*this, camera};
+    std::vector<ample::graphics::ScreenObject> objs;
 };
