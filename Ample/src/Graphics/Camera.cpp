@@ -171,7 +171,7 @@ double Camera::getTop() const
 }
 double Camera::getNear() const
 {
-    return _bottom;
+    return _near;
 }
 double Camera::getFar() const
 {
