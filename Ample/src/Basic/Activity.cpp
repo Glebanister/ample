@@ -1,5 +1,6 @@
 #include <cassert>
 #include <exception>
+#include <algorithm>
 
 #include "Activity.h"
 #include "EventHandler.h"
@@ -11,36 +12,52 @@ namespace ample::activity
 {
 void Activity::loop()
 {
+    std::for_each(_subActivities.begin(), _subActivities.end(),
+                  [](auto &x) { x->onAwake(); });
     onAwake();
     _alive = true;
     while (_alive)
     {
+        std::for_each(_subActivities.begin(), _subActivities.end(),
+                      [](auto &x) { x->onStart(); });
         onStart();
         _running = true;
         while (_running)
         {
+            std::for_each(_subActivities.begin(), _subActivities.end(),
+                          [](auto &x) { x->onActive(); });
             onActive();
         }
         onStop();
+        std::for_each(_subActivities.begin(), _subActivities.end(),
+                      [](auto &x) { x->onStop(); });
     }
     onDestroy();
+    std::for_each(_subActivities.begin(), _subActivities.end(),
+                  [](auto &x) { x->onDestroy(); });
 }
 
 void Activity::pause()
 {
-    if (onPause())
-    {
-        _running = false;
-    }
+    std::for_each(_subActivities.begin(), _subActivities.end(),
+                  [](auto &x) { x->onPause(); });
+    onPause();
+    _running = false;
 }
 
 void Activity::kill()
 {
-    if (onKill())
-    {
-        _running = false;
-        _alive = false;
-    }
+
+    std::for_each(_subActivities.begin(), _subActivities.end(),
+                  [](auto &x) { x->onKill(); });
+    onKill();
+    _running = false;
+    _alive = false;
+}
+
+void Activity::addActivity(std::shared_ptr<Activity> activity)
+{
+    _subActivities.push_back(activity);
 }
 
 void Activity::onAwake() {}
@@ -48,10 +65,7 @@ void Activity::onStart() {}
 void Activity::onActive() {}
 void Activity::onStop() {}
 void Activity::onDestroy() {}
+void Activity::onKill() {}
+void Activity::onPause() {}
 
-bool Activity::onKill() { return true; }
-bool Activity::onPause() { return true; }
-
-bool _alive = false;
-bool _running = false;
 } // namespace ample::activity
