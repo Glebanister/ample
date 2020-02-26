@@ -2,9 +2,14 @@
 #include "Clock.h"
 #include "Vector2d.h"
 #include "PerlinNoise.h"
+#include "CameraBehavior.h"
+#include "SquareBehavior.h"
 
 DemoGame::DemoGame(ample::window::Window &window)
-    : ample::window::WindowActivity(window) {}
+    : ample::window::WindowActivity(window)
+    {
+        addActivity(cameraBeh);
+    }
 
 void DemoGame::onAwake()
 {
@@ -23,48 +28,10 @@ void DemoGame::onActive()
     objectSmall.draw();
     objectBig.draw();
     camera.unlook();
-    if (eventManager->keyboard()->isKeyPressed(ample::control::keysym::KEY_q))
-    {
-        if (isBig)
-        {
-            objectBig.setColor256(100, 100, 100);
-            objectSmall.setColor256(200, 100, 100);
-            current = &objectSmall;
-            isBig = false;
-        }
-        else
-        {
-            objectBig.setColor256(200, 100, 100);
-            objectSmall.setColor256(100, 100, 100);
-            current = &objectBig;
-            isBig = true;
-        }
-    }
-    static ample::graphics::Vector2d<int> startPos{0, 0};
-    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_a))
-    {
-        camera.translate(5, 0, 0);
-    }
-    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_d))
-    {
-        camera.translate(-5, 0, 0);
-    }
-    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_w))
-    {
-        camera.translate(0, 0, 5);
-    }
-    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_s))
-    {
-        camera.translate(0, 0, -5);
-    }
-    if (!eventManager->mouse()->isLeftDown())
-    {
-        camera.rotate(-eventManager->mouse()->getMouseYRel() / getHeight() * 300,
-                      -eventManager->mouse()->getMouseXRel() / getWidth() * 300,
-                      0);
-    }
+
     screenCamera.look();
     ample::graphics::ScreenObject({{-3, -3}, {3, -3}, {3, 3}, {-3, 3}}, {0, 0, 0}).draw();
     screenCamera.unlook();
+
     _window.moveCursor(0, 0);
 }

@@ -1,11 +1,15 @@
 #pragma once
 
+#include <memory>
+
 #include "WindowActivity.h"
 #include "CameraOrtho.h"
 #include "CameraPerspective.h"
 #include "GraphicalObject2d.h"
 #include "ScreenObject.h"
 #include "PerlinNoise.h"
+#include "CameraBehavior.h"
+#include "SquareBehavior.h"
 
 class DemoGame : public ample::window::WindowActivity
 {
@@ -29,5 +33,5 @@ private:
     ample::random::PerlinNoise yNoise{23};
     ample::graphics::ScreenObject *current = &objectBig;
     ample::graphics::CameraOrtho screenCamera{{1920, 1080}};
-    int isBig = true;
+    CameraBehavior cameraBeh{*this, camera};
 };

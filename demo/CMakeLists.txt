@@ -5,7 +5,9 @@ set(APP_NAME DemoGame)
 
 set(SOURCES
     src/main.cpp
-    src/DemoGame.cpp)
+    src/DemoGame.cpp
+    src/SquareBehavior.cpp
+    src/CameraBehavior.cpp)
 
 find_library(AMPLE_LIBRARY NAME Ample
                            PATHS ../build/Ample)
