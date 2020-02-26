@@ -10,7 +10,7 @@ CameraPerspective::CameraPerspective(Vector2d<pixel_t> viewSize, Vector2d<pixel_
                                      double ratio)
     : Camera(viewSize, viewPosition, cameraSize, cameraPosition, ratio)
 {
-    setPerspective(-cameraSize.x / 2.0, cameraSize.x / 2.0, -cameraSize.y / 2.0, cameraSize.y / 2.0, 100.0, 2000.0);
+    setPerspective(-cameraSize.x / 2.0, cameraSize.x / 2.0, -cameraSize.y / 2.0, cameraSize.y / 2.0, 1000.0, 20000.0);
 }
 
 CameraPerspective::CameraPerspective(Vector2d<pixel_t> viewSize, Vector2d<pixel_t> viewPosition,
