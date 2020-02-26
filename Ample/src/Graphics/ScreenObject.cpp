@@ -14,6 +14,9 @@ ScreenObject::ScreenObject(const std::vector<Vector2d<pixel_t>> &shape, Vector3d
     }
 }
 
+ScreenObject::ScreenObject(const std::vector<Vector2d<pixel_t>> &shape, Vector2d<double> position)
+    : ScreenObject(shape, {position.x, position.y, 0}) {}
+
 ScreenObject::ScreenObject(const std::vector<Vector2d<pixel_t>> &shape)
     : ScreenObject(shape, {0, 0, 0}) {}
 
