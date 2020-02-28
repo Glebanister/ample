@@ -20,7 +20,7 @@ private:
     void onAwake() override;
     void onActive() override;
 
-    ample::graphics::CameraPerspective camera{{1920, 1080}};
+    ample::graphics::CameraPerspective camera{{1920, 1080}, {1920, 1080}};
     ample::graphics::ScreenObject objectSmall{{{-10, -10},
                                                {10, -10},
                                                {10, 10},

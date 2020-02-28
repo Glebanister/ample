@@ -10,7 +10,7 @@ DemoGame::DemoGame(ample::window::Window &window)
     : ample::window::WindowActivity(window)
 {
     addActivity(cameraBeh);
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 1; i++)
     {
         objs.push_back(
             {
@@ -21,11 +21,10 @@ DemoGame::DemoGame(ample::window::Window &window)
                     {-300, 300},
                 },
 
-                {0, 0, i * 109},
+                {0, 0, i * 109.0},
             });
-        objs.back().setColor256(rand() % 256, rand() % 256, rand() % 256);
     }
-    camera.translateSet(0, 0, objs.back().getZ());
+    camera.translateSet(0, 0, objs.front().getZ());
 }
 
 void DemoGame::onAwake()
@@ -47,14 +46,7 @@ void DemoGame::onActive()
     screenCamera.look();
     ample::graphics::ScreenObject({{-3, -3}, {3, -3}, {3, 3}, {-3, 3}}, {0, 0, 0}).draw();
     screenCamera.unlook();
-    if (eventManager->mouse()->getWheelY() < 0)
-    {
-        camera.setPerspective(camera.getLeft(), camera.getRight(), camera.getBottom(), camera.getTop(), camera.getNear() + 10, camera.getFar());
-    }
-    else if (eventManager->mouse()->getWheelY() > 0)
-    {
-        camera.setPerspective(camera.getLeft(), camera.getRight(), camera.getBottom(), camera.getTop(), camera.getNear() - 10, camera.getFar());
-    }
+    objs.back().rotate(0, -1, 1);
 
     _window.moveCursor(0, 0);
 }

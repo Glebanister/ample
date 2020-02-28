@@ -20,6 +20,7 @@ enum class exId : size_t
     SDL_DOUBLE_INIT,
     SDL_NOT_READY,
     OPENGL_NOT_FIT,
+    OPENGL_SHADER,
     WINDOW_NOT_READY,
 };
 
@@ -36,6 +37,7 @@ static std::string exIdInfo[] = {
     "SDL double initialization",
     "can't use SDL2: not initializated",
     "OpenGL context can't fit to the window",
+    "OpenGL can't load shader",
     "can't use window: not ready yet",
 };
 
@@ -69,4 +71,4 @@ private:
     exType _type = exType::CRITICAL;
     std::string _message = "";
 };
-} // namespace exception
+} // namespace ample::exception
