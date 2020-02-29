@@ -4,6 +4,7 @@ namespace ample::graphics
 {
 void Layer::onActive()
 {
+    activity::Activity::onActive();
     for (auto cam : _cameras)
     {
         cam->look();
