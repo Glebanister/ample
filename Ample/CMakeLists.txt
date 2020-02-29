@@ -27,7 +27,6 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Graphics/GraphicalObject.cpp
     src/Graphics/GraphicalObject2d.cpp
     src/Graphics/ScreenObject.cpp
-    src/Graphics/Vector2d.cpp
     src/Graphics/Camera.cpp
     src/Graphics/CameraPerspective.cpp
     src/Graphics/CameraOrtho.cpp
