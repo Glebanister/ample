@@ -34,6 +34,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Graphics/Layer2d.cpp
     src/Graphics/ScreenLayer.cpp
     src/Graphics/LayeredWindowActivity.cpp
+    src/Graphics/ShaderProcessor.cpp
     src/Graphics/VertexArray.cpp
     src/Graphics/VertexShader.cpp
     )
