@@ -31,6 +31,9 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Graphics/Camera.cpp
     src/Graphics/CameraPerspective.cpp
     src/Graphics/CameraOrtho.cpp
+    src/Graphics/Layer.cpp
+    src/Graphics/Layer2d.cpp
+    src/Graphics/ScreenLayer.cpp
     )
 
 include_directories(${SDL2_INCLUDE_DIRS})
