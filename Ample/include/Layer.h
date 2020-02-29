@@ -17,7 +17,7 @@ public:
     void addCamera(std::shared_ptr<Camera>);
     void clearCameras();
 
-    void addObject(std::shared_ptr<GraphicalObject>);
+    virtual void addObject(std::shared_ptr<GraphicalObject>);
     void addObject(const std::vector<std::shared_ptr<GraphicalObject>> &);
     void clearObjecs();
 
