@@ -37,6 +37,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Graphics/Layer.cpp
     src/Graphics/Layer2d.cpp
     src/Graphics/ScreenLayer.cpp
+    src/Graphics/LayeredWindowActivity.cpp
     )
 
 include_directories(${SDL2_INCLUDE_DIRS})
