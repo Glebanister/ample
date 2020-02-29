@@ -32,7 +32,10 @@ void Layer::addObject(std::shared_ptr<GraphicalObject> object)
 
 void Layer::addObject(const std::vector<std::shared_ptr<GraphicalObject>> &objects)
 {
-    _objects.insert(_objects.end(), objects.begin(), objects.end());
+    for (auto obj : objects)
+    {
+        addObject(obj);
+    }
 }
 
 void Layer::clearObjecs()
