@@ -187,4 +187,7 @@ void Camera::setPerspective(double left, double right, double bottom, double top
     _near = near;
     _far = far;
 }
+
+void Camera::look() {}
+void Camera::unlook() {}
 } // namespace ample::graphics
