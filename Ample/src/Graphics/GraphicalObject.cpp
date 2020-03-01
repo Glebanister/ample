@@ -2,8 +2,11 @@
 
 namespace ample::graphics
 {
-void GraphicalObject::addSubObject(std::shared_ptr<GraphicalObject> object)
+void GraphicalObject::draw() {}
+void GraphicalObject::drawSelf() {}
+
+void GraphicalObject::addSubObject(const GraphicalObject &object)
 {
-    _subObjects.push_back(object);
+    _subObjects.push_back(std::make_shared<GraphicalObject>(object));
 }
-} // namespace graphics
+} // namespace ample::graphics

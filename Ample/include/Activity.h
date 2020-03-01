@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <memory>
+#include <functional>
 
 #include "EventManager.h"
 #include "EventHandler.h"
@@ -15,13 +16,8 @@ public:
     void loop();
     void pause();
     void kill();
-    void addActivity(std::shared_ptr<Activity>);
 
-    template <class ActivityClass>
-    void addActivity(const ActivityClass &activity)
-    {
-        _subActivities.push_back(std::make_shared<ActivityClass>(activity));
-    }
+    void addActivity(const Activity &activity);
 
     virtual ~Activity() = default;
 

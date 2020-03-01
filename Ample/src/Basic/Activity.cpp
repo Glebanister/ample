@@ -55,9 +55,9 @@ void Activity::kill()
     _alive = false;
 }
 
-void Activity::addActivity(std::shared_ptr<Activity> activity)
+void Activity::addActivity(const Activity &activity)
 {
-    _subActivities.push_back(activity);
+    _subActivities.push_back(std::make_shared<Activity>(activity));
 }
 
 void Activity::onAwake() {}

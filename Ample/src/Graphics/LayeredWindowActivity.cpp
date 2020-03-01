@@ -5,18 +5,10 @@ namespace ample::graphics
 LayeredWindowActivity::LayeredWindowActivity(window::Window &window)
     : WindowActivity(window) {}
 
-void LayeredWindowActivity::addLayer(std::shared_ptr<Layer> layer)
+void LayeredWindowActivity::addLayer(const Layer &layer)
 {
-    _layers.push_back(layer);
+    _layers.push_back(std::make_shared<Layer>(layer));
     addActivity(layer);
-}
-
-void LayeredWindowActivity::addLayer(const std::vector<std::shared_ptr<Layer>> &layers)
-{
-    for (auto layer : layers)
-    {
-        addLayer(layer);
-    }
 }
 
 void LayeredWindowActivity::cleanLayers()

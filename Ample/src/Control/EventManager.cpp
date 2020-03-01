@@ -33,14 +33,14 @@ void EventManager::update()
     }
 }
 
-void EventManager::addKeyHandler(const keysym key, std::shared_ptr<KeyHandler> handler)
+void EventManager::addKeyHandler(const keysym key, const KeyHandler &handler)
 {
     _keyboard->addKeyHandler(key, handler);
 }
 
-void EventManager::addEventHandler(const int eventType, std::shared_ptr<EventHandler> handler)
+void EventManager::addEventHandler(const int eventType, const EventHandler &handler)
 {
-    _handlerByType[eventType].push_back(handler);
+    _handlerByType[eventType].push_back(std::make_shared<EventHandler>(handler));
 }
 
 void EventManager::clearType(const int &eventType)
@@ -57,9 +57,9 @@ std::shared_ptr<MouseHandler> EventManager::mouse() const
     return _mouse;
 }
 
-void KeyboardManager::addKeyHandler(const keysym key, std::shared_ptr<KeyHandler> handler)
+void KeyboardManager::addKeyHandler(const keysym key, const KeyHandler &handler)
 {
-    _handlers[key].push_back(handler);
+    _handlers[key].push_back(std::make_shared<KeyHandler>(handler));
 }
 
 void KeyboardManager::clearKey(const keysym key)

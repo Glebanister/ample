@@ -10,11 +10,11 @@ namespace ample::graphics
 class GraphicalObject : public activity::Activity
 {
 public:
-    virtual void draw() = 0;
-    void addSubObject(std::shared_ptr<GraphicalObject> object);
+    virtual void draw();
+    void addSubObject(const GraphicalObject &object);
 
 protected:
-    virtual void drawSelf() = 0;
+    virtual void drawSelf();
     std::vector<std::shared_ptr<GraphicalObject>> _subObjects;
 };
 } // namespace graphics
