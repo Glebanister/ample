@@ -4,7 +4,8 @@
 
 namespace ample::physics
 {
-WorldLayer2d::WorldLayer2d(const graphics::Vector2d<float> &gravity) : world(b2Vec2(gravity.x, gravity.y)) {}
+WorldLayer2d::WorldLayer2d(const graphics::Vector2d<float> &gravity)
+    : world(b2Vec2(gravity.x, gravity.y)) {}
 
 void WorldLayer2d::addObject(WorldObject2d &object)
 {
@@ -15,7 +16,7 @@ void WorldLayer2d::addObject(WorldObject2d &object)
 void WorldLayer2d::onActive()
 {
     graphics::Layer::onActive();
-    world.Step(1.0 / 62.5, 8, 3);
+    world.Step(1.0 / time::Clock::getFPS(), 8, 3);
     auto bl = world.GetBodyList();
     static bool flag = true;
     if (flag)
@@ -29,6 +30,5 @@ void WorldLayer2d::onActive()
         bl->CreateFixture(&fixtureDef);
         flag = false;
     }
-    // std::cout << bl->GetPosition().x << ' ' << time::Clock::deltaTimeMs() << ' ' << bl->GetPosition().y << std::endl;
 }
-} // namespace physics
+} // namespace ample::physics

@@ -35,27 +35,26 @@ DemoGame::DemoGame(ample::window::Window &window)
     worldLayer.addObject(*ground);
     worldLayer.addCamera(camera);
     addLayer(worldLayer);
-}
-
-void DemoGame::onAwake()
-{
-    LayeredWindowActivity::onAwake();
+    addActivity(cameraBeh);
 }
 
 void DemoGame::onActive()
 {
     LayeredWindowActivity::onActive();
-    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_q))
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_LEFT))
     {
-        brick->_body->ApplyForceToCenter({10000, 0}, false);
+        brick->_body->ApplyLinearImpulseToCenter({-100, 0}, true);
     }
-    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_a))
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_RIGHT))
     {
-        camera.translate(0, -10, 0);
+        brick->_body->ApplyLinearImpulseToCenter({100, 0}, true);
     }
-    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_d))
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_UP))
     {
-        camera.translate(0, 10, 0);
+        brick->_body->ApplyLinearImpulseToCenter({0, 100}, true);
     }
-    // std::cout << ample::time::Clock::getFPS() << std::endl;
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_DOWN))
+    {
+        brick->_body->ApplyLinearImpulseToCenter({0, -100}, true);
+    }
 }

@@ -20,7 +20,6 @@ public:
     DemoGame(ample::window::Window &window);
 
 private:
-    void onAwake() override;
     void onActive() override;
 
     ample::graphics::CameraOrtho camera{{1920, 1080}};
