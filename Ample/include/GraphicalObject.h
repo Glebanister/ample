@@ -11,10 +11,15 @@ class GraphicalObject : public activity::Activity
 {
 public:
     virtual void draw() = 0;
-    void addSubObject(std::shared_ptr<GraphicalObject> object);
+    template <class TGraphicalObject>
+    void addSubObject(const TGraphicalObject &object)
+    {
+        activity::Activity::addActivity(object);
+        _subObjects.push_back(std::make_shared<TGraphicalObject>(object));
+    }
 
 protected:
     virtual void drawSelf() = 0;
     std::vector<std::shared_ptr<GraphicalObject>> _subObjects;
 };
-} // namespace graphics
+} // namespace ample::graphics

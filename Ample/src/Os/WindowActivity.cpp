@@ -34,8 +34,8 @@ WindowActivity::WindowActivity(Window &window)
       _quitHandler(std::make_shared<QuitHandler>(*this)),
       _windowEventHandler(std::make_shared<WindowEventHandler>(*this, _window))
 {
-    eventManager->addEventHandler(SDL_QUIT, _quitHandler);
-    eventManager->addEventHandler(SDL_WINDOWEVENT, _windowEventHandler);
+    eventManager->addEventHandler(SDL_QUIT, *_quitHandler);
+    eventManager->addEventHandler(SDL_WINDOWEVENT, *_windowEventHandler);
 }
 
 void WindowActivity::onActive()

@@ -55,11 +55,6 @@ void Activity::kill()
     _alive = false;
 }
 
-void Activity::addActivity(std::shared_ptr<Activity> activity)
-{
-    _subActivities.push_back(activity);
-}
-
 void Activity::onAwake() {}
 void Activity::onStart() {}
 void Activity::onActive() {}

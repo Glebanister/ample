@@ -14,8 +14,12 @@ class LayeredWindowActivity : public window::WindowActivity
 public:
     LayeredWindowActivity(window::Window &window);
 
-    void addLayer(std::shared_ptr<Layer>);
-    void addLayer(const std::vector<std::shared_ptr<Layer>> &);
+    template <class TLayer>
+    void addLayer(const TLayer &layer)
+    {
+        Activity::addActivity(layer);
+        _layers.push_back(std::make_shared<TLayer>(layer));
+    }
     void cleanLayers();
 
 private:
