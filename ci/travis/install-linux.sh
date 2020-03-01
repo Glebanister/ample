@@ -23,8 +23,8 @@ echo checkinstall
 sudo apt-get install build-essential checkinstall > output
 
 echo cmake
-CMAKE_VERSION=3.3.2
-CMAKE_VERSION_DIR=v3.3
+CMAKE_VERSION=3.17.0
+CMAKE_VERSION_DIR=v3.17
 
 CMAKE_OS=Linux-x86_64
 CMAKE_TAR=cmake-$CMAKE_VERSION-$CMAKE_OS.tar.gz
