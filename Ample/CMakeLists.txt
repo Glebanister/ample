@@ -9,8 +9,10 @@ set(SDL2_LIBRARY /usr/lib/x86_64-linux-gnu/libSDL2.so)
 set(SDL2_INCLUDE_DIRS /usr/include/SDL2/)
 
 set(GLU_LIBRARY /usr/lib/x86_64-linux-gnu/libGLU.so)
-add_subdirectory(../extern/box2d build)
+add_subdirectory(../extern/box2d buildBox2d)
+add_subdirectory(../extern/rapidjson buildRapidjson)
 include_directories(../extern/box2d/include)
+include_directories(../extern/rapidjson/include)
 
 set(${CMAKE_PROJECT_NAME}_SOURCES
 
