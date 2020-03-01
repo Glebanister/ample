@@ -36,6 +36,7 @@ WindowActivity::WindowActivity(Window &window)
 {
     eventManager->addEventHandler(SDL_QUIT, *_quitHandler);
     eventManager->addEventHandler(SDL_WINDOWEVENT, *_windowEventHandler);
+    time::Clock::init();
 }
 
 void WindowActivity::onActive()
