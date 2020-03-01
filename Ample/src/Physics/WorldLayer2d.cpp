@@ -1,5 +1,6 @@
 #include "WorldLayer2d.h"
 #include "Clock.h"
+#include "box2d/b2_polygon_shape.h"
 
 namespace ample::physics
 {
@@ -12,8 +13,23 @@ void WorldLayer2d::addObject(std::shared_ptr<graphics::GraphicalObject> object)
     worldObj->_body = world.CreateBody(&(worldObj->_bodyDef));
 }
 
-void WorldLayer2d::onActive() {
+void WorldLayer2d::onActive()
+{
     ample::graphics::Layer::onActive();
-    world.Step(time::Clock::deltaTimeMs(), 8, 3);
+    world.Step(1.0 / 62.5, 8, 3);
+    std::cout << time::Clock::getFPS() << std::endl;
+    auto bl = world.GetBodyList();
+    if (flag)
+    {
+        b2PolygonShape dynamicBox;
+        dynamicBox.SetAsBox(1.0f, 1.0f);
+        b2FixtureDef fixtureDef;
+        fixtureDef.shape = &dynamicBox;
+        fixtureDef.density = 1.0f;
+        fixtureDef.friction = 0.3f;
+        bl->CreateFixture(&fixtureDef);
+        flag = false;
+    }
+    // std::cout << bl->GetPosition().x << ' ' << time::Clock::deltaTimeMs() << ' ' << bl->GetPosition().y << std::endl;
 }
 } // namespace ample::physics

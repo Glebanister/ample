@@ -8,10 +8,13 @@
 #include "GraphicalObject2d.h"
 #include "ScreenObject.h"
 #include "PerlinNoise.h"
+#include "WorldLayer2d.h"
+#include "Vector2d.h"
 #include "CameraBehavior.h"
+#include "LayeredWindowActivity.h"
 #include "SquareBehavior.h"
 
-class DemoGame : public ample::window::WindowActivity
+class DemoGame : public ample::graphics::LayeredWindowActivity
 {
 public:
     DemoGame(ample::window::Window &window);
@@ -20,19 +23,9 @@ private:
     void onAwake() override;
     void onActive() override;
 
-    ample::graphics::CameraPerspective camera{{1920, 1080}};
-    ample::graphics::ScreenObject objectSmall{{{-10, -10},
-                                               {10, -10},
-                                               {10, 10},
-                                               {-10, 10}}};
-    ample::graphics::ScreenObject objectBig{{{-300, -300},
-                                             {300, -300},
-                                             {300, 300},
-                                             {-300, 300}}};
-    ample::random::PerlinNoise xNoise{103};
-    ample::random::PerlinNoise yNoise{23};
-    ample::graphics::ScreenObject *current = &objectBig;
-    ample::graphics::CameraOrtho screenCamera{{1920, 1080}};
+    ample::graphics::CameraOrtho camera{{1920, 1080}};
     CameraBehavior cameraBeh{*this, camera};
-    std::vector<ample::graphics::ScreenObject> objs;
+    ample::physics::WorldLayer2d worldLayer{{0.0f, 0.0f}};
+    std::shared_ptr<ample::physics::WorldObject2d> ground;
+    std::shared_ptr<ample::physics::WorldObject2d> brick;
 };

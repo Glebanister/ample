@@ -4,57 +4,47 @@
 #include "PerlinNoise.h"
 #include "CameraBehavior.h"
 #include "SquareBehavior.h"
+#include "WorldObject2d.h"
 #include <memory>
 
 DemoGame::DemoGame(ample::window::Window &window)
-    : ample::window::WindowActivity(window)
+    : ample::graphics::LayeredWindowActivity(window)
 {
-    addActivity(cameraBeh);
-    for (int i = 0; i < 10; i++)
-    {
-        objs.push_back(
-            {
-                {
-                    {-300, -300},
-                    {300, -300},
-                    {300, 300},
-                    {-300, 300},
-                },
-
-                {0, 0, i * 109},
-            });
-        objs.back().setColor256(rand() % 256, rand() % 256, rand() % 256);
-    }
-    camera.translateSet(0, 0, objs.back().getZ());
+    ample::physics::DefWorldObject2d groundBodyDef;
+    groundBodyDef.setPosition({0.0f, -70.0f});
+    std::vector<ample::graphics::Vector2d<double>> shapeGround = {{-50, -50}, {-50, 50}, {50, 50}, {50, -50}};
+    ground = std::make_shared<ample::physics::WorldObject2d>(groundBodyDef, shapeGround);
+    worldLayer.addObject(ground);
+    worldLayer.addCamera(std::make_shared<ample::graphics::CameraOrtho>(camera));
+    ample::physics::DefWorldObject2d dynamicBodyDef;
+    dynamicBodyDef.setBodyType(ample::physics::BodyType::dynamicBody);
+    dynamicBodyDef.setPosition({0.0f, 100.0f});
+    std::vector<ample::graphics::Vector2d<double>> shapeBrick = {{-25, -25}, {-25, 25}, {25, 25}, {25, -25}};
+    brick = std::make_shared<ample::physics::WorldObject2d>(dynamicBodyDef, shapeBrick);
+    worldLayer.addObject(brick);
+    brick->setColor256(255, 100, 100);
+    addLayer(std::make_shared<ample::physics::WorldLayer2d>(worldLayer));
 }
 
 void DemoGame::onAwake()
 {
-    WindowActivity::onAwake();
-    _window.disableCursor();
+    LayeredWindowActivity::onAwake();
 }
 
 void DemoGame::onActive()
 {
-    WindowActivity::onActive();
-    camera.look();
-    for (auto obj : objs)
+    LayeredWindowActivity::onActive();
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_q))
     {
-        obj.draw();
+        brick->_body->ApplyForceToCenter({10000, 0}, false);
     }
-    camera.unlook();
-
-    screenCamera.look();
-    ample::graphics::ScreenObject({{-3, -3}, {3, -3}, {3, 3}, {-3, 3}}, {0, 0, 0}).draw();
-    screenCamera.unlook();
-    if (eventManager->mouse()->getWheelY() < 0)
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_a))
     {
-        camera.setPerspective(camera.getLeft(), camera.getRight(), camera.getBottom(), camera.getTop(), camera.getNear() + 10, camera.getFar());
+        camera.translate(0, -10, 0);
     }
-    else if (eventManager->mouse()->getWheelY() > 0)
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_d))
     {
-        camera.setPerspective(camera.getLeft(), camera.getRight(), camera.getBottom(), camera.getTop(), camera.getNear() - 10, camera.getFar());
+        camera.translate(0, 10, 0);
     }
-
-    _window.moveCursor(0, 0);
+    std::cout << ample::time::Clock::getFPS() << std::endl;
 }

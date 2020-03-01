@@ -21,6 +21,7 @@ message(INFO " sources list: ${SOURCES}")
 add_executable(${APP_NAME} ${SOURCES})
 
 include_directories(include)
+include_directories(../extern/box2d/include)
 include_directories(${AMPLE_INCLUDE_DIR})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++17")
