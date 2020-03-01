@@ -18,7 +18,11 @@ using Event = SDL_Event;
 class KeyboardManager final : public EventHandler
 {
 public:
-    void addKeyHandler(const keysym key, const KeyHandler &handler);
+    template <class TKeyHandler>
+    void addKeyHandler(const keysym key, const TKeyHandler &handler)
+    {
+        _handlers[key].push_back(std::make_shared<TKeyHandler>(handler));
+    }
     void clearKey(const keysym key);
     void handleEvent(const SDL_Event &event) override;
     bool isKeyPressed(keysym key);
@@ -44,7 +48,11 @@ public:
     void update();
 
     void addKeyHandler(const keysym key, const KeyHandler &handler);
-    void addEventHandler(const int eventType, const EventHandler &handler);
+    template <class TEventHandler>
+    void addEventHandler(const int eventType, const TEventHandler &handler)
+    {
+        _handlerByType[eventType].push_back(std::make_shared<TEventHandler>(handler));
+    }
     void clearType(const int &eventType);
 
     ~EventManager() = default;
