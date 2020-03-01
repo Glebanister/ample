@@ -7,6 +7,7 @@
 #include "EventManager.h"
 #include "EventHandler.h"
 #include "Clock.h"
+#include "Debug.h"
 
 namespace ample::activity
 {
@@ -17,11 +18,7 @@ public:
     void pause();
     void kill();
 
-    template<class TActivity>
-    void addActivity(const TActivity &activity)
-    {
-        _subActivities.push_back(std::make_shared<TActivity>(activity));
-    }
+    void addActivity(Activity &act);
 
     virtual ~Activity() = default;
 
@@ -38,6 +35,6 @@ protected:
     bool _alive = false;
     bool _running = false;
 
-    std::vector<std::shared_ptr<Activity>> _subActivities;
+    std::vector<Activity *> _subActivities;
 };
 } // namespace ample::activity

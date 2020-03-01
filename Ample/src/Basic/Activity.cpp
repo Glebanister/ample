@@ -11,33 +11,30 @@
 
 namespace ample::activity
 {
+void Activity::addActivity(Activity &act)
+{
+    DEBUG(typeid(*this).name());
+    DEBUG("add subactivity of type");
+    DEBUG(typeid(act).name());
+    _subActivities.push_back(&act);
+}
+
 void Activity::loop()
 {
-    std::cerr << "Loop activity of size" << ' ' << _subActivities.size() << std::endl;
-    std::cerr << _subActivities[0] << std::endl;
-    assert(_subActivities[0]);
-    std::cerr << "Activity.cpp 17" << std::endl;
     std::for_each(_subActivities.begin(), _subActivities.end(),
                   [](auto &x) { x->onAwake(); });
-    std::cerr << "Activity.cpp 19" << std::endl;
     onAwake();
-    std::cerr << "Activity.cpp 21" << std::endl;
     _alive = true;
     while (_alive)
     {
-        std::cerr << "Activity.cpp 25" << std::endl;
         std::for_each(_subActivities.begin(), _subActivities.end(),
                       [](auto &x) { x->onStart(); });
-        std::cerr << "Activity.cpp 28" << std::endl;
         onStart();
-        std::cerr << "Activity.cpp 30" << std::endl;
         _running = true;
         while (_running)
         {
-            std::cerr << "Activity.cpp 34" << std::endl;
             std::for_each(_subActivities.begin(), _subActivities.end(),
                           [](auto &x) { x->onActive(); });
-            std::cerr << "Activity.cpp 37" << std::endl;
             onActive();
         }
         onStop();

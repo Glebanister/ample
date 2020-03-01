@@ -16,7 +16,6 @@ void WorldLayer2d::onActive()
 {
     graphics::Layer::onActive();
     world.Step(1.0 / 62.5, 8, 3);
-    std::cout << time::Clock::getFPS() << std::endl;
     auto bl = world.GetBodyList();
     static bool flag = true;
     if (flag)

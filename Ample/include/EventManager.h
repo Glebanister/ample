@@ -18,11 +18,7 @@ using Event = SDL_Event;
 class KeyboardManager final : public EventHandler
 {
 public:
-    template <class TKeyHandler>
-    void addKeyHandler(const keysym key, const TKeyHandler &handler)
-    {
-        _handlers[key].push_back(std::make_shared<TKeyHandler>(handler));
-    }
+    void addKeyHandler(const keysym key, KeyHandler &handler);
     void clearKey(const keysym key);
     void handleEvent(const SDL_Event &event) override;
     bool isKeyPressed(keysym key);
@@ -31,7 +27,7 @@ public:
     void clear();
 
 private:
-    std::unordered_map<int32_t, std::vector<std::shared_ptr<KeyHandler>>> _handlers;
+    std::unordered_map<int32_t, std::vector<KeyHandler *>> _handlers;
     std::unordered_map<int32_t, int32_t> _keymapWasUp;
     std::unordered_map<int32_t, int32_t> _keymapWasDown;
     std::unordered_map<int32_t, int32_t> _keymapPressed;
@@ -47,12 +43,8 @@ public:
 
     void update();
 
-    void addKeyHandler(const keysym key, const KeyHandler &handler);
-    template <class TEventHandler>
-    void addEventHandler(const int eventType, const TEventHandler &handler)
-    {
-        _handlerByType[eventType].push_back(std::make_shared<TEventHandler>(handler));
-    }
+    void addKeyHandler(const keysym key, KeyHandler &handler);
+    void addEventHandler(const int eventType, EventHandler &handler);
     void clearType(const int &eventType);
 
     ~EventManager() = default;
@@ -64,7 +56,7 @@ private:
     std::shared_ptr<KeyboardManager> _keyboard;
     std::shared_ptr<MouseHandler> _mouse;
     SDL_Event ev;
-    std::unordered_map<int, std::vector<std::shared_ptr<EventHandler>>> _handlerByType;
+    std::unordered_map<int, std::vector<EventHandler *>> _handlerByType;
     window::Window &_window;
 };
 } // namespace ample::control
