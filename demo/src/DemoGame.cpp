@@ -4,49 +4,57 @@
 #include "PerlinNoise.h"
 #include "CameraBehavior.h"
 #include "SquareBehavior.h"
+#include "WorldObject2d.h"
 #include <memory>
 
 DemoGame::DemoGame(ample::window::Window &window)
-    : ample::window::WindowActivity(window)
+    : ample::graphics::LayeredWindowActivity(window)
 {
+    ample::physics::DefWorldObject2d groundBodyDef;
+    groundBodyDef.setPosition({0.0f, -70.0f});
+    ample::physics::DefWorldObject2d dynamicBodyDef;
+    dynamicBodyDef.setBodyType(ample::physics::BodyType::dynamicBody);
+    dynamicBodyDef.setPosition({0.0f, 100.0f});
+    ground = std::make_shared<ample::physics::WorldObject2d>(groundBodyDef,
+                                                             (std::vector<ample::graphics::Vector2d<double>>){
+                                                                 {-50, -50},
+                                                                 {-50, 50},
+                                                                 {50, 50},
+                                                                 {50, -50},
+                                                             });
+    brick = std::make_shared<ample::physics::WorldObject2d>(dynamicBodyDef,
+                                                            (std::vector<ample::graphics::Vector2d<double>>){
+                                                                {-25, -25},
+                                                                {-25, 25},
+                                                                {25, 25},
+                                                                {25, -25},
+                                                            });
+    brick->setColor256(255, 100, 100);
+
+    worldLayer.addObject(*brick);
+    worldLayer.addObject(*ground);
+    worldLayer.addCamera(camera);
+    addLayer(worldLayer);
     addActivity(cameraBeh);
-    for (int i = 0; i < 1; i++)
-    {
-        objs.push_back(
-            {
-                {
-                    {-300, -300},
-                    {300, -300},
-                    {300, 300},
-                    {-300, 300},
-                },
-
-                {0, 0, i * 109.0},
-            });
-    }
-    camera.translateSet(0, 0, objs.front().getZ());
-}
-
-void DemoGame::onAwake()
-{
-    WindowActivity::onAwake();
-    _window.disableCursor();
 }
 
 void DemoGame::onActive()
 {
-    WindowActivity::onActive();
-    camera.look();
-    for (auto obj : objs)
+    LayeredWindowActivity::onActive();
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_LEFT))
     {
-        obj.draw();
+        brick->_body->ApplyLinearImpulseToCenter({-100, 0}, true);
     }
-    camera.unlook();
-
-    screenCamera.look();
-    ample::graphics::ScreenObject({{-3, -3}, {3, -3}, {3, 3}, {-3, 3}}, {0, 0, 0}).draw();
-    screenCamera.unlook();
-    objs.back().rotate(0, -1, 1);
-
-    _window.moveCursor(0, 0);
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_RIGHT))
+    {
+        brick->_body->ApplyLinearImpulseToCenter({100, 0}, true);
+    }
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_UP))
+    {
+        brick->_body->ApplyLinearImpulseToCenter({0, 100}, true);
+    }
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_DOWN))
+    {
+        brick->_body->ApplyLinearImpulseToCenter({0, -100}, true);
+    }
 }

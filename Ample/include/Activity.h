@@ -2,10 +2,12 @@
 
 #include <vector>
 #include <memory>
+#include <functional>
 
 #include "EventManager.h"
 #include "EventHandler.h"
 #include "Clock.h"
+#include "Debug.h"
 
 namespace ample::activity
 {
@@ -15,13 +17,8 @@ public:
     void loop();
     void pause();
     void kill();
-    void addActivity(std::shared_ptr<Activity>);
 
-    template <class ActivityClass>
-    void addActivity(const ActivityClass &activity)
-    {
-        _subActivities.push_back(std::make_shared<ActivityClass>(activity));
-    }
+    void addActivity(Activity &act);
 
     virtual ~Activity() = default;
 
@@ -38,6 +35,6 @@ protected:
     bool _alive = false;
     bool _running = false;
 
-    std::vector<std::shared_ptr<Activity>> _subActivities;
+    std::vector<Activity *> _subActivities;
 };
 } // namespace ample::activity

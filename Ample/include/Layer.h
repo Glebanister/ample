@@ -9,20 +9,19 @@
 
 namespace ample::graphics
 {
-class Layer : activity::Activity
+class Layer : public activity::Activity
 {
 public:
     void onActive() override;
 
-    void addCamera(std::shared_ptr<Camera>);
+    void addCamera(Camera &camera);
     void clearCameras();
 
-    void addObject(std::shared_ptr<GraphicalObject>);
-    void addObject(const std::vector<std::shared_ptr<GraphicalObject>> &);
+    void addObject(GraphicalObject &object);
     void clearObjecs();
 
 private:
-    std::vector<std::shared_ptr<Camera>> _cameras;
-    std::vector<std::shared_ptr<GraphicalObject>> _objects;
+    std::vector<Camera *> _cameras;
+    std::vector<GraphicalObject *> _objects;
 };
 } // namespace ample::graphics

@@ -2,6 +2,7 @@
 #include <memory>
 
 #include "GraphicalObject2d.h"
+#include "Debug.h"
 
 namespace ample::graphics
 {

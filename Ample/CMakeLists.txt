@@ -9,6 +9,10 @@ set(SDL2_LIBRARY /usr/lib/x86_64-linux-gnu/libSDL2.so)
 set(SDL2_INCLUDE_DIRS /usr/include/SDL2/)
 
 set(GLU_LIBRARY /usr/lib/x86_64-linux-gnu/libGLU.so)
+add_subdirectory(../extern/box2d buildBox2d)
+add_subdirectory(../extern/rapidjson buildRapidjson)
+include_directories(../extern/box2d/include)
+include_directories(../extern/rapidjson/include)
 
 set(${CMAKE_PROJECT_NAME}_SOURCES
 
@@ -30,6 +34,9 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Graphics/Camera.cpp
     src/Graphics/CameraPerspective.cpp
     src/Graphics/CameraOrtho.cpp
+
+    src/Physics/WorldObject2d.cpp
+    src/Physics/WorldLayer2d.cpp
     src/Graphics/Layer.cpp
     src/Graphics/Layer2d.cpp
     src/Graphics/ScreenLayer.cpp
@@ -51,3 +58,4 @@ add_library(${CMAKE_PROJECT_NAME} SHARED ${SOURCE_LIB})
 target_link_libraries(${CMAKE_PROJECT_NAME} ${SDL2_LIBRARY})
 target_link_libraries(${CMAKE_PROJECT_NAME} ${OPENGL_gl_LIBRARY})
 target_link_libraries(${CMAKE_PROJECT_NAME} ${GLU_LIBRARY})
+target_link_libraries(${CMAKE_PROJECT_NAME} box2d)

@@ -14,8 +14,7 @@ class Timer;
 class Clock
 {
 public:
-    Clock();
-
+    static void init();
     static milliseconds globalTime();
     static int globalTimeMs();
     static double globalTimeSec();
