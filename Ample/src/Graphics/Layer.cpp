@@ -16,19 +16,9 @@ void Layer::onActive()
     }
 }
 
-void Layer::addCamera(const Camera &camera)
-{
-    _cameras.push_back(std::make_shared<Camera>(camera));
-}
-
 void Layer::clearCameras()
 {
     _cameras.clear();
-}
-
-void Layer::addObject(const GraphicalObject &object)
-{
-    _objects.push_back(std::make_shared<GraphicalObject>(object));
 }
 
 void Layer::clearObjecs()

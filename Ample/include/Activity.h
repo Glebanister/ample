@@ -17,7 +17,11 @@ public:
     void pause();
     void kill();
 
-    void addActivity(const Activity &activity);
+    template<class TActivity>
+    void addActivity(const TActivity &activity)
+    {
+        _subActivities.push_back(std::make_shared<TActivity>(activity));
+    }
 
     virtual ~Activity() = default;
 

@@ -14,10 +14,19 @@ class Layer : public activity::Activity
 public:
     void onActive() override;
 
-    void addCamera(const Camera &);
+    template <class TCamera>
+    void addCamera(const TCamera &camera)
+    {
+        _cameras.push_back(std::make_shared<TCamera>(camera));
+    }
     void clearCameras();
 
-    virtual void addObject(const GraphicalObject &);
+    template <class TGraphicalObject>
+    void addObject(const TGraphicalObject &object)
+    {
+        activity::Activity::addActivity(object);
+        _objects.push_back(std::make_shared<TGraphicalObject>(object));
+    }
     void clearObjecs();
 
 private:

@@ -10,11 +10,16 @@ namespace ample::graphics
 class GraphicalObject : public activity::Activity
 {
 public:
-    virtual void draw();
-    void addSubObject(const GraphicalObject &object);
+    virtual void draw() = 0;
+    template <class TGraphicalObject>
+    void addSubObject(const TGraphicalObject &object)
+    {
+        activity::Activity::addActivity(object);
+        _subObjects.push_back(std::make_shared<TGraphicalObject>(object));
+    }
 
 protected:
-    virtual void drawSelf();
+    virtual void drawSelf() = 0;
     std::vector<std::shared_ptr<GraphicalObject>> _subObjects;
 };
-} // namespace graphics
+} // namespace ample::graphics
