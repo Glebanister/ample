@@ -39,14 +39,13 @@ public:
     double getScaleZ() const override;
 
     void createPhysicalShape(const std::vector<ample::graphics::Vector2d<double>> &shape);
+    b2Body *_body = nullptr;
 
 private:
     friend ample::physics::WorldLayer2d;
 
     double zIndex = 0;
     b2BodyDef _bodyDef;
-    b2Body *_body = nullptr;
-    
 };
 
 struct DefWorldObject2d final

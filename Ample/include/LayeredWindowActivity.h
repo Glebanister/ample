@@ -17,8 +17,10 @@ public:
     template <class TLayer>
     void addLayer(const TLayer &layer)
     {
+        std::cerr << "Adding layer" << std::endl;
         Activity::addActivity(layer);
         _layers.push_back(std::make_shared<TLayer>(layer));
+        std::cerr << "Layer added" << std::endl;
     }
     void cleanLayers();
 

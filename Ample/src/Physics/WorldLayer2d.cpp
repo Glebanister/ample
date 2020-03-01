@@ -6,19 +6,19 @@ namespace ample::physics
 {
 WorldLayer2d::WorldLayer2d(const graphics::Vector2d<float> &gravity) : world(b2Vec2(gravity.x, gravity.y)) {}
 
-void WorldLayer2d::addObject(std::shared_ptr<graphics::GraphicalObject> object)
+void WorldLayer2d::addObject(WorldObject2d &object)
 {
-    ample::graphics::Layer::addObject(object);
-    ample::physics::WorldObject2d *worldObj = static_cast<WorldObject2d *>(object.get());
-    worldObj->_body = world.CreateBody(&(worldObj->_bodyDef));
+    graphics::Layer::addObject(object);
+    object._body = world.CreateBody(&(object._bodyDef));
 }
 
 void WorldLayer2d::onActive()
 {
-    ample::graphics::Layer::onActive();
+    graphics::Layer::onActive();
     world.Step(1.0 / 62.5, 8, 3);
     std::cout << time::Clock::getFPS() << std::endl;
     auto bl = world.GetBodyList();
+    static bool flag = true;
     if (flag)
     {
         b2PolygonShape dynamicBox;
@@ -32,4 +32,4 @@ void WorldLayer2d::onActive()
     }
     // std::cout << bl->GetPosition().x << ' ' << time::Clock::deltaTimeMs() << ' ' << bl->GetPosition().y << std::endl;
 }
-} // namespace ample::physics
+} // namespace physics
