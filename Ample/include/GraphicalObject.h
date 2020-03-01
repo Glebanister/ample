@@ -19,7 +19,7 @@ public:
     }
 
 protected:
-    virtual void drawSelf();
+    virtual void drawSelf() = 0;
     std::vector<std::shared_ptr<GraphicalObject>> _subObjects;
 };
 } // namespace ample::graphics
