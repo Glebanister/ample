@@ -22,4 +22,12 @@ void CameraBehavior::onActive()
     {
         camera.translate(0, -5, 0);
     }
+    if (game.eventManager->mouse()->getWheelY() < 0)
+    {
+        camera.setPerspective(camera.getLeft(), camera.getRight(), camera.getBottom(), camera.getTop(), camera.getNear() + 10, camera.getFar());
+    }
+    else if (game.eventManager->mouse()->getWheelY() > 0)
+    {
+        camera.setPerspective(camera.getLeft(), camera.getRight(), camera.getBottom(), camera.getTop(), camera.getNear() - 10, camera.getFar());
+    }
 }

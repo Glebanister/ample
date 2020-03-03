@@ -12,6 +12,7 @@ class GraphicalObject2d : public GraphicalObject
 public:
     GraphicalObject2d() = default;
     GraphicalObject2d(const std::vector<Vector2d<double>> &);
+    GraphicalObject2d(const std::vector<Vector2d<int>> &);
 
     virtual double getX() const = 0;
     virtual double getY() const = 0;

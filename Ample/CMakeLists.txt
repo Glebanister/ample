@@ -27,6 +27,8 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Os/Window.cpp
 
     src/Utils/Utils.cpp
+    src/Utils/Singleton.cpp
+    src/Utils/Noncopyable.cpp
 
     src/Graphics/GraphicalObject.cpp
     src/Graphics/GraphicalObject2d.cpp
@@ -41,6 +43,11 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Graphics/Layer2d.cpp
     src/Graphics/ScreenLayer.cpp
     src/Graphics/LayeredWindowActivity.cpp
+    src/Graphics/VertexArray.cpp
+    src/Graphics/Shaders/Shader.cpp
+    src/Graphics/Shaders/ShaderProcessor.cpp
+    src/Graphics/Shaders/VertexShader.cpp
+    src/Graphics/Shaders/FragmentShader.cpp
     )
 
 include_directories(${SDL2_INCLUDE_DIRS})
