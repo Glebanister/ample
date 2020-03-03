@@ -7,10 +7,8 @@ LayeredWindowActivity::LayeredWindowActivity(window::Window &window)
 
 void LayeredWindowActivity::addLayer(Layer &layer)
 {
-    DEBUG("Adding layer");
     Activity::addActivity(layer);
     _layers.push_back(&layer);
-    DEBUG("Layer added");
 }
 
 void LayeredWindowActivity::cleanLayers()
