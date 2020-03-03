@@ -4,6 +4,8 @@
 
 #include "Window.h"
 #include "Exception.h"
+#include "Debug.h"
+#include "ShaderProcessor.h"
 
 namespace ample::window
 {
@@ -35,51 +37,50 @@ Window::Window(const std::string &name,
         _y = SDL_WINDOWPOS_UNDEFINED;
     }
 
-    if (SDL_WasInit(SDL_INIT_EVERYTHING))
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_AUDIO) < 0)
     {
-        if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
-        {
-            throw exception::Exception(
-                exception::exId::SDL_INIT,
-                exception::exType::CRITICAL,
-                SDL_GetError());
-        }
+        exception::SDLException::handle();
     }
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
     SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
     _winPtr = SDL_CreateWindow(_name.c_str(), _x, _y,
                                _width, _height,
-                               _modeFlags | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI);
+                               _modeFlags | SDL_WINDOW_OPENGL);
     if (!_winPtr)
     {
         SDL_Quit();
-        throw exception::Exception(
-            exception::exId::WINDOW_OPEN,
-            exception::exType::CRITICAL,
-            SDL_GetError());
+        exception::SDLException::handle();
     }
     _glContext = SDL_GL_CreateContext(_winPtr);
     if (!_glContext)
     {
         SDL_DestroyWindow(_winPtr);
         SDL_Quit();
-        throw exception::Exception(
-            exception::exId::OPENGL_INIT,
-            exception::exType::CRITICAL,
-            SDL_GetError());
+        exception::OpenGLException::handle();
     }
+    DEBUG(glGetString(GL_VERSION));
     if (SDL_GL_SetSwapInterval(1) < 0)
     {
         SDL_DestroyWindow(_winPtr);
         SDL_Quit();
-        throw exception::Exception(
-            exception::exId::SDL_INIT,
-            exception::exType::CRITICAL,
-            SDL_GetError());
+        exception::SDLException::handle();
     }
+    DEBUG("Creating shader processor");
+    auto shaderProcessor = ample::graphics::shaders::ShaderProcessor();
+    DEBUG("Adding vertex shader to processor");
+    shaderProcessor.addShader(ample::graphics::shaders::shaderType::VERTEX, "../../Ample/src/Graphics/Shaders/Shaders/BasicVertexShader.vert");
+    DEBUG("Adding vertex fragment to processor");
+    shaderProcessor.addShader(ample::graphics::shaders::shaderType::FRAGMENT, "../../Ample/src/Graphics/Shaders/Shaders/BasicFragmentShader.frag");
+    DEBUG("Linking shaders");
+    shaderProcessor.link();
+
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     glEnable(GL_TEXTURE_2D);
