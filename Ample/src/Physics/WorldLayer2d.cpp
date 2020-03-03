@@ -1,6 +1,8 @@
+#include "box2d/b2_polygon_shape.h"
+
 #include "WorldLayer2d.h"
 #include "Clock.h"
-#include "box2d/b2_polygon_shape.h"
+#include "Debug.h"
 
 namespace ample::physics
 {
@@ -30,5 +32,10 @@ void WorldLayer2d::onActive()
         bl->CreateFixture(&fixtureDef);
         flag = false;
     }
+}
+
+void WorldLayer2d::loadScene(const filing::Scene2d &scene)
+{
+    DEBUG("Stub for worldLayer load from scene");
 }
 } // namespace ample::physics
