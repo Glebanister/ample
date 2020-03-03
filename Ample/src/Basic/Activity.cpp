@@ -13,9 +13,6 @@ namespace ample::activity
 {
 void Activity::addActivity(Activity &act)
 {
-    DEBUG(typeid(*this).name());
-    DEBUG("add subactivity of type");
-    DEBUG(typeid(act).name());
     _subActivities.push_back(&act);
 }
 
