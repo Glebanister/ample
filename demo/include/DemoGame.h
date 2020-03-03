@@ -22,9 +22,9 @@ public:
 
 private:
     void onActive() override;
-
+    bool isAng = false;
     ample::graphics::CameraOrtho camera{{1920, 1080}};
     CameraBehavior cameraBeh{*this, camera};
     ample::physics::WorldLayer2d worldLayer{{0.0f, -1000.0f}};
-    ample::filing::Scene2d firstScene{"need-for-speed-first-scene.json"};
+    ample::filing::Scene2d firstScene{"../objs/need-for-speed-first-scene.json"};
 };
