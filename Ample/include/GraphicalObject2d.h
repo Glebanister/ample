@@ -34,9 +34,10 @@ public:
     void setRatio(double);
     double getRatio() const;
 
+    void setColor256(double r, double g, double b);
+
 protected:
     void drawSelf() override;
-
     double _ratio = 1.0;
     std::shared_ptr<VertexArray> _vertexArray;
 };

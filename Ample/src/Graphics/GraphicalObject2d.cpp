@@ -36,4 +36,9 @@ double GraphicalObject2d::getRatio() const
 {
     return _ratio;
 }
+
+void GraphicalObject2d::setColor256(double r, double g, double b)
+{
+    _vertexArray->setColor256(r, g, b);
+}
 } // namespace ample::graphics
