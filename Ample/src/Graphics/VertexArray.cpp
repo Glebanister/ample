@@ -5,15 +5,21 @@
 
 #include "VertexArray.h"
 #include "Exception.h"
+#include "Debug.h"
 
 namespace ample::graphics
 {
 void VertexArray::_sendToOpenGL()
 {
+    DEBUG("Generating vertex array");
     glGenVertexArrays(1, &_vertexArrayId);
+    DEBUG("Binding vertex array");
     glBindVertexArray(_vertexArrayId);
+    DEBUG("Generating vertex buffer");
     glGenBuffers(1, &_vertexBufferId);
+    DEBUG("Binding vertex buffer");
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferId);
+    DEBUG("Sending buffer data");
     glBufferData(GL_ARRAY_BUFFER, sizeof(_data.data()), _data.data(), GL_STATIC_DRAW);
     _total = _data.size() / 3;
 }
@@ -30,6 +36,7 @@ void VertexArray::execute()
         0,        // stride
         (void *)0 // array buffer offset
     );
+    glColor3d(_r, _g, _b);
     glDrawArrays(GL_TRIANGLES, 0, _total); // Starting from vertex 0; 3 vertices total -> 1 triangle
     glDisableVertexAttribArray(0);
 }
@@ -37,5 +44,12 @@ void VertexArray::execute()
 GLfloat *VertexArray::data()
 {
     return _data.data();
+}
+
+void VertexArray::setColor256(double r, double g, double b)
+{
+    _r = r;
+    _g = g;
+    _b = b;
 }
 } // namespace ample::graphics

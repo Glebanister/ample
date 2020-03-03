@@ -46,11 +46,14 @@ public:
 
     GLfloat *data();
 
+    void setColor256(double r, double g, double b);
+
 private:
     std::vector<GLfloat> _data;
     GLuint _vertexArrayId;
     GLuint _vertexBufferId;
     void _sendToOpenGL();
     GLsizei _total;
+    double _r = 0.5, _g = 0.5, _b = 0.5;
 };
 } // namespace ample::graphics
