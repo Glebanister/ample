@@ -1,19 +1,33 @@
 #include <GL/gl.h>
-#include <memory>
+#include <GL/glu.h>
+#include <iostream>
 
 #include "GraphicalObject2d.h"
 #include "Debug.h"
 
 namespace ample::graphics
 {
+GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<double>> &graphicalShape)
+    : _graphicalShape(graphicalShape) {}
+
+GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<int>> &graphicalShape)
+    : _graphicalShape(std::vector<Vector2d<double>>(graphicalShape.size()))
+{
+    for (size_t vertId = 0; vertId < graphicalShape.size(); ++vertId)
+    {
+        _graphicalShape[vertId].x = static_cast<double>(graphicalShape[vertId].x);
+        _graphicalShape[vertId].y = static_cast<double>(graphicalShape[vertId].y);
+    }
+}
+
 void GraphicalObject2d::draw()
 {
     glPushMatrix();
-    glScaled(getScaleX(), getScaleY(), getScaleZ());
     glTranslated(getX() * _ratio, getY() * _ratio, getZ() * _ratio);
     glRotated(getAngleX(), 1.0, 0.0, 0.0);
     glRotated(getAngleY(), 0.0, 1.0, 0.0);
     glRotated(getAngleZ(), 0.0, 0.0, 1.0);
+    glScaled(getScaleX(), getScaleY(), getScaleZ());
     drawSelf();
     for (auto subObject : _subObjects)
     {
@@ -24,7 +38,6 @@ void GraphicalObject2d::draw()
 
 void GraphicalObject2d::drawSelf()
 {
-    // _vertexArray->execute();
     glBegin(GL_POLYGON);
     glColor3d(_r, _g, _b);
     for (auto vert : _graphicalShape)
@@ -46,7 +59,8 @@ double GraphicalObject2d::getRatio() const
 
 void GraphicalObject2d::setColor256(double r, double g, double b)
 {
-    DEBUG("SET COLOR STUB");
-    // _vertexArray->setColor256(r, g, b);
+    _r = r / 256.0;
+    _g = g / 256.0;
+    _b = b / 256.0;
 }
 } // namespace ample::graphics
