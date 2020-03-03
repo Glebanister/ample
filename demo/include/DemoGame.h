@@ -13,6 +13,7 @@
 #include "CameraBehavior.h"
 #include "LayeredWindowActivity.h"
 #include "SquareBehavior.h"
+#include "Scene2d.h"
 
 class DemoGame : public ample::graphics::LayeredWindowActivity
 {
@@ -25,6 +26,5 @@ private:
     ample::graphics::CameraOrtho camera{{1920, 1080}};
     CameraBehavior cameraBeh{*this, camera};
     ample::physics::WorldLayer2d worldLayer{{0.0f, -1000.0f}};
-    std::shared_ptr<ample::physics::WorldObject2d> ground;
-    std::shared_ptr<ample::physics::WorldObject2d> brick;
+    ample::filing::Scene2d firstScene{"need-for-speed-first-scene.json"};
 };
