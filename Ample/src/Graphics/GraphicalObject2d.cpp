@@ -24,7 +24,14 @@ void GraphicalObject2d::draw()
 
 void GraphicalObject2d::drawSelf()
 {
-    _vertexArray->execute();
+    // _vertexArray->execute();
+    glBegin(GL_POLYGON);
+    glColor3d(_r, _g, _b);
+    for (auto vert : _graphicalShape)
+    {
+        glVertex2d(vert.x, vert.y);
+    }
+    glEnd();
 }
 
 void GraphicalObject2d::setRatio(double ratio)
@@ -39,6 +46,7 @@ double GraphicalObject2d::getRatio() const
 
 void GraphicalObject2d::setColor256(double r, double g, double b)
 {
-    _vertexArray->setColor256(r, g, b);
+    DEBUG("SET COLOR STUB");
+    // _vertexArray->setColor256(r, g, b);
 }
 } // namespace ample::graphics
