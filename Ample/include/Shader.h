@@ -3,11 +3,18 @@
 #include <string>
 #include <GL/gl.h>
 
-namespace ample::graphics
+#include "Noncopyable.h"
+
+namespace ample::graphics::shaders
 {
-class Shader
+class Shader : public utils::Noncopyable
 {
+public:
+    explicit Shader(GLuint programId);
+    GLuint getShaderId() const;
+
 protected:
+    GLuint _shaderId;
     GLuint _programId;
 };
-} // namespace ample::graphics
+} // namespace ample::graphics::shaders
