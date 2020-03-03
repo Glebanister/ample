@@ -1,7 +1,7 @@
 #define GL_GLEXT_PROTOTYPES 1
 
 #include <GL/gl.h>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
