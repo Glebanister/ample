@@ -4,15 +4,7 @@ namespace ample::graphics
 {
 
 ScreenObject::ScreenObject(const std::vector<Vector2d<pixel_t>> &shape, Vector3d<double> position)
-    : _position(position)
-{
-    _graphicalShape.resize(shape.size());
-    for (size_t i = 0; i < shape.size(); ++i)
-    {
-        _graphicalShape[i].x = shape[i].x;
-        _graphicalShape[i].y = shape[i].y;
-    }
-}
+    : GraphicalObject2d(shape), _position(position) {}
 
 ScreenObject::ScreenObject(const std::vector<Vector2d<pixel_t>> &shape, Vector2d<double> position)
     : ScreenObject(shape, {position.x, position.y, 0}) {}

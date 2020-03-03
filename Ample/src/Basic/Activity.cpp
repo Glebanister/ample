@@ -1,6 +1,7 @@
 #include <cassert>
 #include <exception>
 #include <algorithm>
+#include <iostream>
 
 #include "Activity.h"
 #include "EventHandler.h"
@@ -10,6 +11,11 @@
 
 namespace ample::activity
 {
+void Activity::addActivity(Activity &act)
+{
+    _subActivities.push_back(&act);
+}
+
 void Activity::loop()
 {
     std::for_each(_subActivities.begin(), _subActivities.end(),
@@ -53,11 +59,6 @@ void Activity::kill()
     onKill();
     _running = false;
     _alive = false;
-}
-
-void Activity::addActivity(std::shared_ptr<Activity> activity)
-{
-    _subActivities.push_back(activity);
 }
 
 void Activity::onAwake() {}

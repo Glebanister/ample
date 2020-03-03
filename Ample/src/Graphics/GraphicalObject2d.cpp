@@ -3,11 +3,22 @@
 #include <iostream>
 
 #include "GraphicalObject2d.h"
+#include "Debug.h"
 
 namespace ample::graphics
 {
 GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<double>> &graphicalShape)
     : _graphicalShape(graphicalShape) {}
+
+GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<int>> &graphicalShape)
+    : _graphicalShape(std::vector<Vector2d<double>>(graphicalShape.size()))
+{
+    for (size_t vertId = 0; vertId < graphicalShape.size(); ++vertId)
+    {
+        _graphicalShape[vertId].x = static_cast<double>(graphicalShape[vertId].x);
+        _graphicalShape[vertId].y = static_cast<double>(graphicalShape[vertId].y);
+    }
+}
 
 void GraphicalObject2d::draw()
 {

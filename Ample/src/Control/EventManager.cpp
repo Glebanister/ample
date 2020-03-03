@@ -12,12 +12,12 @@ EventManager::EventManager(window::Window &window)
       _mouse(std::make_shared<MouseHandler>()),
       _window(window)
 {
-    _handlerByType[SDL_KEYDOWN].push_back(_keyboard);
-    _handlerByType[SDL_KEYUP].push_back(_keyboard);
-    _handlerByType[SDL_MOUSEBUTTONDOWN].push_back(_mouse);
-    _handlerByType[SDL_MOUSEBUTTONUP].push_back(_mouse);
-    _handlerByType[SDL_MOUSEWHEEL].push_back(_mouse);
-    _handlerByType[SDL_MOUSEMOTION].push_back(_mouse);
+    _handlerByType[SDL_KEYDOWN].push_back(_keyboard.get());
+    _handlerByType[SDL_KEYUP].push_back(_keyboard.get());
+    _handlerByType[SDL_MOUSEBUTTONDOWN].push_back(_mouse.get());
+    _handlerByType[SDL_MOUSEBUTTONUP].push_back(_mouse.get());
+    _handlerByType[SDL_MOUSEWHEEL].push_back(_mouse.get());
+    _handlerByType[SDL_MOUSEMOTION].push_back(_mouse.get());
 }
 
 void EventManager::update()
@@ -33,14 +33,14 @@ void EventManager::update()
     }
 }
 
-void EventManager::addKeyHandler(const keysym key, std::shared_ptr<KeyHandler> handler)
+void EventManager::addKeyHandler(const keysym key, KeyHandler &handler)
 {
     _keyboard->addKeyHandler(key, handler);
 }
 
-void EventManager::addEventHandler(const int eventType, std::shared_ptr<EventHandler> handler)
+void EventManager::addEventHandler(const int eventType, EventHandler &handler)
 {
-    _handlerByType[eventType].push_back(handler);
+    _handlerByType[eventType].push_back(&handler);
 }
 
 void EventManager::clearType(const int &eventType)
@@ -57,9 +57,9 @@ std::shared_ptr<MouseHandler> EventManager::mouse() const
     return _mouse;
 }
 
-void KeyboardManager::addKeyHandler(const keysym key, std::shared_ptr<KeyHandler> handler)
+void KeyboardManager::addKeyHandler(const keysym key, KeyHandler &handler)
 {
-    _handlers[key].push_back(handler);
+    _handlers[key].push_back(&handler);
 }
 
 void KeyboardManager::clearKey(const keysym key)

@@ -34,12 +34,12 @@ void CameraPerspective::look()
               _bottom, _top,
               _near, _far);
     glScaled(_scale.x, _scale.y, _scale.z);
-    glRotated(_angle.x, 1.0, 0.0, 0.0);
-    glRotated(_angle.y, 0.0, 1.0, 0.0);
-    glRotated(_angle.z, 0.0, 0.0, 1.0);
     glTranslated(_position.x * _ratio,
                  _position.y * _ratio,
                  _position.z * _ratio);
+    glRotated(_angle.x, 1.0, 0.0, 0.0);
+    glRotated(_angle.y, 0.0, 1.0, 0.0);
+    glRotated(_angle.z, 0.0, 0.0, 1.0);
 }
 
 void CameraPerspective::unlook()

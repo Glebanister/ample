@@ -36,8 +36,8 @@ public:
            double ratio = 1.0);
     Camera(Vector2d<pixel_t> cameraSize, double ratio = 1.0);
 
-    virtual void look() = 0;
-    virtual void unlook() = 0;
+    virtual void look();
+    virtual void unlook();
 
     void setViewport(pixel_t x, pixel_t y, pixel_t w, pixel_t h);
     void setViewport(pixel_t w, pixel_t h);

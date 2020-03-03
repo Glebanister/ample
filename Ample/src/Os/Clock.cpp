@@ -14,7 +14,7 @@ milliseconds Clock::liveTime;
 milliseconds Clock::delta;
 double Clock::timeFlow;
 
-Clock::Clock()
+void Clock::init()
 {
     static bool wasInit = false;
 

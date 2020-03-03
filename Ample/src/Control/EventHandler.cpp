@@ -5,6 +5,8 @@
 
 namespace ample::control
 {
+void EventHandler::handleEvent(const SDL_Event &) {}
+
 KeyHandler::KeyHandler()
 {
     this->pressed = eventType::KEY_UP;
