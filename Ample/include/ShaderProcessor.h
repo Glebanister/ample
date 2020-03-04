@@ -11,19 +11,14 @@
 
 namespace ample::graphics::shaders
 {
-
-enum class shaderType
-{
-    VERTEX,
-    FRAGMENT,
-};
-
-class ShaderProcessor : utils::Noncopyable
+class ShaderProcessor final : utils::Noncopyable
 {
 public:
     ShaderProcessor();
     void addShader(shaderType shaderType, const std::string &shaderPath);
     void link();
+    void use();
+    ~ShaderProcessor();
 
 private:
     std::unordered_map<std::string, bool> _hasShader;

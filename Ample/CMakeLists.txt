@@ -46,8 +46,6 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Graphics/VertexArray.cpp
     src/Graphics/Shaders/Shader.cpp
     src/Graphics/Shaders/ShaderProcessor.cpp
-    src/Graphics/Shaders/VertexShader.cpp
-    src/Graphics/Shaders/FragmentShader.cpp
     )
 
 include_directories(${SDL2_INCLUDE_DIRS})
