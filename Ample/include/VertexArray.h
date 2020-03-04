@@ -48,9 +48,10 @@ public:
 
     void setColor256(double r, double g, double b);
 
+    ~VertexArray();
+
 private:
     std::vector<GLfloat> _data;
-    GLuint _vertexArrayId;
     GLuint _vertexBufferId;
     void _sendToOpenGL();
     GLsizei _total;

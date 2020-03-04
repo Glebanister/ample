@@ -7,6 +7,7 @@
 
 #include "Activity.h"
 #include "Window.h"
+#include "ShaderProcessor.h"
 
 namespace ample::window
 {
@@ -51,6 +52,8 @@ public:
     pixel_t getWidth() const;
     pixel_t getHeight() const;
 
+    virtual ~WindowActivity();
+
 protected:
     virtual void onResize();
 
@@ -61,5 +64,9 @@ protected:
     std::shared_ptr<WindowEventHandler> _windowEventHandler;
 
     friend void WindowEventHandler::handleEvent(const SDL_Event &event);
+
+private:
+    std::unique_ptr<graphics::shaders::ShaderProcessor> _shadersProcessor;
+    GLuint _vertexArrayId;
 };
 } // namespace ample::window

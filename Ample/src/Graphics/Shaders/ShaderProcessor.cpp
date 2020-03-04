@@ -5,8 +5,7 @@
 #include "ShaderProcessor.h"
 #include "Debug.h"
 #include "Exception.h"
-#include "VertexShader.h"
-#include "FragmentShader.h"
+#include "Shader.h"
 
 namespace ample::graphics::shaders
 {
@@ -23,17 +22,7 @@ void ShaderProcessor::addShader(shaderType shaderType, const std::string &shader
         return;
     }
     _hasShader[shaderPath] = true;
-    switch (shaderType)
-    {
-    case shaderType::VERTEX:
-        _shaders.push_back(std::make_unique<VertexShader>(shaderPath, _programId));
-        break;
-    case shaderType::FRAGMENT:
-        _shaders.push_back(std::make_unique<FragmentShader>(shaderPath, _programId));
-        break;
-    default:
-        DEBUG("Uknown shader");
-    }
+    _shaders.push_back(std::make_unique<Shader>(_programId, shaderType, shaderPath));
 }
 
 void ShaderProcessor::link()
@@ -63,9 +52,17 @@ void ShaderProcessor::link()
     glValidateProgram(_programId);
     exception::OpenGLException::handle();
 
-    glUseProgram(_programId);
-    exception::OpenGLException::handle();
-
     DEBUG("Shaders - done!");
+}
+
+void ShaderProcessor::use()
+{
+    glUseProgram(_programId);
+}
+
+ShaderProcessor::~ShaderProcessor()
+{
+    DEBUG("Shader processor dtor");
+    glDeleteProgram(_programId);
 }
 } // namespace ample::graphics::shaders

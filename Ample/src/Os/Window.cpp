@@ -72,19 +72,6 @@ Window::Window(const std::string &name,
         SDL_Quit();
         exception::SDLException::handle();
     }
-    DEBUG("Creating shader processor");
-    auto shaderProcessor = ample::graphics::shaders::ShaderProcessor();
-    DEBUG("Adding vertex shader to processor");
-    shaderProcessor.addShader(ample::graphics::shaders::shaderType::VERTEX, "../../Ample/src/Graphics/Shaders/Shaders/BasicVertexShader.vert");
-    DEBUG("Adding vertex fragment to processor");
-    shaderProcessor.addShader(ample::graphics::shaders::shaderType::FRAGMENT, "../../Ample/src/Graphics/Shaders/Shaders/BasicFragmentShader.frag");
-    DEBUG("Linking shaders");
-    shaderProcessor.link();
-
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
-    glEnable(GL_TEXTURE_2D);
-    glPolygonMode(GL_FRONT | GL_BACK, GL_FILL);
 }
 
 void Window::swapBuffer()
