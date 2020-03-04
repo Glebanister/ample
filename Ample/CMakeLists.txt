@@ -32,6 +32,9 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Utils/Singleton.cpp
     src/Utils/Noncopyable.cpp
 
+    src/Filing/Scene.cpp
+    src/Filing/Scene2d.cpp
+
     src/Graphics/GraphicalObject.cpp
     src/Graphics/GraphicalObject2d.cpp
     src/Graphics/ScreenObject.cpp
