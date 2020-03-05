@@ -5,6 +5,7 @@
 #include "Layer.h"
 #include "Scene2d.h"
 #include "WorldObject2d.h"
+#include "ContactListener.h"
 
 namespace ample::filing
 {
@@ -14,6 +15,7 @@ namespace ample::filing
 namespace ample::physics
 {
     class WorldObject2d;
+    class ContactListener;
 }
 
 namespace ample::physics
@@ -24,7 +26,7 @@ public:
     explicit WorldLayer2d(const ample::graphics::Vector2d<float> &gravity);
     void addObject(WorldObject2d &object);
     void loadScene(const ample::filing::Scene2d &scene);
-
+    void setContactListener(ContactListener& listener);
 protected:
     void onActive() override;
 

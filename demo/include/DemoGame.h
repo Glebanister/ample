@@ -14,6 +14,13 @@
 #include "LayeredWindowActivity.h"
 #include "SquareBehavior.h"
 #include "Scene2d.h"
+#include "ContactListener.h"
+
+class MyContactListener : public ample::physics::ContactListener {
+    void startContact(ample::physics::Fixture& fixtureA, ample::physics::Fixture& fixtureB) override;
+    void endContact(ample::physics::Fixture& fixtureA, ample::physics::Fixture& fixtureB) override;
+};
+
 
 class DemoGame : public ample::graphics::LayeredWindowActivity
 {
@@ -21,10 +28,17 @@ public:
     DemoGame(ample::window::Window &window);
 
 private:
+    void leftArrow();
+    void rightArrow();
+    void upArrow();
+    void downArrow();
+
     void onActive() override;
     bool isAng = false;
     ample::graphics::CameraOrtho camera{{1920, 1080}};
     CameraBehavior cameraBeh{*this, camera};
-    ample::physics::WorldLayer2d worldLayer{{0.0f, -1000.0f}};
-    ample::filing::Scene2d firstScene{"../objs/need-for-speed-first-scene.json"};
+    ample::physics::WorldLayer2d worldLayer{{0.0f, -100.0f}};
+    std::shared_ptr<ample::physics::WorldObject2d> ground;
+    std::shared_ptr<ample::physics::WorldObject2d> brick;
+    MyContactListener listener;
 };

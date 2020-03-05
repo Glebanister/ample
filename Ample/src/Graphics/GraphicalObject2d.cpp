@@ -42,7 +42,7 @@ void GraphicalObject2d::drawSelf()
     glColor3d(_r, _g, _b);
     for (auto vert : _graphicalShape)
     {
-        glVertex2d(vert.x, vert.y);
+        glVertex2d(vert.x * _ratio, vert.y * _ratio);
     }
     glEnd();
 }
