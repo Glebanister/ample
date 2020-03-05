@@ -18,8 +18,8 @@ void MyContactListener::startContact(ample::physics::Fixture &fixtureA, ample::p
     ample::physics::WorldObject2d *bodyA = &fixtureA.getObject();
     std::cout << bodyA << std::endl;
     ample::physics::WorldObject2d *bodyB = &fixtureB.getObject();
-    if (bodyA->id != 1)
-        std::swap(bodyA, bodyB);
+    //if (bodyA->id != 1)
+    //    std::swap(bodyA, bodyB);
     //bodyA->_body->SetAngularVelocity(10);
     DEBUG("How are you?");
     //b2Vec2 imp;
@@ -51,21 +51,16 @@ DemoGame::DemoGame(ample::window::Window &window)
                                                                  {70, 0.0},
                                                                  {70, -10.0}});
     brick = std::make_shared<ample::physics::WorldObject2d>(dynamicBodyDef,
-                                                            (std::vector<ample::graphics::Vector2d<double>>){
-                                                                {-2.5, -2.5},
-                                                                {-2.5, 2.5},
-                                                                {2.5, 2.5},
-                                                                {2.5, -2.5},
-                                                            });
+                                                            ample::geometry::RegularPolygon(7.0, 20));
     brick->setColor256(255, 100, 100);
-    ground->id = 0;
-    brick->id = 1;
+    //ground->id = 0;
+    //brick->id = 1;
     worldLayer.addObject(*brick);
     worldLayer.addObject(*ground);
-    auto brickFixture = brick->addFixture({{-2.5, -2.5}, {-2.5, 2.5}, {2.5, 2.5}, {2.5, -2.5}});
+    auto brickFixture = brick->addFixture(ample::geometry::RegularPolygon(7.0, 8));
     auto groundFixture = ground->addFixture({{-70, -5.0}, {-70, 5.0}, {70, 0.0}, {70, -10.0}});
     groundFixture->setDensity(0.5);
-    groundFixture->setFriction(0.3);
+    groundFixture->setFriction(0);
     brick->_body->SetAwake(true);
     brickFixture->setDensity(1.0);
     brickFixture->setFriction(0.3);
@@ -123,54 +118,26 @@ void DemoGame::onActive()
         float force = brick->_body->GetMass() * velChange / (1 / 60.0); //f = mv/t
         brick->_body->ApplyForceToCenter(b2Vec2(force, 0), true);
     }
-    if (eventManager->keyboard()->isKeyPressed(ample::control::keysym::ARROW_UP))
-    {
-        auto t = brick->_body->GetLinearVelocity();
-        t.y += 50;
-        brick->_body->SetLinearVelocity(t);
-    }
     if (eventManager->keyboard()->isKeyReleased(ample::control::keysym::ARROW_UP))
     {
-        auto t = brick->_body->GetLinearVelocity();
-        t.y -= 50;
-        brick->_body->SetLinearVelocity(t);
+        brick->_body->ApplyLinearImpulseToCenter(b2Vec2(0, 100), true);
     }
-    if (eventManager->keyboard()->isKeyPressed(ample::control::keysym::ARROW_DOWN))
-    {
-        auto t = brick->_body->GetLinearVelocity();
-        t.y -= 50;
-        brick->_body->SetLinearVelocity(t);
-    }
+
     if (eventManager->keyboard()->isKeyReleased(ample::control::keysym::ARROW_DOWN))
     {
-        auto t = brick->_body->GetLinearVelocity();
-        t.x += 50;
-        brick->_body->SetLinearVelocity(t);
+        brick->_body->ApplyLinearImpulseToCenter(b2Vec2(0, -100), true);
     }
     if (eventManager->keyboard()->isKeyPressed(ample::control::keysym::SPACE))
     {
-<<<<<<< HEAD
-
         brick->_body->SetAngularVelocity(4);
-        //isAng = true;
     }
     if (eventManager->keyboard()->isKeyPressed(ample::control::keysym::KEY_b))
     {
         brick->_body->SetAwake(false);
-        //isAng = false;
-    }
-    // std::cout << brick->getX() << ' ' << brick->getY() << std::endl;
-=======
-        brick._body->SetAngularVelocity(4);
-    }
-    if (eventManager->keyboard()->isKeyPressed(ample::control::keysym::KEY_b))
-    {
-        brick._body->SetAwake(false);
     }
     camera.look();
     ample::graphics::ScreenObject circle{ample::geometry::RegularPolygon<int>(50, 10)};
     circle.setColor256(100, 200, 100);
     circle.draw();
     camera.unlook();
->>>>>>> 60b7d8ea1662bcab87e483b07c7b7c55e748ff42
 }
