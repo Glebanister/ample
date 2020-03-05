@@ -4,7 +4,6 @@
 #include "Clock.h"
 #include "Debug.h"
 
-
 namespace ample::physics
 {
 WorldLayer2d::WorldLayer2d(const graphics::Vector2d<float> &gravity)
@@ -16,7 +15,8 @@ void WorldLayer2d::addObject(WorldObject2d &object)
     object._body = world.CreateBody(&(object._bodyDef));
 }
 
-void WorldLayer2d::setContactListener(ContactListener& listener) {
+void WorldLayer2d::setContactListener(ContactListener &listener)
+{
     world.SetContactListener(&listener);
 }
 
@@ -28,10 +28,9 @@ void WorldLayer2d::onActive()
 
 void WorldLayer2d::loadScene(const filing::Scene2d &scene)
 {
-    DEBUG("Stub for worldLayer load from scene");
     for (auto [id, obj] : scene.storage_)
     {
-        addObject(*dynamic_cast<WorldObject2d*>(obj.get()));
+        addObject(*dynamic_cast<WorldObject2d *>(obj.get()));
     }
 }
 } // namespace ample::physics

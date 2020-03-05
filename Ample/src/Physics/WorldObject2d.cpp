@@ -7,12 +7,13 @@
 namespace ample::physics
 {
 
-Fixture::Fixture(b2Fixture *fixture, WorldObject2d& wObject) : _fixture(fixture), worldObject(wObject) {
+Fixture::Fixture(b2Fixture *fixture, WorldObject2d &wObject) : _fixture(fixture), worldObject(wObject)
+{
     _fixture->SetUserData(this);
-    DEBUG(_fixture->GetUserData() == this);
 }
 
-WorldObject2d& Fixture::getObject() {
+WorldObject2d &Fixture::getObject()
+{
     return worldObject;
 }
 
