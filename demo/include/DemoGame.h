@@ -26,5 +26,5 @@ private:
     CameraBehavior cameraBeh{*this, camera};
     ample::physics::WorldLayer2d worldLayer{{0.0f, -1000.0f}};
     std::shared_ptr<ample::physics::WorldObject2d> ground;
-    std::shared_ptr<ample::physics::WorldObject2d> brick;
+    // std::shared_ptr<ample::physics::WorldObject2d> brick;
 };
