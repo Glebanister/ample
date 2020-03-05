@@ -37,7 +37,7 @@ private:
     bool isAng = false;
     ample::graphics::CameraOrtho camera{{1920, 1080}};
     CameraBehavior cameraBeh{*this, camera};
-    ample::physics::WorldLayer2d worldLayer{{0.0f, -100.0f}};
+    ample::physics::WorldLayer2d worldLayer{{0.0f, -16.8f}};
     std::shared_ptr<ample::physics::WorldObject2d> ground;
     std::shared_ptr<ample::physics::WorldObject2d> brick;
     MyContactListener listener;
