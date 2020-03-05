@@ -19,6 +19,7 @@ include_directories(../extern/rapidjson/include)
 set(${CMAKE_PROJECT_NAME}_SOURCES
 
     src/Basic/Activity.cpp
+    src/Basic/Behaviour.cpp
 
     src/Control/EventManager.cpp
     src/Control/EventHandler.cpp
