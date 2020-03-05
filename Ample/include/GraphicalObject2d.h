@@ -16,7 +16,7 @@ public:
     GraphicalObject2d() = delete;
     template <typename T>
     GraphicalObject2d(const std::vector<Vector2d<T>> &graphicalShape)
-        : _vertexArray(std::make_shared<VertexArray>(graphicalShape)) {}
+        : _vertexArray(std::make_unique<VertexArray>(graphicalShape)) {}
 
     virtual double getX() const = 0;
     virtual double getY() const = 0;
@@ -39,6 +39,6 @@ public:
 protected:
     void drawSelf() override;
     double _ratio = 1.0;
-    std::shared_ptr<VertexArray> _vertexArray;
+    std::unique_ptr<VertexArray> _vertexArray;
 };
 } // namespace ample::graphics

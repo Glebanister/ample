@@ -8,6 +8,8 @@ set(OPENGL_INCLUDE_DIRS /usr/include/GL/)
 set(SDL2_LIBRARY /usr/lib/x86_64-linux-gnu/libSDL2.so)
 set(SDL2_INCLUDE_DIRS /usr/include/SDL2/)
 
+set(GLM_INCLUDE_DIRS /usr/include/glm/)
+
 set(GLU_LIBRARY /usr/lib/x86_64-linux-gnu/libGLU.so)
 add_subdirectory(../extern/box2d buildBox2d)
 add_subdirectory(../extern/rapidjson buildRapidjson)
@@ -50,6 +52,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
 
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${OPENGL_INCLUDE_DIRS})
+include_directories(${GLM_INCLUDE_DIRS})
 
 include_directories(include)
 

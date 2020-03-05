@@ -1,5 +1,8 @@
-#include <GL/gl.h>
 #include <memory>
+#include <GL/gl.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
 
 #include "GraphicalObject2d.h"
 #include "Debug.h"
