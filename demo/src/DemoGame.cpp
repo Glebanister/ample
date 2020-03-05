@@ -5,6 +5,7 @@
 #include "CameraBehavior.h"
 #include "SquareBehavior.h"
 #include "WorldObject2d.h"
+#include "RegularPolygon.h"
 #include <memory>
 
 #include <fstream>
@@ -43,11 +44,14 @@ void DemoGame::onActive()
     if (eventManager->keyboard()->isKeyPressed(ample::control::keysym::SPACE))
     {
         brick._body->SetAngularVelocity(4);
-        //isAng = true;
     }
     if (eventManager->keyboard()->isKeyPressed(ample::control::keysym::KEY_b))
     {
         brick._body->SetAwake(false);
-        //isAng = false;
     }
+    camera.look();
+    ample::graphics::ScreenObject circle{ample::geometry::RegularPolygon<int>(50, 10)};
+    circle.setColor256(100, 200, 100);
+    circle.draw();
+    camera.unlook();
 }
