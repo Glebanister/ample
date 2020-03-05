@@ -28,6 +28,6 @@ public:
 
 protected:
     GLuint _shaderId;
-    GLuint _programId;
+    const GLuint _programId;
 };
 } // namespace ample::graphics::shaders
