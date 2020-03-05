@@ -42,8 +42,10 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Graphics/CameraPerspective.cpp
     src/Graphics/CameraOrtho.cpp
 
+    src/Physics/ContactListener.cpp
     src/Physics/WorldObject2d.cpp
     src/Physics/WorldLayer2d.cpp
+
     src/Graphics/Layer.cpp
     src/Graphics/Layer2d.cpp
     src/Graphics/ScreenLayer.cpp
