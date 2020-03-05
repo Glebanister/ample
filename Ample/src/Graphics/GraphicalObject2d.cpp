@@ -1,3 +1,5 @@
+#define GLM_ENABLE_EXPERIMENTAL
+
 #include <memory>
 #include <GL/gl.h>
 #include <glm/glm.hpp>
