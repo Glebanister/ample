@@ -6,6 +6,7 @@
 #include "SquareBehavior.h"
 #include "WorldObject2d.h"
 #include "Debug.h"
+#include "RegularPolygon.h"
 #include <memory>
 #include <vector>
 
@@ -148,6 +149,7 @@ void DemoGame::onActive()
     }
     if (eventManager->keyboard()->isKeyPressed(ample::control::keysym::SPACE))
     {
+<<<<<<< HEAD
 
         brick->_body->SetAngularVelocity(4);
         //isAng = true;
@@ -158,4 +160,17 @@ void DemoGame::onActive()
         //isAng = false;
     }
     // std::cout << brick->getX() << ' ' << brick->getY() << std::endl;
+=======
+        brick._body->SetAngularVelocity(4);
+    }
+    if (eventManager->keyboard()->isKeyPressed(ample::control::keysym::KEY_b))
+    {
+        brick._body->SetAwake(false);
+    }
+    camera.look();
+    ample::graphics::ScreenObject circle{ample::geometry::RegularPolygon<int>(50, 10)};
+    circle.setColor256(100, 200, 100);
+    circle.draw();
+    camera.unlook();
+>>>>>>> 60b7d8ea1662bcab87e483b07c7b7c55e748ff42
 }
