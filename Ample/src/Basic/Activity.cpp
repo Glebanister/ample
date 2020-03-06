@@ -11,41 +11,41 @@
 
 namespace ample::activity
 {
-void Activity::addActivity(Activity &act)
+void Activity::addBehaviour(Activity &act)
 {
-    _subActivities.push_back(&act);
+    _behaviours.push_back(&act);
 }
 
 void Activity::loop()
 {
-    std::for_each(_subActivities.begin(), _subActivities.end(),
+    std::for_each(_behaviours.begin(), _behaviours.end(),
                   [](auto &x) { x->onAwake(); });
     onAwake();
     _alive = true;
     while (_alive)
     {
-        std::for_each(_subActivities.begin(), _subActivities.end(),
+        std::for_each(_behaviours.begin(), _behaviours.end(),
                       [](auto &x) { x->onStart(); });
         onStart();
         _running = true;
         while (_running)
         {
-            std::for_each(_subActivities.begin(), _subActivities.end(),
+            std::for_each(_behaviours.begin(), _behaviours.end(),
                           [](auto &x) { x->onActive(); });
             onActive();
         }
         onStop();
-        std::for_each(_subActivities.begin(), _subActivities.end(),
+        std::for_each(_behaviours.begin(), _behaviours.end(),
                       [](auto &x) { x->onStop(); });
     }
     onDestroy();
-    std::for_each(_subActivities.begin(), _subActivities.end(),
+    std::for_each(_behaviours.begin(), _behaviours.end(),
                   [](auto &x) { x->onDestroy(); });
 }
 
 void Activity::pause()
 {
-    std::for_each(_subActivities.begin(), _subActivities.end(),
+    std::for_each(_behaviours.begin(), _behaviours.end(),
                   [](auto &x) { x->onPause(); });
     onPause();
     _running = false;
@@ -54,7 +54,7 @@ void Activity::pause()
 void Activity::kill()
 {
 
-    std::for_each(_subActivities.begin(), _subActivities.end(),
+    std::for_each(_behaviours.begin(), _behaviours.end(),
                   [](auto &x) { x->onKill(); });
     onKill();
     _running = false;

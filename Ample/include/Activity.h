@@ -18,7 +18,7 @@ public:
     void pause();
     void kill();
 
-    void addActivity(Activity &act);
+    void addBehaviour(Activity &act);
 
     virtual ~Activity() = default;
 
@@ -35,6 +35,6 @@ protected:
     bool _alive = false;
     bool _running = false;
 
-    std::vector<Activity *> _subActivities;
+    std::vector<Activity *> _behaviours;
 };
 } // namespace ample::activity
