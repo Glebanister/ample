@@ -11,11 +11,6 @@
 
 namespace ample::activity
 {
-void Activity::addBehaviour(Activity &act)
-{
-    _behaviours.push_back(&act);
-}
-
 void Activity::loop()
 {
     std::for_each(_behaviours.begin(), _behaviours.end(),
@@ -45,6 +40,10 @@ void Activity::loop()
 
 void Activity::pause()
 {
+    for (auto & beh : _behaviours)
+    {
+        beh->onPause();
+    }
     std::for_each(_behaviours.begin(), _behaviours.end(),
                   [](auto &x) { x->onPause(); });
     onPause();
@@ -60,13 +59,4 @@ void Activity::kill()
     _running = false;
     _alive = false;
 }
-
-void Activity::onAwake() {}
-void Activity::onStart() {}
-void Activity::onActive() {}
-void Activity::onStop() {}
-void Activity::onDestroy() {}
-void Activity::onKill() {}
-void Activity::onPause() {}
-
 } // namespace ample::activity

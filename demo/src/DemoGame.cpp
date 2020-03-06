@@ -56,7 +56,7 @@ DemoGame::DemoGame(ample::window::Window &window)
     d.I = 1;
     brick->_body->SetMassData(&d);
 
-    addActivity(cameraBeh);
+    addBehaviour(cameraBeh);
     brick->setRatio(10);
     ground->setRatio(10);
 }

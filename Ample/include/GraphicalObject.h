@@ -3,11 +3,11 @@
 #include <vector>
 #include <memory>
 
-#include "Activity.h"
+#include "Behaviour.h"
 
 namespace ample::graphics
 {
-class GraphicalObject : public activity::Activity
+class GraphicalObject : public activity::Behaviour
 {
 public:
     virtual void draw() = 0;

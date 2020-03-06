@@ -11,4 +11,6 @@ void Behaviour::onStart() {}
 void Behaviour::onActive() {}
 void Behaviour::onStop() {}
 void Behaviour::onDestroy() {}
+void Behaviour::onKill() {}
+void Behaviour::onPause() {}
 } // namespace ample::activity

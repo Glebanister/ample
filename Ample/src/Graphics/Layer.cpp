@@ -11,13 +11,13 @@ void Layer::addCamera(Camera &camera)
 
 void Layer::addObject(GraphicalObject &object)
 {
-    activity::Activity::addBehaviour(object);
+    activity::Behaviour::addBehaviour(object);
     _objects.push_back(&object);
 }
 
 void Layer::onActive()
 {
-    activity::Activity::onActive();
+    activity::Behaviour::onActive();
     for (auto cam : _cameras)
     {
         cam->look();
