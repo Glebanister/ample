@@ -23,28 +23,28 @@ class WorldObject2d final : public ample::graphics::GraphicalObject2d
 {
 public:
     WorldObject2d(const DefWorldObject2d &def,
-                  const std::vector<ample::graphics::Vector2d<double>> &shape);
-    void setZIndex(double z);
+                  const std::vector<ample::graphics::Vector2d<float>> &shape);
+    void setZIndex(float z);
 
-    double getX() const override;
-    double getY() const override;
-    double getZ() const override;
+    float getX() const override;
+    float getY() const override;
+    float getZ() const override;
 
-    double getAngleX() const override;
-    double getAngleY() const override;
-    double getAngleZ() const override;
+    float getAngleX() const override;
+    float getAngleY() const override;
+    float getAngleZ() const override;
 
-    double getScaleX() const override;
-    double getScaleY() const override;
-    double getScaleZ() const override;
+    float getScaleX() const override;
+    float getScaleY() const override;
+    float getScaleZ() const override;
 
-    void createPhysicalShape(const std::vector<ample::graphics::Vector2d<double>> &shape);
+    void createPhysicalShape(const std::vector<ample::graphics::Vector2d<float>> &shape);
     b2Body *_body = nullptr;
 
 private:
     friend ample::physics::WorldLayer2d;
 
-    double zIndex = 0;
+    float zIndex = 0;
     b2BodyDef _bodyDef;
 };
 

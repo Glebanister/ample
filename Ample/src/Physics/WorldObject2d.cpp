@@ -80,55 +80,55 @@ void DefWorldObject2d::setGravityScale(float scale)
 }
 
 WorldObject2d::WorldObject2d(const DefWorldObject2d &def,
-                             const std::vector<ample::graphics::Vector2d<double>> &shape) : GraphicalObject2d(shape), _bodyDef(def.bodyDef) {}
+                             const std::vector<ample::graphics::Vector2d<float>> &shape) : GraphicalObject2d(shape), _bodyDef(def.bodyDef) {}
 
-void WorldObject2d::setZIndex(double z)
+void WorldObject2d::setZIndex(float z)
 {
     zIndex = z;
 }
 
-double WorldObject2d::getX() const
+float WorldObject2d::getX() const
 {
     return _body->GetPosition().x;
 }
 
-double WorldObject2d::getY() const
+float WorldObject2d::getY() const
 {
     return _body->GetPosition().y;
 }
 
-double WorldObject2d::getZ() const
+float WorldObject2d::getZ() const
 {
     return zIndex;
 }
 
-double WorldObject2d::getAngleX() const
+float WorldObject2d::getAngleX() const
 {
     return 0;
 }
 
-double WorldObject2d::getAngleY() const
+float WorldObject2d::getAngleY() const
 {
     return 0;
 }
 
-double WorldObject2d::getAngleZ() const
+float WorldObject2d::getAngleZ() const
 {
-    return _body->GetAngle() * (180 / M_PI);
+    return _body->GetAngle() * (180.0f / M_PI);
 }
 
-double WorldObject2d::getScaleX() const
+float WorldObject2d::getScaleX() const
 {
-    return 1;
+    return 1.0f;
 }
 
-double WorldObject2d::getScaleY() const
+float WorldObject2d::getScaleY() const
 {
-    return 1;
+    return 1.0f;
 }
 
-double WorldObject2d::getScaleZ() const
+float WorldObject2d::getScaleZ() const
 {
-    return 1;
+    return 1.0f;
 }
 } // namespace ample::physics
