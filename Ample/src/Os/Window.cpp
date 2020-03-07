@@ -5,7 +5,6 @@
 #include "Window.h"
 #include "Exception.h"
 #include "Debug.h"
-#include "ShaderProcessor.h"
 
 namespace ample::window
 {

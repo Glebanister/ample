@@ -34,7 +34,7 @@ void VertexArray::execute()
         (void *)0 // array buffer offset
     );
     // glColor3d(_r, _g, _b);
-    glDrawArrays(GL_TRIANGLES, 0, _total); // Starting from vertex 0; 3 vertices total -> 1 triangle
+    glDrawArrays(GL_TRIANGLE_FAN, 0, _total); // Starting from vertex 0; 3 vertices total -> 1 triangle
     glDisableVertexAttribArray(0);
 }
 
