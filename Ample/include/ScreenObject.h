@@ -13,8 +13,9 @@ using radian_t = float;
 class ScreenObject : public GraphicalObject2d
 {
 public:
-    ScreenObject(const std::vector<Vector2d<float>> &shape, Vector3d<float> position = {0.0f, 0.0f, 0.0f});
-    ScreenObject(const std::vector<Vector2d<float>> &shape, Vector2d<float> position = {0.0f, 0.0f});
+    ScreenObject(const std::vector<Vector2d<float>> &shape,
+                 Vector3d<float> position,
+                 const float depth);
 
     float getX() const override;
     float getY() const override;
@@ -29,16 +30,16 @@ public:
     float getScaleZ() const override;
 
     void rotate(Vector3d<float> angle);
-    void translate(Vector3d<float> vector);
-    void scale(Vector3d<float> scale);
+    void translate(Vector2d<float> vector);
+    void scale(Vector2d<float> scale);
 
     void setRotate(Vector3d<float> angle);
-    void setTranslate(Vector3d<float> vector);
-    void setScale(Vector3d<float> scale);
+    void setTranslate(Vector2d<float> vector);
+    void setScale(Vector2d<float> scale);
 
 protected:
-    Vector3d<float> _position{0, 0, 0};
-    Vector3d<float> _scale{1.0, 1.0, 1.0};
+    Vector2d<float> _position{0.0, 0.0};
+    Vector2d<float> _scale{1.0, 1.0};
     Vector3d<radian_t> _angle{0.0, 0.0, 0.0};
 };
 } // namespace ample::graphics

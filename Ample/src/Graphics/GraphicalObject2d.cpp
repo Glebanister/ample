@@ -15,13 +15,33 @@
 
 namespace ample::graphics
 {
-GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphicalShape)
-    : _vertexArray(std::make_unique<VertexArray>(graphicalShape)),
-      _programId(shaders::ShaderProcessor::instance().getProgramId()),
-      _modelMatrixId(glGetUniformLocation(_programId, "ModelMatrix"))
+GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphicalShape,
+                                     const float depth,
+                                     const float z)
+    : _programId(shaders::ShaderProcessor::instance().getProgramId()),
+      _modelMatrixId(glGetUniformLocation(_programId, "ModelMatrix")),
+      _depth(depth),
+      _z(z)
 {
     DEBUG("Setup graphical object 2d");
     exception::OpenGLException::handle();
+    std::vector<Vector3d<float>> sideArray(graphicalShape.size() * 2 + 1);
+    std::vector<Vector3d<float>> faceArray(graphicalShape.size());
+    for (size_t vId = 0; vId < graphicalShape.size(); ++vId)
+    {
+        sideArray[vId * 2] = {graphicalShape[vId].x,
+                              graphicalShape[vId].y,
+                              depth + z};
+        sideArray[vId * 2 + 1] = {graphicalShape[vId].x,
+                                  graphicalShape[vId].y,
+                                  z};
+        faceArray[vId] = {graphicalShape[vId].x,
+                          graphicalShape[vId].y,
+                          z};
+    }
+    sideArray.back() = sideArray.front();
+    _sideArray = std::make_unique<VertexArray>(std::move(sideArray), GL_TRIANGLE_STRIP);
+    _faceArray = std::make_unique<VertexArray>(std::move(faceArray), GL_TRIANGLE_FAN);
 }
 
 void GraphicalObject2d::draw(Vector3d<float> &&scaled,
@@ -46,7 +66,8 @@ void GraphicalObject2d::draw(Vector3d<float> &&scaled,
 
     glUniformMatrix4fv(_modelMatrixId, 1, GL_FALSE, &modelMatrix[0][0]);
     exception::OpenGLException::handle();
-    _vertexArray->execute();
+    _sideArray->execute();
+    _faceArray->execute();
 
     for (auto subObject : _subObjects)
     {
@@ -66,6 +87,6 @@ float GraphicalObject2d::getRatio() const
 
 void GraphicalObject2d::setColor256(float r, float g, float b)
 {
-    _vertexArray->setColor256(r, g, b);
+    _faceArray->setColor256(r, g, b);
 }
 } // namespace ample::graphics

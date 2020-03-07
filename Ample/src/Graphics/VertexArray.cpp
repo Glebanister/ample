@@ -9,15 +9,24 @@
 
 namespace ample::graphics
 {
-void VertexArray::_sendToOpenGL()
+VertexArray::VertexArray(const std::vector<Vector3d<float>> &shape, const GLuint mode)
+    : _data(shape.size() * 3), _drawMode(mode)
 {
+    for (size_t i = 0; i < shape.size(); ++i)
+    {
+        _data[i * 3] = shape[i].x;
+        _data[i * 3 + 1] = shape[i].y;
+        _data[i * 3 + 2] = shape[i].z;
+    }
+    DEBUG(shape.size());
+    DEBUG(_data.size());
     DEBUG("Generating vertex buffer");
     glGenBuffers(1, &_vertexBufferId);
     DEBUG("Binding vertex buffer");
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferId);
     DEBUG("Sending buffer data");
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * _data.size(), _data.data(), GL_STATIC_DRAW);
-    _total = _data.size() / 3;
+    _total = shape.size();
     exception::OpenGLException::handle();
 }
 
@@ -33,14 +42,8 @@ void VertexArray::execute()
         0,        // stride
         (void *)0 // array buffer offset
     );
-    // glColor3d(_r, _g, _b);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, _total); // Starting from vertex 0; 3 vertices total -> 1 triangle
+    glDrawArrays(_drawMode, 0, _total);
     glDisableVertexAttribArray(0);
-}
-
-GLfloat *VertexArray::data()
-{
-    return _data.data();
 }
 
 void VertexArray::setColor256(double r, double g, double b)

@@ -16,8 +16,9 @@ namespace ample::graphics
 class GraphicalObject2d : public GraphicalObject
 {
 public:
-    GraphicalObject2d() = delete;
-    GraphicalObject2d(const std::vector<Vector2d<float>> &graphicalShape);
+    GraphicalObject2d(const std::vector<Vector2d<float>> &graphicalShape,
+                      const float depth,
+                      const float z);
 
     virtual float getX() const = 0;
     virtual float getY() const = 0;
@@ -41,8 +42,11 @@ public:
 
 protected:
     float _ratio = 1.0;
-    std::unique_ptr<VertexArray> _vertexArray;
+    std::unique_ptr<VertexArray> _sideArray;
+    std::unique_ptr<VertexArray> _faceArray;
     const GLuint _programId;
     const GLuint _modelMatrixId;
+    float _depth;
+    float _z;
 };
 } // namespace ample::graphics

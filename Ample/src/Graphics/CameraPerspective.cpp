@@ -34,9 +34,6 @@ CameraPerspective::CameraPerspective(const Vector2d<pixel_t> &viewSize,
 {
     DEBUG("Setup perspective camera");
     exception::OpenGLException::handle();
-    ASSERT(_programId);
-    ASSERT(_viewMatrixId);
-    ASSERT(_projectionMatrixId);
 }
 
 void CameraPerspective::look()

@@ -35,6 +35,6 @@ private:
     };
 
     std::vector<ample::graphics::Vector2d<float>> shape{{-200.0f, -200.0f}, {-200.0f, 200.0f}, {200.0f, 200.0f}, {200.0f, -200.0f}};
-    ample::graphics::ScreenObject object{shape, {0.0f, 0.0f}};
+    ample::graphics::ScreenObject object{shape, {0.0f, 0.0f, 0.0f}, 50.0};
     // std::shared_ptr<ample::physics::WorldObject2d> brick;
 };

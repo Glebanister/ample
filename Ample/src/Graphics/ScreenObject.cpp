@@ -2,11 +2,10 @@
 
 namespace ample::graphics
 {
-ScreenObject::ScreenObject(const std::vector<Vector2d<float>> &shape, Vector3d<float> position)
-    : GraphicalObject2d(shape), _position(position) {}
-
-ScreenObject::ScreenObject(const std::vector<Vector2d<float>> &shape, Vector2d<float> position)
-    : GraphicalObject2d(shape), _position(position.x, _position.y, 0.0) {}
+ScreenObject::ScreenObject(const std::vector<Vector2d<float>> &shape,
+                           Vector3d<float> position,
+                           const float depth)
+    : GraphicalObject2d(shape, depth, position.z), _position(position.x, position.y) {}
 
 float ScreenObject::getX() const
 {
@@ -18,7 +17,7 @@ float ScreenObject::getY() const
 }
 float ScreenObject::getZ() const
 {
-    return _position.z;
+    return _z;
 }
 
 float ScreenObject::getAngleX() const
@@ -38,13 +37,15 @@ float ScreenObject::getScaleX() const
 {
     return _scale.x;
 }
+
 float ScreenObject::getScaleY() const
 {
     return _scale.y;
 }
+
 float ScreenObject::getScaleZ() const
 {
-    return _scale.z;
+    return 1.0;
 }
 
 void ScreenObject::rotate(Vector3d<float> angle)
@@ -52,12 +53,12 @@ void ScreenObject::rotate(Vector3d<float> angle)
     _angle += angle;
 }
 
-void ScreenObject::translate(Vector3d<float> vector)
+void ScreenObject::translate(Vector2d<float> vector)
 {
     _position += vector;
 }
 
-void ScreenObject::scale(Vector3d<float> scale)
+void ScreenObject::scale(Vector2d<float> scale)
 {
     _scale *= scale;
 }
@@ -67,12 +68,12 @@ void ScreenObject::setRotate(Vector3d<float> angle)
     _angle = angle;
 }
 
-void ScreenObject::setTranslate(Vector3d<float> vector)
+void ScreenObject::setTranslate(Vector2d<float> vector)
 {
     _position = vector;
 }
 
-void ScreenObject::setScale(Vector3d<float> scale)
+void ScreenObject::setScale(Vector2d<float> scale)
 {
     _scale = scale;
 }

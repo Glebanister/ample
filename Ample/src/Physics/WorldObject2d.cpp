@@ -80,7 +80,8 @@ void DefWorldObject2d::setGravityScale(float scale)
 }
 
 WorldObject2d::WorldObject2d(const DefWorldObject2d &def,
-                             const std::vector<ample::graphics::Vector2d<float>> &shape) : GraphicalObject2d(shape), _bodyDef(def.bodyDef) {}
+                             const std::vector<ample::graphics::Vector2d<float>> &shape)
+    : GraphicalObject2d(shape, 10, 0), _bodyDef(def.bodyDef) {} // TODO: remove stub
 
 void WorldObject2d::setZIndex(float z)
 {
