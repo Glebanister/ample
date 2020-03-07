@@ -63,6 +63,9 @@ public:
     void translateTarget(Vector3d<float> &&);
     void translateTarget(const Vector3d<float> &);
 
+    void translate(Vector3d<float> &&);
+    void translate(const Vector3d<float> &);
+
     virtual ~Camera() = default;
 
 protected:

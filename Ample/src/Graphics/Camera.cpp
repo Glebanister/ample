@@ -143,4 +143,16 @@ void Camera::translateTarget(const Vector3d<float> &vector)
 {
     _target += vector;
 }
+
+void Camera::translate(Vector3d<float> &&vector)
+{
+    _target += std::move(vector);
+    _position += std::move(vector);
+}
+
+void Camera::translate(const Vector3d<float> &vector)
+{
+    _target += vector;
+    _position += vector;
+}
 } // namespace ample::graphics
