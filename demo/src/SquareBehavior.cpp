@@ -7,10 +7,10 @@ void SquareBehavior::onActive()
 {
     if (game.eventManager->keyboard()->isKeyDown(ample::control::ARROW_LEFT))
     {
-        object.rotate(0, 0, 1);
+        object.rotate({0, 0, 1});
     }
     if (game.eventManager->keyboard()->isKeyDown(ample::control::ARROW_RIGHT))
     {
-        object.rotate(0, 0, -1);
+        object.rotate({0, 0, -1});
     }
 }
