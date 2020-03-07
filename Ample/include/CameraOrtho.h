@@ -7,18 +7,26 @@ namespace ample::graphics
 class CameraOrtho : public Camera
 {
 public:
-    CameraOrtho(Vector2d<pixel_t> viewSize, Vector2d<pixel_t> viewPosition,
-                      Vector2d<double> cameraSize, Vector3d<double> cameraPosition,
-                      double ratio = 1.0);
-    CameraOrtho(Vector2d<pixel_t> viewSize, Vector2d<pixel_t> viewPosition,
-                      Vector2d<double> cameraSize, Vector2d<double> cameraPosition,
-                      double ratio = 1.0);
-    CameraOrtho(Vector2d<pixel_t> viewSize,
-                      Vector2d<double> cameraSize,
-                      double ratio = 1.0);
-    CameraOrtho(Vector2d<pixel_t> cameraSize, double ratio = 1.0);
+    CameraOrtho(const Vector2d<pixel_t> &viewSize,
+                const Vector2d<pixel_t> &viewPosition,
+                const Vector3d<float> &eyePos,
+                const Vector3d<float> &targetPos,
+                float coordRatio,
+                float fov,
+                float aspectRatio,
+                float nearClip,
+                float farClip);
 
     void look() override;
     void unlook() override;
+
+private:
+    float _fov;
+    float _aspectRatio;
+    float _nearClip;
+    float _farClip;
+    GLuint _programId;
+    GLuint _viewMatrixId;
+    GLuint _projectionMatrixId;
 };
 } // namespace ample::graphics

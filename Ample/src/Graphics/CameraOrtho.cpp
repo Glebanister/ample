@@ -1,49 +1,58 @@
+#define GLM_ENABLE_EXPERIMENTAL
+#define GL_GLEXT_PROTOTYPES 1
+
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
 
 #include "CameraOrtho.h"
+#include "Debug.h"
+#include "Exception.h"
+#include "ShaderProcessor.h"
 
 namespace ample::graphics
 {
-CameraOrtho::CameraOrtho(Vector2d<pixel_t> viewSize, Vector2d<pixel_t> viewPosition,
-                         Vector2d<double> cameraSize, Vector3d<double> cameraPosition,
-                         double ratio)
-    : Camera(viewSize, viewPosition, cameraSize, cameraPosition, ratio)
+CameraOrtho::CameraOrtho(const Vector2d<pixel_t> &viewSize,
+                                     const Vector2d<pixel_t> &viewPosition,
+                                     const Vector3d<float> &eyePos,
+                                     const Vector3d<float> &targetPos,
+                                     float coordRatio,
+                                     float fov,
+                                     float aspectRatio,
+                                     float nearClip,
+                                     float farClip)
+    : Camera(viewSize, viewPosition, eyePos, targetPos, coordRatio),
+      _fov(fov),
+      _aspectRatio(aspectRatio),
+      _nearClip(nearClip),
+      _farClip(farClip),
+      _programId(shaders::ShaderProcessor::instance().getProgramId()),
+      _viewMatrixId(glGetUniformLocation(_programId, "ViewMatrix")),
+      _projectionMatrixId(glGetUniformLocation(_programId, "ProjectionMatrix"))
 {
-    setPerspective(-cameraSize.x / 2.0, cameraSize.x / 2.0, -cameraSize.y / 2.0, cameraSize.y / 2.0, -100.0, 100.0);
+    DEBUG("Setup perspective camera");
+    exception::OpenGLException::handle();
 }
-
-CameraOrtho::CameraOrtho(Vector2d<pixel_t> viewSize, Vector2d<pixel_t> viewPosition,
-                         Vector2d<double> cameraSize, Vector2d<double> cameraPosition,
-                         double ratio)
-    : CameraOrtho(viewSize, viewPosition, cameraSize, {cameraPosition.x, cameraPosition.y, 0.0}, ratio) {}
-
-CameraOrtho::CameraOrtho(Vector2d<pixel_t> viewSize,
-                         Vector2d<double> cameraSize,
-                         double ratio)
-    : CameraOrtho(viewSize, {0, 0}, cameraSize, {0, 0}, ratio) {}
-
-CameraOrtho::CameraOrtho(Vector2d<pixel_t> cameraSize, double ratio)
-    : CameraOrtho(cameraSize, {static_cast<double>(cameraSize.x), static_cast<double>(cameraSize.y)}, ratio) {}
 
 void CameraOrtho::look()
 {
     _viewport.set();
-    glPushMatrix();
-    glOrtho(_left, _right,
-            _bottom, _top,
-            _near, _far);
-    glScaled(_scale.x, _scale.y, _scale.z);
-    glRotated(_angle.x, 1.0, 0.0, 0.0);
-    glRotated(_angle.y, 0.0, 1.0, 0.0);
-    glRotated(_angle.z, 0.0, 0.0, 1.0);
-    glTranslated(_position.x * _ratio,
-                 _position.y * _ratio,
-                 _position.z * _ratio);
+    auto viewMatrix = glm::lookAt(glm::vec3{_position.x, _position.y, _position.z},
+                                  glm::vec3{_target.x, _target.y, _target.z},
+                                  glm::vec3{_angle.x, _angle.y, _angle.z});
+    auto projectionMatrix = glm::perspective(glm::radians(_fov),
+                                             _aspectRatio,
+                                             _nearClip,
+                                             _farClip);
+    glUniformMatrix4fv(_viewMatrixId, 1, GL_FALSE, &viewMatrix[0][0]);
+    glUniformMatrix4fv(_projectionMatrixId, 1, GL_FALSE, &projectionMatrix[0][0]);
+    exception::OpenGLException::handle();
 }
 
 void CameraOrtho::unlook()
 {
-    glPopMatrix();
+    DEBUG("STUB for ortho camera unlook()");
 }
 } // namespace ample::graphics
