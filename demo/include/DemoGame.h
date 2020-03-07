@@ -40,5 +40,6 @@ private:
     ample::physics::WorldLayer2d worldLayer{{0.0f, -100.0f}};
     std::shared_ptr<ample::physics::WorldObject2d> ground;
     std::shared_ptr<ample::physics::WorldObject2d> brick;
+    std::shared_ptr<ample::graphics::GraphicalObject2d> intoBrick;
     MyContactListener listener;
 };

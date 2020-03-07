@@ -29,11 +29,11 @@ void GraphicalObject2d::draw()
     glRotated(getAngleZ(), 0.0, 0.0, 1.0);
     glScaled(getScaleX(), getScaleY(), getScaleZ());
     drawSelf();
+    glPopMatrix();
     for (auto subObject : _subObjects)
     {
         subObject->draw();
     }
-    glPopMatrix();
 }
 
 void GraphicalObject2d::drawSelf()
