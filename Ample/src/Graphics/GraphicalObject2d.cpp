@@ -25,7 +25,7 @@ GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphic
 {
     DEBUG("Setup graphical object 2d");
     exception::OpenGLException::handle();
-    std::vector<Vector3d<float>> sideArray(graphicalShape.size() * 2 + 1);
+    std::vector<Vector3d<float>> sideArray(graphicalShape.size() * 2 + 2);
     std::vector<Vector3d<float>> faceArray(graphicalShape.size());
     for (size_t vId = 0; vId < graphicalShape.size(); ++vId)
     {
@@ -39,7 +39,8 @@ GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphic
                           graphicalShape[vId].y,
                           z};
     }
-    sideArray.back() = sideArray.front();
+    sideArray[sideArray.size() - 2] = sideArray[0];
+    sideArray[sideArray.size() - 1] = sideArray[1];
     _sideArray = std::make_unique<VertexArray>(std::move(sideArray), GL_TRIANGLE_STRIP);
     _faceArray = std::make_unique<VertexArray>(std::move(faceArray), GL_TRIANGLE_FAN);
 }
