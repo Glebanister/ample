@@ -8,38 +8,37 @@
 namespace ample::graphics
 {
 using pixel_t = std::int32_t;
-using radian_t = double;
+using radian_t = float;
 
 class ScreenObject : public GraphicalObject2d
 {
 public:
-    ScreenObject(const std::vector<Vector2d<pixel_t>> &, Vector3d<double> position);
-    ScreenObject(const std::vector<Vector2d<pixel_t>> &, Vector2d<double> position);
-    ScreenObject(const std::vector<Vector2d<pixel_t>> &);
+    ScreenObject(const std::vector<Vector2d<float>> &shape, Vector3d<float> position = {0.0f, 0.0f, 0.0f});
+    ScreenObject(const std::vector<Vector2d<float>> &shape, Vector2d<float> position = {0.0f, 0.0f});
 
-    double getX() const override;
-    double getY() const override;
-    double getZ() const override;
+    float getX() const override;
+    float getY() const override;
+    float getZ() const override;
 
-    double getAngleX() const override;
-    double getAngleY() const override;
-    double getAngleZ() const override;
+    float getAngleX() const override;
+    float getAngleY() const override;
+    float getAngleZ() const override;
 
-    double getScaleX() const override;
-    double getScaleY() const override;
-    double getScaleZ() const override;
+    float getScaleX() const override;
+    float getScaleY() const override;
+    float getScaleZ() const override;
 
-    void rotate(radian_t x, radian_t y, radian_t z);
-    void translate(double x, double y, double z);
-    void scale(double x, double y, double z);
+    void rotate(Vector3d<float> angle);
+    void translate(Vector3d<float> vector);
+    void scale(Vector3d<float> scale);
 
-    void setPosition(double x, double y, double z);
-    void setAngle(radian_t x, radian_t y, radian_t z);
-    void setScale(double x, double y, double z);
+    void setRotate(Vector3d<float> angle);
+    void setTranslate(Vector3d<float> vector);
+    void setScale(Vector3d<float> scale);
 
 protected:
-    Vector3d<double> _position{0, 0, 0};
-    Vector3d<double> _scale{1.0, 1.0, 1.0};
+    Vector3d<float> _position{0, 0, 0};
+    Vector3d<float> _scale{1.0, 1.0, 1.0};
     Vector3d<radian_t> _angle{0.0, 0.0, 0.0};
 };
 } // namespace ample::graphics

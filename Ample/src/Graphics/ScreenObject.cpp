@@ -2,95 +2,79 @@
 
 namespace ample::graphics
 {
-
-ScreenObject::ScreenObject(const std::vector<Vector2d<pixel_t>> &shape, Vector3d<double> position)
+ScreenObject::ScreenObject(const std::vector<Vector2d<float>> &shape, Vector3d<float> position)
     : GraphicalObject2d(shape), _position(position) {}
 
-ScreenObject::ScreenObject(const std::vector<Vector2d<pixel_t>> &shape, Vector2d<double> position)
-    : ScreenObject(shape, {position.x, position.y, 0}) {}
+ScreenObject::ScreenObject(const std::vector<Vector2d<float>> &shape, Vector2d<float> position)
+    : GraphicalObject2d(shape), _position(position.x, _position.y, 0.0) {}
 
-ScreenObject::ScreenObject(const std::vector<Vector2d<pixel_t>> &shape)
-    : ScreenObject(shape, {0, 0, 0}) {}
-
-double ScreenObject::getX() const
+float ScreenObject::getX() const
 {
     return _position.x;
 }
-double ScreenObject::getY() const
+float ScreenObject::getY() const
 {
     return _position.y;
 }
-double ScreenObject::getZ() const
+float ScreenObject::getZ() const
 {
     return _position.z;
 }
 
-double ScreenObject::getAngleX() const
+float ScreenObject::getAngleX() const
 {
     return _angle.x;
 }
-double ScreenObject::getAngleY() const
+float ScreenObject::getAngleY() const
 {
     return _angle.y;
 }
-double ScreenObject::getAngleZ() const
+float ScreenObject::getAngleZ() const
 {
     return _angle.z;
 }
 
-double ScreenObject::getScaleX() const
+float ScreenObject::getScaleX() const
 {
     return _scale.x;
 }
-double ScreenObject::getScaleY() const
+float ScreenObject::getScaleY() const
 {
     return _scale.y;
 }
-double ScreenObject::getScaleZ() const
+float ScreenObject::getScaleZ() const
 {
     return _scale.z;
 }
 
-void ScreenObject::rotate(radian_t x, radian_t y, radian_t z)
+void ScreenObject::rotate(Vector3d<float> angle)
 {
-    _angle.x += x;
-    _angle.y += y;
-    _angle.z += z;
+    _angle += angle;
 }
 
-void ScreenObject::translate(double x, double y, double z)
+void ScreenObject::translate(Vector3d<float> vector)
 {
-    _position.x += x;
-    _position.y += y;
-    _position.z += z;
+    _position += vector;
 }
 
-void ScreenObject::scale(double x, double y, double z)
+void ScreenObject::scale(Vector3d<float> scale)
 {
-    _scale.x *= x;
-    _scale.y *= y;
-    _scale.z *= z;
+    _scale *= scale;
 }
 
-void ScreenObject::setAngle(radian_t x, radian_t y, radian_t z)
+void ScreenObject::setRotate(Vector3d<float> angle)
 {
-    _angle.x = x;
-    _angle.y = y;
-    _angle.z = z;
+    _angle = angle;
 }
 
-void ScreenObject::setPosition(double x, double y, double z)
+void ScreenObject::setTranslate(Vector3d<float> vector)
 {
-    _position.x = x;
-    _position.y = y;
-    _position.z = z;
+    _position = vector;
 }
 
-void ScreenObject::setScale(double x, double y, double z)
+void ScreenObject::setScale(Vector3d<float> scale)
 {
-    _scale.x = x;
-    _scale.y = y;
-    _scale.z = z;
+    _scale = scale;
 }
 
 } // namespace ample::graphics
