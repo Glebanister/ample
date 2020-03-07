@@ -66,7 +66,7 @@ protected:
     friend void WindowEventHandler::handleEvent(const SDL_Event &event);
 
 private:
-    std::unique_ptr<graphics::shaders::ShaderProcessor> _shadersProcessor;
+    graphics::shaders::ShaderProcessor &_shadersProcessor;
     GLuint _vertexArrayId;
 };
 } // namespace ample::window

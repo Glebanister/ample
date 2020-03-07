@@ -36,15 +36,15 @@ WindowActivity::WindowActivity(Window &window)
       _window(window),
       _quitHandler(std::make_shared<QuitHandler>(*this)),
       _windowEventHandler(std::make_shared<WindowEventHandler>(*this, _window)),
-      _shadersProcessor(std::make_unique<graphics::shaders::ShaderProcessor>())
+      _shadersProcessor(graphics::shaders::ShaderProcessor::instance())
 {
     eventManager->addEventHandler(SDL_QUIT, *_quitHandler);
     eventManager->addEventHandler(SDL_WINDOWEVENT, *_windowEventHandler);
     time::Clock::init();
 
-    _shadersProcessor->addShader(ample::graphics::shaders::shaderType::VERTEX, "../../Ample/src/Graphics/Shaders/Shaders/BasicVertexShader.vert");
-    _shadersProcessor->addShader(ample::graphics::shaders::shaderType::FRAGMENT, "../../Ample/src/Graphics/Shaders/Shaders/BasicFragmentShader.frag");
-    _shadersProcessor->link();
+    _shadersProcessor.addShader(ample::graphics::shaders::shaderType::VERTEX, "../../Ample/src/Graphics/Shaders/Shaders/BasicVertexShader.vert");
+    _shadersProcessor.addShader(ample::graphics::shaders::shaderType::FRAGMENT, "../../Ample/src/Graphics/Shaders/Shaders/BasicFragmentShader.frag");
+    _shadersProcessor.link();
 
     // glEnable(GL_BLEND);
     // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -61,7 +61,7 @@ void WindowActivity::onActive()
     activity::Activity::onActive();
     time::Clock::update();
     this->_window.swapBuffer();
-    _shadersProcessor->use();
+    _shadersProcessor.use();
     eventManager->update();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

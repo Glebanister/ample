@@ -9,10 +9,26 @@
 
 namespace ample::graphics::shaders
 {
+ShaderProcessor &ShaderProcessor::instance()
+{
+    static ShaderProcessor *pInstance = nullptr;
+    if (!pInstance)
+    {
+        pInstance = new ShaderProcessor{};
+        DEBUG("Init shader processor");
+    }
+    return *pInstance;
+}
+
 ShaderProcessor::ShaderProcessor()
 {
     _programId = glCreateProgram();
     exception::OpenGLException::handle();
+}
+
+GLuint ShaderProcessor::getProgramId() const
+{
+    return _programId;
 }
 
 void ShaderProcessor::addShader(shaderType shaderType, const std::string &shaderPath)

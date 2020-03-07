@@ -13,14 +13,18 @@ namespace ample::graphics::shaders
 {
 class ShaderProcessor final : utils::Noncopyable
 {
+
 public:
-    ShaderProcessor();
+    static ShaderProcessor &instance();
+
     void addShader(shaderType shaderType, const std::string &shaderPath);
+    GLuint getProgramId() const;
     void link();
     void use();
-    ~ShaderProcessor();
 
 private:
+    ShaderProcessor();
+    ~ShaderProcessor();
     std::unordered_map<std::string, bool> _hasShader;
     std::vector<std::unique_ptr<Shader>> _shaders;
     GLuint _programId;
