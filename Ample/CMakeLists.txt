@@ -34,13 +34,12 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
 
     src/Graphics/GraphicalObject.cpp
     src/Graphics/GraphicalObject2d.cpp
+    src/Graphics/GraphicalObject3d.cpp
     src/Graphics/ScreenObject.cpp
     src/Graphics/Camera.cpp
+    src/Graphics/Color.cpp
     src/Graphics/CameraPerspective.cpp
     src/Graphics/CameraOrtho.cpp
-
-    src/Physics/WorldObject2d.cpp
-    src/Physics/WorldLayer2d.cpp
     src/Graphics/Layer.cpp
     src/Graphics/Layer2d.cpp
     src/Graphics/ScreenLayer.cpp
@@ -48,6 +47,10 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Graphics/VertexArray.cpp
     src/Graphics/Shaders/Shader.cpp
     src/Graphics/Shaders/ShaderProcessor.cpp
+    src/Graphics/Light/LightSource.cpp
+
+    src/Physics/WorldObject2d.cpp
+    src/Physics/WorldLayer2d.cpp
     )
 
 include_directories(${SDL2_INCLUDE_DIRS})
