@@ -22,10 +22,12 @@ public:
     VertexArray(const std::vector<Vector3d<float>> &shape, const GLuint mode);
     void execute();
     void setColor256(double r, double g, double b);
+    const std::vector<Vector3d<float>> verticies() const;
     ~VertexArray();
 
 private:
     std::vector<GLfloat> _data;
+    std::vector<Vector3d<float>> _shape;
     GLuint _vertexBufferId;
     GLsizei _total;
     double _r = 0.5, _g = 0.5, _b = 0.5;

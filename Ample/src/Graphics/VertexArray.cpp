@@ -10,7 +10,7 @@
 namespace ample::graphics
 {
 VertexArray::VertexArray(const std::vector<Vector3d<float>> &shape, const GLuint mode)
-    : _data(shape.size() * 3), _drawMode(mode)
+    : _data(shape.size() * 3), _shape(shape), _drawMode(mode)
 {
     for (size_t i = 0; i < shape.size(); ++i)
     {
@@ -51,6 +51,11 @@ void VertexArray::setColor256(double r, double g, double b)
     _r = r;
     _g = g;
     _b = b;
+}
+
+const std::vector<Vector3d<float>> VertexArray::verticies() const
+{
+    return _shape;
 }
 
 VertexArray::~VertexArray()

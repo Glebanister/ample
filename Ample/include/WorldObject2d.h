@@ -73,14 +73,14 @@ public:
     rapidjson::Document save(int id);
     static std::pair<int, std::shared_ptr<ample::physics::WorldObject2d>> load(const rapidjson::Value &doc);
 
-    void createPhysicalShape(const std::vector<ample::graphics::Vector2d<double>> &shape);
+    void createPhysicalShape(const std::vector<ample::graphics::Vector2d<float>> &shape);
     b2Body *_body = nullptr;
-    std::shared_ptr<Fixture> addFixture(const std::vector<ample::graphics::Vector2d<double>> &shape);
+    std::shared_ptr<Fixture> addFixture(const std::vector<ample::graphics::Vector2d<float>> &shape);
 private:
     friend ample::physics::WorldLayer2d;
 
     std::vector<std::shared_ptr<Fixture>> _fixtures;
-    double zIndex = 0;
+    float zIndex = 0;
     b2BodyDef _bodyDef;
 };
 

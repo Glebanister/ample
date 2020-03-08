@@ -40,9 +40,9 @@ Window::Window(const std::string &name,
     {
         exception::SDLException::handle();
     }
-    // SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-    // SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    // SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
     SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
@@ -71,19 +71,6 @@ Window::Window(const std::string &name,
         SDL_Quit();
         exception::SDLException::handle();
     }
-    // DEBUG("Creating shader processor");
-    // auto shaderProcessor = ample::graphics::shaders::ShaderProcessor();
-    // DEBUG("Adding vertex shader to processor");
-    // shaderProcessor.addShader(ample::graphics::shaders::shaderType::VERTEX, "../../Ample/src/Graphics/Shaders/Shaders/BasicVertexShader.vert");
-    // DEBUG("Adding vertex fragment to processor");
-    // shaderProcessor.addShader(ample::graphics::shaders::shaderType::FRAGMENT, "../../Ample/src/Graphics/Shaders/Shaders/BasicFragmentShader.frag");
-    // DEBUG("Linking shaders");
-    // shaderProcessor.link();
-
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
-    glEnable(GL_TEXTURE_2D);
-    glPolygonMode(GL_FRONT | GL_BACK, GL_FILL);
 }
 
 void Window::swapBuffer()

@@ -15,8 +15,7 @@ Shader::Shader(GLuint programId, shaderType shaderType, const std::string &shade
     : _programId(programId)
 {
     DEBUG("Uploading shader from" + shaderPath);
-    GLenum
-        _shaderId = glCreateShader(shaderByType[shaderType]);
+    GLenum _shaderId = glCreateShader(shaderByType[shaderType]);
     exception::OpenGLException::handle();
 
     std::string shaderCode;
@@ -36,7 +35,6 @@ Shader::Shader(GLuint programId, shaderType shaderType, const std::string &shade
         }
         shaderCode = sstr.str();
     }
-
     DEBUG("Compiling shader");
     {
         char const *sourcePointer = shaderCode.c_str();
