@@ -76,16 +76,6 @@ void GraphicalObject2d::draw(Vector3d<float> &&scaled,
     }
 }
 
-void GraphicalObject2d::setRatio(float ratio)
-{
-    _ratio = ratio;
-}
-
-float GraphicalObject2d::getRatio() const
-{
-    return _ratio;
-}
-
 void GraphicalObject2d::setColor256(float r, float g, float b)
 {
     _faceArray->setColor256(r, g, b);
