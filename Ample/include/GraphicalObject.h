@@ -3,12 +3,12 @@
 #include <vector>
 #include <memory>
 
-#include "Activity.h"
 #include "Vector3d.h"
+#include "Behaviour.h"
 
 namespace ample::graphics
 {
-class GraphicalObject : public activity::Activity
+class GraphicalObject : public activity::Behaviour
 {
 public:
     virtual void draw(Vector3d<float> &&scaled = {1.0, 1.0, 1.0},

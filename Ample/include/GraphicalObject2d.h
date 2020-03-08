@@ -34,4 +34,4 @@ protected:
     float _depth;
     float _z;
 };
-} // namespace ample::graphics
+} // namespace graphics

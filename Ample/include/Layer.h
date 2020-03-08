@@ -5,11 +5,11 @@
 
 #include "GraphicalObject.h"
 #include "Camera.h"
-#include "Activity.h"
+#include "Behaviour.h"
 
 namespace ample::graphics
 {
-class Layer : public activity::Activity
+class Layer : public activity::Behaviour
 {
 public:
     void onActive() override;

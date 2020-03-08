@@ -1,6 +1,8 @@
+#include "box2d/b2_polygon_shape.h"
+
 #include "WorldLayer2d.h"
 #include "Clock.h"
-#include "box2d/b2_polygon_shape.h"
+#include "Debug.h"
 
 namespace ample::physics
 {
@@ -13,22 +15,22 @@ void WorldLayer2d::addObject(WorldObject2d &object)
     object._body = world.CreateBody(&(object._bodyDef));
 }
 
+void WorldLayer2d::setContactListener(ContactListener &listener)
+{
+    world.SetContactListener(&listener);
+}
+
 void WorldLayer2d::onActive()
 {
     graphics::Layer::onActive();
     world.Step(1.0 / time::Clock::getFPS(), 8, 3);
-    auto bl = world.GetBodyList();
-    static bool flag = true;
-    if (flag)
+}
+
+void WorldLayer2d::loadScene(const filing::Scene2d &scene)
+{
+    for (auto [id, obj] : scene.storage_)
     {
-        b2PolygonShape dynamicBox;
-        dynamicBox.SetAsBox(1.0f, 1.0f);
-        b2FixtureDef fixtureDef;
-        fixtureDef.shape = &dynamicBox;
-        fixtureDef.density = 1.0f;
-        fixtureDef.friction = 0.3f;
-        bl->CreateFixture(&fixtureDef);
-        flag = false;
+        addObject(*dynamic_cast<WorldObject2d *>(obj.get()));
     }
 }
 } // namespace ample::physics

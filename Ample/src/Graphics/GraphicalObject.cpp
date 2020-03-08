@@ -4,7 +4,7 @@ namespace ample::graphics
 {
 void GraphicalObject::addSubObject(GraphicalObject &object)
 {
-    activity::Activity::addActivity(object);
+    activity::Behaviour::addBehaviour(object);
     _subObjects.push_back(&object);
 }
 
