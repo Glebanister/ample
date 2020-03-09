@@ -1,5 +1,6 @@
 #include <cassert>
 
+#include "Debug.h"
 #include "Layer.h"
 
 namespace ample::graphics

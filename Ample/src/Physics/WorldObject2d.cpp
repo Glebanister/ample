@@ -115,7 +115,9 @@ void DefWorldObject2d::setGravityScale(float scale)
 
 WorldObject2d::WorldObject2d(const DefWorldObject2d &def,
                              const std::vector<ample::graphics::Vector2d<float>> &shape)
-    : GraphicalObject2d(shape, 10, 0), _bodyDef(def.bodyDef) {} // TODO: remove stub
+    : GraphicalObject2d(shape, 10, 0), _bodyDef(def.bodyDef)
+{
+} // TODO: remove stub
 
 std::shared_ptr<Fixture> WorldObject2d::addFixture(
     const std::vector<ample::graphics::Vector2d<float>> &shape)

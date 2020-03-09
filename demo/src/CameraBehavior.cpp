@@ -9,11 +9,11 @@ void CameraBehavior::onActive()
     ample::activity::Activity::onActive();
     if (game.eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_a))
     {
-        camera.translateEye({5, 0, 0});
+        camera.translate({-5, 0, 0});
     }
     if (game.eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_d))
     {
-        camera.translateEye({-5, 0, 0});
+        camera.translate({5, 0, 0});
     }
     if (game.eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_s))
     {
@@ -24,20 +24,12 @@ void CameraBehavior::onActive()
         camera.translateEye({0, 0, -5});
     }
 
-    if (game.eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_LEFT))
-    {
-        camera.translateTarget({5, 0, 0});
-    }
-    if (game.eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_RIGHT))
-    {
-        camera.translateTarget({-5, 0, 0});
-    }
     if (game.eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_DOWN))
     {
-        camera.translateTarget({0, 0, 5});
+        camera.translateTarget({0, -5, 0});
     }
     if (game.eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_UP))
     {
-        camera.translateTarget({0, 0, -5});
+        camera.translateTarget({0, 5, 0});
     }
 }

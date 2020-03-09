@@ -15,12 +15,13 @@
 #include "SquareBehavior.h"
 #include "Scene2d.h"
 #include "ContactListener.h"
+#include "LightSource.h"
 
-class MyContactListener : public ample::physics::ContactListener {
-    void startContact(ample::physics::Fixture& fixtureA, ample::physics::Fixture& fixtureB) override;
-    void endContact(ample::physics::Fixture& fixtureA, ample::physics::Fixture& fixtureB) override;
+class MyContactListener : public ample::physics::ContactListener
+{
+    void startContact(ample::physics::Fixture &fixtureA, ample::physics::Fixture &fixtureB) override;
+    void endContact(ample::physics::Fixture &fixtureA, ample::physics::Fixture &fixtureB) override;
 };
-
 
 class DemoGame : public ample::graphics::LayeredWindowActivity
 {
@@ -33,21 +34,23 @@ private:
     void upArrow();
     void downArrow();
 
+    void onActive() override;
+    bool isAng = false;
     ample::graphics::CameraPerspective camera{
         {1920, 1080},
         {0, 0},
         {0.0, 0.0, 0.0},
         {0.0, 0.0, 0.0},
         1.0,
-        120.0,
+        45.0,
         1920.0 / 1080.0,
         0.1,
         1000.0,
     };
-    
-    void onActive() override;
-
-    std::vector<ample::graphics::Vector2d<float>> shape{{-200.0f, -200.0f}, {-200.0f, 200.0f}, {200.0f, 200.0f}, {200.0f, -200.0f}};
-    ample::graphics::ScreenObject object{shape, {0.0f, 0.0f, 0.0f}, 50.0};
-    // std::shared_ptr<ample::physics::WorldObject2d> brick;
+    CameraBehavior cameraBeh{*this, camera};
+    ample::physics::WorldLayer2d worldLayer{{0.0f, -100.0f}};
+    std::shared_ptr<ample::physics::WorldObject2d> ground;
+    std::shared_ptr<ample::physics::WorldObject2d> brick;
+    MyContactListener listener;
+    ample::graphics::light::LightSource lamp{};
 };

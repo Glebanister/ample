@@ -57,9 +57,9 @@ void GraphicalObject2d::draw(Vector3d<float> &&scaled,
                                                             scaled.y,
                                                             scaled.z,
                                                         });
-    modelMatrix = glm::rotate(modelMatrix, glm::radians(getAngleX()), glm::vec3{1.0, 0.0, 0.0});
-    modelMatrix = glm::rotate(modelMatrix, glm::radians(getAngleY()), glm::vec3{0.0, 1.0, 0.0});
-    modelMatrix = glm::rotate(modelMatrix, glm::radians(getAngleZ()), glm::vec3{0.0, 0.0, 1.0});
+    // modelMatrix = glm::rotate(modelMatrix, glm::radians(getAngleX()), glm::vec3{1.0, 0.0, 0.0});
+    // modelMatrix = glm::rotate(modelMatrix, glm::radians(getAngleY()), glm::vec3{0.0, 1.0, 0.0});
+    // modelMatrix = glm::rotate(modelMatrix, glm::radians(getAngleZ()), glm::vec3{0.0, 0.0, 1.0});
     modelMatrix = glm::translate(modelMatrix,
                                  glm::vec3{getX() * _ratio,
                                            getY() * _ratio,
@@ -69,6 +69,7 @@ void GraphicalObject2d::draw(Vector3d<float> &&scaled,
     exception::OpenGLException::handle();
     _sideArray->execute();
     _faceArray->execute();
+    exception::OpenGLException::handle();
 
     for (auto subObject : _subObjects)
     {

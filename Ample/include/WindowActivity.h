@@ -53,11 +53,11 @@ public:
     pixel_t getHeight() const;
 
     virtual ~WindowActivity();
+    virtual void onActive() override;
 
 protected:
     virtual void onResize();
 
-    virtual void onActive() override;
 
     Window &_window;
     std::shared_ptr<QuitHandler> _quitHandler;

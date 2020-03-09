@@ -27,6 +27,11 @@ VertexArray::VertexArray(const std::vector<Vector3d<float>> &shape, const GLuint
     DEBUG("Sending buffer data");
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * _data.size(), _data.data(), GL_STATIC_DRAW);
     _total = shape.size();
+    for (int i = 0; i < _data.size(); ++i)
+    {
+        std::cerr << _data[i] << ' ';
+    }
+    std::cerr << std::endl;
     exception::OpenGLException::handle();
 }
 

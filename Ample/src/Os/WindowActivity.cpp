@@ -58,12 +58,12 @@ WindowActivity::WindowActivity(Window &window)
 
 void WindowActivity::onActive()
 {
-    activity::Activity::onActive();
     time::Clock::update();
     this->_window.swapBuffer();
-    _shadersProcessor.use();
     eventManager->update();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    _shadersProcessor.use();
+    activity::Activity::onActive();
 }
 
 pixel_t WindowActivity::getWidth() const

@@ -53,6 +53,6 @@ void CameraOrtho::look()
 
 void CameraOrtho::unlook()
 {
-    DEBUG("STUB for ortho camera unlook()");
+    // DEBUG("STUB for ortho camera unlook()");
 }
 } // namespace ample::graphics
