@@ -7,7 +7,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <glm/gtx/normal.hpp>
 
 #include "GraphicalObject2d.h"
 #include "Vector2d.h"
@@ -17,33 +16,6 @@
 
 namespace ample::graphics
 {
-static std::vector<Vector3d<float>> generateFaceNormals(const std::vector<Vector3d<float>> &vert)
-{
-    return {vert.size(), {0, 0, -1}};
-}
-
-static std::vector<Vector3d<float>> generateSideNormals(const std::vector<Vector3d<float>> &vert)
-{
-    std::vector<glm::vec3> triangleNormals(vert.size());
-    for (size_t vId = 0; vId < vert.size(); ++vId)
-    {
-        glm::vec3 first{vert[vId].x, vert[vId].y, vert[vId].z};
-        glm::vec3 second{vert[(vId + 1) % vert.size()].x, vert[(vId + 1) % vert.size()].y, vert[(vId + 1) % vert.size()].z};
-        glm::vec3 third{vert[(vId + 2) % vert.size()].x, vert[(vId + 2) % vert.size()].y, vert[(vId + 2) % vert.size()].z};
-        triangleNormals[vId] = glm::triangleNormal(std::move(first), std::move(second), std::move(third));
-    }
-    std::vector<Vector3d<float>> normals(vert.size());
-    for (size_t vId = 0; vId < vert.size(); ++vId)
-    {
-        size_t adj[] = {(vId - 2 + vert.size()) % vert.size(),
-                        (vId - 1 + vert.size()) % vert.size(),
-                        vId};
-        glm::vec3 normal = (triangleNormals[adj[0]] + triangleNormals[adj[1]] + triangleNormals[adj[2]]) * (1.0f / 3.0f);
-        normals[vId] = {normal[0], normal[1], normal[2]};
-    }
-    return normals;
-}
-
 GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphicalShape,
                                      const float depth,
                                      const float z)
@@ -70,14 +42,24 @@ GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphic
     }
     sideArray[sideArray.size() - 2] = sideArray[0];
     sideArray[sideArray.size() - 1] = sideArray[1];
-    _sideArray = std::make_unique<VertexArray>(sideArray, generateSideNormals(sideArray), GL_TRIANGLE_STRIP);
-    _faceArray = std::make_unique<VertexArray>(faceArray, generateFaceNormals(faceArray), GL_TRIANGLE_FAN);
+    _sideArray = std::make_unique<VertexArray>(std::move(sideArray), GL_TRIANGLE_STRIP);
+    _faceArray = std::make_unique<VertexArray>(std::move(faceArray), GL_TRIANGLE_FAN);
 }
 
-void GraphicalObject2d::drawSelf(const glm::mat4 &)
+void GraphicalObject2d::draw(glm::mat4 rotated,
+                             glm::mat4 translated)
 {
+    rotated *= _rotated;
+    translated *= _translated;
+    glm::mat4 modelMatrix = translated * rotated;
+    glUniformMatrix4fv(_modelMatrixId, 1, GL_FALSE, glm::value_ptr(modelMatrix));
+    exception::OpenGLException::handle();
     _sideArray->execute();
     _faceArray->execute();
+    for (auto subObject : _subObjects)
+    {
+        subObject->draw(rotated, translated);
+    }
     exception::OpenGLException::handle();
 }
 

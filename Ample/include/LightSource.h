@@ -22,7 +22,8 @@ public:
     void setDiffuse(const glm::vec4 &color);
     void setSpecular(const glm::vec4 &color);
 
-    void drawSelf(const glm::mat4 &) override;
+    void draw(glm::mat4 rotated,
+              glm::mat4 translated) override;
 
 private:
     float _intensity;
@@ -31,5 +32,9 @@ private:
     glm::vec4 _specular;
     uint8_t _index;
     GLuint _lightVectorId;
+
+protected:
+    void setupImpl() const;
+    uint8_t getIndex() const;
 };
 } // namespace ample::graphics::light

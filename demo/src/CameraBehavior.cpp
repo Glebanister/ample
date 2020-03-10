@@ -17,12 +17,13 @@ void CameraBehavior::onActive()
     }
     if (game.eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_s))
     {
-        camera.moveInViewDirection(-10);
+        camera.translateEye({0, 0, -5});
     }
     if (game.eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_w))
     {
-        camera.moveInViewDirection(10);
+        camera.translateEye({0, 0, 5});
     }
+
     if (game.eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_DOWN))
     {
         camera.translate({0, -5, 0});
@@ -31,6 +32,4 @@ void CameraBehavior::onActive()
     {
         camera.translate({0, 5, 0});
     }
-    camera.rotate({0, 1, 0}, game.eventManager->mouse()->getMouseXRel() / game.getWidth() * 3);
-    camera.rotate({1, 0, 0}, -game.eventManager->mouse()->getMouseYRel() / game.getHeight() * 3);
 }

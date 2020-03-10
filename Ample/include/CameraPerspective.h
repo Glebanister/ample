@@ -10,7 +10,8 @@ public:
     CameraPerspective(const Vector2d<pixel_t> &viewSize,
                       const Vector2d<pixel_t> &viewPosition,
                       const Vector3d<float> &eyePos,
-                      const Vector3d<float> &direction,
+                      const Vector3d<float> &targetPos,
+                      float coordRatio,
                       float fov,
                       float aspectRatio,
                       float nearClip,
@@ -18,14 +19,6 @@ public:
 
     void look() override;
     void unlook() override;
-
-    void setFov(float);
-    void setNearClip(float);
-    void setFarClip(float);
-
-    float getFov() const;
-    float getNearClip() const;
-    float getFarClip() const;
 
 private:
     float _fov;
