@@ -38,35 +38,80 @@ DemoGame::DemoGame(ample::window::Window &window)
                                                                  {70, -60.0},
                                                                  {70, -70.0}});
     brick = std::make_shared<ample::physics::WorldObject2d>(dynamicBodyDef,
-                                                            ample::geometry::RegularPolygon<float>(7.0, 6));
+                                                            ample::geometry::RegularPolygon<float>(7.0, 7));
     worldLayer.addWorldObject(*brick);
     worldLayer.addWorldObject(*ground);
-    auto brickFixture = brick->addFixture(ample::geometry::RegularPolygon<float>(7.0, 8));
+    auto brickFixture = brick->addFixture(ample::geometry::RegularPolygon<float>(7.0, 7));
     auto groundFixture = ground->addFixture({{-70, -65.0},
                                              {-70, -25.0},
                                              {70, -60.0},
                                              {70, -70.0}});
-    groundFixture->setDensity(0.0f);
-    groundFixture->setFriction(0.0f);
+    groundFixture->setDensity(1.0f);
+    groundFixture->setFriction(0.2f);
     brick->_body->SetAwake(true);
-    brickFixture->setDensity(0.0);
-    brickFixture->setFriction(0.0);
+    brickFixture->setDensity(1.0);
+    brickFixture->setFriction(1.0);
     worldLayer.addCamera(camera);
     addLayer(worldLayer);
     b2MassData d;
     brick->_body->GetMassData(&d);
     d.I = 1;
     brick->_body->SetMassData(&d);
-    addBehaviour(cameraBeh);
-    ground->setFaceColor256({40, 155, 80});
-    brick->setFaceColor256(0xbbbbbb);
+    ground->setFaceColor256({20, 100, 70});
+    brick->setFaceColor256(0x964B00);
     ground->setSideColor256({20, 100, 70});
-    brick->setFaceColor256(0xbbbbbb);
-    camera.translateEye({0, 0, -100});
-    camera.translate({0, -30, 0});
+    brick->setFaceColor256(0x964B00);
+    _window.disableCursor();
+    worldLayer.addObject(lamp);
+    lamp.translate({0, -10, -140});
+    camera.translate({0, -10, -140});
 }
 
 void DemoGame::onActive()
 {
     LayeredWindowActivity::onActive();
+    camera.look();
+    ample::graphics::GraphicalObject2d(ample::geometry::RegularPolygon<float>(100, 6), 1, 50).draw();
+    camera.unlook();
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_d))
+    {
+        lamp.translate({-1, 0, 0});
+        camera.translate({-1, 0, 0});
+    }
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_a))
+    {
+        lamp.translate({1, 0, 0});
+        camera.translate({1, 0, 0});
+    }
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_UP))
+    {
+        lamp.translate({0, 1, 0});
+        camera.translate({0, 1, 0});
+    }
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_DOWN))
+    {
+        lamp.translate({0, -1, 0});
+        camera.translate({0, -1, 0});
+    }
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_w))
+    {
+        lamp.translate({0, 0, 1});
+        camera.translate({0, 0, 1});
+    }
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_s))
+    {
+        lamp.translate({0, 0, -1});
+        camera.translate({0, 0, -1});
+    }
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_LEFT))
+    {
+        lamp.rotate({0, 1, 0}, 1.0);
+        camera.rotate({0, 1, 0}, 1.0);
+    }
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_RIGHT))
+    {
+        lamp.rotate({0, 1, 0}, -1.0);
+        camera.rotate({0, 1, 0}, -1.0);
+    }
+    _window.moveCursor(0, 0);
 }

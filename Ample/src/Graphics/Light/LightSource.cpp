@@ -7,6 +7,7 @@
 #include "LightSource.h"
 #include "Exception.h"
 #include "ShaderProcessor.h"
+#include "Debug.h"
 
 namespace ample::graphics::light
 {
@@ -18,19 +19,14 @@ LightSource::LightSource(const Color ambient,
       _specular(specular.r, specular.g, specular.b, specular.a),
       _lightVectorId(glGetUniformLocation(shaders::ShaderProcessor::instance().getProgramId(), "light_position"))
 {
-    static uint8_t globalColorIndex = 0;
-    _index = globalColorIndex++;
 }
 
 LightSource::LightSource()
     : LightSource(Color{}, Color{}, Color{}) {}
 
-void LightSource::draw(glm::mat4 rotated,
-                       glm::mat4 translated)
+void LightSource::drawSelf(const glm::mat4 &modelMatrix)
 {
-    GraphicalObject::onActive();
-    glm::vec3 lightPos{100, 100, 0};
-    glUniform3fv(_lightVectorId, 1, &lightPos[0]);
-    exception::OpenGLException::handle();
+    glm::vec3 pos = modelMatrix * glm::vec4{1.0};
+    glUniform3fv(_lightVectorId, 1, glm::value_ptr(pos));
 }
 } // namespace ample::graphics::light
