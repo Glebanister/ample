@@ -1,8 +1,15 @@
-#version 330 core
+#version 330
 
-out vec3 color;
+layout(location = 0) out vec4 out_color;
 
+uniform vec3 object_color;
+
+in float light;
+ 
 void main()
 {
-    color = vec3(1.0, 0, 0);
+    out_color = vec4(light + object_color[0],
+                     light + object_color[1],
+                     light + object_color[2],
+                     1);
 }

@@ -53,6 +53,7 @@ WindowActivity::WindowActivity(Window &window)
     DEBUG("Generating vertex array");
     glGenVertexArrays(1, &_vertexArrayId);
     glBindVertexArray(_vertexArrayId);
+    glEnable(GL_DEPTH_TEST);
     exception::OpenGLException::handle();
 }
 

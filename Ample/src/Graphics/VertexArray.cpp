@@ -2,15 +2,22 @@
 
 #include <GL/gl.h>
 #include <iostream>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "VertexArray.h"
 #include "Exception.h"
 #include "Debug.h"
+#include "ShaderProcessor.h"
 
 namespace ample::graphics
 {
 VertexArray::VertexArray(const std::vector<Vector3d<float>> &shape, const GLuint mode)
-    : _data(shape.size() * 3), _shape(shape), _drawMode(mode)
+    : _data(shape.size() * 3),
+      _shape(shape),
+      _drawMode(mode),
+      _colorVectorId(glGetUniformLocation(shaders::ShaderProcessor::instance().getProgramId(),
+                                          "object_color"))
 {
     for (size_t i = 0; i < shape.size(); ++i)
     {
@@ -27,11 +34,6 @@ VertexArray::VertexArray(const std::vector<Vector3d<float>> &shape, const GLuint
     DEBUG("Sending buffer data");
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * _data.size(), _data.data(), GL_STATIC_DRAW);
     _total = shape.size();
-    for (int i = 0; i < _data.size(); ++i)
-    {
-        std::cerr << _data[i] << ' ';
-    }
-    std::cerr << std::endl;
     exception::OpenGLException::handle();
 }
 
@@ -47,6 +49,8 @@ void VertexArray::execute()
         0,        // stride
         (void *)0 // array buffer offset
     );
+    glm::vec3 color{_r, _g, _b};
+    glUniform3fv(_colorVectorId, 1, glm::value_ptr(color));
     glDrawArrays(_drawMode, 0, _total);
     glDisableVertexAttribArray(0);
 }

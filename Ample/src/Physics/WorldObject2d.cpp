@@ -131,7 +131,7 @@ std::shared_ptr<Fixture> WorldObject2d::addFixture(
     b2PolygonShape polygonShape;
     polygonShape.Set(vertices.data(), shape.size());
     fixtureDef.shape = &polygonShape;
-    auto fixture = _fixtures.emplace_back(std::shared_ptr<Fixture>(new Fixture(_body->CreateFixture(&fixtureDef), *this))).get();
+    _fixtures.emplace_back(std::shared_ptr<Fixture>(new Fixture(_body->CreateFixture(&fixtureDef), *this))).get();
     return _fixtures[_fixtures.size() - 1];
 }
 
@@ -140,50 +140,12 @@ void WorldObject2d::setZIndex(float z)
     zIndex = z;
 }
 
-float WorldObject2d::getX() const
+void WorldObject2d::onActive()
 {
-    return _body->GetPosition().x;
+    setTranslate({_body->GetPosition().x, _body->GetPosition().y, getZ()});
+    setRotate({0.0f, 0.0f, 1.0f}, _body->GetAngle() * 180.0f / M_PI);
 }
 
-float WorldObject2d::getY() const
-{
-    return _body->GetPosition().y;
-}
-
-float WorldObject2d::getZ() const
-{
-    return zIndex;
-}
-
-float WorldObject2d::getAngleX() const
-{
-    return 0;
-}
-
-float WorldObject2d::getAngleY() const
-{
-    return 0;
-}
-
-float WorldObject2d::getAngleZ() const
-{
-    return _body->GetAngle() * (180.0f / M_PI);
-}
-
-float WorldObject2d::getScaleX() const
-{
-    return 1.0f;
-}
-
-float WorldObject2d::getScaleY() const
-{
-    return 1.0f;
-}
-
-float WorldObject2d::getScaleZ() const
-{
-    return 1.0f;
-}
 rapidjson::Document WorldObject2d::save(int id)
 {
     rapidjson::Value val;

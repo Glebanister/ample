@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <memory>
+#include <glm/glm.hpp>
 
 #include "Vector3d.h"
 #include "Behaviour.h"
@@ -11,28 +12,23 @@ namespace ample::graphics
 class GraphicalObject : public activity::Behaviour
 {
 public:
-    virtual void draw(Vector3d<float> &&scaled = {1.0, 1.0, 1.0},
-                      Vector3d<float> &&rotated = {0.0, 0.0, 0.0},
-                      Vector3d<float> &&translated = {0.0, 0.0, 0.0}) = 0;
+    virtual void draw(glm::mat4 rotated = glm::mat4{1.0f},
+                      glm::mat4 translated = glm::mat4{1.0f}) = 0;
     void addSubObject(GraphicalObject &object);
 
-    virtual float getX() const = 0;
-    virtual float getY() const = 0;
-    virtual float getZ() const = 0;
+    float getX() const;
+    float getY() const;
+    float getZ() const;
 
-    virtual float getAngleX() const = 0;
-    virtual float getAngleY() const = 0;
-    virtual float getAngleZ() const = 0;
+    void setTranslate(glm::vec3 vector);
+    void translate(glm::vec3 vector);
 
-    virtual float getScaleX() const = 0;
-    virtual float getScaleY() const = 0;
-    virtual float getScaleZ() const = 0;
-
-    void setRatio(float);
-    float getRatio() const;
+    void setRotate(glm::vec3 axis, float angle);
+    void rotate(glm::vec3 axis, float angle);
 
 protected:
     std::vector<GraphicalObject *> _subObjects;
-    float _ratio = 1.0;
+    glm::mat4 _translated{1.0f};
+    glm::mat4 _rotated{1.0f};
 };
 } // namespace ample::graphics

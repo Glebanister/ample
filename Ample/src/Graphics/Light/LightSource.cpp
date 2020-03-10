@@ -1,8 +1,12 @@
+#define GLM_ENABLE_EXPERIMENTAL
+#define GL_GLEXT_PROTOTYPES 1
+
 #include <GL/gl.h>
 #include <glm/gtc/type_ptr.hpp>
 
 #include "LightSource.h"
 #include "Exception.h"
+#include "ShaderProcessor.h"
 
 namespace ample::graphics::light
 {
@@ -11,7 +15,8 @@ LightSource::LightSource(const Color ambient,
                          const Color specular)
     : _ambient(ambient.r, ambient.g, ambient.b, ambient.a),
       _diffuse(diffuse.r, diffuse.g, diffuse.b, diffuse.a),
-      _specular(specular.r, specular.g, specular.b, specular.a)
+      _specular(specular.r, specular.g, specular.b, specular.a),
+      _lightVectorId(glGetUniformLocation(shaders::ShaderProcessor::instance().getProgramId(), "light_position"))
 {
     static uint8_t globalColorIndex = 0;
     _index = globalColorIndex++;
@@ -20,61 +25,12 @@ LightSource::LightSource(const Color ambient,
 LightSource::LightSource()
     : LightSource(Color{}, Color{}, Color{}) {}
 
-void LightSource::draw(Vector3d<float> &&scaled,
-                       Vector3d<float> &&rotated,
-                       Vector3d<float> &&translated)
+void LightSource::draw(glm::mat4 rotated,
+                       glm::mat4 translated)
 {
     GraphicalObject::onActive();
-    glEnable(GLenum(_index));
-    glLightfv(_index, GL_AMBIENT, glm::value_ptr(_ambient));
-    glLightfv(_index, GL_DIFFUSE, glm::value_ptr(_diffuse));
-    glLightfv(_index, GL_SPECULAR, glm::value_ptr(_specular));
-    glLightfv(_index, GL_POSITION, glm::value_ptr(_position));
+    glm::vec3 lightPos{100, 100, 0};
+    glUniform3fv(_lightVectorId, 1, &lightPos[0]);
     exception::OpenGLException::handle();
-}
-
-float LightSource::getX() const
-{
-    return _position[0];
-}
-
-float LightSource::getY() const
-{
-    return _position[1];
-}
-
-float LightSource::getZ() const
-{
-    return _position[2];
-}
-
-float LightSource::getAngleX() const
-{
-    return 0.0;
-}
-
-float LightSource::getAngleY() const
-{
-    return 0.0;
-}
-
-float LightSource::getAngleZ() const
-{
-    return 0.0;
-}
-
-float LightSource::getScaleX() const
-{
-    return 1.0;
-}
-
-float LightSource::getScaleY() const
-{
-    return 1.0;
-}
-
-float LightSource::getScaleZ() const
-{
-    return 1.0;
 }
 } // namespace ample::graphics::light

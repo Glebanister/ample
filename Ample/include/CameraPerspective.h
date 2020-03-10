@@ -28,5 +28,6 @@ private:
     GLuint _programId;
     GLuint _viewMatrixId;
     GLuint _projectionMatrixId;
+    GLuint _eyeVectorId;
 };
 } // namespace ample::graphics

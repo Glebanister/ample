@@ -1,4 +1,5 @@
 #include <cassert>
+#include <glm/glm.hpp>
 
 #include "Debug.h"
 #include "Layer.h"

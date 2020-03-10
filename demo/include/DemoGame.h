@@ -16,6 +16,7 @@
 #include "Scene2d.h"
 #include "ContactListener.h"
 #include "LightSource.h"
+#include "RegularPolygon.h"
 
 class MyContactListener : public ample::physics::ContactListener
 {
@@ -42,7 +43,7 @@ private:
         {0.0, 0.0, 0.0},
         {0.0, 0.0, 0.0},
         1.0,
-        45.0,
+        90.0,
         1920.0 / 1080.0,
         0.1,
         1000.0,
@@ -52,5 +53,4 @@ private:
     std::shared_ptr<ample::physics::WorldObject2d> ground;
     std::shared_ptr<ample::physics::WorldObject2d> brick;
     MyContactListener listener;
-    ample::graphics::light::LightSource lamp{};
 };

@@ -3,15 +3,12 @@
 namespace ample::graphics
 {
 Color::Color(int32_t red, int32_t green, int32_t blue, int32_t alpha)
-    : r(red), g(green), b(blue), a(alpha) {}
+    : r(red / 255.0), g(green / 255.0), b(blue / 255.0), a(alpha / 255.0) {}
 
 Color::Color()
-    : r(255), g(255), b(255), a(255) {}
+    : Color(255, 255, 255) {}
 
 Color::Color(int32_t hex, int32_t alpha)
-    : r((hex >> 16) & 0xFF),
-      g((hex >> 8) & 0xFF),
-      b(hex & 0xFF),
-      a(alpha) {}
+    : Color((hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0xFF, alpha) {}
 
 } // namespace ample::graphics

@@ -10,6 +10,7 @@
 #include "Vector2d.h"
 #include "Vector3d.h"
 #include "VertexArray.h"
+#include "Color.h"
 
 namespace ample::graphics
 {
@@ -20,11 +21,11 @@ public:
                       const float depth,
                       const float z);
 
-    void draw(Vector3d<float> &&scaled = {1.0, 1.0, 1.0},
-              Vector3d<float> &&rotated = {0.0, 0.0, 0.0},
-              Vector3d<float> &&translated = {0.0, 0.0, 0.0}) override;
+    void draw(glm::mat4 rotated = glm::mat4{1.0f},
+              glm::mat4 translated = glm::mat4{1.0f}) override;
 
-    void setColor256(float r, float g, float b);
+    void setFaceColor256(Color color);
+    void setSideColor256(Color color);
 
 protected:
     std::unique_ptr<VertexArray> _sideArray;
@@ -34,4 +35,4 @@ protected:
     float _depth;
     float _z;
 };
-} // namespace graphics
+} // namespace ample::graphics

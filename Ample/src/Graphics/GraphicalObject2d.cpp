@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "GraphicalObject2d.h"
 #include "Vector2d.h"
@@ -19,7 +20,7 @@ GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphic
                                      const float depth,
                                      const float z)
     : _programId(shaders::ShaderProcessor::instance().getProgramId()),
-      _modelMatrixId(glGetUniformLocation(_programId, "ModelMatrix")),
+      _modelMatrixId(glGetUniformLocation(_programId, "model_matrix")),
       _depth(depth),
       _z(z)
 {
@@ -45,40 +46,30 @@ GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphic
     _faceArray = std::make_unique<VertexArray>(std::move(faceArray), GL_TRIANGLE_FAN);
 }
 
-void GraphicalObject2d::draw(Vector3d<float> &&scaled,
-                             Vector3d<float> &&rotated,
-                             Vector3d<float> &&translated)
+void GraphicalObject2d::draw(glm::mat4 rotated,
+                             glm::mat4 translated)
 {
-    scaled *= Vector3d<float>{getScaleX(), getScaleY(), getScaleZ()};
-    rotated += Vector3d<float>{getAngleX(), getAngleY(), getAngleZ()};
-    translated += Vector3d<float>{getX(), getY(), getZ()};
-    glm::mat4 modelMatrix = glm::scale(glm::mat4{1.0f}, glm::vec3{
-                                                            scaled.x,
-                                                            scaled.y,
-                                                            scaled.z,
-                                                        });
-    // modelMatrix = glm::rotate(modelMatrix, glm::radians(getAngleX()), glm::vec3{1.0, 0.0, 0.0});
-    // modelMatrix = glm::rotate(modelMatrix, glm::radians(getAngleY()), glm::vec3{0.0, 1.0, 0.0});
-    // modelMatrix = glm::rotate(modelMatrix, glm::radians(getAngleZ()), glm::vec3{0.0, 0.0, 1.0});
-    modelMatrix = glm::translate(modelMatrix,
-                                 glm::vec3{getX() * _ratio,
-                                           getY() * _ratio,
-                                           getZ() * _ratio});
-
-    glUniformMatrix4fv(_modelMatrixId, 1, GL_FALSE, &modelMatrix[0][0]);
+    rotated *= _rotated;
+    translated *= _translated;
+    glm::mat4 modelMatrix = translated * rotated;
+    glUniformMatrix4fv(_modelMatrixId, 1, GL_FALSE, glm::value_ptr(modelMatrix));
     exception::OpenGLException::handle();
     _sideArray->execute();
     _faceArray->execute();
-    exception::OpenGLException::handle();
-
     for (auto subObject : _subObjects)
     {
-        subObject->draw(std::move(scaled), std::move(rotated), std::move(translated));
+        subObject->draw(rotated, translated);
     }
+    exception::OpenGLException::handle();
 }
 
-void GraphicalObject2d::setColor256(float r, float g, float b)
+void GraphicalObject2d::setFaceColor256(Color color)
 {
-    _faceArray->setColor256(r, g, b);
+    _faceArray->setColor256(color.r, color.g, color.b);
+}
+
+void GraphicalObject2d::setSideColor256(Color color)
+{
+    _sideArray->setColor256(color.r, color.g, color.b);
 }
 } // namespace ample::graphics

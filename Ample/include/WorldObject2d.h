@@ -58,24 +58,14 @@ public:
                   const std::vector<ample::graphics::Vector2d<float>> &shape);
     void setZIndex(float z);
 
-    float getX() const override;
-    float getY() const override;
-    float getZ() const override;
-
-    float getAngleX() const override;
-    float getAngleY() const override;
-    float getAngleZ() const override;
-
-    float getScaleX() const override;
-    float getScaleY() const override;
-    float getScaleZ() const override;
-
     rapidjson::Document save(int id);
     static std::pair<int, std::shared_ptr<ample::physics::WorldObject2d>> load(const rapidjson::Value &doc);
 
     void createPhysicalShape(const std::vector<ample::graphics::Vector2d<float>> &shape);
     b2Body *_body = nullptr;
     std::shared_ptr<Fixture> addFixture(const std::vector<ample::graphics::Vector2d<float>> &shape);
+    void onActive() override;
+
 private:
     friend ample::physics::WorldLayer2d;
 
@@ -100,6 +90,7 @@ struct DefWorldObject2d final
     void setBullet(bool b);
     void setEnabled(bool b);
     void setGravityScale(float scale);
+
 private:
     friend ample::physics::WorldObject2d;
 

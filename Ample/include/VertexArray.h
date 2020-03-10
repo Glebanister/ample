@@ -32,5 +32,6 @@ private:
     GLsizei _total;
     double _r = 0.5, _g = 0.5, _b = 0.5;
     GLint _drawMode;
+    GLint _colorVectorId;
 };
 } // namespace ample::graphics
