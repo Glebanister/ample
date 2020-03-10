@@ -13,81 +13,66 @@ class Camera
 protected:
     struct Viewport final
     {
-        Viewport(pixel_t xv, pixel_t yv, pixel_t wv, pixel_t hv);
-        Viewport(pixel_t wv, pixel_t hv);
+        Viewport(Vector2d<pixel_t> size, Vector2d<pixel_t> pos = {0, 0});
         Viewport &operator=(const Viewport &) = default;
         Viewport(const Viewport &) = default;
-
         void set();
-
         Vector2d<pixel_t> size;
         Vector2d<pixel_t> position;
     };
 
 public:
-    Camera(Vector2d<pixel_t> viewSize, Vector2d<pixel_t> viewPosition,
-           Vector2d<double> cameraSize, Vector3d<double> cameraPosition,
-           double ratio = 1.0);
-    Camera(Vector2d<pixel_t> viewSize, Vector2d<pixel_t> viewPosition,
-           Vector2d<double> cameraSize, Vector2d<double> cameraPosition,
-           double ratio = 1.0);
     Camera(Vector2d<pixel_t> viewSize,
-           Vector2d<double> cameraSize,
-           double ratio = 1.0);
-    Camera(Vector2d<pixel_t> cameraSize, double ratio = 1.0);
+           Vector2d<pixel_t> viewPosition,
+           Vector3d<float> eyePos,
+           Vector3d<float> targetPos,
+           float ratio = 1.0);
 
-    virtual void look();
-    virtual void unlook();
+    virtual void look() = 0;
+    virtual void unlook() = 0;
 
-    void setViewport(pixel_t x, pixel_t y, pixel_t w, pixel_t h);
-    void setViewport(pixel_t w, pixel_t h);
+    void setViewport(Vector2d<pixel_t> &&size, Vector2d<pixel_t> &&pos);
+    void setViewport(const Vector2d<pixel_t> &size, const Vector2d<pixel_t> &pos);
+    void setViewport(Vector2d<pixel_t> &&size);
+    void setViewport(const Vector2d<pixel_t> &size);
 
-    void setRatio(double ratio);
+    void setRatio(float ratio);
+    float getRatio() const;
 
-    void scale(double x, double y, double z);
-    void translate(double x, double y, double z);
-    void rotate(double x, double y, double z);
+    void translateEye(Vector3d<float> &&);
+    void translateEye(const Vector3d<float> &);
 
-    void scaleSet(double x, double y, double z);
-    void translateSet(double x, double y, double z);
-    void rotateSet(double x, double y, double z);
+    void rotateHead(Vector3d<float> &&);
+    void rotateHead(const Vector3d<float> &);
 
-    double getScaleX() const;
-    double getScaleY() const;
-    double getScaleZ() const;
+    void setEyeTranslated(Vector3d<float> &&);
+    void setEyeTranslated(const Vector3d<float> &);
+    void setHeadRotated(Vector3d<float> &&);
+    void setHeadRotated(const Vector3d<float> &);
 
-    double getX() const;
-    double getY() const;
-    double getZ() const;
+    float getEyeX() const;
+    float getEyeY() const;
+    float getEyeZ() const;
 
-    double getAngleX() const;
-    double getAngleY() const;
-    double getAngleZ() const;
+    float getHeadAngleX() const;
+    float getHeadAngleY() const;
+    float getHeadAngleZ() const;
 
-    pixel_t getViewportX() const;
-    pixel_t getViewportY() const;
-    pixel_t getViewportW() const;
-    pixel_t getViewportH() const;
+    void setTarget(Vector3d<float> &&);
+    void setTarget(const Vector3d<float> &);
+    void translateTarget(Vector3d<float> &&);
+    void translateTarget(const Vector3d<float> &);
 
-    double getWidth() const;
-    double getHeight() const;
+    void translate(Vector3d<float> &&);
+    void translate(const Vector3d<float> &);
 
-    double getLeft() const;
-    double getRight() const;
-    double getBottom() const;
-    double getTop() const;
-    double getNear() const;
-    double getFar() const;
-
-    void setPerspective(double left, double right, double bottom, double top, double near, double far);
+    virtual ~Camera() = default;
 
 protected:
     Viewport _viewport;
-    Vector2d<double> _size;
-    Vector3d<double> _position{0.0, 0.0, 0.0};
-    Vector3d<double> _scale{1.0, 1.0, 1.0};
-    Vector3d<double> _angle{0.0, 0.0, 0.0};
-    double _ratio = 1.0;
-    double _left, _right, _bottom, _top, _near, _far;
+    Vector3d<float> _position{0.0, 0.0, 0.0};
+    Vector3d<float> _target{0.0, 0.0, 0.0};
+    Vector3d<float> _angle{0.0, 1.0, 0.0};
+    float _ratio = 1.0;
 };
 } // namespace ample::graphics

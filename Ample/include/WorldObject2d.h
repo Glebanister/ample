@@ -42,29 +42,25 @@ private:
 
 struct MassData
 {
-    float mass;
-    graphics::Vector2d<float> center;
-    float I;
-};
+public:
+    WorldObject2d(const DefWorldObject2d &def,
+                  const std::vector<ample::graphics::Vector2d<float>> &shape);
+    void setZIndex(float z);
 
-struct PrimaryWorldObject2d : ample::graphics::GraphicalObject2d {
-    PrimaryWorldObject2d(b2Body *body, const std::vector<ample::graphics::Vector2d<double>> &shape);
-    void setZIndex(double z);
+    rapidjson::Document save(int id);
+    static std::pair<int, std::shared_ptr<ample::physics::WorldObject2d>> load(const rapidjson::Value &doc);
 
-    double getX() const override;
-    double getY() const override;
-    double getZ() const override;
+    void createPhysicalShape(const std::vector<ample::graphics::Vector2d<float>> &shape);
+    b2Body *_body = nullptr;
+    std::shared_ptr<Fixture> addFixture(const std::vector<ample::graphics::Vector2d<float>> &shape);
+    void onActive() override;
 
-    double getAngleX() const override;
-    double getAngleY() const override;
-    double getAngleZ() const override;
+private:
+    friend ample::physics::WorldLayer2d;
 
-    double getScaleX() const override;
-    double getScaleY() const override;
-    double getScaleZ() const override;
-protected:
-    b2Body* _body = nullptr;
-    double zIndex = 0;
+    std::vector<std::shared_ptr<Fixture>> _fixtures;
+    float zIndex = 0;
+    b2BodyDef _bodyDef;
 };
 
 class WorldObject2d final : public PrimaryWorldObject2d
@@ -106,25 +102,6 @@ public:
     float getGravityScale() const;
     void setGravityScale(float scale);
 
-    /*void SetType(b2BodyType type);
-
-    b2BodyType GetType() const;*/
-
-    void setBullet(bool flag);
-    bool isBullet() const;
-    void setSleepingAllowed(bool flag);
-    bool isSleepingAllowed() const;
-    void setAwake(bool flag);
-    bool isAwake() const;
-    void setEnabled(bool flag);
-    bool isEnabled() const;
-    void setFixedRotation(bool flag);
-    bool isFixedRotation() const;
-    void dump();
-
-
-    rapidjson::Document save(int id);
-    static std::pair<int, std::shared_ptr<ample::physics::WorldObject2d>> load(const rapidjson::Value &doc);
 private:
     friend ample::physics::WorldLayer2d;
 

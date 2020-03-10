@@ -1,66 +1,75 @@
+#define GLM_ENABLE_EXPERIMENTAL
+#define GL_GLEXT_PROTOTYPES 1
+
+#include <memory>
 #include <GL/gl.h>
-#include <GL/glu.h>
-#include <iostream>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "GraphicalObject2d.h"
+#include "Vector2d.h"
 #include "Debug.h"
+#include "Exception.h"
+#include "ShaderProcessor.h"
 
 namespace ample::graphics
 {
-GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<double>> &graphicalShape)
-    : _graphicalShape(graphicalShape) {}
-
-GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<int>> &graphicalShape)
-    : _graphicalShape(std::vector<Vector2d<double>>(graphicalShape.size()))
+GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphicalShape,
+                                     const float depth,
+                                     const float z)
+    : _programId(shaders::ShaderProcessor::instance().getProgramId()),
+      _modelMatrixId(glGetUniformLocation(_programId, "model_matrix")),
+      _depth(depth),
+      _z(z)
 {
-    for (size_t vertId = 0; vertId < graphicalShape.size(); ++vertId)
+    DEBUG("Setup graphical object 2d");
+    exception::OpenGLException::handle();
+    std::vector<Vector3d<float>> sideArray(graphicalShape.size() * 2 + 2);
+    std::vector<Vector3d<float>> faceArray(graphicalShape.size());
+    for (size_t vId = 0; vId < graphicalShape.size(); ++vId)
     {
-        _graphicalShape[vertId].x = static_cast<double>(graphicalShape[vertId].x);
-        _graphicalShape[vertId].y = static_cast<double>(graphicalShape[vertId].y);
+        sideArray[vId * 2] = {graphicalShape[vId].x,
+                              graphicalShape[vId].y,
+                              depth + z};
+        sideArray[vId * 2 + 1] = {graphicalShape[vId].x,
+                                  graphicalShape[vId].y,
+                                  z};
+        faceArray[vId] = {graphicalShape[vId].x,
+                          graphicalShape[vId].y,
+                          z};
     }
+    sideArray[sideArray.size() - 2] = sideArray[0];
+    sideArray[sideArray.size() - 1] = sideArray[1];
+    _sideArray = std::make_unique<VertexArray>(std::move(sideArray), GL_TRIANGLE_STRIP);
+    _faceArray = std::make_unique<VertexArray>(std::move(faceArray), GL_TRIANGLE_FAN);
 }
 
-void GraphicalObject2d::draw()
+void GraphicalObject2d::draw(glm::mat4 rotated,
+                             glm::mat4 translated)
 {
-    glPushMatrix();
-    glTranslated(getX() * _ratio, getY() * _ratio, getZ() * _ratio);
-    glRotated(getAngleX(), 1.0, 0.0, 0.0);
-    glRotated(getAngleY(), 0.0, 1.0, 0.0);
-    glRotated(getAngleZ(), 0.0, 0.0, 1.0);
-    glScaled(getScaleX(), getScaleY(), getScaleZ());
-    drawSelf();
-    glPopMatrix();
+    rotated *= _rotated;
+    translated *= _translated;
+    glm::mat4 modelMatrix = translated * rotated;
+    glUniformMatrix4fv(_modelMatrixId, 1, GL_FALSE, glm::value_ptr(modelMatrix));
+    exception::OpenGLException::handle();
+    _sideArray->execute();
+    _faceArray->execute();
     for (auto subObject : _subObjects)
     {
-        subObject->draw();
+        subObject->draw(rotated, translated);
     }
+    exception::OpenGLException::handle();
 }
 
-void GraphicalObject2d::drawSelf()
+void GraphicalObject2d::setFaceColor256(Color color)
 {
-    glBegin(GL_POLYGON);
-    glColor3d(_r, _g, _b);
-    for (auto vert : _graphicalShape)
-    {
-        glVertex2d(vert.x * _ratio, vert.y * _ratio);
-    }
-    glEnd();
+    _faceArray->setColor256(color.r, color.g, color.b);
 }
 
-void GraphicalObject2d::setRatio(double ratio)
+void GraphicalObject2d::setSideColor256(Color color)
 {
-    _ratio = ratio;
-}
-
-double GraphicalObject2d::getRatio() const
-{
-    return _ratio;
-}
-
-void GraphicalObject2d::setColor256(double r, double g, double b)
-{
-    _r = r / 256.0;
-    _g = g / 256.0;
-    _b = b / 256.0;
+    _sideArray->setColor256(color.r, color.g, color.b);
 }
 } // namespace ample::graphics

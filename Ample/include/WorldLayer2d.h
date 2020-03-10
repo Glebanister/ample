@@ -32,10 +32,7 @@ class WorldLayer2d final : public ample::graphics::Layer
 {
 public:
     explicit WorldLayer2d(const ample::graphics::Vector2d<float> &gravity);
-    void addObject(WorldObject2d &object);
-    std::shared_ptr<WorldObject2d> addObject(const std::vector<ample::graphics::Vector2d<double>> &shape,
-                                            ample::graphics::Vector2d<float> pos,
-                                            BodyType type = BodyType::STATIC_BODY, float angle = 0);
+    void addWorldObject(WorldObject2d &object);
     void loadScene(const ample::filing::Scene2d &scene);
     void setContactListener(ContactListener &listener);
 
