@@ -7,7 +7,7 @@ LayeredWindowActivity::LayeredWindowActivity(window::Window &window)
 
 void LayeredWindowActivity::addLayer(Layer &layer)
 {
-    Activity::addActivity(layer);
+    Activity::addBehaviour(layer);
     _layers.push_back(&layer);
 }
 

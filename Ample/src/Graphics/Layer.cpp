@@ -1,5 +1,7 @@
 #include <cassert>
+#include <glm/glm.hpp>
 
+#include "Debug.h"
 #include "Layer.h"
 
 namespace ample::graphics
@@ -11,13 +13,13 @@ void Layer::addCamera(Camera &camera)
 
 void Layer::addObject(GraphicalObject &object)
 {
-    activity::Activity::addActivity(object);
+    activity::Behaviour::addBehaviour(object);
     _objects.push_back(&object);
 }
 
 void Layer::onActive()
 {
-    activity::Activity::onActive();
+    activity::Behaviour::onActive();
     for (auto cam : _cameras)
     {
         cam->look();

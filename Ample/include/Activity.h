@@ -8,33 +8,19 @@
 #include "EventHandler.h"
 #include "Clock.h"
 #include "Debug.h"
+#include "Behaviour.h"
 
 namespace ample::activity
 {
-class Activity
+class Activity : public Behaviour
 {
 public:
     void loop();
     void pause();
     void kill();
 
-    void addActivity(Activity &act);
-
-    virtual ~Activity() = default;
-
 protected:
-    virtual void onAwake();
-    virtual void onStart();
-    virtual void onActive();
-    virtual void onStop();
-    virtual void onDestroy();
-
-    virtual void onKill();
-    virtual void onPause();
-
     bool _alive = false;
     bool _running = false;
-
-    std::vector<Activity *> _subActivities;
 };
 } // namespace ample::activity

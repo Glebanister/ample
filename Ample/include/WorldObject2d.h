@@ -5,7 +5,16 @@
 #include "WorldLayer2d.h"
 #include "box2d/b2_body.h"
 #include "box2d/b2_fixture.h"
+
+#include <rapidjson/document.h>
+#include <rapidjson/writer.h>
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/prettywriter.h>
+
+#include <fstream>
+#include <sstream>
 #include <memory>
+#include <vector>
 
 namespace ample::physics
 {
@@ -18,33 +27,50 @@ enum class BodyType
 
 struct DefWorldObject2d;
 class WorldLayer2d;
+class WorldObject2d;
+
+class Fixture final
+{
+public:
+    WorldObject2d &getObject();
+
+    void setDensity(float density);
+
+    void setFriction(float friction);
+
+    void setRestitution(float restitution);
+
+    void setSensor(bool sensor);
+
+private:
+    friend WorldObject2d;
+
+    Fixture(b2Fixture *fixture, WorldObject2d &wObject);
+
+    b2Fixture *_fixture = nullptr;
+    WorldObject2d &worldObject;
+};
 
 class WorldObject2d final : public ample::graphics::GraphicalObject2d
 {
 public:
     WorldObject2d(const DefWorldObject2d &def,
-                  const std::vector<ample::graphics::Vector2d<double>> &shape);
-    void setZIndex(double z);
+                  const std::vector<ample::graphics::Vector2d<float>> &shape);
+    void setZIndex(float z);
 
-    double getX() const override;
-    double getY() const override;
-    double getZ() const override;
+    rapidjson::Document save(int id);
+    static std::pair<int, std::shared_ptr<ample::physics::WorldObject2d>> load(const rapidjson::Value &doc);
 
-    double getAngleX() const override;
-    double getAngleY() const override;
-    double getAngleZ() const override;
-
-    double getScaleX() const override;
-    double getScaleY() const override;
-    double getScaleZ() const override;
-
-    void createPhysicalShape(const std::vector<ample::graphics::Vector2d<double>> &shape);
+    void createPhysicalShape(const std::vector<ample::graphics::Vector2d<float>> &shape);
     b2Body *_body = nullptr;
+    std::shared_ptr<Fixture> addFixture(const std::vector<ample::graphics::Vector2d<float>> &shape);
+    void onActive() override;
 
 private:
     friend ample::physics::WorldLayer2d;
 
-    double zIndex = 0;
+    std::vector<std::shared_ptr<Fixture>> _fixtures;
+    float zIndex = 0;
     b2BodyDef _bodyDef;
 };
 
@@ -67,6 +93,7 @@ struct DefWorldObject2d final
 
 private:
     friend ample::physics::WorldObject2d;
+
     b2BodyDef bodyDef;
 };
 } // namespace ample::physics
