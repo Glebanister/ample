@@ -11,21 +11,20 @@
 
 namespace ample::graphics::shaders
 {
-
-enum class shaderType
+class ShaderProcessor final : utils::Noncopyable
 {
-    VERTEX,
-    FRAGMENT,
-};
 
-class ShaderProcessor : utils::Noncopyable
-{
 public:
-    ShaderProcessor();
+    static ShaderProcessor &instance();
+
     void addShader(shaderType shaderType, const std::string &shaderPath);
+    GLuint getProgramId() const;
     void link();
+    void use();
 
 private:
+    ShaderProcessor();
+    ~ShaderProcessor();
     std::unordered_map<std::string, bool> _hasShader;
     std::vector<std::unique_ptr<Shader>> _shaders;
     GLuint _programId;

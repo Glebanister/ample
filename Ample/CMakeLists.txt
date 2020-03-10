@@ -8,6 +8,8 @@ set(OPENGL_INCLUDE_DIRS /usr/include/GL/)
 set(SDL2_LIBRARY /usr/lib/x86_64-linux-gnu/libSDL2.so)
 set(SDL2_INCLUDE_DIRS /usr/include/SDL2/)
 
+set(GLM_INCLUDE_DIRS /usr/include/glm/)
+
 set(GLU_LIBRARY /usr/lib/x86_64-linux-gnu/libGLU.so)
 
 add_subdirectory(../extern/box2d buildBox2d)
@@ -19,6 +21,7 @@ include_directories(../extern/rapidjson/include)
 set(${CMAKE_PROJECT_NAME}_SOURCES
 
     src/Basic/Activity.cpp
+    src/Basic/Behaviour.cpp
 
     src/Control/EventManager.cpp
     src/Control/EventHandler.cpp
@@ -37,8 +40,10 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
 
     src/Graphics/GraphicalObject.cpp
     src/Graphics/GraphicalObject2d.cpp
+    src/Graphics/GraphicalObject3d.cpp
     src/Graphics/ScreenObject.cpp
     src/Graphics/Camera.cpp
+    src/Graphics/Color.cpp
     src/Graphics/CameraPerspective.cpp
     src/Graphics/CameraOrtho.cpp
 
@@ -53,14 +58,14 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Graphics/VertexArray.cpp
     src/Graphics/Shaders/Shader.cpp
     src/Graphics/Shaders/ShaderProcessor.cpp
-    src/Graphics/Shaders/VertexShader.cpp
-    src/Graphics/Shaders/FragmentShader.cpp
+    src/Graphics/Light/LightSource.cpp
 
     src/Geometry/RegularPolygon.cpp
     )
 
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${OPENGL_INCLUDE_DIRS})
+include_directories(${GLM_INCLUDE_DIRS})
 
 include_directories(include)
 

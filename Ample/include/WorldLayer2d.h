@@ -24,7 +24,7 @@ class WorldLayer2d final : public ample::graphics::Layer
 {
 public:
     explicit WorldLayer2d(const ample::graphics::Vector2d<float> &gravity);
-    void addObject(WorldObject2d &object);
+    void addWorldObject(WorldObject2d &object);
     void loadScene(const ample::filing::Scene2d &scene);
     void setContactListener(ContactListener& listener);
 protected:

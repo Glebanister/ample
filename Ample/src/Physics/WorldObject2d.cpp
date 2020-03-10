@@ -114,10 +114,13 @@ void DefWorldObject2d::setGravityScale(float scale)
 }
 
 WorldObject2d::WorldObject2d(const DefWorldObject2d &def,
-                             const std::vector<ample::graphics::Vector2d<double>> &shape) : GraphicalObject2d(shape), _bodyDef(def.bodyDef) {}
+                             const std::vector<ample::graphics::Vector2d<float>> &shape)
+    : GraphicalObject2d(shape, 10, 0), _bodyDef(def.bodyDef)
+{
+} // TODO: remove stub
 
 std::shared_ptr<Fixture> WorldObject2d::addFixture(
-    const std::vector<ample::graphics::Vector2d<double>> &shape)
+    const std::vector<ample::graphics::Vector2d<float>> &shape)
 {
     b2FixtureDef fixtureDef;
     std::vector<b2Vec2> vertices(shape.size());
@@ -128,59 +131,21 @@ std::shared_ptr<Fixture> WorldObject2d::addFixture(
     b2PolygonShape polygonShape;
     polygonShape.Set(vertices.data(), shape.size());
     fixtureDef.shape = &polygonShape;
-    auto fixture = _fixtures.emplace_back(std::shared_ptr<Fixture>(new Fixture(_body->CreateFixture(&fixtureDef), *this))).get();
+    _fixtures.emplace_back(std::shared_ptr<Fixture>(new Fixture(_body->CreateFixture(&fixtureDef), *this))).get();
     return _fixtures[_fixtures.size() - 1];
 }
 
-void WorldObject2d::setZIndex(double z)
+void WorldObject2d::setZIndex(float z)
 {
     zIndex = z;
 }
 
-double WorldObject2d::getX() const
+void WorldObject2d::onActive()
 {
-    return _body->GetPosition().x;
+    setTranslate({_body->GetPosition().x, _body->GetPosition().y, getZ()});
+    setRotate({0.0f, 0.0f, 1.0f}, _body->GetAngle() * 180.0f / M_PI);
 }
 
-double WorldObject2d::getY() const
-{
-    return _body->GetPosition().y;
-}
-
-double WorldObject2d::getZ() const
-{
-    return zIndex;
-}
-
-double WorldObject2d::getAngleX() const
-{
-    return 0;
-}
-
-double WorldObject2d::getAngleY() const
-{
-    return 0;
-}
-
-double WorldObject2d::getAngleZ() const
-{
-    return _body->GetAngle() * (180 / M_PI);
-}
-
-double WorldObject2d::getScaleX() const
-{
-    return 1;
-}
-
-double WorldObject2d::getScaleY() const
-{
-    return 1;
-}
-
-double WorldObject2d::getScaleZ() const
-{
-    return 1;
-}
 rapidjson::Document WorldObject2d::save(int id)
 {
     rapidjson::Value val;
@@ -195,19 +160,19 @@ rapidjson::Document WorldObject2d::save(int id)
     doc.AddMember("id", val, allocator);
 
     rapidjson::Value position(rapidjson::Type::kArrayType);
-    val.SetDouble(_bodyDef.position.x);
+    val.SetFloat(_bodyDef.position.x);
     position.PushBack(val, allocator);
-    val.SetDouble(_bodyDef.position.y);
+    val.SetFloat(_bodyDef.position.y);
     position.PushBack(val, allocator);
     doc.AddMember("position", position, allocator);
 
     rapidjson::Value vertices(rapidjson::Type::kArrayType);
-    for (size_t i = 0; i < _graphicalShape.size(); ++i)
+    for (size_t i = 0; i < _faceArray->verticies().size(); ++i)
     {
         rapidjson::Value coordinate(rapidjson::Type::kArrayType);
-        val.SetDouble(_graphicalShape[i].x);
+        val.SetFloat(_faceArray->verticies()[i].x);
         coordinate.PushBack(val, allocator);
-        val.SetDouble(_graphicalShape[i].y);
+        val.SetFloat(_faceArray->verticies()[i].y);
         coordinate.PushBack(val, allocator);
         vertices.PushBack(coordinate, allocator);
     }
@@ -219,13 +184,13 @@ rapidjson::Document WorldObject2d::save(int id)
 std::pair<int, std::shared_ptr<ample::physics::WorldObject2d>> WorldObject2d::load(const rapidjson::Value &doc)
 {
     ample::physics::DefWorldObject2d BodyDef;
-    BodyDef.setPosition({doc["position"][0].GetDouble(), doc["position"][1].GetDouble()});
+    BodyDef.setPosition({doc["position"][0].GetFloat(), doc["position"][1].GetFloat()});
     ample::physics::DefWorldObject2d dynamicBodyDef;
 
-    std::vector<ample::graphics::Vector2d<double>> shape;
+    std::vector<ample::graphics::Vector2d<float>> shape;
     for (size_t i = 0; i < doc["vertexes"].Size(); i++)
     {
-        shape.push_back(ample::graphics::Vector2d<double>{doc["vertexes"][i][0].GetDouble(), doc["vertexes"][i][1].GetDouble()});
+        shape.push_back(ample::graphics::Vector2d<float>{doc["vertexes"][i][0].GetFloat(), doc["vertexes"][i][1].GetFloat()});
     }
     ample::physics::BodyType bt;
     if (doc["type"] == 0)

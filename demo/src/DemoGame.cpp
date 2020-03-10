@@ -7,6 +7,7 @@
 #include "WorldObject2d.h"
 #include "Debug.h"
 #include "RegularPolygon.h"
+#include "CameraBehavior.h"
 #include <memory>
 #include <vector>
 
@@ -18,6 +19,7 @@ void MyContactListener::startContact(ample::physics::Fixture &fixtureA, ample::p
     ample::physics::WorldObject2d *bodyA = &fixtureA.getObject();
     ample::physics::WorldObject2d *bodyB = &fixtureB.getObject();
 }
+
 void MyContactListener::endContact(ample::physics::Fixture &fixtureA, ample::physics::Fixture &fixtureB) {}
 
 DemoGame::DemoGame(ample::window::Window &window)
@@ -30,92 +32,41 @@ DemoGame::DemoGame(ample::window::Window &window)
     dynamicBodyDef.setBodyType(ample::physics::BodyType::dynamicBody);
     dynamicBodyDef.setPosition({0.0f, 0.0f});
     ground = std::make_shared<ample::physics::WorldObject2d>(groundBodyDef,
-                                                             (std::vector<ample::graphics::Vector2d<double>>){
-                                                                 {-70, -5.0},
-                                                                 {-70, 5.0},
-                                                                 {70, 0.0},
-                                                                 {70, -10.0}});
+                                                             (std::vector<ample::graphics::Vector2d<float>>){
+                                                                 {-70, -65.0},
+                                                                 {-70, -25.0},
+                                                                 {70, -60.0},
+                                                                 {70, -70.0}});
     brick = std::make_shared<ample::physics::WorldObject2d>(dynamicBodyDef,
-                                                            ample::geometry::RegularPolygon(7.0, 50));
-    brick->setColor256(255, 100, 100);
-    //ground->id = 0;
-    //brick->id = 1;
-    worldLayer.addObject(*brick);
-    worldLayer.addObject(*ground);
-    auto brickFixture = brick->addFixture(ample::geometry::RegularPolygon(7.0, 8));
-    auto groundFixture = ground->addFixture({{-70, -5.0}, {-70, 5.0}, {70, 0.0}, {70, -10.0}});
-    groundFixture->setDensity(0.8);
-    groundFixture->setFriction(0);
+                                                            ample::geometry::RegularPolygon<float>(7.0, 6));
+    worldLayer.addWorldObject(*brick);
+    worldLayer.addWorldObject(*ground);
+    auto brickFixture = brick->addFixture(ample::geometry::RegularPolygon<float>(7.0, 8));
+    auto groundFixture = ground->addFixture({{-70, -65.0},
+                                             {-70, -25.0},
+                                             {70, -60.0},
+                                             {70, -70.0}});
+    groundFixture->setDensity(0.0f);
+    groundFixture->setFriction(0.0f);
     brick->_body->SetAwake(true);
-    brickFixture->setDensity(1.0);
-    brickFixture->setFriction(0.3);
+    brickFixture->setDensity(0.0);
+    brickFixture->setFriction(0.0);
     worldLayer.addCamera(camera);
     addLayer(worldLayer);
     b2MassData d;
     brick->_body->GetMassData(&d);
     d.I = 1;
     brick->_body->SetMassData(&d);
-
-    addActivity(cameraBeh);
-    brick->setRatio(10);
-    ground->setRatio(10);
+    addBehaviour(cameraBeh);
+    ground->setFaceColor256({40, 155, 80});
+    brick->setFaceColor256(0xbbbbbb);
+    ground->setSideColor256({20, 100, 70});
+    brick->setFaceColor256(0xbbbbbb);
+    camera.translateEye({0, 0, -100});
+    camera.translate({0, -30, 0});
 }
 
 void DemoGame::onActive()
 {
     LayeredWindowActivity::onActive();
-
-    if (eventManager->keyboard()->isKeyPressed(ample::control::keysym::ARROW_LEFT))
-    {
-        b2Vec2 vel = brick->_body->GetLinearVelocity();
-        float desiredVel = 0;
-        desiredVel = -10;
-        float velChange = desiredVel - vel.x;
-        float force = brick->_body->GetMass() * velChange / (1.0 / ample::time::Clock::getFPS()); //f = mv/t
-        brick->_body->ApplyForceToCenter(b2Vec2(force, 0), true);
-    }
-    if (eventManager->keyboard()->isKeyReleased(ample::control::keysym::ARROW_LEFT))
-    {
-        b2Vec2 vel = brick->_body->GetLinearVelocity();
-        float desiredVel = 0;
-        desiredVel = 0;
-        float velChange = desiredVel - vel.x;
-        float force = brick->_body->GetMass() * velChange / (1.0 / ample::time::Clock::getFPS()); //f = mv/t
-        brick->_body->ApplyForceToCenter(b2Vec2(force, 0), true);
-    }
-    if (eventManager->keyboard()->isKeyPressed(ample::control::keysym::ARROW_RIGHT))
-    {
-        b2Vec2 vel = brick->_body->GetLinearVelocity();
-        float desiredVel = 0;
-        desiredVel = 10;
-        float velChange = desiredVel - vel.x;
-        float force = brick->_body->GetMass() * velChange / (1.0 / ample::time::Clock::getFPS()); //f = mv/t
-        brick->_body->ApplyForceToCenter(b2Vec2(force, 0), true);
-    }
-    if (eventManager->keyboard()->isKeyReleased(ample::control::keysym::ARROW_RIGHT))
-    {
-        b2Vec2 vel = brick->_body->GetLinearVelocity();
-        float desiredVel = 0;
-        desiredVel = 0;
-        float velChange = desiredVel - vel.x;
-        float force = brick->_body->GetMass() * velChange / (1.0 / ample::time::Clock::getFPS()); //f = mv/t
-        brick->_body->ApplyForceToCenter(b2Vec2(force, 0), true);
-    }
-    if (eventManager->keyboard()->isKeyPressed(ample::control::keysym::ARROW_UP))
-    {
-        brick->_body->ApplyLinearImpulseToCenter(b2Vec2(0, 50), true);
-    }
-
-    if (eventManager->keyboard()->isKeyPressed(ample::control::keysym::ARROW_DOWN))
-    {
-        brick->_body->ApplyLinearImpulseToCenter(b2Vec2(0, -50), true);
-    }
-    if (eventManager->keyboard()->isKeyPressed(ample::control::keysym::SPACE))
-    {
-        brick->_body->SetAngularVelocity(4);
-    }
-    if (eventManager->keyboard()->isKeyPressed(ample::control::keysym::KEY_b))
-    {
-        brick->_body->SetAwake(false);
-    }
 }

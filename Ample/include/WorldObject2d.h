@@ -55,33 +55,22 @@ class WorldObject2d final : public ample::graphics::GraphicalObject2d
 {
 public:
     WorldObject2d(const DefWorldObject2d &def,
-                  const std::vector<ample::graphics::Vector2d<double>> &shape);
-    void setZIndex(double z);
-
-    double getX() const override;
-    double getY() const override;
-    double getZ() const override;
-
-    double getAngleX() const override;
-    double getAngleY() const override;
-    double getAngleZ() const override;
-
-    double getScaleX() const override;
-    double getScaleY() const override;
-    double getScaleZ() const override;
+                  const std::vector<ample::graphics::Vector2d<float>> &shape);
+    void setZIndex(float z);
 
     rapidjson::Document save(int id);
     static std::pair<int, std::shared_ptr<ample::physics::WorldObject2d>> load(const rapidjson::Value &doc);
 
-    void createPhysicalShape(const std::vector<ample::graphics::Vector2d<double>> &shape);
+    void createPhysicalShape(const std::vector<ample::graphics::Vector2d<float>> &shape);
     b2Body *_body = nullptr;
-    std::shared_ptr<Fixture> addFixture(const std::vector<ample::graphics::Vector2d<double>> &shape);
+    std::shared_ptr<Fixture> addFixture(const std::vector<ample::graphics::Vector2d<float>> &shape);
+    void onActive() override;
+
 private:
     friend ample::physics::WorldLayer2d;
 
-
     std::vector<std::shared_ptr<Fixture>> _fixtures;
-    double zIndex = 0;
+    float zIndex = 0;
     b2BodyDef _bodyDef;
 };
 
@@ -101,6 +90,7 @@ struct DefWorldObject2d final
     void setBullet(bool b);
     void setEnabled(bool b);
     void setGravityScale(float scale);
+
 private:
     friend ample::physics::WorldObject2d;
 
