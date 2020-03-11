@@ -26,7 +26,7 @@ LightSource::LightSource()
 
 void LightSource::drawSelf(const glm::mat4 &modelMatrix)
 {
-    glm::vec3 pos = modelMatrix * glm::vec4{1.0};
+    glm::vec4 pos = modelMatrix * glm::vec4{1.0};
     glUniform3fv(_lightVectorId, 1, glm::value_ptr(pos));
 }
 } // namespace ample::graphics::light
