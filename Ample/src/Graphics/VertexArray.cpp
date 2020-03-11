@@ -12,8 +12,11 @@
 
 namespace ample::graphics
 {
-VertexArray::VertexArray(const std::vector<Vector3d<float>> &shape, const GLuint mode)
-    : _data(shape.size() * 3),
+VertexArray::VertexArray(const std::vector<Vector3d<float>> &shape,
+                         const std::vector<Vector3d<float>> &normals,
+                         const GLuint mode)
+    : _coords(shape.size() * 3),
+      _normals(shape.size() * 3),
       _shape(shape),
       _drawMode(mode),
       _colorVectorId(glGetUniformLocation(shaders::ShaderProcessor::instance().getProgramId(),
@@ -21,24 +24,35 @@ VertexArray::VertexArray(const std::vector<Vector3d<float>> &shape, const GLuint
 {
     for (size_t i = 0; i < shape.size(); ++i)
     {
-        _data[i * 3] = shape[i].x;
-        _data[i * 3 + 1] = shape[i].y;
-        _data[i * 3 + 2] = shape[i].z;
+        _coords[i * 3] = shape[i].x;
+        _coords[i * 3 + 1] = shape[i].y;
+        _coords[i * 3 + 2] = shape[i].z;
     }
-    DEBUG(shape.size());
-    DEBUG(_data.size());
+    for (size_t i = 0; i < shape.size(); ++i)
+    {
+        _normals[i * 3] = normals[i].x;
+        _normals[i * 3 + 1] = normals[i].y;
+        _normals[i * 3 + 2] = normals[i].z;
+    }
     DEBUG("Generating vertex buffer");
     glGenBuffers(1, &_vertexBufferId);
-    DEBUG("Binding vertex buffer");
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferId);
-    DEBUG("Sending buffer data");
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * _data.size(), _data.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * _coords.size(), _coords.data(), GL_STATIC_DRAW);
     _total = shape.size();
+
+    DEBUG("Generating normals buffer");
+    glGenBuffers(1, &_normalBufferId);
+    glBindBuffer(GL_ARRAY_BUFFER, _normalBufferId);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * _normals.size(), _normals.data(), GL_STATIC_DRAW);
+
     exception::OpenGLException::handle();
 }
 
 void VertexArray::execute()
 {
+    glm::vec3 color{_r, _g, _b};
+    glUniform3fv(_colorVectorId, 1, glm::value_ptr(color));
+
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferId);
     glVertexAttribPointer(
@@ -49,10 +63,20 @@ void VertexArray::execute()
         0,        // stride
         (void *)0 // array buffer offset
     );
-    glm::vec3 color{_r, _g, _b};
-    glUniform3fv(_colorVectorId, 1, glm::value_ptr(color));
+
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, _normalBufferId);
+    glVertexAttribPointer(
+        1,        // attribute
+        3,        // size
+        GL_FLOAT, // type
+        GL_FALSE, // normalized?
+        0,        // stride
+        (void *)0 // array buffer offset
+    );
     glDrawArrays(_drawMode, 0, _total);
     glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
 }
 
 void VertexArray::setColor256(double r, double g, double b)
