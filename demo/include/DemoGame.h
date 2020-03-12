@@ -41,9 +41,8 @@ private:
         {1920, 1080},
         {0, 0},
         {0.0, 0.0, 0.0},
-        {0.0, 0.0, 0.0},
-        1.0,
-        90.0,
+        {0.0, 0.0, 1.0},
+        60.0,
         1920.0 / 1080.0,
         0.1,
         1000.0,
@@ -54,4 +53,6 @@ private:
     std::shared_ptr<ample::physics::WorldObject2d> brick;
     std::shared_ptr<ample::graphics::GraphicalObject2d> intoBrick;
     MyContactListener listener;
+    ample::graphics::light::LightSource lamp;
+    ample::random::PerlinNoise noise{42};
 };

@@ -18,13 +18,12 @@ namespace ample::graphics
 CameraPerspective::CameraPerspective(const Vector2d<pixel_t> &viewSize,
                                      const Vector2d<pixel_t> &viewPosition,
                                      const Vector3d<float> &eyePos,
-                                     const Vector3d<float> &targetPos,
-                                     float coordRatio,
+                                     const Vector3d<float> &direction,
                                      float fov,
                                      float aspectRatio,
                                      float nearClip,
                                      float farClip)
-    : Camera(viewSize, viewPosition, eyePos, targetPos, coordRatio),
+    : Camera(viewSize, viewPosition, eyePos, direction),
       _fov(fov),
       _aspectRatio(aspectRatio),
       _nearClip(nearClip),
@@ -41,18 +40,15 @@ CameraPerspective::CameraPerspective(const Vector2d<pixel_t> &viewSize,
 void CameraPerspective::look()
 {
     _viewport.set();
-    auto viewMatrix = glm::lookAt(glm::vec3{_position.x, _position.y, _position.z},
-                                  glm::vec3{_target.x, _target.y, _target.z},
-                                  glm::vec3{_angle.x, _angle.y, _angle.z});
+    auto viewMatrix = glm::lookAt(_position, _position + _direction, {0, 1, 0});
     auto projectionMatrix = glm::perspective(glm::radians(_fov),
                                              _aspectRatio,
                                              _nearClip,
                                              _farClip);
-    glm::vec3 eyePosition{_position.x, _position.y, _position.z};
 
     glUniformMatrix4fv(_projectionMatrixId, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
     glUniformMatrix4fv(_viewMatrixId, 1, GL_FALSE, glm::value_ptr(viewMatrix));
-    glUniform3fv(_eyeVectorId, 1, glm::value_ptr(eyePosition));
+    glUniform3fv(_eyeVectorId, 1, glm::value_ptr(_position));
 
     exception::OpenGLException::handle();
 }
@@ -61,4 +57,12 @@ void CameraPerspective::unlook()
 {
     // DEBUG("STUB for ortho camera unlook()");
 }
+
+void CameraPerspective::setFov(float fov) { _fov = fov; }
+void CameraPerspective::setNearClip(float nearClip) { _nearClip = nearClip; }
+void CameraPerspective::setFarClip(float farClip) { _farClip = farClip; }
+
+float CameraPerspective::getFov() const { return _fov; }
+float CameraPerspective::getNearClip() const { return _nearClip; }
+float CameraPerspective::getFarClip() const { return _farClip; }
 } // namespace ample::graphics

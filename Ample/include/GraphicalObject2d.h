@@ -21,8 +21,7 @@ public:
                       const float depth,
                       const float z);
 
-    void draw(glm::mat4 rotated = glm::mat4{1.0f},
-              glm::mat4 translated = glm::mat4{1.0f}) override;
+    void drawSelf(const glm::mat4 &) override;
 
     void setFaceColor256(Color color);
     void setSideColor256(Color color);
