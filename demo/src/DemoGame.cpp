@@ -27,37 +27,31 @@ DemoGame::DemoGame(ample::window::Window &window)
     : ample::graphics::LayeredWindowActivity(window)
 {
     worldLayer.setContactListener(listener);
-    ample::physics::DefWorldObject2d groundBodyDef;
-    groundBodyDef.setPosition({0.0f, 0.0f});
-    ample::physics::DefWorldObject2d dynamicBodyDef;
-    dynamicBodyDef.setBodyType(ample::physics::BodyType::dynamicBody);
-    dynamicBodyDef.setPosition({0.0f, 0.0f});
-    ground = std::make_shared<ample::physics::WorldObject2d>(groundBodyDef,
-                                                             (std::vector<ample::graphics::Vector2d<float>>){
+    ground = &worldLayer.addWorldObject((std::vector<ample::graphics::Vector2d<float>>){
                                                                  {-70, -65.0},
                                                                  {-70, -25.0},
                                                                  {70, -60.0},
-                                                                 {70, -70.0}});
-    brick = std::make_shared<ample::physics::WorldObject2d>(dynamicBodyDef,
-                                                            ample::geometry::RegularPolygon<float>(7.0, 7));
-    worldLayer.addWorldObject(*brick);
-    worldLayer.addWorldObject(*ground);
+                                                                 {70, -70.0}}, {0, 0});
+
+    brick = &worldLayer.addWorldObject(ample::geometry::RegularPolygon<float>(7.0, 7),
+                                      {0, 0}, ample::physics::BodyType::DYNAMIC_BODY);
+
     auto brickFixture = brick->addFixture(ample::geometry::RegularPolygon<float>(7.0, 7));
     auto groundFixture = ground->addFixture({{-70, -65.0},
                                              {-70, -25.0},
                                              {70, -60.0},
                                              {70, -70.0}});
-    groundFixture->setDensity(1.0f);
-    groundFixture->setFriction(0.2f);
-    brick->_body->SetAwake(true);
-    brickFixture->setDensity(1.0);
-    brickFixture->setFriction(1.0);
+    groundFixture.setDensity(1.0f);
+    groundFixture.setFriction(0.2f);
+    brick->setAwake(true);
+    brickFixture.setDensity(1.0);
+    brickFixture.setFriction(1.0);
     worldLayer.addCamera(camera);
     addLayer(worldLayer);
-    b2MassData d;
-    brick->_body->GetMassData(&d);
+    ample::physics::MassData d;
+    d = brick->getMassData();
     d.I = 1;
-    brick->_body->SetMassData(&d);
+    brick->setMassData(d);
     ground->setFaceColor256({20, 100, 70});
     brick->setFaceColor256(0x964B00);
     ground->setSideColor256({20, 100, 70});
@@ -71,9 +65,6 @@ DemoGame::DemoGame(ample::window::Window &window)
 void DemoGame::onActive()
 {
     LayeredWindowActivity::onActive();
-//    camera.look();
-//    ample::graphics::GraphicalObject2d(ample::geometry::RegularPolygon<float>(100, 6), 1, 50).draw();
-//    camera.unlook();
     if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_d))
     {
         lamp.translate({-1, 0, 0});
@@ -114,5 +105,4 @@ void DemoGame::onActive()
         lamp.rotate({0, 1, 0}, -1.0);
         camera.rotate({0, 1, 0}, -1.0);
     }
-    _window.moveCursor(0, 0);
 }
