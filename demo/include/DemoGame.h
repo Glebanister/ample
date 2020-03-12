@@ -18,6 +18,9 @@
 #include "LightSource.h"
 #include "RegularPolygon.h"
 
+
+#include "GraphicalObject2dIO.h"
+
 class MyContactListener : public ample::physics::ContactListener
 {
     void startContact(ample::physics::Fixture &fixtureA, ample::physics::Fixture &fixtureB) override;

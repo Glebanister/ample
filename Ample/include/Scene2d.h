@@ -4,6 +4,12 @@
 #include "WorldLayer2d.h"
 #include "Scene.h"
 
+
+#include <rapidjson/document.h>
+#include <rapidjson/writer.h>
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/prettywriter.h>
+
 namespace ample::physics
 {
     class WorldLayer2d;

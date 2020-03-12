@@ -14,6 +14,7 @@
 #include <fstream>
 #include <sstream>
 
+
 void MyContactListener::startContact(ample::physics::Fixture &fixtureA, ample::physics::Fixture &fixtureB)
 {
     ample::physics::WorldObject2d *bodyA = &fixtureA.getObject();
@@ -70,9 +71,9 @@ DemoGame::DemoGame(ample::window::Window &window)
 void DemoGame::onActive()
 {
     LayeredWindowActivity::onActive();
-    camera.look();
-    ample::graphics::GraphicalObject2d(ample::geometry::RegularPolygon<float>(100, 6), 1, 50).draw();
-    camera.unlook();
+//    camera.look();
+//    ample::graphics::GraphicalObject2d(ample::geometry::RegularPolygon<float>(100, 6), 1, 50).draw();
+//    camera.unlook();
     if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_d))
     {
         lamp.translate({-1, 0, 0});

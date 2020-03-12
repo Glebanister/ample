@@ -28,14 +28,14 @@ Scene2d::Scene2d(const std::string &scenePath)
         rapidjson::Document doc;
         doc.Parse(s.c_str());
 
-        if (doc["name"] == "WorldObject2d")
-        {
-            std::pair<int, std::shared_ptr<ample::physics::WorldObject2d>> p =
-                    ample::physics::WorldObject2d::load(doc);
-            int id = p.first;
-            std::shared_ptr<ample::physics::WorldObject2d> obj = p.second;
-            storage_[id] = obj;
-        }
+//        if (doc["name"] == "WorldObject2d")
+//        {
+//            std::pair<int, std::shared_ptr<ample::physics::WorldObject2d>> p =
+//                    ample::physics::WorldObject2d::load(doc);
+//            int id = p.first;
+//            std::shared_ptr<ample::physics::WorldObject2d> obj = p.second;
+//            storage_[id] = obj;
+//        }
     }
 }
 

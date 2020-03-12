@@ -86,7 +86,7 @@ void VertexArray::setColor256(double r, double g, double b)
     _b = b;
 }
 
-const std::vector<Vector3d<float>> VertexArray::verticies() const
+const std::vector<Vector3d<float>> &VertexArray::verticies() const
 {
     return _shape;
 }

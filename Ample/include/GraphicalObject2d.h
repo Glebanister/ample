@@ -12,6 +12,11 @@
 #include "VertexArray.h"
 #include "Color.h"
 
+namespace ample::filing
+{
+class GraphicalObject2dIO;
+}
+
 namespace ample::graphics
 {
 class GraphicalObject2d : public GraphicalObject
@@ -27,6 +32,8 @@ public:
     void setSideColor256(Color color);
 
 protected:
+    friend class ample::filing::GraphicalObject2dIO;
+
     std::unique_ptr<VertexArray> _sideArray;
     std::unique_ptr<VertexArray> _faceArray;
     const GLuint _programId;

@@ -24,7 +24,7 @@ public:
                 const GLuint mode);
     void execute();
     void setColor256(double r, double g, double b);
-    const std::vector<Vector3d<float>> verticies() const;
+    const std::vector<Vector3d<float>> &verticies() const;
     ~VertexArray();
 
 private:
