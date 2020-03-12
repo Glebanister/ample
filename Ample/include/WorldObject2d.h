@@ -18,14 +18,18 @@
 
 namespace ample::physics
 {
-struct DefWorldObject2d;
+
+//struct DefWorldObject2d;
 class WorldLayer2d;
 class WorldObject2d;
+enum class BodyType;
+
 
 class Fixture final
 {
 public:
     WorldObject2d &getObject();
+
     void setDensity(float density);
     void setFriction(float friction);
     void setRestitution(float restitution);
@@ -42,32 +46,19 @@ private:
 
 struct MassData
 {
-public:
-    WorldObject2d(const DefWorldObject2d &def,
-                  const std::vector<ample::graphics::Vector2d<float>> &shape);
-    void setZIndex(float z);
-
-    rapidjson::Document save(int id);
-    static std::pair<int, std::shared_ptr<ample::physics::WorldObject2d>> load(const rapidjson::Value &doc);
-
-    void createPhysicalShape(const std::vector<ample::graphics::Vector2d<float>> &shape);
-    b2Body *_body = nullptr;
-    std::shared_ptr<Fixture> addFixture(const std::vector<ample::graphics::Vector2d<float>> &shape);
-    void onActive() override;
-
-private:
-    friend ample::physics::WorldLayer2d;
-
-    std::vector<std::shared_ptr<Fixture>> _fixtures;
-    float zIndex = 0;
-    b2BodyDef _bodyDef;
+    float mass;
+    ample::graphics::Vector2d<float> center;
+    float I;
 };
 
-class WorldObject2d final : public PrimaryWorldObject2d
+class WorldObject2d final : public ample::graphics::GraphicalObject2d
 {
 public:
-    std::shared_ptr<GraphicalObject2d> addSubShape(const std::vector<ample::graphics::Vector2d<double>> &shape);
-    std::shared_ptr<Fixture> addFixture(const std::vector<ample::graphics::Vector2d<double>> &shape);
+    void setZIndex(float z);
+    void onActive() override;
+    //void onPause() override;//TODO
+
+    Fixture& addFixture(const std::vector<ample::graphics::Vector2d<float>> &shape);
 
     void setTransform(const graphics::Vector2d<float> &position, float angle);
     graphics::Vector2d<float> getPosition() const;
@@ -87,7 +78,7 @@ public:
     float getMass() const;
     float getInertia() const;
     MassData getMassData() const;
-    void setMassData(const MassData& data);
+    void setMassData(const MassData &data);
     void resetMassData();
     graphics::Vector2d<float> getWorldPoint(const graphics::Vector2d<float> &localPoint) const;
     graphics::Vector2d<float> getWorldVector(const graphics::Vector2d<float> &localVector) const;
@@ -101,12 +92,24 @@ public:
     void setAngularDamping(float angularDamping);
     float getGravityScale() const;
     void setGravityScale(float scale);
+    void setSleepingAllowed(bool flag);
+    bool isSleepingAllowed() const;
+    void setAwake(bool flag);
+    bool isAwake() const;
+    void setEnabled(bool flag);
+    bool isEnabled() const;
+    void setFixedRotation(bool flag);
+    bool isFixedRotation() const;
+    void dump();
+
+    static std::pair<int, std::shared_ptr<ample::physics::WorldObject2d>> load(const rapidjson::Value &doc) {};
 
 private:
     friend ample::physics::WorldLayer2d;
 
-    WorldObject2d(b2Body *body, const std::vector<ample::graphics::Vector2d<double>> &shape);
+    WorldObject2d(b2Body *body, const std::vector<ample::graphics::Vector2d<float>> &shape);
     std::vector<std::shared_ptr<Fixture>> _fixtures;
-    std::vector<std::shared_ptr<GraphicalObject2d>> _subShapes;
+    float zIndex = 0;
+    b2Body *_body = nullptr;
 };
 } // namespace ample::physics
