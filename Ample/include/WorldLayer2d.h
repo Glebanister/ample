@@ -5,6 +5,7 @@
 #include "Layer.h"
 #include "Scene2d.h"
 #include "WorldObject2d.h"
+#include "WorldJoint2d.h"
 #include "ContactListener.h"
 
 namespace ample::filing
@@ -15,6 +16,7 @@ namespace ample::filing
 namespace ample::physics
 {
     class WorldObject2d;
+    class WorldJoint2d;
     class ContactListener;
     enum class BodyType
 {
@@ -34,12 +36,19 @@ public:
     WorldObject2d& addWorldObject(const std::vector<ample::graphics::Vector2d<float>> &shape,
                                             ample::graphics::Vector2d<float> pos,
                                             BodyType type = BodyType::STATIC_BODY, float angle = 0);
+    WorldJoint2d& addWorldDistanceJoint(WorldObject2d& bodyA, WorldObject2d& bodyB,
+                                        ample::graphics::Vector2d<float> anchorOnBodyA,
+                                        ample::graphics::Vector2d<float> anchorOnBodyB,
+                                        float width = 1,
+                                        float length = -1,
+                                        bool collideConnected = false);
     void setContactListener(ContactListener& listener);
 protected:
     void onActive() override;
 
 private:
     std::vector<std::shared_ptr<WorldObject2d>> _bodies;
+    std::vector<std::shared_ptr<WorldJoint2d>> _joints;
     b2World world;
 };
 } // namespace ample::physics

@@ -50,6 +50,8 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Physics/ContactListener.cpp
     src/Physics/WorldObject2d.cpp
     src/Physics/WorldLayer2d.cpp
+    src/Physics/WorldJoint2d.cpp
+    src/Physics/WorldDistanceJoint.cpp
 
     src/Graphics/Layer.cpp
     src/Graphics/Layer2d.cpp

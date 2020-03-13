@@ -2,7 +2,6 @@
 
 #include "GraphicalObject2d.h"
 #include "Vector2d.h"
-#include "WorldLayer2d.h"
 #include "box2d/b2_body.h"
 #include "box2d/b2_fixture.h"
 
@@ -18,12 +17,8 @@
 
 namespace ample::physics
 {
-
-//struct DefWorldObject2d;
 class WorldLayer2d;
 class WorldObject2d;
-enum class BodyType;
-
 
 class Fixture final
 {
@@ -58,7 +53,7 @@ public:
     void onActive() override;
     //void onPause() override;//TODO
 
-    Fixture& addFixture(const std::vector<ample::graphics::Vector2d<float>> &shape);
+    Fixture &addFixture(const std::vector<ample::graphics::Vector2d<float>> &shape);
 
     void setTransform(const graphics::Vector2d<float> &position, float angle);
     graphics::Vector2d<float> getPosition() const;
@@ -102,7 +97,7 @@ public:
     bool isFixedRotation() const;
     void dump();
 
-    static std::pair<int, std::shared_ptr<ample::physics::WorldObject2d>> load(const rapidjson::Value &doc) {};
+    static std::pair<int, std::shared_ptr<ample::physics::WorldObject2d>> load(const rapidjson::Value &doc){(void)doc;};
 
 private:
     friend ample::physics::WorldLayer2d;
