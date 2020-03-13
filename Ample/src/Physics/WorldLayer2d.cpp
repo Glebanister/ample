@@ -50,4 +50,12 @@ void WorldLayer2d::onActive()
     graphics::Layer::onActive();
     world.Step(1.0 / time::Clock::getFPS(), 8, 3);
 }
+
+//void WorldLayer2d::loadScene(const ample::filing::Scene2d &scene)
+//{
+//    for (auto [id, obj] : scene.storage_)
+//    {
+//        addWorldObject(*dynamic_cast<WorldObject2d *>(obj.get()));
+//    }
+//}
 } // namespace ample::physics
