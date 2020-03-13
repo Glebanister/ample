@@ -53,7 +53,10 @@ private:
     CameraBehavior cameraBeh{*this, camera};
     ample::physics::WorldLayer2d worldLayer{{0.0f, -100.0f}};
     ample::physics::WorldObject2d* ground;
-    ample::physics::WorldObject2d* brick;
+    ample::physics::WorldObject2d* brick1;
+    ample::physics::WorldObject2d* brick2;
+    ample::physics::WorldObject2d* brick3;
+    ample::physics::WorldObject2d* ground2;
     MyContactListener listener;
     ample::graphics::light::LightSource lamp;
     ample::random::PerlinNoise noise{42};
