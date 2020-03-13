@@ -37,7 +37,7 @@ void Fixture::setSensor(bool sensor)
     _fixture->SetSensor(sensor);
 }
 
-Fixture& WorldObject2d::addFixture(
+Fixture &WorldObject2d::addFixture(
     const std::vector<ample::graphics::Vector2d<float>> &shape)
 {
     b2FixtureDef fixtureDef;
