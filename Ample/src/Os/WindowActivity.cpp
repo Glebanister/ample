@@ -46,10 +46,7 @@ WindowActivity::WindowActivity(Window &window)
     _shadersProcessor.addShader(ample::graphics::shaders::shaderType::FRAGMENT, "../../Ample/src/Graphics/Shaders/Shaders/BasicFragmentShader.frag");
     _shadersProcessor.link();
 
-    // glEnable(GL_BLEND);
-    // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    // glPolygonMode(GL_FRONT | GL_BACK, GL_FILL);
-    glClearColor(20.0 / 256.0, 60.0 / 256.0, 80.0 / 256.0, 0.5);
+    glClearColor(0.0 / 256.0, 0.0 / 256.0, 0.0 / 256.0, 0.5);
     DEBUG("Generating vertex array");
     glGenVertexArrays(1, &_vertexArrayId);
     glBindVertexArray(_vertexArrayId);

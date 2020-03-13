@@ -27,23 +27,23 @@ void main()
     
     float diffuse = material_kd * LdotN;
     
-    float specular = 0;
+    float specular = 1;
     
-    if(LdotN > 0.0)
+    if (LdotN > 0.0)
     {    
         // choose H or R to see the difference
         // vec3 R = -normalize(reflect(L, world_normal));//Reflection
         // specular = material_ks * pow(max(0, dot(R, V)), material_shininess);
         
         // Blinn-Phong
-        vec3 H = normalize(L + V ); // Halfway
+        vec3 H = normalize(L + V); // Halfway
         specular = material_ks * pow(max(0, dot(H, world_normal)), material_shininess);
         
     }
     
     float light = diffuse + specular;
     
-    float gamma = 1/2.2;
+    float gamma = 1 / 2.2;
     float final_light = pow(light, gamma);
     out_color = vec4(object_color * final_light, 0.5);
 }
