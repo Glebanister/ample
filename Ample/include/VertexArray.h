@@ -10,18 +10,19 @@
 
 namespace ample::graphics
 {
-enum glDrawMode
+enum class normalsMode
 {
-    POLYGON,
-    QUAD_STRIP,
+    SINGLE,
+    VERTEX,
+    FACE,
 };
 
 class VertexArray final : public utils::Noncopyable
 {
 public:
     VertexArray(const std::vector<Vector3d<float>> &shape,
-                const std::vector<Vector3d<float>> &normals,
-                const GLuint mode);
+                const normalsMode normalsType,
+                const std::vector<Vector3d<float>> &normals);
     void execute();
     void setColor256(double r, double g, double b);
     const std::vector<Vector3d<float>> verticies() const;
@@ -30,12 +31,15 @@ public:
 private:
     std::vector<GLfloat> _coords;
     std::vector<GLfloat> _normals;
+    std::vector<GLfloat> _normalsLines;
     std::vector<Vector3d<float>> _shape;
     GLuint _vertexBufferId;
     GLuint _normalBufferId;
-    GLsizei _total;
-    double _r = 0.5, _g = 0.5, _b = 0.5;
-    GLint _drawMode;
+    GLuint _normalLinesBufferId;
+    GLsizei _totalVerts;
+    normalsMode _normalsMode;
     GLint _colorVectorId;
+    double _r = 0.5, _g = 0.5, _b = 0.5;
+    GLsizei _normalStride;
 };
 } // namespace ample::graphics
