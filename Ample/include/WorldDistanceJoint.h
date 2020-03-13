@@ -6,7 +6,7 @@
 namespace ample::physics
 {
 class WorldLayer2d;
-class WorldObject2d; 
+class WorldObject2d;
 class WorldDistanceJoint2d : public ample::physics::WorldJoint2d
 {
 public:
@@ -31,7 +31,7 @@ public:
 private:
     friend ample::physics::WorldLayer2d;
 
-    WorldDistanceJoint2d(b2DistanceJoint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB, 
+    WorldDistanceJoint2d(b2DistanceJoint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB,
                          const std::vector<ample::graphics::Vector2d<float>> &shape);
     b2DistanceJoint *_joint = nullptr;
 };
