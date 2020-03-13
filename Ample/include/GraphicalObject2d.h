@@ -29,8 +29,6 @@ public:
 protected:
     std::unique_ptr<VertexArray> _sideArray;
     std::unique_ptr<VertexArray> _faceArray;
-    const GLuint _programId;
-    const GLuint _modelMatrixId;
     float _depth;
     float _z;
 };
