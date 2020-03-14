@@ -8,12 +8,12 @@
 #include "GraphicalObject.h"
 #include "ShaderProcessor.h"
 #include "Exception.h"
+#include "Debug.h"
 
 namespace ample::graphics
 {
 GraphicalObject::GraphicalObject()
-    : _programId(shaders::ShaderProcessor::instance().getProgramId()),
-      _modelMatrixId(glGetUniformLocation(_programId, "model_matrix")) {}
+    : _modelMatrixUniform(std::make_unique<shaders::ShaderProcessor::Uniform>(_modelMatrix, "model_matrix")) {}
 
 void GraphicalObject::addSubObject(GraphicalObject &object)
 {
@@ -48,10 +48,9 @@ void GraphicalObject::draw(glm::mat4 rotated,
 {
     rotated *= _rotated;
     translated *= _translated;
-    glm::mat4 modelMatrix = translated * rotated;
-    glUniformMatrix4fv(_modelMatrixId, 1, GL_FALSE, glm::value_ptr(modelMatrix));
-    exception::OpenGLException::handle();
-    drawSelf(modelMatrix);
+    _modelMatrix = translated * rotated;
+    _modelMatrixUniform->load();
+    drawSelf();
     for (auto subObject : _subObjects)
     {
         subObject->draw(rotated, translated);

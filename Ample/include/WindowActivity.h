@@ -52,7 +52,6 @@ public:
     pixel_t getWidth() const;
     pixel_t getHeight() const;
 
-    virtual ~WindowActivity();
     virtual void onActive() override;
 
 protected:
@@ -64,9 +63,5 @@ protected:
     std::shared_ptr<WindowEventHandler> _windowEventHandler;
 
     friend void WindowEventHandler::handleEvent(const SDL_Event &event);
-
-private:
-    graphics::shaders::ShaderProcessor &_shadersProcessor;
-    GLuint _vertexArrayId;
 };
 } // namespace ample::window

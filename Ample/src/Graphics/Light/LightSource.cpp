@@ -17,16 +17,16 @@ LightSource::LightSource(const Color ambient,
     : _ambient(ambient.r, ambient.g, ambient.b, ambient.a),
       _diffuse(diffuse.r, diffuse.g, diffuse.b, diffuse.a),
       _specular(specular.r, specular.g, specular.b, specular.a),
-      _lightVectorId(glGetUniformLocation(shaders::ShaderProcessor::instance().getProgramId(), "light_position"))
+      _lightVectorUniform(std::make_unique<shaders::ShaderProcessor::Uniform>(_position, "light_position"))
 {
 }
 
 LightSource::LightSource()
     : LightSource(Color{}, Color{}, Color{}) {}
 
-void LightSource::drawSelf(const glm::mat4 &modelMatrix)
+void LightSource::drawSelf()
 {
-    glm::vec4 pos = modelMatrix * glm::vec4{1.0};
-    glUniform3fv(_lightVectorId, 1, glm::value_ptr(pos));
+    _position = _modelMatrix * glm::vec4{1.0f};
+    _lightVectorUniform->load();
 }
 } // namespace ample::graphics::light

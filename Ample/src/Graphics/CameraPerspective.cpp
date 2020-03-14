@@ -7,6 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <memory>
 
 #include "CameraPerspective.h"
 #include "Debug.h"
@@ -28,27 +29,27 @@ CameraPerspective::CameraPerspective(const Vector2d<pixel_t> &viewSize,
       _aspectRatio(aspectRatio),
       _nearClip(nearClip),
       _farClip(farClip),
-      _programId(shaders::ShaderProcessor::instance().getProgramId()),
-      _viewMatrixId(glGetUniformLocation(_programId, "view_matrix")),
-      _projectionMatrixId(glGetUniformLocation(_programId, "projection_matrix")),
-      _eyeVectorId(glGetUniformLocation(_programId, "eye_position"))
+      _viewMatrixUniform(std::make_unique<shaders::ShaderProcessor::Uniform>(_viewMatrix, "view_matrix")),
+      _projectionMatrixUniform(std::make_unique<shaders::ShaderProcessor::Uniform>(_projectionMatrix, "projection_matrix")),
+    //   _eyeVectorUniform(std::make_unique<shaders::ShaderProcessor::Uniform>(_position, "eye_position"))
+    _eyeVectorUniform(nullptr)
 {
-    DEBUG("Setup perspective camera") << _programId << ' ' << _projectionMatrixId << ' ' << _viewMatrixId << ' ' << _fov << ' ' << _aspectRatio << ' ' << std::endl;
+    DEBUG("Setup perspective camera") << _fov << ' ' << _aspectRatio << ' ' << std::endl;
     exception::OpenGLException::handle();
 }
 
 void CameraPerspective::look()
 {
     _viewport.set();
-    auto viewMatrix = glm::lookAt(_position, _position + _direction, {0, 1, 0});
-    auto projectionMatrix = glm::perspective(glm::radians(_fov),
-                                             _aspectRatio,
-                                             _nearClip,
-                                             _farClip);
+    _viewMatrix = glm::lookAt(_position, _position + _direction, {0, 1, 0});
+    _projectionMatrix = glm::perspective(glm::radians(_fov),
+                                         _aspectRatio,
+                                         _nearClip,
+                                         _farClip);
 
-    glUniformMatrix4fv(_projectionMatrixId, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
-    glUniformMatrix4fv(_viewMatrixId, 1, GL_FALSE, glm::value_ptr(viewMatrix));
-    glUniform3fv(_eyeVectorId, 1, glm::value_ptr(_position));
+    _viewMatrixUniform->load();
+    _projectionMatrixUniform->load();
+    // _eyeVectorUniform->load();
 
     exception::OpenGLException::handle();
 }
