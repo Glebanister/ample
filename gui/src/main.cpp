@@ -2,84 +2,68 @@
 #include <imgui.h>
 #include <imgui_sdl.h>
 #include <SDL2/SDL.h>
+#include <ample/SDLEnvironment.h>
+#include <ample/Window.h>
+#include <ample/Clock.h>
+#include <ample/WindowActivity.h>
 
-int main()
+class ImguiActivity : public ample::window::WindowActivity
 {
-    SDL_Init(SDL_INIT_EVERYTHING);
-
-    SDL_Window *window = SDL_CreateWindow("SDL2 ImGui Renderer", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_RESIZABLE);
-    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-
-    ImGui::CreateContext();
-    ImGuiSDL::Initialize(renderer, 800, 600);
-
-    SDL_Texture *texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, 100, 100);
+public:
+    ImguiActivity(ample::window::Window &window)
+        : WindowActivity(window),
+          _renderer(SDL_CreateRenderer(_window.pointer(), -1, SDL_RENDERER_ACCELERATED))
     {
-        SDL_SetRenderTarget(renderer, texture);
-        SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
-        SDL_RenderClear(renderer);
-        SDL_SetRenderTarget(renderer, nullptr);
+        ImGui::CreateContext();
+        ImGuiSDL::Initialize(_renderer, getWidth(), getHeight());
+
+        texture = SDL_CreateTexture(_renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, 100, 100);
+        {
+            SDL_SetRenderTarget(_renderer, texture);
+            SDL_SetRenderDrawColor(_renderer, 255, 0, 255, 255);
+            SDL_RenderClear(_renderer);
+            SDL_SetRenderTarget(_renderer, nullptr);
+        }
     }
 
-    bool run = true;
-    while (run)
+    void onActive() override
     {
+        ample::window::WindowActivity::onActive();
         ImGuiIO &io = ImGui::GetIO();
-
-        int wheel = 0;
-
-        SDL_Event e;
-        while (SDL_PollEvent(&e))
-        {
-            if (e.type == SDL_QUIT)
-                run = false;
-            else if (e.type == SDL_WINDOWEVENT)
-            {
-                if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
-                {
-                    io.DisplaySize.x = static_cast<float>(e.window.data1);
-                    io.DisplaySize.y = static_cast<float>(e.window.data2);
-                }
-            }
-            else if (e.type == SDL_MOUSEWHEEL)
-            {
-                wheel = e.wheel.y;
-            }
-        }
-
-        int mouseX, mouseY;
-        const int buttons = SDL_GetMouseState(&mouseX, &mouseY);
-
-        // Setup low-level inputs (e.g. on Win32, GetKeyboardState(), or write to those fields from your Windows message loop handlers, etc.)
-
-        io.DeltaTime = 1.0f / 60.0f;
-        io.MousePos = ImVec2(static_cast<float>(mouseX), static_cast<float>(mouseY));
-        io.MouseDown[0] = buttons & SDL_BUTTON(SDL_BUTTON_LEFT);
-        io.MouseDown[1] = buttons & SDL_BUTTON(SDL_BUTTON_RIGHT);
-        io.MouseWheel = static_cast<float>(wheel);
-
+        io.DeltaTime = 1.0f / std::max(20.0, std::min(120.0, ample::time::Clock::getFPS()));
+        io.MousePos = ImVec2(static_cast<float>(eventManager->mouse()->getMouseX()), static_cast<float>(eventManager->mouse()->getMouseY()));
+        io.MouseDown[0] = eventManager->mouse()->isLeftPressed() & SDL_BUTTON(SDL_BUTTON_LEFT);
+        io.MouseDown[1] = eventManager->mouse()->isRightPressed() & SDL_BUTTON(SDL_BUTTON_RIGHT);
+        io.MouseWheel = static_cast<float>(eventManager->mouse()->getWheelY());
         ImGui::NewFrame();
-
         ImGui::ShowDemoWindow();
-
         ImGui::Begin("Image");
         ImGui::Image(texture, ImVec2(100, 100));
         ImGui::End();
-
-        SDL_SetRenderDrawColor(renderer, 114, 144, 154, 255);
-        SDL_RenderClear(renderer);
-
+        SDL_SetRenderDrawColor(_renderer, 114, 144, 154, 255);
+        SDL_RenderClear(_renderer);
         ImGui::Render();
         ImGuiSDL::Render(ImGui::GetDrawData());
-
-        SDL_RenderPresent(renderer);
+        SDL_RenderPresent(_renderer);
     }
 
-    ImGuiSDL::Deinitialize();
+    ~ImguiActivity()
+    {
+        ImGuiSDL::Deinitialize();
+        SDL_DestroyRenderer(_renderer);
+        ImGui::DestroyContext();
+    }
 
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
+private:
+    SDL_Renderer *_renderer;
+    SDL_Texture *texture;
+};
 
-    ImGui::DestroyContext();
+int main()
+{
+    ample::window::Window window{"ample gui", 0, 0, 1024, 512, ample::window::UNDEFINED_POS, ample::window::MINIMIZED | ample::window::RESIZABLE};
+    ImguiActivity ampleGui{window};
+    ampleGui.loop();
+
     return 0;
 }
