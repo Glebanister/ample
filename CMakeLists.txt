@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.3)
 
-project(Ample)
+project(ample)
 
 include_directories(${CMAKE_PROJECT_NAME}/include)
 
-add_subdirectory(Ample)
+add_subdirectory(core)
 add_subdirectory(gui)

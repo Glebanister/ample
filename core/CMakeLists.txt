@@ -81,7 +81,7 @@ include_directories(${OPENGL_INCLUDE_DIRS})
 include_directories(${GLM_INCLUDE_DIRS})
 include_directories(${IL_INCLUDE_DIRS})
 
-include_directories(include)
+include_directories(include/ample)
 
 set(SOURCE_LIB ${${CMAKE_PROJECT_NAME}_SOURCES})
 

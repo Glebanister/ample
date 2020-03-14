@@ -11,6 +11,7 @@ include_directories(include)
 include_directories(../extern/imgui/)
 include_directories(../extern/imgui_sdl/)
 include_directories(${SDL2_INCLUDE_DIRS})
+include_directories(../core/include)
 
 set(IMGUI_SOURCES
     ../extern/imgui/imgui.cpp
@@ -26,3 +27,4 @@ set(SOURCES
 add_executable(AmpleGUI ${SOURCES} ${IMGUI_SOURCES})
 
 target_link_libraries(AmpleGUI ${SDL2_LIBRARY})
+target_link_libraries(AmpleGUI Ample)

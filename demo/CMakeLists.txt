@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(DemoGame)
-set(APP_NAME DemoGame)
+project(demo)
+set(APP_NAME demo)
 
 set(SOURCES
     src/main.cpp
@@ -9,10 +9,10 @@ set(SOURCES
     src/SquareBehavior.cpp
     src/CameraBehavior.cpp)
 
-find_library(AMPLE_LIBRARY NAME Ample
-                           PATHS ../build/Ample/)
+find_library(AMPLE_LIBRARY NAME ample
+                           PATHS ../build/core/)
 find_path(AMPLE_INCLUDE_DIR NAMES Activity.h
-                            PATHS ../Ample/include)
+                            PATHS ../core/include/ample)
 
 message(INFO " ample library found in ${AMPLE_LIBRARY}")
 message(INFO " ample headers found in ${AMPLE_INCLUDE_DIR}")
