@@ -7,43 +7,25 @@
 layout(location = 0) out vec4 out_color;
 
 uniform vec3 light_position;
-uniform vec3 eye_position;
 uniform vec3 object_color;
 
-in vec3 world_pos;
-in vec3 world_normal;
- 
-void main()
-{    
-    int material_shininess = 1;
-    
-    float material_kd = 4.0;
-    float material_ks = 1.7;
-    
-    vec3 L = normalize(light_position - world_pos); // light direction
-    vec3 V = normalize(eye_position - world_pos); // view direction
-    
-    float LdotN = max(0, dot(L,world_normal));
-    
-    float diffuse = material_kd * LdotN;
-    
-    float specular = 1;
-    
-    if (LdotN > 0.0)
-    {    
-        // choose H or R to see the difference
-        // vec3 R = -normalize(reflect(L, world_normal));//Reflection
-        // specular = material_ks * pow(max(0, dot(R, V)), material_shininess);
-        
-        // Blinn-Phong
-        vec3 H = normalize(L + V); // Halfway
-        specular = material_ks * pow(max(0, dot(H, world_normal)), material_shininess);
-        
-    }
-    
-    float light = diffuse + specular;
-    
-    float gamma = 1 / 2.2;
-    float final_light = pow(light, gamma);
-    out_color = vec4(object_color * final_light, 0.5);
+// in vec3 world_pos;
+// in vec3 world_normal;
+
+// here
+uniform mat4 model_matrix;
+
+in vec3 fragNormal;
+in vec3 fragVert;
+
+out vec4 finalColor;
+
+void main() {
+    mat3 normalMatrix = transpose(inverse(mat3(model_matrix)));
+    vec3 normal = normalize(normalMatrix * fragNormal);
+    vec3 fragPosition = vec3(model_matrix * vec4(fragVert, 1));
+    vec3 surfaceToLight = light_position - fragPosition;
+    float brightness = dot(normal, surfaceToLight) / (length(surfaceToLight) * length(normal));
+    brightness = clamp(brightness, 0, 1);
+    finalColor = vec4(brightness * 1.5 * object_color, 1);
 }
