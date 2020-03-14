@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.3)
 
-project(AmpleGUI)
+project(ample-gui)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -std=c++17 -fPIC")
 
@@ -24,7 +24,7 @@ set(IMGUI_SOURCES
 set(SOURCES
     src/main.cpp)
 
-add_executable(AmpleGUI ${SOURCES} ${IMGUI_SOURCES})
+add_executable(ample-gui ${SOURCES} ${IMGUI_SOURCES})
 
-target_link_libraries(AmpleGUI ${SDL2_LIBRARY})
-target_link_libraries(AmpleGUI Ample)
+target_link_libraries(ample-gui ${SDL2_LIBRARY})
+target_link_libraries(ample-gui ample)
