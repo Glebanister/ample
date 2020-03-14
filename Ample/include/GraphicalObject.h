@@ -18,7 +18,7 @@ public:
 
     void draw(glm::mat4 rotated = glm::mat4{1.0f},
               glm::mat4 translated = glm::mat4{1.0f});
-    virtual void drawSelf(const glm::mat4 &modelMatrix) = 0;
+    virtual void drawSelf() = 0;
     void addSubObject(GraphicalObject &object);
 
     float getX() const;

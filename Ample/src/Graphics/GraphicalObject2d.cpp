@@ -77,7 +77,7 @@ GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphic
     DEBUG("Setup graphical object 2d done!");
 }
 
-void GraphicalObject2d::drawSelf(const glm::mat4 &)
+void GraphicalObject2d::drawSelf()
 {
     _sideArray->execute();
     _faceArray->execute();

@@ -15,9 +15,9 @@ OpenGLEnvironment::OpenGLEnvironment()
     DEBUG("Setting up opengl environment");
     SDLEnvironment::instance();
     graphics::shaders::ShaderProcessor::instance().addShader(ample::graphics::shaders::shaderType::VERTEX,
-                                                 "../../Ample/src/Graphics/Shaders/Shaders/BasicVertexShader.vert");
+                                                             "../../Ample/src/Graphics/Shaders/Shaders/BasicVertexShader.vert");
     graphics::shaders::ShaderProcessor::instance().addShader(ample::graphics::shaders::shaderType::FRAGMENT,
-                                "../../Ample/src/Graphics/Shaders/Shaders/BasicFragmentShader.frag");
+                                                             "../../Ample/src/Graphics/Shaders/Shaders/BasicFragmentShader.frag");
     graphics::shaders::ShaderProcessor::instance().link();
     graphics::shaders::ShaderProcessor::instance().use();
 
@@ -29,18 +29,9 @@ OpenGLEnvironment::OpenGLEnvironment()
     DEBUG("Opengl environment done!");
 }
 
-OpenGLEnvironment &OpenGLEnvironment::instance()
-{
-    static OpenGLEnvironment *_instance;
-    if (!_instance)
-    {
-        _instance = new OpenGLEnvironment();
-    }
-    return *_instance;
-}
-
 OpenGLEnvironment::~OpenGLEnvironment()
 {
     glDeleteVertexArrays(1, &_vertexArrayId);
+    DEBUG("Quit from opengl context");
 }
 } // namespace ample::os::environment

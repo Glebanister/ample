@@ -17,7 +17,7 @@ public:
                 const Color specular);
     LightSource();
 
-    void drawSelf(const glm::mat4 &) override;
+    void drawSelf() override;
 
 private:
     float _intensity;

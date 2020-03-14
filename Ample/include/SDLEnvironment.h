@@ -1,13 +1,12 @@
 #pragma once
 
+#include "Singleton.h"
+
 namespace ample::os::environment
 {
-class SDLEnvironment final
+class SDLEnvironment : public utils::Singleton<SDLEnvironment>
 {
-public:
-    static SDLEnvironment &instance();
-
-private:
+protected:
     SDLEnvironment();
     ~SDLEnvironment();
 };

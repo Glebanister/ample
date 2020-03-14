@@ -50,7 +50,7 @@ void GraphicalObject::draw(glm::mat4 rotated,
     translated *= _translated;
     _modelMatrix = translated * rotated;
     _modelMatrixUniform->load();
-    drawSelf(_modelMatrix);
+    drawSelf();
     for (auto subObject : _subObjects)
     {
         subObject->draw(rotated, translated);

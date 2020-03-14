@@ -24,18 +24,9 @@ SDLEnvironment::SDLEnvironment()
     DEBUG("SDL environment done");
 }
 
-SDLEnvironment &SDLEnvironment::instance()
-{
-    static SDLEnvironment *_instance;
-    if (!_instance)
-    {
-        _instance = new SDLEnvironment();
-    }
-    return *_instance;
-}
-
 SDLEnvironment::~SDLEnvironment()
 {
     SDL_Quit();
+    DEBUG("Quit SDL environment");
 }
 } // namespace ample::os::environment

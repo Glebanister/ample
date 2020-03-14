@@ -24,9 +24,9 @@ LightSource::LightSource(const Color ambient,
 LightSource::LightSource()
     : LightSource(Color{}, Color{}, Color{}) {}
 
-void LightSource::drawSelf(const glm::mat4 &modelMatrix)
+void LightSource::drawSelf()
 {
-    _position = modelMatrix * glm::vec4{1.0f};
+    _position = _modelMatrix * glm::vec4{1.0f};
     _lightVectorUniform->load();
 }
 } // namespace ample::graphics::light

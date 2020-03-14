@@ -22,7 +22,7 @@ public:
                       const float depth,
                       const float z);
 
-    void drawSelf(const glm::mat4 &) override;
+    void drawSelf() override;
 
     void setFaceColor256(Color color);
     void setSideColor256(Color color);
