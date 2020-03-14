@@ -1,6 +1,6 @@
 #include "WorldDistanceJoint.h"
 #include <cmath>
-
+#include <iostream>
 namespace ample::physics
 {
 WorldDistanceJoint2d::WorldDistanceJoint2d(b2DistanceJoint *joint,
@@ -20,10 +20,10 @@ void WorldDistanceJoint2d::onActive()
                   (_bodyA.getPosition().y + _bodyB.getPosition().y) / 2, getZ()});
 
     float gip = getLength();
-    float angle = acos(abs(_bodyA.getPosition().y - _bodyB.getPosition().y) / gip);
+    float angle = acos(std::min((float)1, abs(_bodyA.getPosition().y - _bodyB.getPosition().y) / gip));
     if (_bodyA.getPosition().y >= _bodyB.getPosition().y)
     {
-        if (_bodyA.getPosition().x >= _bodyB.getPosition().x)
+        if (_bodyA.getPosition().x > _bodyB.getPosition().x)
         {
             setRotate({0.0f, 0.0f, 1.0f}, 180 - angle * 180.0f / M_PI);
         }
@@ -34,7 +34,7 @@ void WorldDistanceJoint2d::onActive()
     }
     else
     {
-        if (_bodyA.getPosition().x >= _bodyB.getPosition().x)
+        if (_bodyA.getPosition().x > _bodyB.getPosition().x)
         {
             setRotate({0.0f, 0.0f, 1.0f}, angle * 180.0f / M_PI);
         }

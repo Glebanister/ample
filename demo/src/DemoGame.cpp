@@ -103,7 +103,7 @@ void DemoGame::onActive()
     LayeredWindowActivity::onActive();
     if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_g))
     {
-        brick1->applyForceToCenter({10000, 0}, true);
+        brick1->applyForceToCenter({0, -100000}, true);
     }
     if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_f))
     {
