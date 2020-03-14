@@ -83,14 +83,4 @@ void GraphicalObject2d::drawSelf(const glm::mat4 &)
     _faceArray->execute();
     exception::OpenGLException::handle();
 }
-
-void GraphicalObject2d::setFaceColor256(Color color)
-{
-    _faceArray->setColor256(color.r, color.g, color.b);
-}
-
-void GraphicalObject2d::setSideColor256(Color color)
-{
-    _sideArray->setColor256(color.r, color.g, color.b);
-}
 } // namespace ample::graphics

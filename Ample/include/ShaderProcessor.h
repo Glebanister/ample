@@ -21,6 +21,7 @@ public:
     GLuint getProgramId() const;
     void link();
     void use();
+    GLint getUniformLocation(const std::string &name);
 
 private:
     ShaderProcessor();

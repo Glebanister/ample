@@ -17,7 +17,7 @@ LightSource::LightSource(const Color ambient,
     : _ambient(ambient.r, ambient.g, ambient.b, ambient.a),
       _diffuse(diffuse.r, diffuse.g, diffuse.b, diffuse.a),
       _specular(specular.r, specular.g, specular.b, specular.a),
-      _lightVectorId(glGetUniformLocation(shaders::ShaderProcessor::instance().getProgramId(), "light_position"))
+      _lightVectorId(shaders::ShaderProcessor::instance().getUniformLocation("light_position"))
 {
 }
 

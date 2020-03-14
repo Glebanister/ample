@@ -76,6 +76,11 @@ void ShaderProcessor::use()
     glUseProgram(_programId);
 }
 
+GLint ShaderProcessor::getUniformLocation(const std::string &name)
+{
+    return glGetUniformLocation(_programId, name.c_str());
+}
+
 ShaderProcessor::~ShaderProcessor()
 {
     DEBUG("Shader processor dtor");

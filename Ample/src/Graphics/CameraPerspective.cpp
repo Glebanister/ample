@@ -28,10 +28,9 @@ CameraPerspective::CameraPerspective(const Vector2d<pixel_t> &viewSize,
       _aspectRatio(aspectRatio),
       _nearClip(nearClip),
       _farClip(farClip),
-      _programId(shaders::ShaderProcessor::instance().getProgramId()),
-      _viewMatrixId(glGetUniformLocation(_programId, "view_matrix")),
-      _projectionMatrixId(glGetUniformLocation(_programId, "projection_matrix")),
-      _eyeVectorId(glGetUniformLocation(_programId, "eye_position"))
+      _viewMatrixId(shaders::ShaderProcessor::instance().getUniformLocation("view_matrix")),
+      _projectionMatrixId(shaders::ShaderProcessor::instance().getUniformLocation("projection_matrix")),
+      _eyeVectorId(shaders::ShaderProcessor::instance().getUniformLocation("eye_position"))
 {
     DEBUG("Setup perspective camera") << _programId << ' ' << _projectionMatrixId << ' ' << _viewMatrixId << ' ' << _fov << ' ' << _aspectRatio << ' ' << std::endl;
     exception::OpenGLException::handle();

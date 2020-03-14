@@ -13,7 +13,7 @@ namespace ample::graphics
 {
 GraphicalObject::GraphicalObject()
     : _programId(shaders::ShaderProcessor::instance().getProgramId()),
-      _modelMatrixId(glGetUniformLocation(_programId, "model_matrix")) {}
+      _modelMatrixId(shaders::ShaderProcessor::instance().getUniformLocation("model_matrix")) {}
 
 void GraphicalObject::addSubObject(GraphicalObject &object)
 {
