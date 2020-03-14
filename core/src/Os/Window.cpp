@@ -97,6 +97,11 @@ void Window::resize(const pixel_t w, const pixel_t &h)
     _height = h;
 }
 
+SDL_Window *Window::pointer()
+{
+    return _winPtr;
+}
+
 Window::~Window()
 {
     SDL_DestroyWindow(_winPtr);

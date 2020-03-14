@@ -17,6 +17,8 @@ public:
 
     void addLayer(Layer &layer);
     void cleanLayers();
+    void onActive() override;
+    void onAwake() override;
 
 private:
     std::vector<Layer *> _layers;
