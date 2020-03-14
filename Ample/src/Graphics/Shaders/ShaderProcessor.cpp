@@ -12,17 +12,6 @@
 
 namespace ample::graphics::shaders
 {
-ShaderProcessor &ShaderProcessor::instance()
-{
-    static ShaderProcessor *pInstance = nullptr;
-    if (!pInstance)
-    {
-        pInstance = new ShaderProcessor{};
-        DEBUG("Init shader processor");
-    }
-    return *pInstance;
-}
-
 ShaderProcessor::ShaderProcessor()
 {
     _programId = glCreateProgram();
@@ -86,7 +75,7 @@ GLint ShaderProcessor::getUniformLocation(const std::string &name)
 
 ShaderProcessor::~ShaderProcessor()
 {
-    DEBUG("Shader processor dtor");
+    DEBUG("Destroy shader processor");
     glDeleteProgram(_programId);
 }
 

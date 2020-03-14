@@ -18,7 +18,7 @@ class OpenGLEnvironment;
 
 namespace ample::graphics::shaders
 {
-class ShaderProcessor final : utils::Noncopyable
+class ShaderProcessor : public utils::Singleton<ShaderProcessor>
 {
 public:
     enum class UniformType
@@ -48,16 +48,13 @@ public:
     };
 
 public:
-    static ShaderProcessor &instance();
-
     void addShader(shaderType shaderType, const std::string &shaderPath);
     GLuint getProgramId() const;
     GLint getUniformLocation(const std::string &name);
     void link();
     void use();
 
-private:
-
+protected:
     ShaderProcessor();
     ~ShaderProcessor();
     std::unordered_map<std::string, bool> _hasShader;

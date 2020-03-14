@@ -61,8 +61,8 @@ Shader::Shader(GLuint programId, shaderType shaderType, const std::string &shade
 
 Shader::~Shader()
 {
-    DEBUG("Shader dtor");
     glDetachShader(_programId, _shaderId);
     glDeleteShader(_shaderId);
+    DEBUG("Shader dtor");
 }
 } // namespace ample::graphics::shaders
