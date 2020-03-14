@@ -4,5 +4,5 @@ project(Ample)
 
 include_directories(${CMAKE_PROJECT_NAME}/include)
 
-add_subdirectory(${CMAKE_PROJECT_NAME})
-
+add_subdirectory(Ample)
+add_subdirectory(gui)
