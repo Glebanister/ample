@@ -44,18 +44,13 @@ WindowActivity::WindowActivity(Window &window)
     time::Clock::update();
     this->_window.swapBuffer();
     eventManager->update();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    graphics::shaders::ShaderProcessor::instance().use();
 }
 
 void WindowActivity::onActive()
 {
     activity::Activity::onActive();
     time::Clock::update();
-    this->_window.swapBuffer();
     eventManager->update();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    graphics::shaders::ShaderProcessor::instance().use();
 }
 
 pixel_t WindowActivity::getWidth() const
