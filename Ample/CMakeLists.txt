@@ -33,6 +33,8 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Os/Clock.cpp
     src/Os/Exception.cpp
     src/Os/Window.cpp
+    src/Os/OpenGLEnvironment.cpp
+    src/Os/SDLEnvironment.cpp
 
     src/Utils/Utils.cpp
     src/Utils/Singleton.cpp

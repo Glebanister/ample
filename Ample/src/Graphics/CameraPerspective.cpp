@@ -33,7 +33,7 @@ CameraPerspective::CameraPerspective(const Vector2d<pixel_t> &viewSize,
       _eyeVectorUniform(shaders::ShaderProcessor::instance().addUniform(_position, "eye_position"))
 
 {
-    // DEBUG("Setup perspective camera") << _fov << ' ' << _aspectRatio << ' ' << std::endl;
+    DEBUG("Setup perspective camera") << _fov << ' ' << _aspectRatio << ' ' << std::endl;
     exception::OpenGLException::handle();
 }
 
