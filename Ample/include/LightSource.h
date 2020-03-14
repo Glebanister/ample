@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <memory>
 
 #include "Color.h"
 #include "GraphicalObject.h"
@@ -24,7 +25,7 @@ private:
     glm::vec4 _diffuse;
     glm::vec4 _specular;
     uint8_t _index;
-    shaders::ShaderProcessor::Uniform &_lightVectorUniform;
-    glm::vec4 _position;
+    std::unique_ptr<shaders::ShaderProcessor::Uniform> _lightVectorUniform;
+    glm::vec3 _position;
 };
 } // namespace ample::graphics::light

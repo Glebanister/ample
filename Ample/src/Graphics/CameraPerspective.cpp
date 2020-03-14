@@ -7,6 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <memory>
 
 #include "CameraPerspective.h"
 #include "Debug.h"
@@ -28,10 +29,9 @@ CameraPerspective::CameraPerspective(const Vector2d<pixel_t> &viewSize,
       _aspectRatio(aspectRatio),
       _nearClip(nearClip),
       _farClip(farClip),
-      _viewMatrixUniform(shaders::ShaderProcessor::instance().addUniform(_viewMatrix, "view_matrix")),
-      _projectionMatrixUniform(shaders::ShaderProcessor::instance().addUniform(_projectionMatrix, "projection_matrix")),
-      _eyeVectorUniform(shaders::ShaderProcessor::instance().addUniform(_position, "eye_position"))
-
+      _viewMatrixUniform(std::make_unique<shaders::ShaderProcessor::Uniform>(_viewMatrix, "view_matrix")),
+      _projectionMatrixUniform(std::make_unique<shaders::ShaderProcessor::Uniform>(_projectionMatrix, "projection_matrix")),
+      _eyeVectorUniform(std::make_unique<shaders::ShaderProcessor::Uniform>(_position, "eye_position"))
 {
     DEBUG("Setup perspective camera") << _fov << ' ' << _aspectRatio << ' ' << std::endl;
     exception::OpenGLException::handle();
@@ -46,9 +46,9 @@ void CameraPerspective::look()
                                          _nearClip,
                                          _farClip);
 
-    _viewMatrixUniform.load();
-    _projectionMatrixUniform.load();
-    _eyeVectorUniform.load();
+    _viewMatrixUniform->load();
+    _projectionMatrixUniform->load();
+    _eyeVectorUniform->load();
 
     exception::OpenGLException::handle();
 }

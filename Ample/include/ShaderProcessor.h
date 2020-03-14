@@ -9,6 +9,12 @@
 #include "Shader.h"
 #include "Singleton.h"
 #include "Noncopyable.h"
+#include "OpenGLEnvironment.h"
+
+namespace ample::os::environment
+{
+class OpenGLEnvironment;
+}
 
 namespace ample::graphics::shaders
 {
@@ -25,7 +31,10 @@ public:
 
     struct Uniform
     {
+    private:
         Uniform(float *, const std::string &);
+    
+    public:    
         Uniform(glm::mat4 &, const std::string &);
         Uniform(glm::mat3 &, const std::string &);
         Uniform(glm::vec4 &, const std::string &);
@@ -35,6 +44,7 @@ public:
         float *pointer;
         UniformType type;
         GLint location;
+        std::string _name;
     };
 
 public:
@@ -45,12 +55,6 @@ public:
     GLint getUniformLocation(const std::string &name);
     void link();
     void use();
-    template <typename T>
-    Uniform &addUniform(T &data, const std::string &name)
-    {
-        _uniforms.emplace_back(data, name);
-        return _uniforms.back();
-    }
 
 private:
 

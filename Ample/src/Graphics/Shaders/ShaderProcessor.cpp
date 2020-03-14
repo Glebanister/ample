@@ -8,6 +8,7 @@
 #include "Debug.h"
 #include "Exception.h"
 #include "Shader.h"
+#include "OpenGLEnvironment.h"
 
 namespace ample::graphics::shaders
 {
@@ -91,7 +92,8 @@ ShaderProcessor::~ShaderProcessor()
 
 ShaderProcessor::Uniform::Uniform(float *data, const std::string &name)
     : pointer(data),
-      location(glGetUniformLocation(ShaderProcessor::instance().getProgramId(), name.c_str()))
+      location(glGetUniformLocation(ShaderProcessor::instance().getProgramId(), name.c_str())),
+      _name(name)
 {
     if (location < 0)
     {
@@ -99,37 +101,45 @@ ShaderProcessor::Uniform::Uniform(float *data, const std::string &name)
                                    exception::exType::CRITICAL,
                                    "could not find uniform '" + name + "'");
     }
-    exception::OpenGLException::handle();
+    DEBUG(name + " found in " + std::to_string(location));
+    ASSERT(pointer);
+    DEBUG("Uniform is ready: " + _name);
 }
 
 ShaderProcessor::Uniform::Uniform(glm::mat4 &data, const std::string &name)
     : Uniform(glm::value_ptr(data), name)
 {
     type = UniformType::MAT4;
+    DEBUG("MAT4");
 }
 ShaderProcessor::Uniform::Uniform(glm::mat3 &data, const std::string &name)
     : Uniform(glm::value_ptr(data), name)
 {
     type = UniformType::MAT3;
+    DEBUG("MAT3");
 }
 ShaderProcessor::Uniform::Uniform(glm::vec4 &data, const std::string &name)
     : Uniform(glm::value_ptr(data), name)
 {
     type = UniformType::VEC4;
+    DEBUG("VEC4");
 }
 ShaderProcessor::Uniform::Uniform(glm::vec3 &data, const std::string &name)
     : Uniform(glm::value_ptr(data), name)
 {
     type = UniformType::VEC3;
+    DEBUG("VEC3");
 }
 
 void ShaderProcessor::Uniform::load()
 {
+    ASSERT(_name.length() != 0);
+    // DEBUG("Loading uniform " + _name);
     if (!pointer)
     {
         throw exception::Exception(exception::exId::OPENGL,
                                    exception::exType::CRITICAL,
-                                   "uniform pointer is null");
+                                   "uniform pointer is null" + _name);
     }
     switch (type)
     {
@@ -146,5 +156,7 @@ void ShaderProcessor::Uniform::load()
         glUniform3fv(location, 1, pointer);
         break;
     }
+    exception::OpenGLException::handle();
+    // DEBUG("Load uniform");
 }
 } // namespace ample::graphics::shaders

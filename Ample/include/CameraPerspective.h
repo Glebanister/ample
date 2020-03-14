@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "Camera.h"
 #include "ShaderProcessor.h"
 
@@ -36,8 +38,8 @@ private:
     glm::highp_mat4 _viewMatrix;
     glm::highp_mat4 _projectionMatrix;
 
-    shaders::ShaderProcessor::Uniform &_viewMatrixUniform;
-    shaders::ShaderProcessor::Uniform &_projectionMatrixUniform;
-    shaders::ShaderProcessor::Uniform &_eyeVectorUniform;
+    std::unique_ptr<shaders::ShaderProcessor::Uniform> _viewMatrixUniform;
+    std::unique_ptr<shaders::ShaderProcessor::Uniform> _projectionMatrixUniform;
+    std::unique_ptr<shaders::ShaderProcessor::Uniform> _eyeVectorUniform;
 };
 } // namespace ample::graphics

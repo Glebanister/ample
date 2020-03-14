@@ -5,9 +5,10 @@ namespace ample::os::environment
 class SDLEnvironment final
 {
 public:
-    SDLEnvironment &instance();
+    static SDLEnvironment &instance();
 
 private:
     SDLEnvironment();
+    ~SDLEnvironment();
 };
 } // namespace ample::os::environment

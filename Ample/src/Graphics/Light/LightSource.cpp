@@ -17,7 +17,7 @@ LightSource::LightSource(const Color ambient,
     : _ambient(ambient.r, ambient.g, ambient.b, ambient.a),
       _diffuse(diffuse.r, diffuse.g, diffuse.b, diffuse.a),
       _specular(specular.r, specular.g, specular.b, specular.a),
-      _lightVectorUniform(shaders::ShaderProcessor::instance().addUniform(_position, "light_position"))
+      _lightVectorUniform(std::make_unique<shaders::ShaderProcessor::Uniform>(_position, "light_position"))
 {
 }
 
@@ -27,6 +27,6 @@ LightSource::LightSource()
 void LightSource::drawSelf(const glm::mat4 &modelMatrix)
 {
     _position = modelMatrix * glm::vec4{1.0f};
-    _lightVectorUniform.load();
+    _lightVectorUniform->load();
 }
 } // namespace ample::graphics::light
