@@ -28,26 +28,27 @@ CameraPerspective::CameraPerspective(const Vector2d<pixel_t> &viewSize,
       _aspectRatio(aspectRatio),
       _nearClip(nearClip),
       _farClip(farClip),
-      _viewMatrixId(shaders::ShaderProcessor::instance().getUniformLocation("view_matrix")),
-      _projectionMatrixId(shaders::ShaderProcessor::instance().getUniformLocation("projection_matrix")),
-      _eyeVectorId(shaders::ShaderProcessor::instance().getUniformLocation("eye_position"))
+      _viewMatrixUniform(shaders::ShaderProcessor::instance().addUniform(_viewMatrix, "view_matrix")),
+      _projectionMatrixUniform(shaders::ShaderProcessor::instance().addUniform(_projectionMatrix, "projection_matrix")),
+      _eyeVectorUniform(shaders::ShaderProcessor::instance().addUniform(_position, "eye_position"))
+
 {
-    DEBUG("Setup perspective camera") << _programId << ' ' << _projectionMatrixId << ' ' << _viewMatrixId << ' ' << _fov << ' ' << _aspectRatio << ' ' << std::endl;
+    // DEBUG("Setup perspective camera") << _fov << ' ' << _aspectRatio << ' ' << std::endl;
     exception::OpenGLException::handle();
 }
 
 void CameraPerspective::look()
 {
     _viewport.set();
-    auto viewMatrix = glm::lookAt(_position, _position + _direction, {0, 1, 0});
-    auto projectionMatrix = glm::perspective(glm::radians(_fov),
-                                             _aspectRatio,
-                                             _nearClip,
-                                             _farClip);
+    _viewMatrix = glm::lookAt(_position, _position + _direction, {0, 1, 0});
+    _projectionMatrix = glm::perspective(glm::radians(_fov),
+                                         _aspectRatio,
+                                         _nearClip,
+                                         _farClip);
 
-    glUniformMatrix4fv(_projectionMatrixId, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
-    glUniformMatrix4fv(_viewMatrixId, 1, GL_FALSE, glm::value_ptr(viewMatrix));
-    glUniform3fv(_eyeVectorId, 1, glm::value_ptr(_position));
+    _viewMatrixUniform.load();
+    _projectionMatrixUniform.load();
+    _eyeVectorUniform.load();
 
     exception::OpenGLException::handle();
 }

@@ -4,6 +4,7 @@
 
 #include "Color.h"
 #include "GraphicalObject.h"
+#include "ShaderProcessor.h"
 
 namespace ample::graphics::light
 {
@@ -15,13 +16,6 @@ public:
                 const Color specular);
     LightSource();
 
-    glm::vec4 getAmbient() const;
-    glm::vec4 getDiffuse() const;
-    glm::vec4 getSpecular() const;
-    void setAmbient(const glm::vec4 &color);
-    void setDiffuse(const glm::vec4 &color);
-    void setSpecular(const glm::vec4 &color);
-
     void drawSelf(const glm::mat4 &) override;
 
 private:
@@ -30,6 +24,7 @@ private:
     glm::vec4 _diffuse;
     glm::vec4 _specular;
     uint8_t _index;
-    GLuint _lightVectorId;
+    shaders::ShaderProcessor::Uniform &_lightVectorUniform;
+    glm::vec4 _position;
 };
 } // namespace ample::graphics::light

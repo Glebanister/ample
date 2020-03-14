@@ -1,6 +1,8 @@
 #define GL_GLEXT_PROTOTYPES 1
+#define GLM_ENABLE_EXPERIMENTAL
 
 #include <GL/gl.h>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "ShaderProcessor.h"
 #include "Debug.h"
@@ -85,5 +87,64 @@ ShaderProcessor::~ShaderProcessor()
 {
     DEBUG("Shader processor dtor");
     glDeleteProgram(_programId);
+}
+
+ShaderProcessor::Uniform::Uniform(float *data, const std::string &name)
+    : pointer(data),
+      location(glGetUniformLocation(ShaderProcessor::instance().getProgramId(), name.c_str()))
+{
+    if (location < 0)
+    {
+        throw exception::Exception(exception::exId::OPENGL,
+                                   exception::exType::CRITICAL,
+                                   "could not find uniform '" + name + "'");
+    }
+    exception::OpenGLException::handle();
+}
+
+ShaderProcessor::Uniform::Uniform(glm::mat4 &data, const std::string &name)
+    : Uniform(glm::value_ptr(data), name)
+{
+    type = UniformType::MAT4;
+}
+ShaderProcessor::Uniform::Uniform(glm::mat3 &data, const std::string &name)
+    : Uniform(glm::value_ptr(data), name)
+{
+    type = UniformType::MAT3;
+}
+ShaderProcessor::Uniform::Uniform(glm::vec4 &data, const std::string &name)
+    : Uniform(glm::value_ptr(data), name)
+{
+    type = UniformType::VEC4;
+}
+ShaderProcessor::Uniform::Uniform(glm::vec3 &data, const std::string &name)
+    : Uniform(glm::value_ptr(data), name)
+{
+    type = UniformType::VEC3;
+}
+
+void ShaderProcessor::Uniform::load()
+{
+    if (!pointer)
+    {
+        throw exception::Exception(exception::exId::OPENGL,
+                                   exception::exType::CRITICAL,
+                                   "uniform pointer is null");
+    }
+    switch (type)
+    {
+    case UniformType::MAT4:
+        glUniformMatrix4fv(location, 1, GL_FALSE, pointer);
+        break;
+    case UniformType::MAT3:
+        glUniformMatrix3fv(location, 1, GL_FALSE, pointer);
+        break;
+    case UniformType::VEC4:
+        glUniform4fv(location, 1, pointer);
+        break;
+    case UniformType::VEC3:
+        glUniform3fv(location, 1, pointer);
+        break;
+    }
 }
 } // namespace ample::graphics::shaders

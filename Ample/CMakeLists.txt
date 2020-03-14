@@ -77,7 +77,7 @@ include_directories(include)
 
 set(SOURCE_LIB ${${CMAKE_PROJECT_NAME}_SOURCES})
 
-add_library(${CMAKE_PROJECT_NAME} STATIC ${SOURCE_LIB})
+add_library(${CMAKE_PROJECT_NAME} SHARED ${SOURCE_LIB})
 
 target_link_libraries(${CMAKE_PROJECT_NAME} ${SDL2_LIBRARY})
 target_link_libraries(${CMAKE_PROJECT_NAME} ${OPENGL_gl_LIBRARY})
