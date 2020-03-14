@@ -5,6 +5,7 @@
 #include <vector>
 #include <GL/gl.h>
 #include <glm/glm.hpp>
+#include <string>
 
 #include "GraphicalObject.h"
 #include "Vector2d.h"
