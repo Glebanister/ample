@@ -2,15 +2,24 @@
 
 namespace ample::utils
 {
+template <typename T>
 class Singleton
 {
 public:
-    static Singleton &instance();
-    Singleton(const Singleton &) = delete;
-    Singleton &operator=(const Singleton &) = delete;
+    static T &instance()
+    {
+        struct T_Proxy : public T
+        {
+            T_Proxy() : T() {}
+        };
+        static T_Proxy inst;
+        return inst;
+    }
 
-private:
-    Singleton() {}
-    ~Singleton() {}
+    Singleton &operator=(Singleton const &) = delete;
+    Singleton &operator=(Singleton &&) = delete;
+
+protected:
+    Singleton() = default;
 };
 } // namespace ample::utils

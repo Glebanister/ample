@@ -45,6 +45,7 @@ sudo apt-get install libglm-dev > output
 sudo apt-get install libgles2-mesa-dev > output
 sudo apt-get install libegl1-mesa-dev > output
 sudo apt-get install libsdl2-dev > output
+sudo apt-get install libdevil1c2 libdevil-dev > output
 
 # echo python3
 # sudo apt-get install python3.6 > output

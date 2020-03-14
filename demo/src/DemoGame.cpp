@@ -85,13 +85,13 @@ DemoGame::DemoGame(ample::window::Window &window)
     d.I = 1;
     brick1->setMassData(d);
     //ground->setFaceColor256({20, 100, 70});
-    brick1->setFaceColor256(0x964B00);
-    q.setFaceColor256(0xff69b4);
-    q2.setFaceColor256(0xff69b4);
-    q3.setFaceColor256(0xff69b4);
+    // brick1->setFaceColor256(0x964B00);
+    // q.setFaceColor256(0xff69b4);
+    // q2.setFaceColor256(0xff69b4);
+    // q3.setFaceColor256(0xff69b4);
     //q.setLength(20);
     //ground->setSideColor256({20, 100, 70});
-    brick3->setFaceColor256(0x964B00);
+    // brick3->setFaceColor256(0x964B00);
     _window.disableCursor();
     worldLayer.addObject(lamp);
     lamp.translate({0, -10, -140});

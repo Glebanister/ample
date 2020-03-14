@@ -10,7 +10,7 @@ set(SOURCES
     src/CameraBehavior.cpp)
 
 find_library(AMPLE_LIBRARY NAME Ample
-                           PATHS ../build/Ample)
+                           PATHS ../build/Ample/)
 find_path(AMPLE_INCLUDE_DIR NAMES Activity.h
                             PATHS ../Ample/include)
 

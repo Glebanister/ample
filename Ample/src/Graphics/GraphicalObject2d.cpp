@@ -47,9 +47,7 @@ static std::vector<Vector3d<float>> generateSideNormals(const std::vector<Vector
 GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphicalShape,
                                      const float depth,
                                      const float z)
-    : _programId(shaders::ShaderProcessor::instance().getProgramId()),
-      _modelMatrixId(glGetUniformLocation(_programId, "model_matrix")),
-      _depth(depth),
+    : _depth(depth),
       _z(z)
 {
     DEBUG("Setup graphical object 2d");
@@ -71,28 +69,18 @@ GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphic
     for (size_t i = 1; i < verts - 1; ++i)
     {
         faceArray.emplace_back(graphicalShape[0].x, graphicalShape[0].y, z);
-        faceArray.emplace_back(graphicalShape[i + 1].x, graphicalShape[i + 1].y, z);
         faceArray.emplace_back(graphicalShape[i].x, graphicalShape[i].y, z);
+        faceArray.emplace_back(graphicalShape[i + 1].x, graphicalShape[i + 1].y, z);
     }
     _sideArray = std::make_unique<VertexArray>(sideArray, normalsMode::FACE, generateSideNormals(sideArray));
     _faceArray = std::make_unique<VertexArray>(faceArray, normalsMode::SINGLE, generateFaceNormals(faceArray));
     DEBUG("Setup graphical object 2d done!");
 }
 
-void GraphicalObject2d::drawSelf(const glm::mat4 &)
+void GraphicalObject2d::drawSelf()
 {
     _sideArray->execute();
     _faceArray->execute();
     exception::OpenGLException::handle();
-}
-
-void GraphicalObject2d::setFaceColor256(Color color)
-{
-    _faceArray->setColor256(color.r, color.g, color.b);
-}
-
-void GraphicalObject2d::setSideColor256(Color color)
-{
-    _sideArray->setColor256(color.r, color.g, color.b);
 }
 } // namespace ample::graphics

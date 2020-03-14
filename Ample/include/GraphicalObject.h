@@ -6,6 +6,7 @@
 #include <GL/gl.h>
 
 #include "Vector3d.h"
+#include "ShaderProcessor.h"
 #include "Behaviour.h"
 
 namespace ample::graphics
@@ -17,7 +18,7 @@ public:
 
     void draw(glm::mat4 rotated = glm::mat4{1.0f},
               glm::mat4 translated = glm::mat4{1.0f});
-    virtual void drawSelf(const glm::mat4 &modelMatrix) = 0;
+    virtual void drawSelf() = 0;
     void addSubObject(GraphicalObject &object);
 
     float getX() const;
@@ -34,7 +35,7 @@ protected:
     std::vector<GraphicalObject *> _subObjects;
     glm::mat4 _translated{1.0f};
     glm::mat4 _rotated{1.0f};
-    const GLuint _programId;
-    const GLuint _modelMatrixId;
+    glm::mat4 _modelMatrix{1.0f};
+    std::unique_ptr<shaders::ShaderProcessor::Uniform> _modelMatrixUniform;
 };
 } // namespace ample::graphics

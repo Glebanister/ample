@@ -1,6 +1,9 @@
 #pragma once
 
+#include <memory>
+
 #include "Camera.h"
+#include "ShaderProcessor.h"
 
 namespace ample::graphics
 {
@@ -32,9 +35,11 @@ private:
     float _aspectRatio;
     float _nearClip;
     float _farClip;
-    GLuint _programId;
-    GLuint _viewMatrixId;
-    GLuint _projectionMatrixId;
-    GLuint _eyeVectorId;
+    glm::mat4 _viewMatrix{1.0f};
+    glm::mat4 _projectionMatrix{1.0f};
+
+    std::unique_ptr<shaders::ShaderProcessor::Uniform> _viewMatrixUniform;
+    std::unique_ptr<shaders::ShaderProcessor::Uniform> _projectionMatrixUniform;
+    std::unique_ptr<shaders::ShaderProcessor::Uniform> _eyeVectorUniform;
 };
 } // namespace ample::graphics

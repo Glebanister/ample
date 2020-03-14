@@ -12,6 +12,9 @@ set(GLM_INCLUDE_DIRS /usr/include/glm/)
 
 set(GLU_LIBRARY /usr/lib/x86_64-linux-gnu/libGLU.so)
 
+set(IL_LIBRARY /usr/lib/x86_64-linux-gnu/libIL.so.1)
+set(IL_INCLUDE_DIRS /usr/include/IL/)
+
 add_subdirectory(../extern/box2d buildBox2d)
 add_subdirectory(../extern/rapidjson buildRapidjson)
 
@@ -30,6 +33,8 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Os/Clock.cpp
     src/Os/Exception.cpp
     src/Os/Window.cpp
+    src/Os/OpenGLEnvironment.cpp
+    src/Os/SDLEnvironment.cpp
 
     src/Utils/Utils.cpp
     src/Utils/Singleton.cpp
@@ -68,6 +73,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${OPENGL_INCLUDE_DIRS})
 include_directories(${GLM_INCLUDE_DIRS})
+include_directories(${IL_INCLUDE_DIRS})
 
 include_directories(include)
 
@@ -78,4 +84,5 @@ add_library(${CMAKE_PROJECT_NAME} SHARED ${SOURCE_LIB})
 target_link_libraries(${CMAKE_PROJECT_NAME} ${SDL2_LIBRARY})
 target_link_libraries(${CMAKE_PROJECT_NAME} ${OPENGL_gl_LIBRARY})
 target_link_libraries(${CMAKE_PROJECT_NAME} ${GLU_LIBRARY})
+target_link_libraries(${CMAKE_PROJECT_NAME} ${IL_LIBRARY})
 target_link_libraries(${CMAKE_PROJECT_NAME} box2d)
