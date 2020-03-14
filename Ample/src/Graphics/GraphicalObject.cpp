@@ -40,7 +40,7 @@ void GraphicalObject::setRotate(glm::vec3 axis, float angle)
 }
 void GraphicalObject::rotate(glm::vec3 axis, float angle)
 {
-    _rotated *= glm::rotate(_rotated, glm::radians(angle), axis);
+    _rotated = glm::rotate(_rotated, glm::radians(angle), axis);
 }
 
 void GraphicalObject::draw(glm::mat4 rotated,

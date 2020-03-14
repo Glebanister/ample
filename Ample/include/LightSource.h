@@ -26,6 +26,6 @@ private:
     glm::vec4 _specular;
     uint8_t _index;
     std::unique_ptr<shaders::ShaderProcessor::Uniform> _lightVectorUniform;
-    glm::vec3 _position;
+    glm::vec3 _position{0.0f};
 };
 } // namespace ample::graphics::light

@@ -35,8 +35,8 @@ private:
     float _aspectRatio;
     float _nearClip;
     float _farClip;
-    glm::highp_mat4 _viewMatrix;
-    glm::highp_mat4 _projectionMatrix;
+    glm::mat4 _viewMatrix{1.0f};
+    glm::mat4 _projectionMatrix{1.0f};
 
     std::unique_ptr<shaders::ShaderProcessor::Uniform> _viewMatrixUniform;
     std::unique_ptr<shaders::ShaderProcessor::Uniform> _projectionMatrixUniform;

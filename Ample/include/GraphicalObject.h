@@ -35,7 +35,7 @@ protected:
     std::vector<GraphicalObject *> _subObjects;
     glm::mat4 _translated{1.0f};
     glm::mat4 _rotated{1.0f};
-    glm::mat4 _modelMatrix;
+    glm::mat4 _modelMatrix{1.0f};
     std::unique_ptr<shaders::ShaderProcessor::Uniform> _modelMatrixUniform;
 };
 } // namespace ample::graphics
