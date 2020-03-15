@@ -51,6 +51,8 @@ public:
 
     void resize(const pixel_t w, const pixel_t &h);
 
+    SDL_Window *pointer();
+
     ~Window();
 
 private:
