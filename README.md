@@ -8,21 +8,16 @@ You can create ample directories anywhere, using ample script.
 
 ### Install (Linux)
 
-`$ ./ci/travis/install-linux.sh` \
+`$ ./ci/travis/install-linux.sh` \ - installs dependencies
 `$ mkdir build && cd build` \
 `$ cmake .. && cmake --build`
 
 
-### Run (your project)
-`$ cd script` \
-`$ mkdir [your-project-name] && cd [your-project-name]` \
-`$ ../ample.py init [your-project-name]` \
-`$ ../ample.py build [your-project-name]` \
-`$ ../ample.py run [your-project-name]`
+### Create your project (in developing)
+`$ cd buile/gui` \
+`$ ./ample-gui`
 
 
 ### Run (demo)
-`$ cd demo` \
-`$ mkdir build && cd build` \
-`$ cmake .. && cmake --build .` \
-`$ ./DemoGame`
+`$ cd build/demo` \
+`$ ./demo`
