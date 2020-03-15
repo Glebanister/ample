@@ -18,9 +18,7 @@ void WorldDistanceJoint2d::onActive()
 {
     setTranslate({(_bodyA.getPosition().x + _bodyB.getPosition().x) / 2,
                   (_bodyA.getPosition().y + _bodyB.getPosition().y) / 2, getZ()});
-
-    float gip = getLength();
-    float angle = acos(std::min((float)1, abs(_bodyA.getPosition().y - _bodyB.getPosition().y) / gip));
+    float angle = atan(abs((_bodyA.getPosition().x - _bodyB.getPosition().x) / (_bodyA.getPosition().y - _bodyB.getPosition().y)));
     if (_bodyA.getPosition().y >= _bodyB.getPosition().y)
     {
         if (_bodyA.getPosition().x > _bodyB.getPosition().x)
