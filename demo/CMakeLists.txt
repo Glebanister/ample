@@ -5,9 +5,7 @@ set(APP_NAME demo)
 
 set(SOURCES
     src/main.cpp
-    src/DemoGame.cpp
-    src/SquareBehavior.cpp
-    src/CameraBehavior.cpp)
+    src/DemoGame.cpp)
 
 add_executable(${APP_NAME} ${SOURCES})
 
