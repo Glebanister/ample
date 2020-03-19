@@ -15,6 +15,8 @@ set(GLU_LIBRARY /usr/lib/x86_64-linux-gnu/libGLU.so)
 set(IL_LIBRARY /usr/lib/x86_64-linux-gnu/libIL.so.1)
 set(IL_INCLUDE_DIRS /usr/include/IL/)
 
+set(BOX2D_BUILD_UNIT_TESTS OFF CACHE BOOL "Build the Box2D unit tests")
+set(BOX2D_BUILD_TESTBED OFF CACHE BOOL "Build the Box2D testbed")
 add_subdirectory(../extern/box2d buildBox2d)
 
 set(RAPIDJSON_BUILD_DOC OFF CACHE BOOL "Build rapidjson documentation.")
@@ -72,14 +74,14 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Graphics/Light/LightSource.cpp
 
     src/Geometry/RegularPolygon.cpp
-    )
+   )
 
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${OPENGL_INCLUDE_DIRS})
 include_directories(${GLM_INCLUDE_DIRS})
 include_directories(${IL_INCLUDE_DIRS})
 
-include_directories(include)
+include_directories(include/ample)
 
 set(SOURCE_LIB ${${CMAKE_PROJECT_NAME}_SOURCES})
 

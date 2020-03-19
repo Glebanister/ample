@@ -20,7 +20,8 @@ in vec3 fragVert;
 
 out vec4 finalColor;
 
-void main() {
+void main()
+{
     mat3 normalMatrix = transpose(inverse(mat3(model_matrix)));
     vec3 normal = normalize(normalMatrix * fragNormal);
     vec3 fragPosition = vec3(model_matrix * vec4(fragVert, 1));
