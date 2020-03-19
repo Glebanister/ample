@@ -48,12 +48,9 @@ private:
         1000.0,
     };
     CameraBehavior cameraBeh{*this, camera};
-    ample::physics::WorldLayer2d worldLayer{{0.0f, -100.0f}};
-    ample::physics::WorldObject2d* ground;
-    ample::physics::WorldObject2d* brick1;
-    ample::physics::WorldObject2d* brick2;
-    ample::physics::WorldObject2d* brick3;
-    ample::physics::WorldObject2d* ground2;
+    ample::physics::WorldLayer2d worldLayer{{0.0f, -16.8f}};
+    std::shared_ptr<ample::physics::WorldObject2d> ground;
+    std::shared_ptr<ample::physics::WorldObject2d> brick;
     MyContactListener listener;
     ample::graphics::light::LightSource lamp;
     ample::random::PerlinNoise noise{42};
