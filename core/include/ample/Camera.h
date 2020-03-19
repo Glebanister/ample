@@ -5,11 +5,12 @@
 
 #include "Vector2d.h"
 #include "Vector3d.h"
+#include "Behaviour.h"
 
 namespace ample::graphics
 {
 using pixel_t = std::int32_t;
-class Camera
+class Camera : public activity::Behaviour
 {
 protected:
     struct Viewport final
