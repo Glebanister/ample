@@ -16,6 +16,10 @@ set(IL_LIBRARY /usr/lib/x86_64-linux-gnu/libIL.so.1)
 set(IL_INCLUDE_DIRS /usr/include/IL/)
 
 add_subdirectory(../extern/box2d buildBox2d)
+
+set(RAPIDJSON_BUILD_DOC OFF CACHE BOOL "Build rapidjson documentation.")
+set(RAPIDJSON_BUILD_EXAMPLES OFF CACHE BOOL "Build rapidjson examples.")
+set(RAPIDJSON_BUILD_TESTS OFF CACHE BOOL "Build rapidjson perftests and unittests.")
 add_subdirectory(../extern/rapidjson buildRapidjson)
 
 include_directories(../extern/box2d/include)
