@@ -14,6 +14,7 @@ class DemoGame : public ample::graphics::LayeredWindowActivity
 {
 public:
     DemoGame(ample::window::Window &window);
+    void onActive() override;
 
 private:
     KeyboardControlCamera<ample::graphics::CameraPerspective> camera{*eventManager};

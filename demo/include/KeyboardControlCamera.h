@@ -33,34 +33,45 @@ void KeyboardControlCamera<CameraT>::onActive()
 {
     if (_manager.keyboard()->isKeyDown(ample::control::keysym::KEY_d))
     {
-        this->translate({-1, 0, 0});
+        this->moveRight(1);
     }
     if (_manager.keyboard()->isKeyDown(ample::control::keysym::KEY_a))
     {
-        this->translate({1, 0, 0});
+        this->moveRight(-1);
     }
     if (_manager.keyboard()->isKeyDown(ample::control::keysym::ARROW_UP))
     {
-        this->translate({0, 1, 0});
+        this->rotateUp(1);
     }
     if (_manager.keyboard()->isKeyDown(ample::control::keysym::ARROW_DOWN))
     {
-        this->translate({0, -1, 0});
+        this->rotateUp(-1);
     }
     if (_manager.keyboard()->isKeyDown(ample::control::keysym::KEY_w))
     {
-        this->translate({0, 0, 1});
+        this->moveForward(1);
     }
     if (_manager.keyboard()->isKeyDown(ample::control::keysym::KEY_s))
     {
-        this->translate({0, 0, -1});
+        this->moveForward(-1);
     }
     if (_manager.keyboard()->isKeyDown(ample::control::keysym::ARROW_LEFT))
     {
-        this->rotate({0, 1, 0}, 1.0);
+        this->rotateRight(-1);
     }
     if (_manager.keyboard()->isKeyDown(ample::control::keysym::ARROW_RIGHT))
     {
-        this->rotate({0, 1, 0}, -1.0);
+        this->rotateRight(1);
     }
+    if (_manager.keyboard()->isKeyDown(ample::control::keysym::COMMA))
+    {
+        this->rotateForward(-1);
+    }
+    if (_manager.keyboard()->isKeyDown(ample::control::keysym::PERIOD))
+    {
+        this->rotateForward(1);
+    }
+    this->rotateUp(-_manager.mouse()->getMouseXRel() / 5.0);
+    this->rotateUp(-_manager.mouse()->getMouseXRel() / 5.0);
+    this->rotate({0.0, 1.0, 0.0}, _manager.mouse()->getMouseYRel() / 5.0);
 }

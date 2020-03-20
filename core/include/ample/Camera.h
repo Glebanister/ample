@@ -38,14 +38,22 @@ public:
     void setViewport(const Vector2d<pixel_t> &size);
 
     void translate(const glm::vec3 &);
-    void moveInViewDirection(float);
+    void moveForward(float);
+    void moveRight(float);
+    void moveUp(float);
+
     void rotate(const glm::vec3 &axis, const float angle);
+    void rotateForward(float);
+    void rotateRight(float);
+    void rotateUp(float);
 
     virtual ~Camera() = default;
 
 protected:
     Viewport _viewport;
     glm::vec3 _position{0.0f};
-    glm::vec3 _direction{0.0, 1.0, 0.0};
+    glm::vec3 _direction{0.0, 0.0, 1.0};
+    glm::vec3 _head{0.0, 1.0, 0.0};
+    glm::vec3 _right{1.0, 0.0, 0.0};
 };
 } // namespace ample::graphics

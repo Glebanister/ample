@@ -40,4 +40,11 @@ DemoGame::DemoGame(ample::window::Window &window)
     layer.addObject(lamp);
     addLayer(layer);
     lamp.translate({-200, 0, -100});
+    _window.disableCursor();
+}
+
+void DemoGame::onActive()
+{
+    LayeredWindowActivity::onActive();
+    _window.moveCursor(0, 0);
 }
