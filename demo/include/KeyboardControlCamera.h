@@ -71,7 +71,6 @@ void KeyboardControlCamera<CameraT>::onActive()
     {
         this->rotateForward(1);
     }
-    this->rotateUp(-_manager.mouse()->getMouseXRel() / 5.0);
-    this->rotateUp(-_manager.mouse()->getMouseXRel() / 5.0);
-    this->rotate({0.0, 1.0, 0.0}, _manager.mouse()->getMouseYRel() / 5.0);
+    this->rotateRight(-_manager.mouse()->getMouseXRel() / 5.0);
+    this->rotateUp(-_manager.mouse()->getMouseYRel() / 5.0);
 }
