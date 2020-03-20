@@ -26,9 +26,10 @@ private:
         1920 / 10,
         -1080 / 10,
         1080 / 10,
-        0, 1000
-    };
+        0,
+        1000};
     ample::graphics::Layer layer;
-    ample::graphics::GraphicalObject2d object{ample::geometry::RegularPolygon<float>(10, 7), 10, 0};
+    std::vector<std::unique_ptr<ample::graphics::GraphicalObject2d>> smooth;
+    std::vector<std::unique_ptr<ample::graphics::GraphicalObject2d>> rough;
     ample::graphics::light::LightSource lamp;
 };
