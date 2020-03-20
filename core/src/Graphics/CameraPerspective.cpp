@@ -30,9 +30,7 @@ CameraPerspective::CameraPerspective(const Vector2d<pixel_t> &viewSize,
       _nearClip(nearClip),
       _farClip(farClip),
       _viewMatrixUniform(std::make_unique<shaders::ShaderProcessor::Uniform>(_viewMatrix, "view_matrix")),
-      _projectionMatrixUniform(std::make_unique<shaders::ShaderProcessor::Uniform>(_projectionMatrix, "projection_matrix")),
-    //   _eyeVectorUniform(std::make_unique<shaders::ShaderProcessor::Uniform>(_position, "eye_position"))
-    _eyeVectorUniform(nullptr)
+      _projectionMatrixUniform(std::make_unique<shaders::ShaderProcessor::Uniform>(_projectionMatrix, "projection_matrix"))
 {
     DEBUG("Setup perspective camera") << _fov << ' ' << _aspectRatio << ' ' << std::endl;
     exception::OpenGLException::handle();
@@ -49,7 +47,6 @@ void CameraPerspective::look()
 
     _viewMatrixUniform->load();
     _projectionMatrixUniform->load();
-    // _eyeVectorUniform->load();
 
     exception::OpenGLException::handle();
 }

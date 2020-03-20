@@ -27,4 +27,5 @@ private:
     KeyboardControlCamera<ample::graphics::CameraPerspective> camera{*eventManager};
     ample::graphics::Layer layer;
     ample::graphics::GraphicalObject2d object{ample::geometry::RegularPolygon<float>(10, 7), 10, 0};
+    ample::graphics::light::LightSource lamp;
 };

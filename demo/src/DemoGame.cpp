@@ -18,7 +18,10 @@ DemoGame::DemoGame(ample::window::Window &window)
 {
     layer.addCamera(camera);
     layer.addObject(object);
+    layer.addObject(lamp);
     addLayer(layer);
+    lamp.translate({-20, 20, -10});
+    camera.translate({-20, 20, -10});
 }
 
 void DemoGame::onActive()
