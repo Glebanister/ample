@@ -1,3 +1,8 @@
+#include <memory>
+#include <vector>
+#include <fstream>
+#include <sstream>
+
 #include "DemoGame.h"
 #include "Clock.h"
 #include "Vector2d.h"
@@ -7,11 +12,6 @@
 #include "WorldDistanceJoint.h"
 #include "Debug.h"
 #include "RegularPolygon.h"
-#include <memory>
-#include <vector>
-
-#include <fstream>
-#include <sstream>
 
 DemoGame::DemoGame(ample::window::Window &window)
     : ample::graphics::LayeredWindowActivity(window)
@@ -21,10 +21,4 @@ DemoGame::DemoGame(ample::window::Window &window)
     layer.addObject(lamp);
     addLayer(layer);
     lamp.translate({-20, 20, -10});
-    camera.translate({-20, 20, -10});
-}
-
-void DemoGame::onActive()
-{
-    LayeredWindowActivity::onActive();
 }
