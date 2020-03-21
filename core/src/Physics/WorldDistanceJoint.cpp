@@ -91,4 +91,14 @@ float WorldDistanceJoint2d::getFrequency() const
 {
     return _joint->GetFrequency();
 }
+
+void WorldDistanceJoint2d::setDampingRatio(float ratio)
+{
+    _joint->SetDampingRatio(ratio);
+}
+
+float WorldDistanceJoint2d::getDampingRatio() const
+{
+    return _joint->GetDampingRatio();
+}
 } // namespace ample::physics

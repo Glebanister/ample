@@ -26,8 +26,8 @@ public:
     void setFrequency(float hz);
     float getFrequency() const;
 
-    /*void SetDampingRatio(float ratio);
-	float GetDampingRatio() const;*/
+    void setDampingRatio(float ratio);
+	float getDampingRatio() const;
 private:
     friend ample::physics::WorldLayer2d;
 
