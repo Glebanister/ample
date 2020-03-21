@@ -5,6 +5,7 @@
 
 #include "WorldLayer2d.h"
 #include "WorldDistanceJoint.h"
+#include "WorldRevoluteJoint2d.h"
 #include "Clock.h"
 #include "Debug.h"
 
@@ -71,6 +72,20 @@ WorldJoint2d &WorldLayer2d::addWorldDistanceJoint(WorldObject2d &bodyA, WorldObj
                                                                {-width / 2, -length / 2}};
     _joints.emplace_back(new WorldDistanceJoint2d((b2DistanceJoint *)world.CreateJoint(&jointDef),
                                                   bodyA, bodyB, distanceLine));
+    graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
+    return *(_joints[_joints.size() - 1]);
+}
+
+WorldJoint2d &WorldLayer2d::addWorldRevoluteJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
+                                                  ample::graphics::Vector2d<float> anchor,
+                                                  float referenceAngle)
+{
+    b2RevoluteJointDef jointDef;
+    jointDef.Initialize(bodyA._body, bodyB._body,
+                        {anchor.x, anchor.y});
+    jointDef.referenceAngle = referenceAngle;
+    _joints.emplace_back(new WorldRevoluteJoint2d((b2RevoluteJoint *)world.CreateJoint(&jointDef),
+                                                  bodyA, bodyB, {{1, 1}}));
     graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
     return *(_joints[_joints.size() - 1]);
 }
