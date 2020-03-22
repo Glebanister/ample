@@ -62,6 +62,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Physics/WorldDistanceJoint.cpp
     src/Physics/WorldRevoluteJoint2d.cpp
     src/Physics/WorldPrismaticJoint2d.cpp
+    src/Physics/WorldPulleyJoint2d.cpp
 
     src/Graphics/Layer.cpp
     src/Graphics/LayeredWindowActivity.cpp

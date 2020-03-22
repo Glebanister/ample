@@ -7,6 +7,7 @@
 #include "WorldDistanceJoint.h"
 #include "WorldRevoluteJoint2d.h"
 #include "WorldPrismaticJoint2d.h"
+#include "WorldPulleyJoint2d.h"
 #include "Clock.h"
 #include "Debug.h"
 
@@ -100,7 +101,34 @@ WorldJoint2d &WorldLayer2d::addWorldPrismaticJoint(WorldObject2d &bodyA, WorldOb
     jointDef.Initialize(bodyA._body, bodyB._body, {anchor.x, anchor.y}, {worldAxis.x, worldAxis.y});
     jointDef.referenceAngle = referenceAngle;
     _joints.emplace_back(new WorldPrismaticJoint2d((b2PrismaticJoint *)world.CreateJoint(&jointDef),
-                                                  bodyA, bodyB, {{1, 1}}));
+                                                   bodyA, bodyB, {{1, 1}}));
+    graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
+    return *(_joints[_joints.size() - 1]);
+}
+
+WorldJoint2d &WorldLayer2d::addWorldPulleyJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
+                                                ample::graphics::Vector2d<float> groundAnchorA,
+                                                ample::graphics::Vector2d<float> groundAnchorB,
+                                                ample::graphics::Vector2d<float> anchorA,
+                                                ample::graphics::Vector2d<float> anchorB,
+                                                float lengthA,
+                                                float lengthB,
+                                                float ratio)
+{
+    b2PulleyJointDef jointDef;
+    jointDef.Initialize(bodyA._body, bodyB._body, 
+                        {groundAnchorA.x, groundAnchorA.y}, 
+                        {groundAnchorB.x, groundAnchorB.y},  
+                        {anchorA.x, anchorA.y}, 
+                        {anchorB.x, anchorB.y}, ratio);
+    if (lengthA > 0) {
+        jointDef.lengthA = lengthA;
+    }
+    if (lengthB > 0) {
+        jointDef.lengthB = lengthB;
+    }
+    _joints.emplace_back(new WorldPulleyJoint2d((b2PulleyJoint *)world.CreateJoint(&jointDef),
+                                                   bodyA, bodyB, {{1, 1}}));
     graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
     return *(_joints[_joints.size() - 1]);
 }
