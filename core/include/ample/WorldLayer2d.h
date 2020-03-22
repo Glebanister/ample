@@ -42,6 +42,24 @@ public:
                                         float width = 1,
                                         float length = -1,
                                         bool collideConnected = false);
+    WorldJoint2d &addWorldRevoluteJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
+                                        ample::graphics::Vector2d<float> anchor,
+                                        float referenceAngle = 0);
+    WorldJoint2d &addWorldPrismaticJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
+                                         ample::graphics::Vector2d<float> anchor,
+                                         ample::graphics::Vector2d<float> worldAxis = {1, 0},
+                                         float referenceAngle = 0);
+    WorldJoint2d &addWorldPulleyJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
+                                      ample::graphics::Vector2d<float> groundAnchorA,
+                                      ample::graphics::Vector2d<float> groundAnchorB,
+                                      ample::graphics::Vector2d<float> anchorA,
+                                      ample::graphics::Vector2d<float> anchorB,
+                                      float lengthA = -1,
+                                      float lengthB = -1,
+                                      float ratio = 1);
+    WorldJoint2d &addWorldGearJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
+                                    WorldJoint2d &jointA, WorldJoint2d & jointB,
+                                    float ratio = 1);
     void setContactListener(ContactListener &listener);
 
 protected:
