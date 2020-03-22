@@ -116,19 +116,21 @@ WorldJoint2d &WorldLayer2d::addWorldPulleyJoint(WorldObject2d &bodyA, WorldObjec
                                                 float ratio)
 {
     b2PulleyJointDef jointDef;
-    jointDef.Initialize(bodyA._body, bodyB._body, 
-                        {groundAnchorA.x, groundAnchorA.y}, 
-                        {groundAnchorB.x, groundAnchorB.y},  
-                        {anchorA.x, anchorA.y}, 
+    jointDef.Initialize(bodyA._body, bodyB._body,
+                        {groundAnchorA.x, groundAnchorA.y},
+                        {groundAnchorB.x, groundAnchorB.y},
+                        {anchorA.x, anchorA.y},
                         {anchorB.x, anchorB.y}, ratio);
-    if (lengthA > 0) {
+    if (lengthA > 0)
+    {
         jointDef.lengthA = lengthA;
     }
-    if (lengthB > 0) {
+    if (lengthB > 0)
+    {
         jointDef.lengthB = lengthB;
     }
     _joints.emplace_back(new WorldPulleyJoint2d((b2PulleyJoint *)world.CreateJoint(&jointDef),
-                                                   bodyA, bodyB, {{1, 1}}));
+                                                bodyA, bodyB, {{1, 1}}));
     graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
     return *(_joints[_joints.size() - 1]);
 }

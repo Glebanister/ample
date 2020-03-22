@@ -48,62 +48,77 @@ ample::graphics::Vector2d<float> WorldPrismaticJoint2d::getLocalAxisA() const
     return {axis.x, axis.y};
 }
 
-float WorldPrismaticJoint2d::getReferenceAngle() const {
+float WorldPrismaticJoint2d::getReferenceAngle() const
+{
     return _joint->GetReferenceAngle();
 }
 
-float WorldPrismaticJoint2d::getJointTranslation() const{
+float WorldPrismaticJoint2d::getJointTranslation() const
+{
     return _joint->GetJointTranslation();
 }
 
-float WorldPrismaticJoint2d::getJointSpeed() const{
+float WorldPrismaticJoint2d::getJointSpeed() const
+{
     return _joint->GetJointSpeed();
 }
 
-bool WorldPrismaticJoint2d::isLimitEnabled() const{
+bool WorldPrismaticJoint2d::isLimitEnabled() const
+{
     return _joint->IsLimitEnabled();
 }
 
-void WorldPrismaticJoint2d::enableLimit(bool flag) {
+void WorldPrismaticJoint2d::enableLimit(bool flag)
+{
     _joint->EnableLimit(flag);
 }
 
-float WorldPrismaticJoint2d::getLowerLimit() const{
+float WorldPrismaticJoint2d::getLowerLimit() const
+{
     return _joint->GetLowerLimit();
 }
 
-float WorldPrismaticJoint2d::getUpperLimit() const{
+float WorldPrismaticJoint2d::getUpperLimit() const
+{
     return _joint->GetUpperLimit();
 }
 
-void WorldPrismaticJoint2d::setLimits(float lower, float upper){
+void WorldPrismaticJoint2d::setLimits(float lower, float upper)
+{
     _joint->SetLimits(lower, upper);
 }
 
-bool WorldPrismaticJoint2d::isMotorEnabled() const {
+bool WorldPrismaticJoint2d::isMotorEnabled() const
+{
     return _joint->IsMotorEnabled();
 }
 
-void WorldPrismaticJoint2d::enableMotor(bool flag) {
+void WorldPrismaticJoint2d::enableMotor(bool flag)
+{
     _joint->EnableMotor(flag);
 }
 
-void WorldPrismaticJoint2d::setMotorSpeed(float speed){
+void WorldPrismaticJoint2d::setMotorSpeed(float speed)
+{
     _joint->SetMotorSpeed(speed);
 }
 
-float WorldPrismaticJoint2d::getMotorSpeed() const{
+float WorldPrismaticJoint2d::getMotorSpeed() const
+{
     return _joint->GetMotorSpeed();
 }
 
-void WorldPrismaticJoint2d::setMaxMotorForce(float force){
+void WorldPrismaticJoint2d::setMaxMotorForce(float force)
+{
     _joint->SetMaxMotorForce(force);
 }
-float WorldPrismaticJoint2d::getMaxMotorForce() const{
+float WorldPrismaticJoint2d::getMaxMotorForce() const
+{
     return _joint->GetMaxMotorForce();
 }
 
-float WorldPrismaticJoint2d::getMotorForce(float inv_dt) const{
+float WorldPrismaticJoint2d::getMotorForce(float inv_dt) const
+{
     return _joint->GetMotorForce(inv_dt);
 }
 } // namespace ample::physics
