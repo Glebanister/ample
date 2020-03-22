@@ -15,12 +15,14 @@
 #include "SquareBehavior.h"
 #include "Scene2d.h"
 #include "ContactListener.h"
+#include "LightSource.h"
+#include "RegularPolygon.h"
 
-class MyContactListener : public ample::physics::ContactListener {
-    void startContact(ample::physics::Fixture& fixtureA, ample::physics::Fixture& fixtureB) override;
-    void endContact(ample::physics::Fixture& fixtureA, ample::physics::Fixture& fixtureB) override;
+class MyContactListener : public ample::physics::ContactListener
+{
+    void startContact(ample::physics::Fixture &fixtureA, ample::physics::Fixture &fixtureB) override;
+    void endContact(ample::physics::Fixture &fixtureA, ample::physics::Fixture &fixtureB) override;
 };
-
 
 class DemoGame : public ample::graphics::LayeredWindowActivity
 {
@@ -35,10 +37,24 @@ private:
 
     void onActive() override;
     bool isAng = false;
-    ample::graphics::CameraOrtho camera{{1920, 1080}};
+    ample::graphics::CameraPerspective camera{
+        {1920, 1080},
+        {0, 0},
+        {0.0, 0.0, 0.0},
+        {0.0, 0.0, 1.0},
+        60.0,
+        1920.0 / 1080.0,
+        0.1,
+        1000.0,
+    };
     CameraBehavior cameraBeh{*this, camera};
-    ample::physics::WorldLayer2d worldLayer{{0.0f, -16.8f}};
-    std::shared_ptr<ample::physics::WorldObject2d> ground;
-    std::shared_ptr<ample::physics::WorldObject2d> brick;
+    ample::physics::WorldLayer2d worldLayer{{0.0f, -100.0f}};
+    ample::physics::WorldObject2d* ground;
+    ample::physics::WorldObject2d* brick1;
+    ample::physics::WorldObject2d* brick2;
+    ample::physics::WorldObject2d* brick3;
+    ample::physics::WorldObject2d* ground2;
     MyContactListener listener;
+    ample::graphics::light::LightSource lamp;
+    ample::random::PerlinNoise noise{42};
 };

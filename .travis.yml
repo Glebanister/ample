@@ -17,10 +17,6 @@ script:
   # - mkdir TestingDir
   # - ./test/test_Ample
   # - rm -rf TestingDir
-  - cd ..
-  - cd demo
-  - mkdir build && cd build
-  - cmake .. && cmake --build .
   # - cd script
   # - mkdir MyGame
   # - cd MyGame

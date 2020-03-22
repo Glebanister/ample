@@ -7,3 +7,9 @@
 [submodule "extern/rapidjson"]
 	path = extern/rapidjson
 	url = https://github.com/Tencent/rapidjson
+[submodule "extern/imgui"]
+	path = extern/imgui
+	url = https://github.com/ocornut/imgui
+[submodule "extern/imgui_sdl"]
+	path = extern/imgui_sdl
+	url = https://github.com/Tyyppi77/imgui_sdl

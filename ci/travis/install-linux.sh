@@ -45,20 +45,21 @@ sudo apt-get install libglm-dev > output
 sudo apt-get install libgles2-mesa-dev > output
 sudo apt-get install libegl1-mesa-dev > output
 sudo apt-get install libsdl2-dev > output
+sudo apt-get install libdevil1c2 libdevil-dev > output
 
-echo python3
-sudo apt-get install python3.6 > output
-sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 1 > output
-sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 2 > output
-sudo update-alternatives --config python3 > output
-python3 --version
+# echo python3
+# sudo apt-get install python3.6 > output
+# sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 1 > output
+# sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 2 > output
+# sudo update-alternatives --config python3 > output
+# python3 --version
 
-echo pip3
-sudo apt install python3-pip > output
+# echo pip3
+# sudo apt install python3-pip > output
 
-echo linters
-pip3 install --user pytest pytest-cov pytest-mock flake8 pep8-naming flake8-quotes mypy pylint > output
-sudo apt install pylint3 > output
-pylint --version
+# echo linters
+# pip3 install --user pytest pytest-cov pytest-mock flake8 pep8-naming flake8-quotes mypy pylint > output
+# sudo apt install pylint3 > output
+# pylint --version
 
 rm -rf output
