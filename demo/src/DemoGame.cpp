@@ -1,38 +1,50 @@
+#include <memory>
+#include <vector>
+#include <fstream>
+#include <sstream>
+
 #include "DemoGame.h"
 #include "Clock.h"
 #include "Vector2d.h"
 #include "PerlinNoise.h"
-#include "CameraBehavior.h"
-#include "SquareBehavior.h"
+#include "KeyboardControlCamera.h"
 #include "WorldObject2d.h"
 #include "WorldDistanceJoint.h"
 #include "Debug.h"
 #include "RegularPolygon.h"
-#include "CameraBehavior.h"
-#include <memory>
-#include <vector>
-
-#include <fstream>
-#include <sstream>
-
-void MyContactListener::startContact(ample::physics::Fixture &fixtureA, ample::physics::Fixture &fixtureB)
-{
-    ample::physics::WorldObject2d *bodyA = &fixtureA.getObject();
-    ample::physics::WorldObject2d *bodyB = &fixtureB.getObject();
-    //bodyA->applyImpulsToCenter({-100, 0.}, true);
-    //bodyA->setAngularVelocity(4.0);
-    //bodyB->applyImpulsToCenter({-100, 0.}, true);
-    //bodyB->setAngularVelocity(4.0);
-}
-
-void MyContactListener::endContact(ample::physics::Fixture &fixtureA, ample::physics::Fixture &fixtureB) {}
 
 DemoGame::DemoGame(ample::window::Window &window)
     : ample::graphics::LayeredWindowActivity(window)
 {
+    layer.addCamera(camera);
+    for (size_t i = 0; i < 7; ++i)
+    {
+        smooth.emplace_back(std::make_unique<ample::graphics::GraphicalObject2d>(ample::geometry::RegularPolygon<float>(10,
+                                                                                                                        (i + 1) * 3),
+                                                                                 10,
+                                                                                 0,
+                                                                                 true));
+        smooth[i]->translate({30 * i, 0, 0});
+        layer.addObject(*smooth[i]);
+    }
+    for (size_t i = 0; i < 7; ++i)
+    {
+        rough.emplace_back(std::make_unique<ample::graphics::GraphicalObject2d>(ample::geometry::RegularPolygon<float>(10,
+                                                                                                                        (i + 1) * 3),
+                                                                                 10,
+                                                                                 0,
+                                                                                 false));
+        rough[i]->translate({30 * i, 50, 0});
+        layer.addObject(*rough[i]);
+    }
+    layer.addObject(lamp);
+    addLayer(layer);
+    lamp.translate({-200, 0, -100});
+    _window.disableCursor();
 }
 
 void DemoGame::onActive()
 {
     LayeredWindowActivity::onActive();
+    _window.moveCursor(0, 0);
 }

@@ -24,14 +24,21 @@ ImguiActivity::ImguiActivity(ample::window::Window &window)
     }
 }
 
+void ImguiActivity::onResize()
+{
+    ample::window::WindowActivity::onResize();
+    SDL_Rect newViewport{0, 0, getWidth(), getHeight()};
+    SDL_RenderSetClipRect(_renderer, &newViewport);
+}
+
 void ImguiActivity::onActive()
 {
     ample::window::WindowActivity::onActive();
     ImGuiIO &io = ImGui::GetIO();
     io.DeltaTime = 1.0f / std::max(20.0, std::min(120.0, ample::time::Clock::getFPS()));
     io.MousePos = ImVec2(static_cast<float>(eventManager->mouse()->getMouseX()), static_cast<float>(eventManager->mouse()->getMouseY()));
-    io.MouseDown[0] = eventManager->mouse()->isLeftPressed() & SDL_BUTTON(SDL_BUTTON_LEFT);
-    io.MouseDown[1] = eventManager->mouse()->isRightPressed() & SDL_BUTTON(SDL_BUTTON_RIGHT);
+    io.MouseDown[0] = eventManager->mouse()->isLeftDown() & SDL_BUTTON(SDL_BUTTON_LEFT);
+    io.MouseDown[1] = eventManager->mouse()->isRightDown() & SDL_BUTTON(SDL_BUTTON_RIGHT);
     io.MouseWheel = static_cast<float>(eventManager->mouse()->getWheelY());
     ImGui::NewFrame();
     ImGui::ShowDemoWindow();

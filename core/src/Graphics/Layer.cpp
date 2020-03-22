@@ -8,6 +8,7 @@ namespace ample::graphics
 {
 void Layer::addCamera(Camera &camera)
 {
+    activity::Behaviour::addBehaviour(camera);
     _cameras.push_back(&camera);
 }
 

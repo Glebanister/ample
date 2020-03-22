@@ -1,5 +1,7 @@
 #pragma once
 
+#include <map>
+
 #include "GraphicalObject2d.h"
 #include "WorldLayer2d.h"
 #include "Scene.h"

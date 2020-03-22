@@ -19,9 +19,9 @@ set(BOX2D_BUILD_UNIT_TESTS OFF CACHE BOOL "Build the Box2D unit tests")
 set(BOX2D_BUILD_TESTBED OFF CACHE BOOL "Build the Box2D testbed")
 add_subdirectory(../extern/box2d buildBox2d)
 
-set(RAPIDJSON_BUILD_DOC OFF CACHE BOOL "Build rapidjson documentation." OFF)
-set(RAPIDJSON_BUILD_EXAMPLES OFF CACHE BOOL "Build rapidjson examples." OFF)
-set(RAPIDJSON_BUILD_TESTS OFF CACHE BOOL "Build rapidjson perftests and unittests." OFF)
+set(RAPIDJSON_BUILD_DOC OFF CACHE BOOL "Build rapidjson documentation.")
+set(RAPIDJSON_BUILD_EXAMPLES OFF CACHE BOOL "Build rapidjson examples.")
+set(RAPIDJSON_BUILD_TESTS OFF CACHE BOOL "Build rapidjson perftests and unittests.")
 add_subdirectory(../extern/rapidjson buildRapidjson)
 
 include_directories(../extern/box2d/include)
@@ -46,13 +46,10 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Utils/Singleton.cpp
     src/Utils/Noncopyable.cpp
 
-    src/Filing/Scene.cpp
     src/Filing/Scene2d.cpp
 
     src/Graphics/GraphicalObject.cpp
     src/Graphics/GraphicalObject2d.cpp
-    src/Graphics/GraphicalObject3d.cpp
-    src/Graphics/ScreenObject.cpp
     src/Graphics/Camera.cpp
     src/Graphics/Color.cpp
     src/Graphics/CameraPerspective.cpp
@@ -65,8 +62,6 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Physics/WorldDistanceJoint.cpp
 
     src/Graphics/Layer.cpp
-    src/Graphics/Layer2d.cpp
-    src/Graphics/ScreenLayer.cpp
     src/Graphics/LayeredWindowActivity.cpp
     src/Graphics/VertexArray.cpp
     src/Graphics/Shaders/Shader.cpp

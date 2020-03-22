@@ -14,6 +14,7 @@ public:
     ImguiActivity(ample::window::Window &window);
 
     void onActive() override;
+    void onResize() override;
 
     ~ImguiActivity();
 
