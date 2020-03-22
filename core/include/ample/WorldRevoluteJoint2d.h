@@ -12,11 +12,6 @@ class WorldRevoluteJoint2d : public WorldJoint2d
 public:
 	void onActive() override;
 
-	ample::graphics::Vector2d<float> getAnchorA() const override;
-	ample::graphics::Vector2d<float> getAnchorB() const override;
-	ample::graphics::Vector2d<float> getReactionForce(float inv_dt) const override;
-	float getReactionTorque(float inv_dt) const override;
-
 	ample::graphics::Vector2d<float> getLocalAnchorA() const;
 	ample::graphics::Vector2d<float> getLocalAnchorB() const;
 
@@ -52,8 +47,7 @@ public:
 private:
 	friend ample::physics::WorldLayer2d;
 
-	WorldRevoluteJoint2d(b2RevoluteJoint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB,
+	WorldRevoluteJoint2d(b2Joint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB,
 						 const std::vector<ample::graphics::Vector2d<float>> &shape);
-	b2RevoluteJoint *_joint = nullptr;
 };
 } // namespace ample::physics

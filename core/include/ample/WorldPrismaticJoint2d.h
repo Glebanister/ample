@@ -10,11 +10,6 @@ class WorldObject2d;
 class WorldPrismaticJoint2d : public WorldJoint2d
 {
 public:
-	ample::graphics::Vector2d<float> getAnchorA() const override;
-	ample::graphics::Vector2d<float> getAnchorB() const override;
-	ample::graphics::Vector2d<float> getReactionForce(float inv_dt) const override;
-	float getReactionTorque(float inv_dt) const override;
-
 	ample::graphics::Vector2d<float> getLocalAnchorA() const;
 	ample::graphics::Vector2d<float> getLocalAnchorB() const;
 
@@ -52,9 +47,8 @@ public:
 private:
 	friend WorldLayer2d;
 
-	WorldPrismaticJoint2d(b2PrismaticJoint *joint,
+	WorldPrismaticJoint2d(b2Joint *joint,
 						  WorldObject2d &bodyA, WorldObject2d &bodyB,
 						  const std::vector<ample::graphics::Vector2d<float>> &shape);
-	b2PrismaticJoint *_joint = nullptr;
 };
 } // namespace ample::physics
