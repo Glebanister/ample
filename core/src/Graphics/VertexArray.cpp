@@ -14,7 +14,8 @@ namespace ample::graphics
 {
 VertexArray::VertexArray(const std::vector<Vector3d<float>> &shape,
                          const normalsMode normMode,
-                         const std::vector<Vector3d<float>> &normals)
+                         const std::vector<Vector3d<float>> &normals,
+                         const std::string &texrutePath)
     : _coords(shape.size() * 3),
       _normals(normals.size() * 3),
       _normalsLines(normals.size() * 6),

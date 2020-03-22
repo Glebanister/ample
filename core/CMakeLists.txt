@@ -69,6 +69,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Graphics/Shaders/Shader.cpp
     src/Graphics/Shaders/ShaderProcessor.cpp
     src/Graphics/Light/LightSource.cpp
+    src/Graphics/Texture.cpp
 
     src/Geometry/RegularPolygon.cpp
    )
