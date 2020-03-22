@@ -17,6 +17,8 @@ public:
     virtual float getReactionTorque(float inv_dt) const;
 
 protected:
+    friend WorldLayer2d;
+
     WorldJoint2d(b2Joint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB,
                  const std::vector<ample::graphics::Vector2d<float>> &shape);
     b2Joint *_joint = nullptr;

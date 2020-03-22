@@ -8,6 +8,7 @@
 #include "WorldRevoluteJoint2d.h"
 #include "WorldPrismaticJoint2d.h"
 #include "WorldPulleyJoint2d.h"
+#include "WorldGearJoint2d.h"
 #include "Clock.h"
 #include "Debug.h"
 
@@ -131,6 +132,22 @@ WorldJoint2d &WorldLayer2d::addWorldPulleyJoint(WorldObject2d &bodyA, WorldObjec
     }
     _joints.emplace_back(new WorldPulleyJoint2d((b2PulleyJoint *)world.CreateJoint(&jointDef),
                                                 bodyA, bodyB, {{1, 1}}));
+    graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
+    return *(_joints[_joints.size() - 1]);
+}
+
+WorldJoint2d &WorldLayer2d::addWorldGearJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
+                                              WorldJoint2d &jointA, WorldJoint2d &jointB,
+                                              float ratio)
+{
+    b2GearJointDef jointDef;
+    jointDef.bodyA = bodyA._body;
+    jointDef.bodyB = bodyB._body;
+    jointDef.joint1 = jointA._joint;
+    jointDef.joint2 = jointB._joint;
+    jointDef.ratio = ratio;
+    _joints.emplace_back(new WorldGearJoint2d((b2GearJoint *)world.CreateJoint(&jointDef),
+                                                bodyA, bodyB, jointA, jointB, {{1, 1}}));
     graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
     return *(_joints[_joints.size() - 1]);
 }
