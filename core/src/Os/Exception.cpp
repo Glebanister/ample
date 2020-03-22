@@ -3,7 +3,10 @@
 #include <iostream>
 #include <GL/gl.h>
 #include <SDL2/SDL.h>
+#include <IL/il.h>
+#include <IL/ilu.h>
 #include <unordered_map>
+#include <sstream>
 
 #include "Exception.h"
 
@@ -56,4 +59,24 @@ void SDLException::handle(const std::string &message)
         throw SDLException(SDL_GetError() + message);
     }
 }
+
+void DevILException::handle(const std::string &message, bool throwAnyway)
+{
+    std::string errorString;
+    bool hasError = false;
+    ILenum error = IL_NO_ERROR;
+    errorString += message + '\n';
+    while ((error = ilGetError()) != IL_NO_ERROR)
+    {
+        errorString += iluErrorString(error) + '\n';
+        hasError = true;
+    }
+    if (hasError || throwAnyway)
+    {
+        throw DevILException{errorString};
+    }
+}
+
+DevILException::DevILException(const std::string &message)
+    : Exception(exId::DEVIL, exType::CRITICAL, message) {}
 } // namespace ample::exception
