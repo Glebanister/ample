@@ -45,6 +45,10 @@ public:
     WorldJoint2d &addWorldRevoluteJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
                                         ample::graphics::Vector2d<float> anchor,
                                         float referenceAngle = 0);
+    WorldJoint2d &addWorldPrismaticJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
+                                         ample::graphics::Vector2d<float> anchor,
+                                         ample::graphics::Vector2d<float> worldAxis = {1, 0},
+                                         float referenceAngle = 0);
     void setContactListener(ContactListener &listener);
 
 protected:

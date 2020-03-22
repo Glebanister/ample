@@ -6,6 +6,7 @@
 #include "WorldLayer2d.h"
 #include "WorldDistanceJoint.h"
 #include "WorldRevoluteJoint2d.h"
+#include "WorldPrismaticJoint2d.h"
 #include "Clock.h"
 #include "Debug.h"
 
@@ -85,6 +86,20 @@ WorldJoint2d &WorldLayer2d::addWorldRevoluteJoint(WorldObject2d &bodyA, WorldObj
                         {anchor.x, anchor.y});
     jointDef.referenceAngle = referenceAngle;
     _joints.emplace_back(new WorldRevoluteJoint2d((b2RevoluteJoint *)world.CreateJoint(&jointDef),
+                                                  bodyA, bodyB, {{1, 1}}));
+    graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
+    return *(_joints[_joints.size() - 1]);
+}
+
+WorldJoint2d &WorldLayer2d::addWorldPrismaticJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
+                                                   ample::graphics::Vector2d<float> anchor,
+                                                   ample::graphics::Vector2d<float> worldAxis,
+                                                   float referenceAngle)
+{
+    b2PrismaticJointDef jointDef;
+    jointDef.Initialize(bodyA._body, bodyB._body, {anchor.x, anchor.y}, {worldAxis.x, worldAxis.y});
+    jointDef.referenceAngle = referenceAngle;
+    _joints.emplace_back(new WorldPrismaticJoint2d((b2PrismaticJoint *)world.CreateJoint(&jointDef),
                                                   bodyA, bodyB, {{1, 1}}));
     graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
     return *(_joints[_joints.size() - 1]);
