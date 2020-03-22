@@ -23,12 +23,14 @@ static std::vector<Vector3d<float>> generateFaceNormals(const std::vector<Vector
     return {vert.size(), {0, 0, -1}};
 }
 
-static std::vector<Vector3d<float>> generateSideNormals(const std::vector<Vector3d<float>> &vert)
+static std::vector<Vector3d<float>> generateSideNormals(const std::vector<Vector3d<float>> &vert, normalsMode mode = normalsMode::FACE)
 {
     ASSERT(vert.size() % 3 == 0);
-    int verts = vert.size();
+    size_t verts = vert.size();
     std::vector<Vector3d<float>> normals;
-    for (int i = 0; i < verts; i += 3)
+    std::vector<glm::vec3> triangleNormals;
+    std::vector<int> normId;
+    for (size_t i = 0; i < verts; i += 3)
     {
         glm::vec3 first{vert[i + 0].x, vert[i + 0].y, vert[i + 0].z};
         glm::vec3 secon{vert[i + 1].x, vert[i + 1].y, vert[i + 1].z};
@@ -36,9 +38,30 @@ static std::vector<Vector3d<float>> generateSideNormals(const std::vector<Vector
         auto norm = glm::triangleNormal(std::move(first),
                                         std::move(secon),
                                         std::move(third));
+        triangleNormals.emplace_back(norm);
+        triangleNormals.emplace_back(norm);
+        triangleNormals.emplace_back(norm);
         for (int i = 0; i < 3; ++i)
         {
             normals.emplace_back(norm.x, norm.y, norm.z);
+        }
+    }
+    if (mode == normalsMode::VERTEX)
+    {
+        auto normalsCopy{triangleNormals};
+        for (size_t i = 2; i < verts; i += 6)
+        {
+            size_t f = (i + 2) % verts;
+            size_t s = (i + 5) % verts;
+            auto mid = (normalsCopy[i] + normalsCopy[f] + normalsCopy[s]) * (1.0f / 3.0f);
+            normals[i] = normals[f] = normals[s] = {mid.x, mid.y, mid.z};
+        }
+        for (size_t i = 5; i < verts; i += 6)
+        {
+            size_t f = (i + 1) % verts;
+            size_t s = (i + 4) % verts;
+            auto mid = (normalsCopy[i] + normalsCopy[f] + normalsCopy[s]) * (1.0f / 3.0f);
+            normals[i] = normals[f] = normals[s] = {mid.x, mid.y, mid.z};
         }
     }
     return normals;
@@ -46,7 +69,8 @@ static std::vector<Vector3d<float>> generateSideNormals(const std::vector<Vector
 
 GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphicalShape,
                                      const float depth,
-                                     const float z)
+                                     const float z,
+                                     const bool smooth)
     : _depth(depth),
       _z(z)
 {
@@ -72,7 +96,10 @@ GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphic
         faceArray.emplace_back(graphicalShape[i].x, graphicalShape[i].y, z);
         faceArray.emplace_back(graphicalShape[i + 1].x, graphicalShape[i + 1].y, z);
     }
-    _sideArray = std::make_unique<VertexArray>(sideArray, normalsMode::FACE, generateSideNormals(sideArray));
+
+    normalsMode mode = smooth ? normalsMode::VERTEX : normalsMode::FACE;
+
+    _sideArray = std::make_unique<VertexArray>(sideArray, normalsMode::FACE, generateSideNormals(sideArray, mode));
     _faceArray = std::make_unique<VertexArray>(faceArray, normalsMode::SINGLE, generateFaceNormals(faceArray));
     DEBUG("Setup graphical object 2d done!");
 }

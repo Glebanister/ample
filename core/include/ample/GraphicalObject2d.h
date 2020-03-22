@@ -20,7 +20,8 @@ class GraphicalObject2d : public GraphicalObject
 public:
     GraphicalObject2d(const std::vector<Vector2d<float>> &graphicalShape,
                       const float depth,
-                      const float z);
+                      const float z,
+                      const bool smooth = false);
 
     void drawSelf() override;
 
