@@ -46,13 +46,10 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Utils/Singleton.cpp
     src/Utils/Noncopyable.cpp
 
-    src/Filing/Scene.cpp
     src/Filing/Scene2d.cpp
 
     src/Graphics/GraphicalObject.cpp
     src/Graphics/GraphicalObject2d.cpp
-    src/Graphics/GraphicalObject3d.cpp
-    src/Graphics/ScreenObject.cpp
     src/Graphics/Camera.cpp
     src/Graphics/Color.cpp
     src/Graphics/CameraPerspective.cpp
@@ -65,8 +62,6 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Physics/WorldDistanceJoint.cpp
 
     src/Graphics/Layer.cpp
-    src/Graphics/Layer2d.cpp
-    src/Graphics/ScreenLayer.cpp
     src/Graphics/LayeredWindowActivity.cpp
     src/Graphics/VertexArray.cpp
     src/Graphics/Shaders/Shader.cpp
