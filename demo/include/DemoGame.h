@@ -38,5 +38,4 @@ private:
     ample::graphics::Layer layer;
     std::vector<std::unique_ptr<ample::graphics::GraphicalObject2d>> smooth;
     std::vector<std::unique_ptr<ample::graphics::GraphicalObject2d>> rough;
-    ample::graphics::light::LightSource lamp;
 };
