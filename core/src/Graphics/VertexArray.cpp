@@ -101,7 +101,7 @@ void VertexArray::execute()
     );
 
     glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, _textureBufferId);
+    glBindBuffer(GL_TEXTURE_BUFFER, _textureBufferId);
     glVertexAttribPointer(
         1,        // attribute
         2,        // size

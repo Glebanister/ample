@@ -35,9 +35,11 @@ public:
 
 protected:
     friend class ample::filing::GraphicalObject2dIO;
+    // TODO: save graphicalShape
 
     std::unique_ptr<VertexArray> _sideArray;
     std::unique_ptr<VertexArray> _faceArray;
+    std::vector<graphics::Vector2d<float>> _graphicalShape;
     float _depth;
     float _z;
 };
