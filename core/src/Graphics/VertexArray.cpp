@@ -160,5 +160,7 @@ const std::vector<Vector3d<float>> &VertexArray::verticies() const
 VertexArray::~VertexArray()
 {
     glDeleteBuffers(1, &_vertexBufferId);
+    glDeleteBuffers(1, &_textureBufferId);
+    glDeleteBuffers(1, &_normalBufferId);
 }
 } // namespace ample::graphics
