@@ -49,8 +49,18 @@ Fixture &WorldObject2d::addFixture(
     b2PolygonShape polygonShape;
     polygonShape.Set(vertices.data(), shape.size());
     fixtureDef.shape = &polygonShape;
-    _fixtures.emplace_back(std::shared_ptr<Fixture>(new Fixture(_body->CreateFixture(&fixtureDef), *this))).get();
-    return *(_fixtures[_fixtures.size() - 1]);
+    _fixtures.emplace_back(new Fixture(_body->CreateFixture(&fixtureDef), *this));
+    return *(_fixtures.back());
+}
+
+void WorldObject2d::setSpeed(float desiredVelX, float desiredVelY)
+{
+    ample::graphics::Vector2d<float> vel = getLinearVelocity();
+    float velChangeX = desiredVelX - vel.x;
+    float velChangeY = desiredVelY - vel.y;
+    float impulseX = getMass() * velChangeX;
+    float impulseY = getMass() * velChangeY;
+    applyLinearImpulseToCenter({impulseX, impulseY}, true);
 }
 
 void WorldObject2d::setZIndex(float z)
