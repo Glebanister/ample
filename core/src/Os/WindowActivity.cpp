@@ -48,9 +48,11 @@ WindowActivity::WindowActivity(Window &window)
 
 void WindowActivity::onActive()
 {
+    DEBUG("Window activity is active");
     activity::Activity::onActive();
     time::Clock::update();
     eventManager->update();
+    DEBUG("Window activity is activated");
 }
 
 pixel_t WindowActivity::getWidth() const

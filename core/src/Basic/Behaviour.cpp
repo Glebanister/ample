@@ -23,8 +23,11 @@ void Behaviour::onStart()
 
 void Behaviour::onActive()
 {
+    DEBUG("Behaviour is active");
+    DEBUG(typeid(*this).name());
     std::for_each(_behaviours.begin(), _behaviours.end(),
                   [](auto &x) { x->onActive(); });
+    DEBUG("Behaviour is activated");
 }
 
 void Behaviour::onStop()

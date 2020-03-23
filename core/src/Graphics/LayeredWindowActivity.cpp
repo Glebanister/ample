@@ -30,9 +30,11 @@ void LayeredWindowActivity::onAwake()
 
 void LayeredWindowActivity::onActive()
 {
+    DEBUG("Layered window activity is active");
     WindowActivity::onActive();
     this->_window.swapBuffer();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     graphics::shaders::ShaderProcessor::instance().use();
+    DEBUG("Layered window activity is activated");
 }
 } // namespace ample::graphics

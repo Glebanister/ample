@@ -44,6 +44,7 @@ DemoGame::DemoGame(ample::window::Window &window)
 
 void DemoGame::onActive()
 {
+    DEBUG("Demo game is active");
     LayeredWindowActivity::onActive();
     _window.moveCursor(0, 0);
 }

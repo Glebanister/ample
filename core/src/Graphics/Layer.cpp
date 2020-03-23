@@ -20,16 +20,24 @@ void Layer::addObject(GraphicalObject &object)
 
 void Layer::onActive()
 {
+    DEBUG("Layer is active");
     activity::Behaviour::onActive();
+    DEBUG("Layer iterating");
     for (auto cam : _cameras)
     {
+        DEBUG("Camera look");
         cam->look();
+        DEBUG("Camera is looking");
         for (auto obj : _objects)
         {
+            DEBUG("Object draw");
             obj->draw();
+            DEBUG("Object done");
         }
+        DEBUG("Camera unlook");
         cam->unlook();
     }
+    DEBUG("Layer is activated");
 }
 
 void Layer::clearCameras()
