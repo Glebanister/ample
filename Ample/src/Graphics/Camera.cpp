@@ -1,193 +1,68 @@
+#define GLM_ENABLE_EXPERIMENTAL
+#define GL_GLEXT_PROTOTYPES 1
+
 #include <GL/gl.h>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 #include <iostream>
 
 #include "Camera.h"
+#include "Debug.h"
 
 namespace ample::graphics
 {
-Camera::Viewport::Viewport(pixel_t xv, pixel_t yv, pixel_t wv, pixel_t hv)
-    : size(wv, hv), position(xv, yv) {}
-
-Camera::Viewport::Viewport(pixel_t wv, pixel_t hv)
-    : Viewport(0, 0, wv, hv) {}
+Camera::Viewport::Viewport(Vector2d<pixel_t> viewportSize, Vector2d<pixel_t> viewportPos)
+    : size(viewportSize), position(viewportPos) {}
 
 void Camera::Viewport::set()
 {
     glViewport(position.x, position.y, size.x, size.y);
 }
 
-Camera::Camera(Vector2d<pixel_t> viewSize, Vector2d<pixel_t> viewPosition,
-               Vector2d<double> cameraSize, Vector3d<double> cameraPosition,
-               double ratio)
-    : _viewport(viewPosition.x, viewPosition.y, viewSize.x, viewSize.y),
-      _size(cameraSize), _position(cameraPosition), _ratio(ratio) {}
-
-Camera::Camera(Vector2d<pixel_t> viewSize, Vector2d<pixel_t> viewPosition,
-               Vector2d<double> cameraSize, Vector2d<double> cameraPosition,
-               double ratio)
-    : Camera(viewSize, viewPosition, cameraSize, {cameraPosition.x, cameraPosition.y, 0}, ratio) {}
-
 Camera::Camera(Vector2d<pixel_t> viewSize,
-               Vector2d<double> cameraSize,
-               double ratio)
-    : Camera(viewSize, {0, 0}, cameraSize, {0, 0}, ratio) {}
-
-Camera::Camera(Vector2d<pixel_t> cameraSize, double ratio)
-    : Camera(cameraSize, {static_cast<double>(cameraSize.x), static_cast<double>(cameraSize.y)}, ratio) {}
-
-void Camera::setViewport(pixel_t x, pixel_t y, pixel_t w, pixel_t h)
+               Vector2d<pixel_t> viewPosition,
+               Vector3d<float> eyePos,
+               Vector3d<float> direction)
+    : _viewport(viewSize, viewPosition),
+      _position(eyePos.x, eyePos.y, eyePos.z),
+      _direction(direction.x, direction.y, direction.z)
 {
-    _viewport.position.x = x;
-    _viewport.position.y = y;
-    _viewport.size.x = w;
-    _viewport.size.y = h;
-}
-void Camera::setViewport(pixel_t w, pixel_t h)
-{
-    setViewport(0, 0, w, h);
 }
 
-void Camera::setRatio(double ratio)
+void Camera::setViewport(Vector2d<pixel_t> &&size, Vector2d<pixel_t> &&pos)
 {
-    _ratio = ratio;
+    _viewport.position = std::move(pos);
+    _viewport.size = std::move(size);
 }
 
-void Camera::scale(double x, double y, double z)
+void Camera::setViewport(const Vector2d<pixel_t> &size, const Vector2d<pixel_t> &pos)
 {
-    _scale.x *= x;
-    _scale.y *= y;
-    _scale.z *= z;
-}
-void Camera::translate(double x, double y, double z)
-{
-    _position.x += x;
-    _position.y += y;
-    _position.z += z;
-}
-void Camera::rotate(double x, double y, double z)
-{
-    _angle.x += x;
-    _angle.y += y;
-    _angle.z += z;
+    _viewport.position = pos;
+    _viewport.size = size;
 }
 
-void Camera::scaleSet(double x, double y, double z)
+void Camera::setViewport(Vector2d<pixel_t> &&size)
 {
-    _scale.x = x;
-    _scale.y = y;
-    _scale.z = z;
-}
-void Camera::translateSet(double x, double y, double z)
-{
-    _position.x = x;
-    _position.y = y;
-    _position.z = z;
-}
-void Camera::rotateSet(double x, double y, double z)
-{
-    _angle.x = x;
-    _angle.y = y;
-    _angle.z = z;
+    setViewport(Vector2d<pixel_t>{0, 0}, std::move(size));
 }
 
-double Camera::getScaleX() const
+void Camera::setViewport(const Vector2d<pixel_t> &size)
 {
-    return _angle.x;
-}
-double Camera::getScaleY() const
-{
-    return _angle.y;
-}
-double Camera::getScaleZ() const
-{
-    return _angle.z;
+    setViewport(Vector2d<pixel_t>{0, 0}, size);
 }
 
-double Camera::getX() const
+void Camera::translate(const glm::vec3 &vector)
 {
-    return _position.x;
-}
-double Camera::getY() const
-{
-    return _position.y;
-}
-double Camera::getZ() const
-{
-    return _position.y;
-}
-double Camera::getAngleX() const
-{
-    return _angle.x;
-}
-double Camera::getAngleY() const
-{
-    return _angle.y;
-}
-double Camera::getAngleZ() const
-{
-    return _angle.z;
+    _position += vector;
 }
 
-pixel_t Camera::getViewportX() const
+void Camera::rotate(const glm::vec3 &axis, const float angle)
 {
-    return _viewport.position.x;
-}
-pixel_t Camera::getViewportY() const
-{
-    return _viewport.position.y;
-}
-pixel_t Camera::getViewportW() const
-{
-    return _viewport.size.x;
-}
-pixel_t Camera::getViewportH() const
-{
-    return _viewport.size.y;
+    _direction = glm::rotate(_direction, glm::radians(angle), axis);
 }
 
-double Camera::getWidth() const
+void Camera::moveInViewDirection(float units)
 {
-    return _size.x;
+    _position += _direction * units;
 }
-double Camera::getHeight() const
-{
-    return _size.y;
-}
-double Camera::getLeft() const
-{
-    return _left;
-}
-double Camera::getRight() const
-{
-    return _right;
-}
-double Camera::getBottom() const
-{
-    return _bottom;
-}
-double Camera::getTop() const
-{
-    return _top;
-}
-double Camera::getNear() const
-{
-    return _near;
-}
-double Camera::getFar() const
-{
-    return _far;
-}
-
-void Camera::setPerspective(double left, double right, double bottom, double top, double near, double far)
-{
-    _left = left;
-    _right = right;
-    _bottom = bottom;
-    _top = top;
-    _near = near;
-    _far = far;
-}
-
-void Camera::look() {}
-void Camera::unlook() {}
 } // namespace ample::graphics

@@ -14,6 +14,18 @@
 #include "LayeredWindowActivity.h"
 #include "SquareBehavior.h"
 #include "Scene2d.h"
+#include "ContactListener.h"
+#include "LightSource.h"
+#include "RegularPolygon.h"
+
+
+#include "GraphicalObject2dIO.h"
+
+class MyContactListener : public ample::physics::ContactListener
+{
+    void startContact(ample::physics::Fixture &fixtureA, ample::physics::Fixture &fixtureB) override;
+    void endContact(ample::physics::Fixture &fixtureA, ample::physics::Fixture &fixtureB) override;
+};
 
 class DemoGame : public ample::graphics::LayeredWindowActivity
 {
@@ -21,10 +33,31 @@ public:
     DemoGame(ample::window::Window &window);
 
 private:
-    void onActive() override;
+    void leftArrow();
+    void rightArrow();
+    void upArrow();
+    void downArrow();
 
-    ample::graphics::CameraOrtho camera{{1920, 1080}};
+    void onActive() override;
+    bool isAng = false;
+    ample::graphics::CameraPerspective camera{
+        {1920, 1080},
+        {0, 0},
+        {0.0, 0.0, 0.0},
+        {0.0, 0.0, 1.0},
+        60.0,
+        1920.0 / 1080.0,
+        0.1,
+        1000.0,
+    };
     CameraBehavior cameraBeh{*this, camera};
-    ample::physics::WorldLayer2d worldLayer{{0.0f, -1000.0f}};
-    ample::filing::Scene2d firstScene{"need-for-speed-first-scene.json"};
+    ample::physics::WorldLayer2d worldLayer{{0.0f, -100.0f}};
+    ample::physics::WorldObject2d* ground;
+    ample::physics::WorldObject2d* brick1;
+    ample::physics::WorldObject2d* brick2;
+    ample::physics::WorldObject2d* brick3;
+    ample::physics::WorldObject2d* ground2;
+    MyContactListener listener;
+    ample::graphics::light::LightSource lamp;
+    ample::random::PerlinNoise noise{42};
 };

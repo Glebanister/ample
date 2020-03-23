@@ -1,41 +1,44 @@
 #pragma once
 
+#define GLM_ENABLE_EXPERIMENTAL
+
 #include <vector>
+#include <GL/gl.h>
+#include <glm/glm.hpp>
 
 #include "GraphicalObject.h"
 #include "Vector2d.h"
+#include "Vector3d.h"
+#include "VertexArray.h"
+#include "Color.h"
+
+namespace ample::filing
+{
+class GraphicalObject2dIO;
+}
 
 namespace ample::graphics
 {
 class GraphicalObject2d : public GraphicalObject
 {
 public:
-    GraphicalObject2d() = default;
-    GraphicalObject2d(const std::vector<Vector2d<double>> &);
-    GraphicalObject2d(const std::vector<Vector2d<int>> &);
+    GraphicalObject2d(const std::vector<Vector2d<float>> &graphicalShape,
+                      const float depth,
+                      const float z);
 
-    virtual double getX() const = 0;
-    virtual double getY() const = 0;
-    virtual double getZ() const = 0;
+    void drawSelf(const glm::mat4 &) override;
 
-    virtual double getAngleX() const = 0;
-    virtual double getAngleY() const = 0;
-    virtual double getAngleZ() const = 0;
-
-    virtual double getScaleX() const = 0;
-    virtual double getScaleY() const = 0;
-    virtual double getScaleZ() const = 0;
-
-    void draw() override;
-    void setRatio(double);
-    double getRatio() const;
-
-    void setColor256(double r, double g, double b);
+    void setFaceColor256(Color color);
+    void setSideColor256(Color color);
 
 protected:
-    void drawSelf() override;
-    std::vector<Vector2d<double>> _graphicalShape;
-    double _ratio = 1.0;
-    double _r = 0.5, _g = 0.5, _b = 0.5;
+    friend class ample::filing::GraphicalObject2dIO;
+
+    std::unique_ptr<VertexArray> _sideArray;
+    std::unique_ptr<VertexArray> _faceArray;
+    const GLuint _programId;
+    const GLuint _modelMatrixId;
+    float _depth;
+    float _z;
 };
-} // namespace graphics
+} // namespace ample::graphics

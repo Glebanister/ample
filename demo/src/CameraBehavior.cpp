@@ -6,28 +6,31 @@ CameraBehavior::CameraBehavior(ample::window::WindowActivity &game, ample::graph
 
 void CameraBehavior::onActive()
 {
+    ample::activity::Activity::onActive();
     if (game.eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_a))
     {
-        camera.translate(5, 0, 0);
+        camera.translate({5, 0, 0});
     }
     if (game.eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_d))
     {
-        camera.translate(-5, 0, 0);
+        camera.translate({-5, 0, 0});
     }
     if (game.eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_s))
     {
-        camera.translate(0, 5, 0);
+        camera.moveInViewDirection(-10);
     }
     if (game.eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_w))
     {
-        camera.translate(0, -5, 0);
+        camera.moveInViewDirection(10);
     }
-    if (game.eventManager->mouse()->getWheelY() < 0)
+    if (game.eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_DOWN))
     {
-        camera.setPerspective(camera.getLeft(), camera.getRight(), camera.getBottom(), camera.getTop(), camera.getNear() + 10, camera.getFar());
+        camera.translate({0, -5, 0});
     }
-    else if (game.eventManager->mouse()->getWheelY() > 0)
+    if (game.eventManager->keyboard()->isKeyDown(ample::control::keysym::ARROW_UP))
     {
-        camera.setPerspective(camera.getLeft(), camera.getRight(), camera.getBottom(), camera.getTop(), camera.getNear() - 10, camera.getFar());
+        camera.translate({0, 5, 0});
     }
+    camera.rotate({0, 1, 0}, game.eventManager->mouse()->getMouseXRel() / game.getWidth() * 3);
+    camera.rotate({1, 0, 0}, -game.eventManager->mouse()->getMouseYRel() / game.getHeight() * 3);
 }

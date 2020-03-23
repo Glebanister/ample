@@ -2,7 +2,7 @@
 #include <exception>
 #include <iostream>
 #include <GL/gl.h>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #include <unordered_map>
 
 #include "Exception.h"
