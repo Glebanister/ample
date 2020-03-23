@@ -3,7 +3,6 @@
 #include "box2d/b2_world.h"
 
 #include "Layer.h"
-#include "Scene2d.h"
 #include "WorldObject2d.h"
 #include "WorldJoint2d.h"
 #include "ContactListener.h"
@@ -28,7 +27,7 @@ enum class BodyType
 
 namespace ample::physics
 {
-class WorldLayer2d final : public ample::graphics::Layer
+class WorldLayer2d : public ample::graphics::Layer
 {
 public:
     explicit WorldLayer2d(const ample::graphics::Vector2d<float> &gravity);
@@ -65,7 +64,6 @@ public:
 protected:
     void onActive() override;
 
-private:
     std::vector<std::shared_ptr<WorldObject2d>> _bodies;
     std::vector<std::shared_ptr<WorldJoint2d>> _joints;
     b2World world;

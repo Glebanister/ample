@@ -147,12 +147,12 @@ void VertexArray::execute()
     // glDisableVertexAttribArray(0);
 }
 
-void VertexArray::setColor256(double r, double g, double b)
+void VertexArray::setColor256(double, double, double)
 {
     // TODO: remove stub
 }
 
-const std::vector<Vector3d<float>> VertexArray::verticies() const
+const std::vector<Vector3d<float>> &VertexArray::verticies() const
 {
     return _shape;
 }

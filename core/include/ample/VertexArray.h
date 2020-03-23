@@ -28,7 +28,7 @@ public:
                 const std::string &texturePath = "../../demo/textures/lena512.png"); // TODO: remove lena's default path
     void execute();
     void setColor256(double r, double g, double b);
-    const std::vector<Vector3d<float>> verticies() const;
+    const std::vector<Vector3d<float>> &verticies() const;
     ~VertexArray();
 
 private:
