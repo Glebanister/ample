@@ -73,15 +73,15 @@ Texture::Texture(const std::string &texturePath,
                                    exception::exType::CRITICAL,
                                    "requried size does not fit");
     }
-    _pixelMap = PixelMap{{width, height}, channelMode::RGB};
+    PixelMap pixelMap{{width, height}, channelMode::RGB};
     ilCopyPixels(position.x, position.y, 0, width, height, 1, IL_RGB,
-                 IL_UNSIGNED_BYTE, _pixelMap.data());
+                 IL_UNSIGNED_BYTE, pixelMap.data());
     DEBUG("Uploading texture to opengl");
 
     glGenTextures(1, &_glTextureId);
     DEBUG("Texture generated");
     glBindTexture(GL_TEXTURE_2D, _glTextureId);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, _pixelMap.data());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pixelMap.data());
     DEBUG("Texture uploaded");
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -90,7 +90,8 @@ Texture::Texture(const std::string &texturePath,
     DEBUG("opengl texture is ready");
 
     ilDeleteImage(_imgId);
-    DEBUG("Read image of size") << _pixelMap.getWidth() << ' ' << _pixelMap.getHeight() << std::endl;
+    ilBindImage(0);
+    DEBUG("Read image of size") << width << ' ' << height << std::endl;
 
     exception::DevILException::handle();
 }
@@ -107,8 +108,24 @@ Texture::Texture(const std::string &texturePath,
 Texture::Texture(const std::string &texturePath)
     : Texture(texturePath, {0, 0}, {0, 0}, true) {}
 
+GLuint Texture::getGlTextureId() const noexcept
+{
+    return _glTextureId;
+}
+
+GLint Texture::getWidth() const noexcept
+{
+    return _size.x;
+}
+
+GLint Texture::getHeight() const noexcept
+{
+    return _size.y;
+}
+
 Texture::~Texture()
 {
+    glDeleteTextures(1, &_glTextureId);
 }
 
 } // namespace ample::graphics

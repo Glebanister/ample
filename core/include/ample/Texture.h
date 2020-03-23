@@ -53,6 +53,8 @@ public:
     ~Texture();
 
     GLuint getGlTextureId() const noexcept;
+    GLint getWidth() const noexcept;
+    GLint getHeight() const noexcept;
 
 private:
     Texture(const std::string &texturePath,
@@ -61,7 +63,6 @@ private:
             const bool autoDetectSize);
 
     const std::string &_texturePath;
-    PixelMap _pixelMap;
     graphics::Vector2d<int> _size;
     graphics::Vector2d<int> _position;
     ILuint _imgId;
