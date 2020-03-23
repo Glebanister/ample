@@ -31,7 +31,8 @@ void LightSource::addIntensitiy(const Color &color)
 
 void LightSource::drawSelf()
 {
-    _position = _modelMatrix * glm::vec4{1.0f};
+    auto position4 = _modelMatrix * glm::vec4{1.0f};
+    _position = {position4.x, position4.y, position4.z};
     _lightPositionUnirom.load();
     _lightIntensitiesUniform.load();
 }
