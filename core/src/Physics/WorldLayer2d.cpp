@@ -17,12 +17,6 @@ namespace ample::physics
 WorldLayer2d::WorldLayer2d(const graphics::Vector2d<float> &gravity)
     : world(b2Vec2(gravity.x, gravity.y)) {}
 
-/*void WorldLayer2d::addWorldObject(WorldObject2d &object)
-{
-    graphics::Layer::addObject(object);
-    object._body = world.CreateBody(&(object._bodyDef));
-}*/
-
 void WorldLayer2d::setContactListener(ContactListener &listener)
 {
     world.SetContactListener(&listener);
@@ -49,7 +43,7 @@ WorldObject2d &WorldLayer2d::addWorldObject(const std::vector<ample::graphics::V
     }
     _bodies.emplace_back(new WorldObject2d(world.CreateBody(&bodyDef), shape));
     graphics::Layer::addObject(*(_bodies[_bodies.size() - 1]));
-    return *(_bodies[_bodies.size() - 1]);
+    return *(_bodies.back());
 }
 
 WorldJoint2d &WorldLayer2d::addWorldDistanceJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
@@ -76,7 +70,7 @@ WorldJoint2d &WorldLayer2d::addWorldDistanceJoint(WorldObject2d &bodyA, WorldObj
     _joints.emplace_back(new WorldDistanceJoint2d((b2DistanceJoint *)world.CreateJoint(&jointDef),
                                                   bodyA, bodyB, distanceLine));
     graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
-    return *(_joints[_joints.size() - 1]);
+    return *(_joints.back());
 }
 
 WorldJoint2d &WorldLayer2d::addWorldRevoluteJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
@@ -90,7 +84,7 @@ WorldJoint2d &WorldLayer2d::addWorldRevoluteJoint(WorldObject2d &bodyA, WorldObj
     _joints.emplace_back(new WorldRevoluteJoint2d((b2RevoluteJoint *)world.CreateJoint(&jointDef),
                                                   bodyA, bodyB, {{1, 1}}));
     graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
-    return *(_joints[_joints.size() - 1]);
+    return *(_joints.back());
 }
 
 WorldJoint2d &WorldLayer2d::addWorldPrismaticJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
@@ -104,7 +98,7 @@ WorldJoint2d &WorldLayer2d::addWorldPrismaticJoint(WorldObject2d &bodyA, WorldOb
     _joints.emplace_back(new WorldPrismaticJoint2d((b2PrismaticJoint *)world.CreateJoint(&jointDef),
                                                    bodyA, bodyB, {{1, 1}}));
     graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
-    return *(_joints[_joints.size() - 1]);
+    return *(_joints.back());
 }
 
 WorldJoint2d &WorldLayer2d::addWorldPulleyJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
@@ -133,7 +127,7 @@ WorldJoint2d &WorldLayer2d::addWorldPulleyJoint(WorldObject2d &bodyA, WorldObjec
     _joints.emplace_back(new WorldPulleyJoint2d((b2PulleyJoint *)world.CreateJoint(&jointDef),
                                                 bodyA, bodyB, {{1, 1}}));
     graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
-    return *(_joints[_joints.size() - 1]);
+    return *(_joints.back());
 }
 
 WorldJoint2d &WorldLayer2d::addWorldGearJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
@@ -149,7 +143,7 @@ WorldJoint2d &WorldLayer2d::addWorldGearJoint(WorldObject2d &bodyA, WorldObject2
     _joints.emplace_back(new WorldGearJoint2d((b2GearJoint *)world.CreateJoint(&jointDef),
                                                 bodyA, bodyB, jointA, jointB, {{1, 1}}));
     graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
-    return *(_joints[_joints.size() - 1]);
+    return *(_joints.back());
 }
 
 void WorldLayer2d::onActive()
