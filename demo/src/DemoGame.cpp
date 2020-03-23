@@ -37,9 +37,8 @@ DemoGame::DemoGame(ample::window::Window &window)
         rough[i]->translate({30 * i, 50, 0});
         layer.addObject(*rough[i]);
     }
-    layer.addObject(lamp);
+    layer.addObject(camera.getLamp());
     addLayer(layer);
-    lamp.translate({-200, 0, -100});
     _window.disableCursor();
 }
 

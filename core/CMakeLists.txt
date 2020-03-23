@@ -12,7 +12,9 @@ set(GLM_INCLUDE_DIRS /usr/include/glm/)
 
 set(GLU_LIBRARY /usr/lib/x86_64-linux-gnu/libGLU.so)
 
-set(IL_LIBRARY /usr/lib/x86_64-linux-gnu/libIL.so.1)
+set(IL_LIBRARY /usr/lib/x86_64-linux-gnu/libIL.so)
+set(ILU_LIBRARY /usr/lib/x86_64-linux-gnu/libILU.so)
+set(ILUT_LIBRARY /usr/lib/x86_64-linux-gnu/libILUT.so)
 set(IL_INCLUDE_DIRS /usr/include/IL/)
 
 set(BOX2D_BUILD_UNIT_TESTS OFF CACHE BOOL "Build the Box2D unit tests")
@@ -41,6 +43,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Os/Window.cpp
     src/Os/OpenGLEnvironment.cpp
     src/Os/SDLEnvironment.cpp
+    src/Os/ILEnvironment.cpp
 
     src/Utils/Utils.cpp
     src/Utils/Singleton.cpp
@@ -71,6 +74,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Graphics/Shaders/Shader.cpp
     src/Graphics/Shaders/ShaderProcessor.cpp
     src/Graphics/Light/LightSource.cpp
+    src/Graphics/Texture.cpp
 
     src/Geometry/RegularPolygon.cpp
    )
@@ -90,4 +94,6 @@ target_link_libraries(${CMAKE_PROJECT_NAME} ${SDL2_LIBRARY})
 target_link_libraries(${CMAKE_PROJECT_NAME} ${OPENGL_gl_LIBRARY})
 target_link_libraries(${CMAKE_PROJECT_NAME} ${GLU_LIBRARY})
 target_link_libraries(${CMAKE_PROJECT_NAME} ${IL_LIBRARY})
+target_link_libraries(${CMAKE_PROJECT_NAME} ${ILU_LIBRARY})
+target_link_libraries(${CMAKE_PROJECT_NAME} ${ILUT_LIBRARY})
 target_link_libraries(${CMAKE_PROJECT_NAME} box2d)
