@@ -7,6 +7,7 @@
 #include "Vector2d.h"
 #include "Vector3d.h"
 #include "Noncopyable.h"
+#include "Texture.h"
 
 namespace ample::graphics
 {
@@ -42,5 +43,6 @@ private:
     GLint _colorVectorId;
     double _r = 0.5, _g = 0.5, _b = 0.5;
     GLsizei _normalStride;
+    Texture _texture;
 };
 } // namespace ample::graphics

@@ -5,9 +5,11 @@
 #include <SDL2/SDL.h>
 #include <IL/il.h>
 #include <IL/ilu.h>
+#include <IL/ilut.h>
 #include <unordered_map>
 #include <sstream>
 
+#include "Debug.h"
 #include "Exception.h"
 
 namespace ample::exception
@@ -19,7 +21,7 @@ Exception::Exception(const exId &id, const exType &type, const std::string &mess
 void Exception::report() const
 {
     std::string message = exIdInfo[int(_id)] + ' ' + _message;
-    std::cout << exTypeInfo[int(_type)] << " : " << message << std::endl;
+    std::cerr << exTypeInfo[int(_type)] << " : " << message << std::endl;
 }
 
 const char *Exception::what() const throw()
@@ -62,18 +64,18 @@ void SDLException::handle(const std::string &message)
 
 void DevILException::handle(const std::string &message, bool throwAnyway)
 {
-    std::string errorString;
+    std::stringstream errorString;
     bool hasError = false;
-    ILenum error = IL_NO_ERROR;
-    errorString += message + '\n';
+    ILenum error;
+    errorString << message << '\n';
     while ((error = ilGetError()) != IL_NO_ERROR)
     {
-        errorString += iluErrorString(error) + '\n';
+        errorString << iluErrorString(error) << '\n';
         hasError = true;
     }
     if (hasError || throwAnyway)
     {
-        throw DevILException{errorString};
+        throw DevILException{std::string(std::istreambuf_iterator<char>(errorString), {})};
     }
 }
 

@@ -23,7 +23,8 @@ VertexArray::VertexArray(const std::vector<Vector3d<float>> &shape,
       _totalVerts(shape.size()),
       _normalsMode(normMode),
       _colorVectorId(glGetUniformLocation(shaders::ShaderProcessor::instance().getProgramId(),
-                                          "object_color"))
+                                          "object_color")),
+      _texture(texrutePath)
 {
     DEBUG("Generating vertex buffer");
     for (size_t i = 0; i < shape.size(); ++i)
