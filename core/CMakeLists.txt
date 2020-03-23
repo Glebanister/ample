@@ -43,6 +43,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Os/Window.cpp
     src/Os/OpenGLEnvironment.cpp
     src/Os/SDLEnvironment.cpp
+    src/Os/ILEnvironment.cpp
 
     src/Utils/Utils.cpp
     src/Utils/Singleton.cpp
