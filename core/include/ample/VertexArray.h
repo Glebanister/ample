@@ -3,6 +3,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <vector>
+#include <memory>
 
 #include "Vector2d.h"
 #include "Vector3d.h"
@@ -31,18 +32,14 @@ public:
     ~VertexArray();
 
 private:
-    std::vector<GLfloat> _coords;
-    std::vector<GLfloat> _normals;
-    std::vector<GLfloat> _normalsLines;
     std::vector<Vector3d<float>> _shape;
     GLuint _vertexBufferId;
+    GLuint _textureBufferId;
     GLuint _normalBufferId;
     GLuint _normalLinesBufferId;
     GLsizei _totalVerts;
     normalsMode _normalsMode;
-    GLint _colorVectorId;
-    double _r = 0.5, _g = 0.5, _b = 0.5;
     GLsizei _normalStride;
-    Texture _texture;
+    std::unique_ptr<Texture> _texture;
 };
 } // namespace ample::graphics
