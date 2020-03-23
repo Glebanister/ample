@@ -55,7 +55,8 @@ public:
 
     Fixture &addFixture(const std::vector<ample::graphics::Vector2d<float>> &shape);
     
-    void setSpeed(float desiredVelX, float desiredVelY);
+    void setSpeedX(float desiredVelX);
+    void setSpeedY(float desiredVelY);
 
     void setTransform(const graphics::Vector2d<float> &position, float angle);
     graphics::Vector2d<float> getPosition() const;

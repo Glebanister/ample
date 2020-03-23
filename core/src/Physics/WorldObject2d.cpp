@@ -53,14 +53,20 @@ Fixture &WorldObject2d::addFixture(
     return *(_fixtures.back());
 }
 
-void WorldObject2d::setSpeed(float desiredVelX, float desiredVelY)
+void WorldObject2d::setSpeedX(float desiredVelX)
 {
     ample::graphics::Vector2d<float> vel = getLinearVelocity();
     float velChangeX = desiredVelX - vel.x;
-    float velChangeY = desiredVelY - vel.y;
     float impulseX = getMass() * velChangeX;
+    applyLinearImpulseToCenter({impulseX, 0}, true);
+}
+
+void WorldObject2d::setSpeedY(float desiredVelY)
+{
+    ample::graphics::Vector2d<float> vel = getLinearVelocity();
+    float velChangeY = desiredVelY - vel.y;
     float impulseY = getMass() * velChangeY;
-    applyLinearImpulseToCenter({impulseX, impulseY}, true);
+    applyLinearImpulseToCenter({0, impulseY}, true);
 }
 
 void WorldObject2d::setZIndex(float z)
