@@ -62,14 +62,15 @@ class Exception : public std::exception
 {
 public:
     explicit Exception(const exId &id,
-                       const exType &type,
-                       const std::string &message = "");
+              const exType &type,
+              const std::string &message = "");
 
     const char *what() const throw();
 
     void report() const;
 
     exId getId() const;
+
     exType getType() const;
 
 private:

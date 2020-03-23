@@ -1,4 +1,5 @@
 #include "WorldObject2dIO.h"
+
 #include <iostream>
 
 namespace ample::filing
@@ -35,28 +36,11 @@ RawObject &WorldObject2dIO::loadJSONFile(const std::string &dataDoc, RawObject &
     doc.SetObject();
     doc.Parse(dataDoc.c_str());
 
-
     obj = GraphicalObject2dIO::loadJSONFile(dataDoc, obj);
 
     obj.pos.x = doc["position"][0].GetFloat();
     obj.pos.y = doc["position"][1].GetFloat();
 
-
-//    ample::physics::BodyType bt;
-//    if (doc["type"] == 0)
-//    {
-//    bt = ample::physics::BodyType::staticBody;
-//    }
-//    else if (doc["type"] == 1)
-//    {
-//    //        static_cast<ample::physics::BodyType>(doc["type"]);
-//    bt = ample::physics::BodyType::kinematicBody;
-//    }
-//    else if (doc["type"] == 2)
-//    {
-//    bt = ample::physics::BodyType::dynamicBody;
-//    }
-//    BodyDef.setBodyType(bt);
     return obj;
 }
 } // namespace ample::filing

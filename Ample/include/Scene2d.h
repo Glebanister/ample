@@ -8,8 +8,7 @@
 #include <rapidjson/prettywriter.h>
 
 #include <string>
-#include <map>
-
+#include <unordered_map>
 
 namespace ample::filing
 {
@@ -22,9 +21,9 @@ public:
 
     void saveScene(const std::string &name);
 
-    ample::graphics::GraphicalObject &getElementById(const std::string id);
+    ample::graphics::GraphicalObject &getElementById(const std::string &id);
 
 private:
-    std::map <std::string, std::shared_ptr<ample::graphics::GraphicalObject>> _storage;
+    std::unordered_map <std::string, std::shared_ptr<ample::graphics::GraphicalObject>> _storage;
 };
 } // namespace ample::filing
