@@ -89,8 +89,15 @@ VertexArray::VertexArray(const std::vector<Vector3d<float>> &shape,
 
 void VertexArray::execute()
 {
+    DEBUG("Enabling 0 arrrib");
     glEnableVertexAttribArray(0);
+    exception::OpenGLException::handle();
+    DEBUG("Enabling 0 arrrib done");
+    DEBUG("Binding");
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferId);
+    exception::OpenGLException::handle();
+    DEBUG("Binding done");
+    DEBUG("Sending vertex attrib pointer");
     glVertexAttribPointer(
         0,        // attribute 0. No particular reason for 0, but must match the layout in the shader.
         3,        // size
@@ -99,9 +106,18 @@ void VertexArray::execute()
         0,        // stride
         (void *)0 // array buffer offset
     );
+    exception::OpenGLException::handle();
+    DEBUG("Sending vertex attrib pointer done");
 
+    DEBUG("Enabling 1 arrrib");
     glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, _textureBufferId);
+    exception::OpenGLException::handle();
+    DEBUG("Enabling 1 arrrib done");
+    DEBUG("Binding buffer");
+    glBindBuffer(GL_TEXTURE_BUFFER, _textureBufferId);
+    exception::OpenGLException::handle();
+    DEBUG("Binding buffer done");
+    DEBUG("Sending vertex attrib pointer");
     glVertexAttribPointer(
         1,        // attribute
         2,        // size
@@ -110,9 +126,18 @@ void VertexArray::execute()
         0,        // stride
         (void *)0 // array buffer offset
     );
+    exception::OpenGLException::handle();
+    DEBUG("Sending vertex attrib pointer done");
 
+    DEBUG("Enabling 2 arrrib");
     glEnableVertexAttribArray(2);
+    exception::OpenGLException::handle();
+    DEBUG("Enabling 1 arrrib done");
+    DEBUG("Binding buffer");
     glBindBuffer(GL_ARRAY_BUFFER, _normalBufferId);
+    exception::OpenGLException::handle();
+    DEBUG("Binding buffer done");
+    DEBUG("Sending vertex attrib pointer");
     glVertexAttribPointer(
         2,        // attribute
         3,        // size
@@ -121,12 +146,27 @@ void VertexArray::execute()
         0,        // stride
         (void *)0 // array buffer offset
     );
+    exception::OpenGLException::handle();
+    DEBUG("Sending vertex attrib pointer done");
 
+    DEBUG("Drawing arrays");
     glDrawArrays(GL_TRIANGLES, 0, _totalVerts);
+    exception::OpenGLException::handle();
+    DEBUG("Drawing arrays done");
 
+
+    DEBUG("disabling 0");
     glDisableVertexAttribArray(0);
+    exception::OpenGLException::handle();
+    DEBUG("disabling 0 done");
+    DEBUG("disabling 1");
     glDisableVertexAttribArray(1);
+    exception::OpenGLException::handle();
+    DEBUG("disabling 1 done");
+    DEBUG("disabling 2");
     glDisableVertexAttribArray(2);
+    exception::OpenGLException::handle();
+    DEBUG("disabling 2 done");
     // DEBUG normals
     // glm::vec3 colorNormals{1.0, 0, 0};
     // glUniform3fv(_colorVectorId, 1, glm::value_ptr(colorNormals));

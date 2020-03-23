@@ -106,8 +106,15 @@ GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphic
 
 void GraphicalObject2d::drawSelf()
 {
+    DEBUG("drawing self");
+    DEBUG("executing side array");
     _sideArray->execute();
+    DEBUG("executing side array done");
+    DEBUG("executing face array");
     _faceArray->execute();
+    DEBUG("executing face array done");
+    DEBUG("checking for error");
     exception::OpenGLException::handle();
+    DEBUG("no error occured");
 }
 } // namespace ample::graphics

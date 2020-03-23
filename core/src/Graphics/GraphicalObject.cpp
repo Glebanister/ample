@@ -46,15 +46,20 @@ void GraphicalObject::rotate(glm::vec3 axis, float angle)
 void GraphicalObject::draw(glm::mat4 rotated,
                            glm::mat4 translated)
 {
+    DEBUG("start drawing Graphical object");
     rotated *= _rotated;
     translated *= _translated;
     _modelMatrix = translated * rotated;
     _modelMatrixUniform->load();
+    DEBUG("drawing self");
     drawSelf();
+    DEBUG("drawing self done");
     for (auto subObject : _subObjects)
     {
         subObject->draw(rotated, translated);
     }
+    DEBUG("checking for error");
     exception::OpenGLException::handle();
+    DEBUG("Graphical object is done");
 }
 } // namespace ample::graphics
