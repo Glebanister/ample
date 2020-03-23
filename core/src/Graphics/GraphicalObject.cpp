@@ -50,9 +50,13 @@ void GraphicalObject::draw(glm::mat4 rotated,
     rotated *= _rotated;
     translated *= _translated;
     _modelMatrix = translated * rotated;
+    DEBUG("loading uniform");
     _modelMatrixUniform->load();
+    exception::OpenGLException::handle();
+    DEBUG("loading uniform done");
     DEBUG("drawing self");
     drawSelf();
+    exception::OpenGLException::handle();
     DEBUG("drawing self done");
     for (auto subObject : _subObjects)
     {

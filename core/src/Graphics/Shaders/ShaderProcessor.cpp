@@ -123,7 +123,7 @@ ShaderProcessor::Uniform::Uniform(glm::vec3 &data, const std::string &name)
 void ShaderProcessor::Uniform::load()
 {
     ASSERT(_name.length() != 0);
-    // DEBUG("Loading uniform " + _name);
+    DEBUG("Loading uniform " + _name);
     if (!pointer)
     {
         throw exception::Exception(exception::exId::OPENGL,
@@ -146,6 +146,6 @@ void ShaderProcessor::Uniform::load()
         break;
     }
     exception::OpenGLException::handle();
-    // DEBUG("Load uniform");
+    DEBUG("Load uniform done");
 }
 } // namespace ample::graphics::shaders
