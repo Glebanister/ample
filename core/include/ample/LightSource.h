@@ -12,20 +12,15 @@ namespace ample::graphics::light
 class LightSource : public GraphicalObject
 {
 public:
-    LightSource(const Color ambient,
-                const Color diffuse,
-                const Color specular);
     LightSource();
 
     void drawSelf() override;
+    void addIntensitiy(const Color &);
 
 private:
-    float _intensity;
-    glm::vec4 _ambient;
-    glm::vec4 _diffuse;
-    glm::vec4 _specular;
-    uint8_t _index;
-    std::unique_ptr<shaders::ShaderProcessor::Uniform> _lightVectorUniform;
-    glm::vec3 _position{0.0f};
+    glm::vec3 _position;
+    glm::vec3 _intensities{1.0, 1.0, 1.0};
+    shaders::ShaderProcessor::Uniform _lightPositionUnirom;
+    shaders::ShaderProcessor::Uniform _lightIntensitiesUniform;
 };
 } // namespace ample::graphics::light

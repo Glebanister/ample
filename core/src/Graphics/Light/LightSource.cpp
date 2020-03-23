@@ -3,6 +3,7 @@
 
 #include <GL/gl.h>
 #include <glm/gtc/type_ptr.hpp>
+#include <algorithm>
 
 #include "LightSource.h"
 #include "Exception.h"
@@ -11,22 +12,27 @@
 
 namespace ample::graphics::light
 {
-LightSource::LightSource(const Color ambient,
-                         const Color diffuse,
-                         const Color specular)
-    : _ambient(ambient.r, ambient.g, ambient.b, ambient.a),
-      _diffuse(diffuse.r, diffuse.g, diffuse.b, diffuse.a),
-      _specular(specular.r, specular.g, specular.b, specular.a),
-      _lightVectorUniform(std::make_unique<shaders::ShaderProcessor::Uniform>(_position, "light_position"))
+LightSource::LightSource()
+    : _lightPositionUnirom(_position, "light.position"),
+      _lightIntensitiesUniform(_intensities, "light.intensities")
 {
 }
 
-LightSource::LightSource()
-    : LightSource(Color{}, Color{}, Color{}) {}
+void LightSource::addIntensitiy(const Color &color)
+{
+    _intensities += glm::vec3{color.r, color.g, color.b};
+    _intensities[0] = std::max(_intensities[0], 0.0f);
+    _intensities[1] = std::max(_intensities[1], 0.0f);
+    _intensities[2] = std::max(_intensities[2], 0.0f);
+    _intensities[0] = std::min(_intensities[0], 1.0f);
+    _intensities[1] = std::min(_intensities[1], 1.0f);
+    _intensities[2] = std::min(_intensities[2], 1.0f);
+}
 
 void LightSource::drawSelf()
 {
     _position = _modelMatrix * glm::vec4{1.0f};
-    _lightVectorUniform->load();
+    _lightPositionUnirom.load();
+    _lightIntensitiesUniform.load();
 }
 } // namespace ample::graphics::light
