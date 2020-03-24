@@ -71,7 +71,8 @@ GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphic
                                      const float depth,
                                      const float z,
                                      const bool smooth)
-    : _depth(depth),
+    : _graphicalShape(graphicalShape),
+      _depth(depth),
       _z(z)
 {
     DEBUG("Setup graphical object 2d");
