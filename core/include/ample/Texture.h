@@ -33,7 +33,6 @@ private:
 
         uint8_t *data();
         void resize(const graphics::Vector2d<int> &size);
-        void debug() const noexcept;
         int getWidth() const noexcept;
         int getHeight() const noexcept;
 

@@ -13,12 +13,10 @@
 namespace ample::graphics
 {
 VertexArray::VertexArray(const std::vector<Vector3d<float>> &shape,
-                         const normalsMode normMode,
+                         const std::vector<Vector2d<float>> &uvCoords,
                          const std::vector<Vector3d<float>> &normals,
                          const std::string &texrutePath)
-    : _shape(shape),
-      _totalVerts(shape.size()),
-      _normalsMode(normMode)
+    : _totalVerts(shape.size())
 {
     {
         DEBUG("Generating vertex buffer");
@@ -36,17 +34,16 @@ VertexArray::VertexArray(const std::vector<Vector3d<float>> &shape,
 
     {
         DEBUG("Generating texture buffer");
-        std::vector<GLfloat> _texCoords(shape.size() * 2);
-        // int texWidth = _texture.getWidth();
-        // int texHeight = _texture.getHeight();
+        std::vector<GLfloat> _texCoords(uvCoords.size() * 2);
         for (size_t i = 0; i < shape.size(); ++i)
         {
-            _texCoords[i * 2 + 0] = shape[i].x;
-            _texCoords[i * 2 + 1] = shape[i].y;
+            _texCoords[i * 2 + 0] = uvCoords[i].x;
+            _texCoords[i * 2 + 1] = uvCoords[i].y;
         }
         glGenBuffers(1, &_textureBufferId);
         glBindBuffer(GL_TEXTURE_BUFFER, _textureBufferId);
         glBufferData(GL_TEXTURE_BUFFER, sizeof(GLfloat) * _texCoords.size(), _texCoords.data(), GL_STATIC_DRAW);
+        _texture = std::make_unique<Texture>(texrutePath);
     }
 
     {
@@ -62,7 +59,6 @@ VertexArray::VertexArray(const std::vector<Vector3d<float>> &shape,
         glGenBuffers(1, &_normalBufferId);
         glBindBuffer(GL_ARRAY_BUFFER, _normalBufferId);
         glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * _normals.size(), _normals.data(), GL_STATIC_DRAW);
-        _texture = std::make_unique<Texture>(texrutePath);
         glBindBuffer(GL_TEXTURE_BUFFER, 0);
     }
 
@@ -150,11 +146,6 @@ void VertexArray::execute()
 void VertexArray::setColor256(double, double, double)
 {
     // TODO: remove stub
-}
-
-const std::vector<Vector3d<float>> &VertexArray::verticies() const
-{
-    return _shape;
 }
 
 VertexArray::~VertexArray()
