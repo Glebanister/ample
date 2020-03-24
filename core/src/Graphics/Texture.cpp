@@ -20,20 +20,6 @@ uint8_t *Texture::PixelMap::data()
     return _data.data();
 }
 
-void Texture::PixelMap::debug() const noexcept
-{
-    for (int i = 0; i < _size.y; ++i)
-    {
-        for (int j = 0; j < _size.x; ++j)
-        {
-            std::cout << (int)_data[i * _size.x * 3 + j * 3] << ' '
-                      << (int)_data[i * _size.x * 3 + j * 3 + 1] << ' '
-                      << (int)_data[i * _size.x * 3 + j * 3 + 2] << ' '
-                      << std::endl;
-        }
-    }
-}
-
 int Texture::PixelMap::getWidth() const noexcept
 {
     return _size.x;

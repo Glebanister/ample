@@ -22,18 +22,16 @@ DemoGame::DemoGame(ample::window::Window &window)
         smooth.emplace_back(std::make_unique<ample::graphics::GraphicalObject2d>(ample::geometry::RegularPolygon<float>(10,
                                                                                                                         (i + 1) * 3),
                                                                                  10,
-                                                                                 0,
-                                                                                 true));
+                                                                                 0));
         smooth[i]->translate({30 * i, 0, 0});
         layer.addObject(*smooth[i]);
     }
     for (size_t i = 0; i < 7; ++i)
     {
         rough.emplace_back(std::make_unique<ample::graphics::GraphicalObject2d>(ample::geometry::RegularPolygon<float>(10,
-                                                                                                                        (i + 1) * 3),
-                                                                                 10,
-                                                                                 0,
-                                                                                 false));
+                                                                                                                       (i + 1) * 3),
+                                                                                10,
+                                                                                0));
         rough[i]->translate({30 * i, 50, 0});
         layer.addObject(*rough[i]);
     }
