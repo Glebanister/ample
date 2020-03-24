@@ -55,7 +55,7 @@ static std::vector<Vector2d<float>> generateFaceUVCoords(const std::vector<Vecto
     case textureMode::STRETCH:
         for (size_t i = 0; i < vert.size(); ++i)
         {
-            uvCoords[i].x = ((vert[i].x - leftDown.x) / (rightTop.x - leftDown.x)) * size.x + position.x;
+            uvCoords[i].x = ((vert[i].x - leftDown.x) / (rightTop.x - leftDown.x)) + position.x / size.x;
         }
         break;
     }
@@ -71,7 +71,7 @@ static std::vector<Vector2d<float>> generateFaceUVCoords(const std::vector<Vecto
     case textureMode::STRETCH:
         for (size_t i = 0; i < vert.size(); ++i)
         {
-            uvCoords[i].y = ((vert[i].y - leftDown.y) / (rightTop.y - leftDown.y)) * size.y + position.y;
+            uvCoords[i].y = ((vert[i].y - leftDown.y) / (rightTop.y - leftDown.y)) + position.y / size.y;
         }
         break;
     }
