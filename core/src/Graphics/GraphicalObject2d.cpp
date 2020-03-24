@@ -48,13 +48,13 @@ GraphicalObject2d::GraphicalObject2d(const GraphicalObject2dRaw &raw)
     : _raw(raw)
 {
     DEBUG("Setup graphical object 2d");
-    _faceArray = std::make_unique<VertexArrayFace2d>(_raw.faceTextureSize,
+    _faceArray = std::make_unique<VertexArrayFace2d>(_raw.graphicalShape,
                                                      _raw.z,
                                                      _raw.faceTexturePath,
                                                      _raw.faceTexturePos,
                                                      _raw.faceTextureSize,
                                                      _raw.faceTextureMode);
-    _sideArray = std::make_unique<VertexArraySide2d>(_raw.sideTexturePath,
+    _sideArray = std::make_unique<VertexArraySide2d>(_raw.graphicalShape,
                                                      _raw.z,
                                                      _raw.depth,
                                                      _raw.sideTexturePath,
@@ -63,6 +63,28 @@ GraphicalObject2d::GraphicalObject2d(const GraphicalObject2dRaw &raw)
                                                      _raw.sideTextureMode,
                                                      _raw.sideNormalsMode);
     DEBUG("Setup graphical object 2d done!");
+}
+
+GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphicalShape,
+                                     const float depth,
+                                     const float z)
+    : GraphicalObject2d({
+          graphicalShape,
+          depth,
+          z,
+          "../../demo/textures/lena512.png",
+          {0.0, 0.0},
+          {512.0, 512.0},
+          {textureMode::STRETCH, textureMode::STRETCH},
+          "../../demo/textures/lena512.png",
+          {0.0, 0.0},
+          {512.0, 512.0},
+          {textureMode::STRETCH, textureMode::STRETCH},
+          normalsMode::FACE,
+      })
+{
+    DEBUG("Bad GraphicalObject2d constructor usage!");
+    // TODO: remove this constructor
 }
 
 void GraphicalObject2d::drawSelf()
