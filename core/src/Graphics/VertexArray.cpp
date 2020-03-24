@@ -59,7 +59,6 @@ VertexArray::VertexArray(const std::vector<Vector3d<float>> &shape,
         glGenBuffers(1, &_normalBufferId);
         glBindBuffer(GL_ARRAY_BUFFER, _normalBufferId);
         glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * _normals.size(), _normals.data(), GL_STATIC_DRAW);
-        glBindBuffer(GL_TEXTURE_BUFFER, 0);
     }
 
     {
@@ -93,18 +92,18 @@ void VertexArray::execute()
         GL_FLOAT, // type
         GL_FALSE, // normalized?
         0,        // stride
-        (void *)0 // array buffer offset
+        NULL // array buffer offset
     );
 
     glEnableVertexAttribArray(1);
-    glBindBuffer(GL_TEXTURE_BUFFER, _textureBufferId);
+    glBindBuffer(GL_ARRAY_BUFFER, _textureBufferId);
     glVertexAttribPointer(
         1,        // attribute
         2,        // size
         GL_FLOAT, // type
-        GL_FALSE, // normalized?
+        GL_TRUE, // normalized?
         0,        // stride
-        (void *)0 // array buffer offset
+        NULL // array buffer offset
     );
 
     glEnableVertexAttribArray(2);
@@ -115,7 +114,7 @@ void VertexArray::execute()
         GL_FLOAT, // type
         GL_FALSE, // normalized?
         0,        // stride
-        (void *)0 // array buffer offset
+        NULL // array buffer offset
     );
 
     glDrawArrays(GL_TRIANGLES, 0, _totalVerts);
