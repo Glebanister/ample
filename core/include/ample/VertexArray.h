@@ -19,26 +19,29 @@ enum class normalsMode
     FACE,
 };
 
-class VertexArray final : public utils::Noncopyable
+enum class textureMode
+{
+    TILE,
+    STRETCH,
+};
+
+class VertexArray : public utils::Noncopyable
 {
 public:
-    VertexArray(const std::vector<Vector3d<float>> &shape,
-                const normalsMode normalsType,
+    VertexArray(const std::vector<Vector3d<float>> &coords,
+                const std::vector<Vector2d<float>> &uvCoords,
                 const std::vector<Vector3d<float>> &normals,
-                const std::string &texturePath = "../../demo/textures/lena512.png"); // TODO: remove lena's default path
+                const std::string &texturePath);
     void execute();
     void setColor256(double r, double g, double b);
-    const std::vector<Vector3d<float>> &verticies() const;
     ~VertexArray();
 
 private:
-    std::vector<Vector3d<float>> _shape;
     GLuint _vertexBufferId;
     GLuint _textureBufferId;
     GLuint _normalBufferId;
     GLuint _normalLinesBufferId;
     GLsizei _totalVerts;
-    normalsMode _normalsMode;
     GLsizei _normalStride;
     std::unique_ptr<Texture> _texture;
 };
