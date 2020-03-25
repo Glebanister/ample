@@ -17,26 +17,49 @@ DemoGame::DemoGame(ample::window::Window &window)
     : ample::graphics::LayeredWindowActivity(window)
 {
     layer.addCamera(camera);
-    for (size_t i = 0; i < 7; ++i)
-    {
-        smooth.emplace_back(std::make_unique<ample::graphics::GraphicalObject2d>(ample::geometry::RegularPolygon<float>(10,
-                                                                                                                        (i + 1) * 3),
-                                                                                 10,
-                                                                                 0));
-        smooth[i]->translate({30 * i, 0, 0});
-        layer.addObject(*smooth[i]);
-    }
-    for (size_t i = 0; i < 7; ++i)
-    {
-        rough.emplace_back(std::make_unique<ample::graphics::GraphicalObject2d>(ample::geometry::RegularPolygon<float>(10,
-                                                                                                                       (i + 1) * 3),
-                                                                                10,
-                                                                                0));
-        rough[i]->translate({30 * i, 50, 0});
-        layer.addObject(*rough[i]);
-    }
+    ample::graphics::GraphicalObject2dRaw sample1{ample::geometry::RegularPolygon<float>(10, 8),
+                                                  10.0,
+                                                  20.0,
+                                                  "../../demo/textures/LAND.BMP",
+                                                  {1024, 768.0},
+                                                  {0.0, 0.0},
+                                                  {
+                                                      ample::graphics::textureMode::STRETCH,
+                                                      ample::graphics::textureMode::STRETCH,
+                                                  },
+                                                  "../../demo/textures/lena512.png",
+                                                  {512.0, 512.0},
+                                                  {0.0, 0.0},
+                                                  {
+                                                      ample::graphics::textureMode::STRETCH,
+                                                      ample::graphics::textureMode::STRETCH,
+                                                  },
+                                                  ample::graphics::normalsMode::FACE};
+    ample::graphics::GraphicalObject2dRaw sample2{ample::geometry::RegularPolygon<float>(10, 8),
+                                                  10.0,
+                                                  20.0,
+                                                  "../../demo/textures/lena512.png",
+                                                  {512, 512.0},
+                                                  {0.0, 0.0},
+                                                  {
+                                                      ample::graphics::textureMode::STRETCH,
+                                                      ample::graphics::textureMode::STRETCH,
+                                                  },
+                                                  "../../demo/textures/LAND.BMP",
+                                                  {1024.0, 768.0},
+                                                  {0.0, 0.0},
+                                                  {
+                                                      ample::graphics::textureMode::STRETCH,
+                                                      ample::graphics::textureMode::STRETCH,
+                                                  },
+                                                  ample::graphics::normalsMode::FACE};
+    object1 = std::make_unique<ample::graphics::GraphicalObject2d>(sample1);
+    object2 = std::make_unique<ample::graphics::GraphicalObject2d>(sample2);
+    layer.addObject(*object1);
+    layer.addObject(*object2);
     layer.addObject(camera.getLamp());
     addLayer(layer);
+    object2->translate({-30, 0, 0});
     _window.disableCursor();
 }
 

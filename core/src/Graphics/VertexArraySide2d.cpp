@@ -100,12 +100,14 @@ VertexArraySide2d::VertexArraySide2d(const std::vector<Vector2d<float>> &graphic
                                      const float z,
                                      const float depth,
                                      const std::string &texturePath,
-                                     const Vector2d<float> &texturePos,
                                      const Vector2d<float> &textureSize,
+                                     const Vector2d<float> &texturePos,
                                      const Vector2d<textureMode> &texMode,
                                      const normalsMode &normMode)
     : VertexArray(generateSideCoords(graphicalShape, z, depth),
                   generateSideUVCoords(graphicalShape, z, depth, textureSize, texturePos, texMode.x, texMode.y),
                   generateSideNormals(graphicalShape, normMode, z, depth),
-                  texturePath) {}
+                  texturePath,
+                  textureSize,
+                  texturePos) {}
 } // namespace ample::graphics

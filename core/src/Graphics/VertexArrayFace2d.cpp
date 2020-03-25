@@ -81,13 +81,16 @@ static std::vector<Vector2d<float>> generateFaceUVCoords(const std::vector<Vecto
 VertexArrayFace2d::VertexArrayFace2d(const std::vector<Vector2d<float>> &graphicalShape,
                                      const float z,
                                      const std::string &texturePath,
-                                     const Vector2d<float> &texturePos,
                                      const Vector2d<float> &textureSize,
+                                     const Vector2d<float> &texturePos,
                                      const Vector2d<textureMode> &texMode)
     : VertexArray(generateFaceCoords(graphicalShape, z),
                   generateFaceUVCoords(graphicalShape, textureSize, texturePos, texMode.x, texMode.y, z),
                   generateFaceNormals(graphicalShape, z),
-                  texturePath)
+                  texturePath,
+                  textureSize,
+                  texturePos)
 {
+    DEBUG("VertexArrayFace2d : VertexArrayFace2d") << textureSize.x << ' ' << textureSize.y << std::endl;
 }
 } // namespace ample::graphics

@@ -36,6 +36,6 @@ private:
         0,
         1000};
     ample::graphics::Layer layer;
-    std::vector<std::unique_ptr<ample::graphics::GraphicalObject2d>> smooth;
-    std::vector<std::unique_ptr<ample::graphics::GraphicalObject2d>> rough;
+    std::unique_ptr<ample::graphics::GraphicalObject2d> object1;
+    std::unique_ptr<ample::graphics::GraphicalObject2d> object2;
 };

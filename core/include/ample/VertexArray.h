@@ -31,7 +31,9 @@ public:
     VertexArray(const std::vector<Vector3d<float>> &coords,
                 const std::vector<Vector2d<float>> &uvCoords,
                 const std::vector<Vector3d<float>> &normals,
-                const std::string &texturePath);
+                const std::string &texturePath,
+                const Vector2d<float> &textureSize = {0.0f, 0.0f},
+                const Vector2d<float> &texturePosition = {0.0f, 0.0f});
     void execute();
     void setColor256(double r, double g, double b);
     ~VertexArray();
@@ -40,7 +42,6 @@ private:
     GLuint _vertexBufferId;
     GLuint _textureBufferId;
     GLuint _normalBufferId;
-    GLuint _normalLinesBufferId;
     GLsizei _totalVerts;
     GLsizei _normalStride;
     std::unique_ptr<Texture> _texture;

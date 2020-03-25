@@ -31,14 +31,20 @@ int Texture::PixelMap::getHeight() const noexcept
 }
 
 Texture::Texture(const std::string &texturePath,
-                 const graphics::Vector2d<int> size,
-                 const graphics::Vector2d<int> position,
-                 const bool autoDetectSize)
+                 const graphics::Vector2d<float> size,
+                 const graphics::Vector2d<float> position)
     : _texturePath(texturePath),
       _size(size),
       _position(position)
 {
+    DEBUG("Texture ctor");
+    DEBUG("Size: ") << size.x << ' ' << size.y << std::endl;
     os::environment::ILEnvironment::instance();
+    bool autoDetectSize = false;
+    if (size.x == 0.0 && size.y == 0.0)
+    {
+        autoDetectSize = true;
+    }
     DEBUG("Loading texture " + texturePath);
 
     ilGenImages(1, &_imgId);
@@ -51,7 +57,7 @@ Texture::Texture(const std::string &texturePath,
     ILint height = ilGetInteger(IL_IMAGE_HEIGHT);
     if (autoDetectSize)
     {
-        _size = {width, height};
+        _size = {static_cast<float>(width), static_cast<float>(height)};
     }
     if (width < size.x || height < size.y)
     {
@@ -59,8 +65,8 @@ Texture::Texture(const std::string &texturePath,
                                    exception::exType::CRITICAL,
                                    "requried size does not fit");
     }
-    PixelMap pixelMap{{width, height}, channelMode::RGB};
-    ilCopyPixels(position.x, position.y, 0, width, height, 1, IL_RGB,
+    PixelMap pixelMap{{_size.x, _size.y}, channelMode::RGB};
+    ilCopyPixels(position.x, position.y, 0, _size.x, _size.y, 1, IL_RGB,
                  IL_UNSIGNED_BYTE, pixelMap.data());
     DEBUG("Uploading texture to opengl");
 
@@ -68,10 +74,8 @@ Texture::Texture(const std::string &texturePath,
     DEBUG("Texture generated");
     glBindTexture(GL_TEXTURE_2D, _glTextureId);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pixelMap.data());
-    DEBUG("Texture uploaded");
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    DEBUG("Texture parametrized");
     exception::OpenGLException::handle();
     DEBUG("opengl texture is ready");
 
@@ -81,18 +85,6 @@ Texture::Texture(const std::string &texturePath,
 
     exception::DevILException::handle();
 }
-
-Texture::Texture(const std::string &texturePath,
-                 const graphics::Vector2d<int> size,
-                 const graphics::Vector2d<int> position)
-    : Texture(texturePath, size, position, false) {}
-
-Texture::Texture(const std::string &texturePath,
-                 const graphics::Vector2d<int> size)
-    : Texture(texturePath, size, {0, 0}, false) {}
-
-Texture::Texture(const std::string &texturePath)
-    : Texture(texturePath, {0, 0}, {0, 0}, true) {}
 
 GLuint Texture::getGlTextureId() const noexcept
 {
