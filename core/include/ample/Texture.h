@@ -43,8 +43,8 @@ private:
 
 public:
     Texture(const std::string &texturePath,
-            const graphics::Vector2d<float> size,
-            const graphics::Vector2d<float> position);
+            const graphics::Vector2d<int> size,
+            const graphics::Vector2d<int> position);
 
     ~Texture();
 
@@ -54,8 +54,8 @@ public:
 
 private:
     const std::string &_texturePath;
-    graphics::Vector2d<float> _size;
-    graphics::Vector2d<float> _position;
+    graphics::Vector2d<int> _size;
+    graphics::Vector2d<int> _position;
     ILuint _imgId;
     GLuint _glTextureId;
 };

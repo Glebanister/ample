@@ -85,8 +85,8 @@ static std::vector<Vector3d<float>> generateSideNormals(const std::vector<Vector
 static std::vector<Vector2d<float>> generateSideUVCoords(const std::vector<Vector2d<float>> &graphicalShape,
                                                          const float z,
                                                          const float depth,
-                                                         const Vector2d<float> &size,
-                                                         const Vector2d<float> &position,
+                                                         const Vector2d<int> &size,
+                                                         const Vector2d<int> &position,
                                                          const textureMode &texModeX,
                                                          const textureMode &texModeY)
 {
@@ -100,8 +100,8 @@ VertexArraySide2d::VertexArraySide2d(const std::vector<Vector2d<float>> &graphic
                                      const float z,
                                      const float depth,
                                      const std::string &texturePath,
-                                     const Vector2d<float> &textureSize,
-                                     const Vector2d<float> &texturePos,
+                                     const Vector2d<int> &textureSize,
+                                     const Vector2d<int> &texturePos,
                                      const Vector2d<textureMode> &texMode,
                                      const normalsMode &normMode)
     : VertexArray(generateSideCoords(graphicalShape, z, depth),

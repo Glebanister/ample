@@ -31,8 +31,8 @@ int Texture::PixelMap::getHeight() const noexcept
 }
 
 Texture::Texture(const std::string &texturePath,
-                 const graphics::Vector2d<float> size,
-                 const graphics::Vector2d<float> position)
+                 const graphics::Vector2d<int> size,
+                 const graphics::Vector2d<int> position)
     : _texturePath(texturePath),
       _size(size),
       _position(position)
@@ -57,7 +57,7 @@ Texture::Texture(const std::string &texturePath,
     ILint height = ilGetInteger(IL_IMAGE_HEIGHT);
     if (autoDetectSize)
     {
-        _size = {static_cast<float>(width), static_cast<float>(height)};
+        _size = {width, height};
     }
     if (width < size.x || height < size.y)
     {

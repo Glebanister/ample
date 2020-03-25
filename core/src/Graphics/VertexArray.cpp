@@ -16,8 +16,8 @@ VertexArray::VertexArray(const std::vector<Vector3d<float>> &shape,
                          const std::vector<Vector2d<float>> &uvCoords,
                          const std::vector<Vector3d<float>> &normals,
                          const std::string &texrutePath,
-                         const Vector2d<float> &textureSize,
-                         const Vector2d<float> &texturePosition)
+                         const Vector2d<int> &textureSize,
+                         const Vector2d<int> &texturePosition)
     : _totalVerts(shape.size())
 {
     {
