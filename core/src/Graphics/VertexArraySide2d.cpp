@@ -5,6 +5,7 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/normal.hpp>
+#include <cmath>
 
 #include "Vector3d.h"
 #include "Vector2d.h"
@@ -92,7 +93,24 @@ static std::vector<Vector2d<float>> generateSideUVCoords(const std::vector<Vecto
 {
     auto shape = generateSideCoords(graphicalShape, z, depth);
     std::vector<Vector2d<float>> uvCoords(shape.size());
-    // TODO
+
+    float boardLength = std::sqrt((graphicalShape[0].x - graphicalShape.back().x) * (graphicalShape[0].x - graphicalShape.back().x) +
+                                  (graphicalShape[0].y - graphicalShape.back().y) * (graphicalShape[0].y - graphicalShape.back().y));
+    std::vector<float> prefixBoardLenth(shape.size() + 1);
+    for (size_t i = 1; i < graphicalShape.size(); ++i)
+    {
+        boardLength += std::sqrt((graphicalShape[i].x - graphicalShape[i - 1].x) * (graphicalShape[i].x - graphicalShape[i - 1].x) +
+                                 (graphicalShape[i].y - graphicalShape[i - 1].y) * (graphicalShape[i].y - graphicalShape[i - 1].y));
+        prefixBoardLenth[i] = boardLength;
+    }
+    for (size_t i = 0, vId = 0; i < uvCoords.size(); i += 6, vId += 1)
+    {
+        uvCoords[i + 0].x = uvCoords[i + 3].x = uvCoords[i + 5].x = 0.f;
+        uvCoords[i + 1].x = uvCoords[i + 2].x = uvCoords[i + 4].x = 1.f * 1.f;
+        uvCoords[i + 0].y = uvCoords[i + 1].y = uvCoords[i + 3].y = prefixBoardLenth[vId + 0] / boardLength * 10.f;
+        uvCoords[i + 2].y = uvCoords[i + 4].y = uvCoords[i + 5].y = prefixBoardLenth[vId + 1] / boardLength * 10.f;
+    }
+
     return uvCoords;
 }
 
@@ -103,11 +121,13 @@ VertexArraySide2d::VertexArraySide2d(const std::vector<Vector2d<float>> &graphic
                                      const Vector2d<int> &textureSize,
                                      const Vector2d<int> &texturePos,
                                      const Vector2d<textureMode> &texMode,
-                                     const normalsMode &normMode)
+                                     const normalsMode &normMode,
+                                     const channelMode &mode)
     : VertexArray(generateSideCoords(graphicalShape, z, depth),
                   generateSideUVCoords(graphicalShape, z, depth, textureSize, texturePos, texMode.x, texMode.y),
                   generateSideNormals(graphicalShape, normMode, z, depth),
                   texturePath,
                   textureSize,
-                  texturePos) {}
+                  texturePos,
+                  mode) {}
 } // namespace ample::graphics
