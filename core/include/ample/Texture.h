@@ -43,11 +43,8 @@ private:
 
 public:
     Texture(const std::string &texturePath,
-            const graphics::Vector2d<int> size,
-            const graphics::Vector2d<int> position);
-    Texture(const std::string &texturePath,
-            const graphics::Vector2d<int> size);
-    Texture(const std::string &texturePath);
+            const graphics::Vector2d<float> size,
+            const graphics::Vector2d<float> position);
 
     ~Texture();
 
@@ -56,14 +53,9 @@ public:
     GLint getHeight() const noexcept;
 
 private:
-    Texture(const std::string &texturePath,
-            const graphics::Vector2d<int> size,
-            const graphics::Vector2d<int> position,
-            const bool autoDetectSize);
-
     const std::string &_texturePath;
-    graphics::Vector2d<int> _size;
-    graphics::Vector2d<int> _position;
+    graphics::Vector2d<float> _size;
+    graphics::Vector2d<float> _position;
     ILuint _imgId;
     GLuint _glTextureId;
 };

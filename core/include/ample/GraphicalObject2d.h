@@ -31,13 +31,13 @@ struct GraphicalObject2dRaw final
     float z;
 
     const std::string faceTexturePath;
-    Vector2d<float> faceTexturePos;
     Vector2d<float> faceTextureSize;
+    Vector2d<float> faceTexturePos;
     const Vector2d<textureMode> faceTextureMode;
 
     const std::string sideTexturePath;
-    Vector2d<float> sideTexturePos;
     Vector2d<float> sideTextureSize;
+    Vector2d<float> sideTexturePos;
     const Vector2d<textureMode> sideTextureMode;
     const normalsMode sideNormalsMode;
 
@@ -45,12 +45,12 @@ struct GraphicalObject2dRaw final
                          float depth,
                          float z,
                          const std::string faceTexturePath,
-                         Vector2d<float> faceTexturePos,
                          Vector2d<float> faceTextureSize,
+                         Vector2d<float> faceTexturePos,
                          const Vector2d<textureMode> faceTextureMode,
                          const std::string sideTexturePath,
-                         Vector2d<float> sideTexturePos,
                          Vector2d<float> sideTextureSize,
+                         Vector2d<float> sideTexturePos,
                          const Vector2d<textureMode> sideTextureMode,
                          const normalsMode sideNormalsMode);
 

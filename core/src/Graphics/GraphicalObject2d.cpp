@@ -18,24 +18,24 @@ GraphicalObject2dRaw::GraphicalObject2dRaw(const std::vector<graphics::Vector2d<
                                            float depth,
                                            float z,
                                            const std::string faceTexturePath,
-                                           Vector2d<float> faceTexturePos,
                                            Vector2d<float> faceTextureSize,
+                                           Vector2d<float> faceTexturePos,
                                            const Vector2d<textureMode> faceTextureMode,
                                            const std::string sideTexturePath,
-                                           Vector2d<float> sideTexturePos,
                                            Vector2d<float> sideTextureSize,
+                                           Vector2d<float> sideTexturePos,
                                            const Vector2d<textureMode> sideTextureMode,
                                            const normalsMode sideNormalsMode)
     : graphicalShape(graphicalShape),
       depth(depth),
       z(z),
       faceTexturePath(faceTexturePath),
-      faceTexturePos(faceTexturePos),
       faceTextureSize(faceTextureSize),
+      faceTexturePos(faceTexturePos),
       faceTextureMode(faceTextureMode),
       sideTexturePath(sideTexturePath),
-      sideTexturePos(sideTexturePos),
       sideTextureSize(sideTextureSize),
+      sideTexturePos(sideTexturePos),
       sideTextureMode(sideTextureMode),
       sideNormalsMode(sideNormalsMode)
 {
@@ -47,19 +47,19 @@ GraphicalObject2dRaw::GraphicalObject2dRaw(const GraphicalObject2d &other)
 GraphicalObject2d::GraphicalObject2d(const GraphicalObject2dRaw &raw)
     : _raw(raw)
 {
-    DEBUG("Setup graphical object 2d");
+    DEBUG("Setup graphical object 2d") << _raw.faceTextureSize.x << ' ' << _raw.faceTextureSize.y << std::endl;
     _faceArray = std::make_unique<VertexArrayFace2d>(_raw.graphicalShape,
                                                      _raw.z,
                                                      _raw.faceTexturePath,
-                                                     _raw.faceTexturePos,
                                                      _raw.faceTextureSize,
+                                                     _raw.faceTexturePos,
                                                      _raw.faceTextureMode);
     _sideArray = std::make_unique<VertexArraySide2d>(_raw.graphicalShape,
                                                      _raw.z,
                                                      _raw.depth,
                                                      _raw.sideTexturePath,
-                                                     _raw.sideTexturePos,
                                                      _raw.sideTextureSize,
+                                                     _raw.sideTexturePos,
                                                      _raw.sideTextureMode,
                                                      _raw.sideNormalsMode);
     DEBUG("Setup graphical object 2d done!");
@@ -73,12 +73,12 @@ GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphic
           depth,
           z,
           "../../demo/textures/lena512.png",
-          {0.0, 0.0},
-          {512.0, 512.0},
+          {0.f, 0.f},
+          {512.f, 512.f},
           {textureMode::STRETCH, textureMode::STRETCH},
           "../../demo/textures/lena512.png",
-          {0.0, 0.0},
-          {512.0, 512.0},
+          {0.f, 0.f},
+          {512.f, 512.f},
           {textureMode::STRETCH, textureMode::STRETCH},
           normalsMode::FACE,
       })
