@@ -32,8 +32,9 @@ public:
                 const std::vector<Vector2d<float>> &uvCoords,
                 const std::vector<Vector3d<float>> &normals,
                 const std::string &texturePath,
-                const Vector2d<float> &textureSize = {0.0f, 0.0f},
-                const Vector2d<float> &texturePosition = {0.0f, 0.0f});
+                const Vector2d<int> &textureSize = {0, 0},
+                const Vector2d<int> &texturePosition = {0, 0},
+                const channelMode mode = channelMode::RGB);
     void execute();
     void setColor256(double r, double g, double b);
     ~VertexArray();

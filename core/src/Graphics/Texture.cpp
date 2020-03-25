@@ -31,8 +31,9 @@ int Texture::PixelMap::getHeight() const noexcept
 }
 
 Texture::Texture(const std::string &texturePath,
-                 const graphics::Vector2d<float> size,
-                 const graphics::Vector2d<float> position)
+                 const graphics::Vector2d<int> size,
+                 const graphics::Vector2d<int> position,
+                 const channelMode mode)
     : _texturePath(texturePath),
       _size(size),
       _position(position)
@@ -57,7 +58,7 @@ Texture::Texture(const std::string &texturePath,
     ILint height = ilGetInteger(IL_IMAGE_HEIGHT);
     if (autoDetectSize)
     {
-        _size = {static_cast<float>(width), static_cast<float>(height)};
+        _size = {width, height};
     }
     if (width < size.x || height < size.y)
     {
@@ -65,15 +66,17 @@ Texture::Texture(const std::string &texturePath,
                                    exception::exType::CRITICAL,
                                    "requried size does not fit");
     }
-    PixelMap pixelMap{{_size.x, _size.y}, channelMode::RGB};
-    ilCopyPixels(position.x, position.y, 0, _size.x, _size.y, 1, IL_RGB,
+    int ilImageMode = mode == channelMode::RGB ? IL_RGB : IL_RGBA;
+    int glImageMode = mode == channelMode::RGB ? GL_RGB : GL_RGBA;
+    PixelMap pixelMap{{_size.x, _size.y}, mode};
+    ilCopyPixels(position.x, position.y, 0, _size.x, _size.y, 1, ilImageMode,
                  IL_UNSIGNED_BYTE, pixelMap.data());
     DEBUG("Uploading texture to opengl");
 
     glGenTextures(1, &_glTextureId);
     DEBUG("Texture generated");
     glBindTexture(GL_TEXTURE_2D, _glTextureId);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pixelMap.data());
+    glTexImage2D(GL_TEXTURE_2D, 0, glImageMode, width, height, 0, glImageMode, GL_UNSIGNED_BYTE, pixelMap.data());
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     exception::OpenGLException::handle();
