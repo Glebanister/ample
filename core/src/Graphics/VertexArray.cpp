@@ -17,7 +17,8 @@ VertexArray::VertexArray(const std::vector<Vector3d<float>> &shape,
                          const std::vector<Vector3d<float>> &normals,
                          const std::string &texrutePath,
                          const Vector2d<int> &textureSize,
-                         const Vector2d<int> &texturePosition)
+                         const Vector2d<int> &texturePosition,
+                         const channelMode mode)
     : _totalVerts(shape.size())
 {
     {
@@ -44,7 +45,7 @@ VertexArray::VertexArray(const std::vector<Vector3d<float>> &shape,
         glGenBuffers(1, &_textureBufferId);
         glBindBuffer(GL_ARRAY_BUFFER, _textureBufferId);
         glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * _texCoords.size(), _texCoords.data(), GL_STATIC_DRAW);
-        _texture = std::make_unique<Texture>(texrutePath, textureSize, texturePosition);
+        _texture = std::make_unique<Texture>(texrutePath, textureSize, texturePosition, mode);
     }
 
     {
@@ -102,9 +103,9 @@ void VertexArray::execute()
 
     glDrawArrays(GL_TRIANGLES, 0, _totalVerts);
 
-    glDisableVertexAttribArray(0);
-    glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(2);
+    glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(0);
 }
 
 void VertexArray::setColor256(double, double, double)

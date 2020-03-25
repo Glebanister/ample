@@ -83,14 +83,15 @@ VertexArrayFace2d::VertexArrayFace2d(const std::vector<Vector2d<float>> &graphic
                                      const std::string &texturePath,
                                      const Vector2d<int> &textureSize,
                                      const Vector2d<int> &texturePos,
-                                     const Vector2d<textureMode> &texMode)
+                                     const Vector2d<textureMode> &texMode,
+                                     const channelMode &mode)
     : VertexArray(generateFaceCoords(graphicalShape, z),
                   generateFaceUVCoords(graphicalShape, textureSize, texturePos, texMode.x, texMode.y, z),
                   generateFaceNormals(graphicalShape, z),
                   texturePath,
                   textureSize,
-                  texturePos)
+                  texturePos,
+                  mode)
 {
-    DEBUG("VertexArrayFace2d : VertexArrayFace2d") << textureSize.x << ' ' << textureSize.y << std::endl;
 }
 } // namespace ample::graphics

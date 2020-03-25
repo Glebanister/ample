@@ -14,15 +14,14 @@
 
 namespace ample::graphics
 {
+enum class channelMode
+{
+    RGB,
+    RGBA,
+};
 class Texture final : public utils::Noncopyable
 {
 private:
-    enum class channelMode
-    {
-        RGB,
-        RGBA,
-    };
-
     class PixelMap
     {
     public:
@@ -44,7 +43,8 @@ private:
 public:
     Texture(const std::string &texturePath,
             const graphics::Vector2d<int> size,
-            const graphics::Vector2d<int> position);
+            const graphics::Vector2d<int> position,
+            const channelMode mode);
 
     ~Texture();
 

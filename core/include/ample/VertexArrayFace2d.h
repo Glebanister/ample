@@ -14,6 +14,7 @@ public:
                       const std::string &texturePath,
                       const Vector2d<int> &textureSize,
                       const Vector2d<int> &texturePos,
-                      const Vector2d<textureMode> &texMode);
+                      const Vector2d<textureMode> &texMode,
+                      const channelMode &mode);
 };
 } // namespace ample::graphics

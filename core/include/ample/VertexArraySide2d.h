@@ -16,6 +16,7 @@ public:
                       const Vector2d<int> &textureSize,
                       const Vector2d<int> &texturePos,
                       const Vector2d<textureMode> &texMode,
-                      const normalsMode &normMode);
+                      const normalsMode &normMode,
+                      const channelMode &mode);
 };
 } // namespace ample::graphics
