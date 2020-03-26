@@ -49,7 +49,6 @@ struct MassData
 class WorldObject2d final : public ample::graphics::GraphicalObject2d
 {
 public:
-    void setZIndex(float z);
     void onActive() override;
     //void onPause() override;//TODO
 
@@ -114,9 +113,11 @@ private:
     friend ample::physics::WorldLayer2d;
     friend ample::filing::WorldObject2dIO;
 
-    WorldObject2d(b2Body *body, const std::vector<ample::graphics::Vector2d<float>> &shape);
+    WorldObject2d(b2Body *body,
+                  const std::vector<ample::graphics::Vector2d<float>> &shape,
+                  const float thickness,
+                  const float z);
     std::vector<std::shared_ptr<Fixture>> _fixtures;
-    float zIndex = 0;
     b2Body *_body = nullptr;
 };
 } // namespace ample::physics

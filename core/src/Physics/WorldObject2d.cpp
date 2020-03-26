@@ -53,11 +53,6 @@ Fixture &WorldObject2d::addFixture(
     return *(_fixtures[_fixtures.size() - 1]);
 }
 
-void WorldObject2d::setZIndex(float z)
-{
-    zIndex = z;
-}
-
 void WorldObject2d::onActive()
 {
     setTranslate({_body->GetPosition().x, _body->GetPosition().y, getZ()});
@@ -282,6 +277,9 @@ void WorldObject2d::resetMassData()
     _body->ResetMassData();
 }
 
-WorldObject2d::WorldObject2d(b2Body *body, const std::vector<ample::graphics::Vector2d<float>> &shape)
-    : GraphicalObject2d(shape, 10, 0), _body(body) {}
+WorldObject2d::WorldObject2d(b2Body *body,
+                             const std::vector<ample::graphics::Vector2d<float>> &shape,
+                             const float thickness,
+                             const float z)
+    : GraphicalObject2d(shape, thickness, z), _body(body) {}
 } // namespace ample::physics
