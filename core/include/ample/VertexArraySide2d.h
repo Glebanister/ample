@@ -13,9 +13,10 @@ public:
                       const float z,
                       const float depth,
                       const std::string &texturePath,
-                      const Vector2d<float> &texturePos,
-                      const Vector2d<float> &textureSize,
+                      const Vector2d<int> &textureSize,
+                      const Vector2d<int> &texturePos,
                       const Vector2d<textureMode> &texMode,
-                      const normalsMode &normMode);
+                      const normalsMode &normMode,
+                      const channelMode &mode);
 };
 } // namespace ample::graphics
