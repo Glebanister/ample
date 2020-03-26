@@ -71,4 +71,36 @@ void DemoGame::onActive()
 {
     LayeredWindowActivity::onActive();
     _window.moveCursor(0, 0);
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_p))
+    {
+        object2->scale({1.1, 1.1, 1.0});
+    }
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_o))
+    {
+        object2->scale({1.0 / 1.1, 1.0 / 1.1, 1.0});
+    }
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_z))
+    {
+        object2->translate({2.0, 0.0, 0.0});
+    }
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_x))
+    {
+        object2->translate({-2.0, 0.0, 0.0});
+    }
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_c))
+    {
+        object2->translate({0.0, 2.0, 0.0});
+    }
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_v))
+    {
+        object2->translate({0.0, -2.0, 0.0});
+    }
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_b))
+    {
+        object2->translate({0.0, 0.0, 2.0});
+    }
+    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_n))
+    {
+        object2->translate({0.0, 0.0, -2.0});
+    }
 }

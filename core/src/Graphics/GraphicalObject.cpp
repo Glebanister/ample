@@ -25,35 +25,47 @@ float GraphicalObject::getX() const { return _translated[0][0]; }
 float GraphicalObject::getY() const { return _translated[1][1]; }
 float GraphicalObject::getZ() const { return _translated[2][2]; }
 
-void GraphicalObject::setTranslate(glm::vec3 vector)
+void GraphicalObject::setTranslate(const glm::vec3 &vector) noexcept
 {
     _translated = glm::translate(vector);
 }
-void GraphicalObject::translate(glm::vec3 vector)
+void GraphicalObject::translate(const glm::vec3 &vector) noexcept
 {
     _translated *= glm::translate(vector);
 }
 
-void GraphicalObject::setRotate(glm::vec3 axis, float angle)
+void GraphicalObject::setRotate(const glm::vec3 &axis, const float angle) noexcept
 {
     _rotated = glm::rotate(glm::radians(angle), axis);
 }
-void GraphicalObject::rotate(glm::vec3 axis, float angle)
+void GraphicalObject::rotate(const glm::vec3 &axis, const float angle) noexcept
 {
     _rotated = glm::rotate(_rotated, glm::radians(angle), axis);
 }
 
-void GraphicalObject::draw(glm::mat4 rotated,
+void GraphicalObject::setScale(const glm::vec3 &coef) noexcept
+{
+    _scaled = glm::scale(coef);
+}
+
+void GraphicalObject::scale(const glm::vec3 &coef) noexcept
+{
+    _scaled *= glm::scale(coef);
+}
+
+void GraphicalObject::draw(glm::mat4 scaled,
+                           glm::mat4 rotated,
                            glm::mat4 translated)
 {
     rotated *= _rotated;
     translated *= _translated;
-    _modelMatrix = translated * rotated;
+    scaled *= _scaled;
+    _modelMatrix = translated * rotated * scaled;
     _modelMatrixUniform->load();
     drawSelf();
     for (auto subObject : _subObjects)
     {
-        subObject->draw(rotated, translated);
+        subObject->draw(scaled, rotated, translated);
     }
     exception::OpenGLException::handle();
 }
