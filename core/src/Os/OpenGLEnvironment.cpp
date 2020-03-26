@@ -21,7 +21,7 @@ OpenGLEnvironment::OpenGLEnvironment()
     graphics::shaders::ShaderProcessor::instance().link();
     graphics::shaders::ShaderProcessor::instance().use();
 
-    glClearColor(80.0 / 256.0, 180.0 / 256.0, 180.0 / 256.0, 0.5);
+    glClearColor(50.0 / 256.0, 50.0 / 256.0, 50.0 / 256.0, 0.5);
     glGenVertexArrays(1, &_vertexArrayId);
     glBindVertexArray(_vertexArrayId);
     glEnable(GL_DEPTH_TEST);

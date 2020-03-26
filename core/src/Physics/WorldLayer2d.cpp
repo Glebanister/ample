@@ -5,6 +5,10 @@
 
 #include "WorldLayer2d.h"
 #include "WorldDistanceJoint.h"
+#include "WorldRevoluteJoint2d.h"
+#include "WorldPrismaticJoint2d.h"
+#include "WorldPulleyJoint2d.h"
+#include "WorldGearJoint2d.h"
 #include "Clock.h"
 #include "Debug.h"
 
@@ -71,6 +75,79 @@ WorldJoint2d &WorldLayer2d::addWorldDistanceJoint(WorldObject2d &bodyA, WorldObj
                                                                {-width / 2, -length / 2}};
     _joints.emplace_back(new WorldDistanceJoint2d((b2DistanceJoint *)world.CreateJoint(&jointDef),
                                                   bodyA, bodyB, distanceLine));
+    graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
+    return *(_joints[_joints.size() - 1]);
+}
+
+WorldJoint2d &WorldLayer2d::addWorldRevoluteJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
+                                                  ample::graphics::Vector2d<float> anchor,
+                                                  float referenceAngle)
+{
+    b2RevoluteJointDef jointDef;
+    jointDef.Initialize(bodyA._body, bodyB._body,
+                        {anchor.x, anchor.y});
+    jointDef.referenceAngle = referenceAngle;
+    _joints.emplace_back(new WorldRevoluteJoint2d((b2RevoluteJoint *)world.CreateJoint(&jointDef),
+                                                  bodyA, bodyB, {{1, 1}}));
+    graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
+    return *(_joints[_joints.size() - 1]);
+}
+
+WorldJoint2d &WorldLayer2d::addWorldPrismaticJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
+                                                   ample::graphics::Vector2d<float> anchor,
+                                                   ample::graphics::Vector2d<float> worldAxis,
+                                                   float referenceAngle)
+{
+    b2PrismaticJointDef jointDef;
+    jointDef.Initialize(bodyA._body, bodyB._body, {anchor.x, anchor.y}, {worldAxis.x, worldAxis.y});
+    jointDef.referenceAngle = referenceAngle;
+    _joints.emplace_back(new WorldPrismaticJoint2d((b2PrismaticJoint *)world.CreateJoint(&jointDef),
+                                                   bodyA, bodyB, {{1, 1}}));
+    graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
+    return *(_joints[_joints.size() - 1]);
+}
+
+WorldJoint2d &WorldLayer2d::addWorldPulleyJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
+                                                ample::graphics::Vector2d<float> groundAnchorA,
+                                                ample::graphics::Vector2d<float> groundAnchorB,
+                                                ample::graphics::Vector2d<float> anchorA,
+                                                ample::graphics::Vector2d<float> anchorB,
+                                                float lengthA,
+                                                float lengthB,
+                                                float ratio)
+{
+    b2PulleyJointDef jointDef;
+    jointDef.Initialize(bodyA._body, bodyB._body,
+                        {groundAnchorA.x, groundAnchorA.y},
+                        {groundAnchorB.x, groundAnchorB.y},
+                        {anchorA.x, anchorA.y},
+                        {anchorB.x, anchorB.y}, ratio);
+    if (lengthA > 0)
+    {
+        jointDef.lengthA = lengthA;
+    }
+    if (lengthB > 0)
+    {
+        jointDef.lengthB = lengthB;
+    }
+    _joints.emplace_back(new WorldPulleyJoint2d((b2PulleyJoint *)world.CreateJoint(&jointDef),
+                                                bodyA, bodyB, {{1, 1}}));
+    graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
+    return *(_joints[_joints.size() - 1]);
+}
+
+WorldJoint2d &WorldLayer2d::addWorldGearJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
+                                              WorldJoint2d &jointA, WorldJoint2d &jointB,
+                                              float ratio)
+{
+    b2GearJointDef jointDef;
+    jointDef.bodyA = bodyA._body;
+    jointDef.bodyB = bodyB._body;
+    jointDef.joint1 = jointA._joint;
+    jointDef.joint2 = jointB._joint;
+    jointDef.ratio = ratio;
+    _joints.emplace_back(new WorldGearJoint2d((b2GearJoint *)world.CreateJoint(&jointDef),
+                                                bodyA, bodyB, jointA, jointB, {{1, 1}}));
     graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
     return *(_joints[_joints.size() - 1]);
 }

@@ -59,10 +59,33 @@ void Camera::translate(const glm::vec3 &vector)
 void Camera::rotate(const glm::vec3 &axis, const float angle)
 {
     _direction = glm::rotate(_direction, glm::radians(angle), axis);
+    _head = glm::rotate(_head, glm::radians(angle), axis);
+    _right = glm::rotate(_right, glm::radians(angle), axis);
 }
 
-void Camera::moveInViewDirection(float units)
+void Camera::moveForward(float units)
 {
     _position += _direction * units;
+}
+void Camera::moveRight(float units)
+{
+    _position -= _right * units;
+}
+void Camera::moveUp(float units)
+{
+    _position += _head * units;
+}
+
+void Camera::rotateForward(float angle)
+{
+    rotate(_direction, angle);
+}
+void Camera::rotateRight(float angle)
+{
+    rotate({0.0, 1.0, 0.0}, -angle);
+}
+void Camera::rotateUp(float angle)
+{
+    rotate(_right, -angle);
 }
 } // namespace ample::graphics

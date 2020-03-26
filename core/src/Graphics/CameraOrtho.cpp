@@ -22,16 +22,18 @@ CameraOrtho::CameraOrtho(const Vector2d<pixel_t> &viewSize,
                          float left,
                          float right,
                          float bottom,
-                         float top)
+                         float top,
+                         float near,
+                         float far)
     : Camera(viewSize, viewPosition, eyePos, direction),
       _left(left),
       _right(right),
       _bottom(bottom),
       _top(top),
-      _programId(shaders::ShaderProcessor::instance().getProgramId()),
-      _viewMatrixId(glGetUniformLocation(_programId, "view_matrix")),
-      _projectionMatrixId(glGetUniformLocation(_programId, "projection_matrix")),
-      _eyeVectorId(glGetUniformLocation(_programId, "eye_position"))
+      _near(near),
+      _far(far),
+      _viewMatrixUniform(std::make_unique<shaders::ShaderProcessor::Uniform>(_viewMatrix, "view_matrix")),
+      _projectionMatrixUniform(std::make_unique<shaders::ShaderProcessor::Uniform>(_projectionMatrix, "projection_matrix"))
 {
     DEBUG("Setup ortho camera");
     exception::OpenGLException::handle();
@@ -40,13 +42,10 @@ CameraOrtho::CameraOrtho(const Vector2d<pixel_t> &viewSize,
 void CameraOrtho::look()
 {
     _viewport.set();
-    auto viewMatrix = glm::lookAt(_position, _position + _direction, {0, 1, 0});
-    auto projectionMatrix = glm::ortho(_left, _right, _bottom, _top);
-    glm::vec3 eyePosition{_position.x, _position.y, _position.z};
-
-    glUniformMatrix4fv(_projectionMatrixId, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
-    glUniformMatrix4fv(_viewMatrixId, 1, GL_FALSE, glm::value_ptr(viewMatrix));
-    glUniform3fv(_eyeVectorId, 1, glm::value_ptr(eyePosition));
+    _viewMatrix = glm::lookAt(_position, _position + _direction, _head);
+    _projectionMatrix = glm::ortho(_left, _right, _bottom, _top, _near, _far);
+    _viewMatrixUniform->load();
+    _projectionMatrixUniform->load();
 
     exception::OpenGLException::handle();
 }
@@ -60,9 +59,13 @@ void CameraOrtho::setLeft(float left) { _left = left; }
 void CameraOrtho::setRight(float right) { _right = right; }
 void CameraOrtho::setBottom(float bottom) { _bottom = bottom; }
 void CameraOrtho::setTop(float top) { _top = top; }
+void CameraOrtho::setNear(float near) { _near = near; }
+void CameraOrtho::setFar(float far) { _far = far; }
 
 float CameraOrtho::getLeft() const { return _left; }
 float CameraOrtho::getRight() const { return _right; }
 float CameraOrtho::getBottom() const { return _bottom; }
 float CameraOrtho::getTop() const { return _top; }
+float CameraOrtho::getNear() const { return _near; }
+float CameraOrtho::getFar() const { return _far; }
 } // namespace ample::graphics

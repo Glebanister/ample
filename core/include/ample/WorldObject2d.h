@@ -5,15 +5,15 @@
 #include "box2d/b2_body.h"
 #include "box2d/b2_fixture.h"
 
-#include <rapidjson/document.h>
-#include <rapidjson/writer.h>
-#include <rapidjson/stringbuffer.h>
-#include <rapidjson/prettywriter.h>
-
 #include <fstream>
 #include <sstream>
 #include <memory>
 #include <vector>
+
+namespace ample::filing
+{
+class WorldObject2dIO;
+}
 
 namespace ample::physics
 {
@@ -110,10 +110,9 @@ public:
 
     void dump();
 
-    static std::pair<int, std::shared_ptr<ample::physics::WorldObject2d>> load(const rapidjson::Value &doc) { (void)doc; };
-
 private:
     friend ample::physics::WorldLayer2d;
+    friend ample::filing::WorldObject2dIO;
 
     WorldObject2d(b2Body *body, const std::vector<ample::graphics::Vector2d<float>> &shape);
     std::vector<std::shared_ptr<Fixture>> _fixtures;

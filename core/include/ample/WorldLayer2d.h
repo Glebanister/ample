@@ -3,7 +3,6 @@
 #include "box2d/b2_world.h"
 
 #include "Layer.h"
-#include "Scene2d.h"
 #include "WorldObject2d.h"
 #include "WorldJoint2d.h"
 #include "ContactListener.h"
@@ -28,7 +27,7 @@ enum class BodyType
 
 namespace ample::physics
 {
-class WorldLayer2d final : public ample::graphics::Layer
+class WorldLayer2d : public ample::graphics::Layer
 {
 public:
     explicit WorldLayer2d(const ample::graphics::Vector2d<float> &gravity);
@@ -42,12 +41,29 @@ public:
                                         float width = 1,
                                         float length = -1,
                                         bool collideConnected = false);
+    WorldJoint2d &addWorldRevoluteJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
+                                        ample::graphics::Vector2d<float> anchor,
+                                        float referenceAngle = 0);
+    WorldJoint2d &addWorldPrismaticJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
+                                         ample::graphics::Vector2d<float> anchor,
+                                         ample::graphics::Vector2d<float> worldAxis = {1, 0},
+                                         float referenceAngle = 0);
+    WorldJoint2d &addWorldPulleyJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
+                                      ample::graphics::Vector2d<float> groundAnchorA,
+                                      ample::graphics::Vector2d<float> groundAnchorB,
+                                      ample::graphics::Vector2d<float> anchorA,
+                                      ample::graphics::Vector2d<float> anchorB,
+                                      float lengthA = -1,
+                                      float lengthB = -1,
+                                      float ratio = 1);
+    WorldJoint2d &addWorldGearJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
+                                    WorldJoint2d &jointA, WorldJoint2d & jointB,
+                                    float ratio = 1);
     void setContactListener(ContactListener &listener);
 
 protected:
     void onActive() override;
 
-private:
     std::vector<std::shared_ptr<WorldObject2d>> _bodies;
     std::vector<std::shared_ptr<WorldJoint2d>> _joints;
     b2World world;
