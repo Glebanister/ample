@@ -41,6 +41,10 @@ CameraOrtho::CameraOrtho(const Vector2d<pixel_t> &viewSize,
 
 void CameraOrtho::look()
 {
+    if (!_visible)
+    {
+        return;
+    }
     _viewport.set();
     _viewMatrix = glm::lookAt(_position, _position + _direction, _head);
     _projectionMatrix = glm::ortho(_left, _right, _bottom, _top, _near, _far);
