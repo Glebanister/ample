@@ -83,6 +83,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Geometry/RegularPolygon.cpp
 
     src/Game/Game2d/Game2d.cpp
+    src/Game/GameException.cpp
    )
 
 include_directories(${SDL2_INCLUDE_DIRS})

@@ -27,6 +27,7 @@ enum class exId : size_t
     OPENGL,
     SDL,
     DEVIL,
+    GAME,
 };
 
 static std::string exIdInfo[] = {
@@ -47,6 +48,7 @@ static std::string exIdInfo[] = {
     "OpenGL error occured",
     "SDL error occured",
     "DevIL error occured",
+    "game error occured",
 };
 
 enum class exType : size_t
@@ -64,8 +66,8 @@ class Exception : public std::exception
 {
 public:
     explicit Exception(const exId &id,
-              const exType &type,
-              const std::string &message = "");
+                       const exType &type,
+                       const std::string &message = "");
 
     const char *what() const throw();
 
