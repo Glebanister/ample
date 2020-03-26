@@ -74,6 +74,8 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Graphics/Layer.cpp
     src/Graphics/LayeredWindowActivity.cpp
     src/Graphics/VertexArray.cpp
+    src/Graphics/VertexArraySide2d.cpp
+    src/Graphics/VertexArrayFace2d.cpp
     src/Graphics/Shaders/Shader.cpp
     src/Graphics/Shaders/ShaderProcessor.cpp
     src/Graphics/Light/LightSource.cpp

@@ -16,7 +16,8 @@ class GraphicalObject : public activity::Behaviour
 public:
     GraphicalObject();
 
-    void draw(glm::mat4 rotated = glm::mat4{1.0f},
+    void draw(glm::mat4 scaled = glm::mat4{1.0f},
+              glm::mat4 rotated = glm::mat4{1.0f},
               glm::mat4 translated = glm::mat4{1.0f});
     virtual void drawSelf() = 0;
     void addSubObject(GraphicalObject &object);
@@ -25,15 +26,19 @@ public:
     float getY() const;
     float getZ() const;
 
-    void setTranslate(glm::vec3 vector);
-    void translate(glm::vec3 vector);
+    void setScale(const glm::vec3 &) noexcept;
+    void scale(const glm::vec3 &) noexcept;
 
-    void setRotate(glm::vec3 axis, float angle);
-    void rotate(glm::vec3 axis, float angle);
+    void setRotate(const glm::vec3 &axis, const float angle) noexcept;
+    void rotate(const glm::vec3 &axis, const float angle) noexcept;
+
+    void setTranslate(const glm::vec3 &) noexcept;
+    void translate(const glm::vec3 &) noexcept;
 
 protected:
     std::vector<GraphicalObject *> _subObjects;
     glm::mat4 _translated{1.0f};
+    glm::mat4 _scaled{1.0f};
     glm::mat4 _rotated{1.0f};
     glm::mat4 _modelMatrix{1.0f};
     std::unique_ptr<shaders::ShaderProcessor::Uniform> _modelMatrixUniform;
