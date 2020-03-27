@@ -1,5 +1,6 @@
 #include "Level.h"
 #include "GameException.h"
+#include "Debug.h"
 
 namespace ample::game::game2d
 {
@@ -18,11 +19,12 @@ physics::WorldLayer2d &Level::createSlice(const size_t num)
     {
         throw GameException{"layer already exists: " + std::to_string(num)};
     }
-    _sliceByDistance.emplace(num,
-                             std::make_shared<physics::WorldLayer2d>(_defaultGravity,
-                                                                     num * _sliceThikness,
-                                                                     _sliceThikness,
-                                                                     _physicsLayerPosition));
+    _sliceByDistance[num] = std::make_shared<physics::WorldLayer2d>(_defaultGravity,
+                                                                    num * _sliceThikness,
+                                                                    _sliceThikness,
+                                                                    _physicsLayerPosition);
+    auto &slice = *_sliceByDistance[num].get();
+    slice.addCamera(_perspectiveCamera);
     return *_sliceByDistance[num].get();
 }
 
@@ -40,4 +42,13 @@ physics::WorldLayer2d &Level::numberedSlice(const size_t num)
     return *_sliceByDistance[num];
 }
 
+graphics::CameraPerspective &Level::camera()
+{
+    return _perspectiveCamera;
+}
+
+std::unordered_map<size_t, std::shared_ptr<physics::WorldLayer2d>> &Level::layers() noexcept
+{
+    return _sliceByDistance;
+}
 } // namespace ample::game::game2d
