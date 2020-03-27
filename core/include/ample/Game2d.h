@@ -6,27 +6,52 @@
 #include "LayeredWindowActivity.h"
 #include "WorldLayer2d.h"
 #include "Vector2d.h"
+#include "GameException.h"
+#include "CameraPerspective.h"
+#include "CameraOrtho.h"
+#include "Debug.h"
+#include "Level.h"
 
 namespace ample::game::game2d
 {
 class Game2d : public graphics::LayeredWindowActivity
 {
 public:
-    Game2d(window::Window &window, float sliceThikness, float physicsLayerPosition,
-           const graphics::Vector2d<float> &frontSliceGravity = {0.f, -10.f});
+    Game2d(window::Window &window);
 
-    void setSlice(physics::WorldLayer2d &slice, const size_t num);
+    graphics::CameraPerspective &perspectiveCamera() noexcept;
+    graphics::CameraOrtho &orthoCamera() noexcept;
 
-    physics::WorldLayer2d &frontSlice() noexcept;
-    physics::WorldLayer2d &numberedSlice(const size_t num);
+    graphics::Layer &layout() noexcept;
+
+    template <typename... Args>
+    Level &createLevel(size_t num, Args... args);
 
 private:
-    const float _sliceThikness;
-    const float _physicsLayerPosition;
-    const graphics::Vector2d<float> _defaultGravity;
-
-    std::unordered_map<size_t, physics::WorldLayer2d *> _sliceByDistance;
-    physics::WorldLayer2d _frontSlice;
+    std::unordered_map<size_t, std::shared_ptr<Level>> _levels;
+    size_t _currentLevel;
     graphics::Layer _layout;
+    graphics::CameraPerspective _perspectiveCamera{
+        {1920, 1080},
+        {0, 0},
+        {0.0, 0.0, 0.0},
+        {0.0, 0.0, 1.0},
+        60.0,
+        1920.0 / 1080.0,
+        0.1,
+        1000.0};
+    graphics::CameraOrtho _orthoCamera{
+        {1920, 1080},
+        {0, 0},
+        {0.0, 0.0, 0.0},
+        {0.0, 0.0, 1.0},
+        -1920 / 10,
+        1920 / 10,
+        -1080 / 10,
+        1080 / 10,
+        0,
+        1000};
 };
 } // namespace ample::game::game2d
+
+#include "templates/Game2d.hpp"

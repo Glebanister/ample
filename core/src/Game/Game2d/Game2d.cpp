@@ -5,34 +5,26 @@
 
 namespace ample::game::game2d
 {
-Game2d::Game2d(window::Window &window, float layerThikness, float physicsLayerPosition,
-               const graphics::Vector2d<float> &frontLayerGravity)
-    : graphics::LayeredWindowActivity(window),
-      _sliceThikness(layerThikness),
-      _physicsLayerPosition(physicsLayerPosition),
-      _frontSlice(frontLayerGravity),
-      _defaultGravity(frontLayerGravity)
+Game2d::Game2d(window::Window &window)
+    : graphics::LayeredWindowActivity(window)
 {
-    addLayer(_frontSlice);
-    _sliceByDistance[0] = &_frontSlice;
+    _perspectiveCamera.setVisibility(true);
+    _orthoCamera.setVisibility(true);
+    _layout.addCamera(_orthoCamera);
 }
 
-void Game2d::setSlice(physics::WorldLayer2d &slice, const size_t num)
+graphics::Layer &Game2d::layout() noexcept
 {
-    _sliceByDistance[num] = &slice;
+    return _layout;
 }
 
-physics::WorldLayer2d &Game2d::frontSlice() noexcept
+graphics::CameraPerspective &Game2d::perspectiveCamera() noexcept
 {
-    return _frontSlice;
+    return _perspectiveCamera;
 }
 
-physics::WorldLayer2d &Game2d::numberedSlice(const size_t num)
+graphics::CameraOrtho &Game2d::orthoCamera() noexcept
 {
-    if (!_sliceByDistance[num])
-    {
-        throw GameException{"wrong layer number: " + std::to_string(num)};
-    }
-    return *_sliceByDistance[num];
+    return _orthoCamera;
 }
 } // namespace ample::game::game2d
