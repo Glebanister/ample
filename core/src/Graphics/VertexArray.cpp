@@ -45,7 +45,7 @@ VertexArray::VertexArray(const std::vector<Vector3d<float>> &shape,
         glGenBuffers(1, &_textureBufferId);
         glBindBuffer(GL_ARRAY_BUFFER, _textureBufferId);
         glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * _texCoords.size(), _texCoords.data(), GL_STATIC_DRAW);
-        _texture = std::make_unique<Texture>(texrutePath, textureSize, texturePosition, mode);
+        _texture = std::make_unique<Texture>(TextureRaw{texrutePath, textureSize, texturePosition, mode});
     }
 
     {

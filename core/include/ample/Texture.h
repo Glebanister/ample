@@ -19,6 +19,26 @@ enum class channelMode
     RGB,
     RGBA,
 };
+
+class Texture;
+
+class TextureRaw
+{
+public:
+    TextureRaw(const std::string &texturePath,
+               const graphics::Vector2d<int> &size,
+               const graphics::Vector2d<int> &position,
+               const channelMode mode);
+
+    TextureRaw(const Texture &);
+
+public:
+    const std::string &texturePath;
+    graphics::Vector2d<int> size;
+    graphics::Vector2d<int> position;
+    channelMode mode;
+};
+
 class Texture final : public utils::Noncopyable
 {
 private:
@@ -28,7 +48,6 @@ private:
         PixelMap(const graphics::Vector2d<int> &size,
                  const channelMode mode = channelMode::RGB);
         PixelMap() = default;
-        PixelMap &operator=(const PixelMap &) = default;
 
         uint8_t *data();
         void resize(const graphics::Vector2d<int> &size);
@@ -41,10 +60,7 @@ private:
     };
 
 public:
-    Texture(const std::string &texturePath,
-            const graphics::Vector2d<int> size,
-            const graphics::Vector2d<int> position,
-            const channelMode mode);
+    Texture(const TextureRaw &rawTexture);
 
     ~Texture();
 
@@ -53,10 +69,10 @@ public:
     GLint getHeight() const noexcept;
 
 private:
-    const std::string &_texturePath;
-    graphics::Vector2d<int> _size;
-    graphics::Vector2d<int> _position;
+    TextureRaw _raw;
     ILuint _imgId;
     GLuint _glTextureId;
+
+    friend class TextureRaw;
 };
 } // namespace ample::graphics
