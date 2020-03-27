@@ -15,8 +15,16 @@
 
 namespace ample::physics
 {
-WorldLayer2d::WorldLayer2d(const graphics::Vector2d<float> &gravity, float z, float thickness)
-    : world(b2Vec2(gravity.x, gravity.y)), _z(z), _thickness(thickness) {}
+WorldLayer2d::WorldLayer2d(const graphics::Vector2d<float> &gravity,
+                           float z,
+                           float thickness,
+                           float relativePositionInSlice)
+    : world(b2Vec2(gravity.x, gravity.y)),
+      _z(z),
+      _thickness(thickness),
+      _relativePositionInSlice(relativePositionInSlice)
+{
+}
 
 /*void WorldLayer2d::addWorldObject(WorldObject2d &object)
 {
@@ -59,7 +67,7 @@ WorldObject2d &WorldLayer2d::addWorldObject(const std::vector<ample::graphics::V
     _bodies.emplace_back(new WorldObject2d(world.CreateBody(&bodyDef),
                                            shape,
                                            _thickness * relativeThickness,
-                                           _z + (_thickness - _thickness * relativeThickness) / 2.0f));
+                                           _z + (_thickness * (1 - relativeThickness)) * _relativePositionInSlice));
     graphics::Layer::addObject(*(_bodies[_bodies.size() - 1]));
     return *(_bodies[_bodies.size() - 1]);
 }
