@@ -9,6 +9,12 @@ Level &Game2d::createLevel(size_t num, Args... args)
     {
         throw GameException{"level with given id is already exists"};
     }
-    return *(_levels[num] = std::make_shared<Level>(args...)); // TODO : remove operator=
+    if (!num)
+    {
+        throw GameException{"level can not have 0 as id"};
+    }
+    auto &level = *(_levels[num] = std::make_shared<Level>(args...));
+    level.camera().setVisibility(false);
+    return level; // TODO : remove operator=
 }
 } // namespace ample::game::game2d

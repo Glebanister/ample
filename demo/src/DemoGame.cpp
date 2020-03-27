@@ -53,7 +53,9 @@ DemoGame::DemoGame(ample::window::Window &window)
     object2 = std::make_unique<ample::graphics::GraphicalObject2d>(sample2);
     object2->translate({-30, 0, -30});
     _window.disableCursor();
-    auto level = createLevel(0, 10.0f, 0.5f);
-    // level.frontSlice().addObject(*object1);
-    // level.frontSlice().addObject(*object2);
+    auto &level = createLevel(1, 10.0f, 0.5f);
+    level.frontSlice().addObject(*object1);
+    level.frontSlice().addObject(*object2);
+    setCurrentLevel(1);
+    level.camera().translate({0.0, 0.0, -50.0});
 }
