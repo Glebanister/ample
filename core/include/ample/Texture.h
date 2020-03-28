@@ -14,10 +14,17 @@
 
 namespace ample::graphics
 {
-enum class channelMode
+enum channelMode
 {
-    RGB,
-    RGBA,
+    RGB = IL_RGB,
+    RGBA = IL_RGBA,
+};
+
+enum texturePlayback
+{
+    NORMAL,
+    REVERSED,
+    BOOMERANG,
 };
 
 class Texture;
@@ -26,17 +33,21 @@ class TextureRaw
 {
 public:
     TextureRaw(const std::string &texturePath,
-               const graphics::Vector2d<int> &size,
-               const graphics::Vector2d<int> &position,
-               const channelMode mode);
+               const graphics::Vector2d<size_t> &eachSize,
+               const graphics::Vector2d<int> &startPosition,
+               const graphics::Vector2d<size_t> &framesCount,
+               const channelMode format,
+               const texturePlayback playback);
 
     TextureRaw(const Texture &);
 
 public:
     const std::string &texturePath;
-    graphics::Vector2d<int> size;
-    graphics::Vector2d<int> position;
-    channelMode mode;
+    graphics::Vector2d<size_t> eachSize;
+    graphics::Vector2d<int> startPosition;
+    graphics::Vector2d<size_t> framesCount;
+    channelMode format;
+    texturePlayback playback;
 };
 
 class Texture final : public utils::Noncopyable
@@ -45,34 +56,96 @@ private:
     class PixelMap
     {
     public:
-        PixelMap(const graphics::Vector2d<int> &size,
-                 const channelMode mode = channelMode::RGB);
-        PixelMap() = default;
+        class Pixel
+        {
+        public:
+            Pixel(channelMode, uint8_t *data);
+            Pixel(const Pixel &) = delete;
+            Pixel &operator=(const Pixel &);
+
+        private:
+            uint8_t *_data;
+            const channelMode _format;
+        };
+
+        class PixelMapRow
+        {
+        public:
+            PixelMapRow(channelMode, uint8_t *data);
+            Pixel operator[](const size_t);
+
+        private:
+            uint8_t *_data;
+            const channelMode _format;
+        };
+
+        PixelMap(const graphics::Vector2d<size_t> &size,
+                 const channelMode mode);
 
         uint8_t *data();
-        void resize(const graphics::Vector2d<int> &size);
-        int getWidth() const noexcept;
-        int getHeight() const noexcept;
+        size_t getWidth() const noexcept;
+        size_t getHeight() const noexcept;
+
+        PixelMapRow &operator[](const size_t);
 
     private:
+        std::vector<PixelMapRow> _rows;
+        graphics::Vector2d<size_t> _size;
         std::vector<uint8_t> _data;
-        graphics::Vector2d<int> _size;
+        const channelMode _format;
+    };
+
+    class ILimage final
+    {
+    public:
+        ILimage(const std::string &imagePath,
+                ILenum format,
+                const Vector2d<size_t> &size,
+                const Vector2d<int> &position);
+        ~ILimage();
+
+        PixelMap &pixels();
+
+        size_t width() const noexcept;
+        size_t height() const noexcept;
+
+    private:
+        ILuint _imgId;
+        PixelMap _pixels;
+    };
+
+    class GLSingleTexture final
+    {
+    public:
+        GLSingleTexture(PixelMap &pixels,
+                        const GLenum internalFormat,
+                        const GLenum format);
+
+        GLuint glTextureId() const noexcept;
+
+        ~GLSingleTexture();
+
+    private:
+        GLuint _glTextureId;
     };
 
 public:
     Texture(const TextureRaw &rawTexture);
 
-    ~Texture();
-
-    GLuint getGlTextureId() const noexcept;
     GLint getWidth() const noexcept;
     GLint getHeight() const noexcept;
 
+    size_t getFramesTotal() const noexcept;
+    size_t getCurrentFrame() const noexcept;
+    void setFrame(size_t num) noexcept;
+
+    void bind() const noexcept;
+
 private:
     TextureRaw _raw;
-    ILuint _imgId;
-    GLuint _glTextureId;
-
+    std::vector<GLSingleTexture> _frames;
+    size_t _currentFrame = 0U;
     friend class TextureRaw;
+    bool _boomerangAnimationForward = true;
 };
 } // namespace ample::graphics
