@@ -11,6 +11,7 @@
 #include "WorldGearJoint2d.h"
 #include "WorldMouseJoint2d.h"
 #include "WorldWheelJoint2d.h"
+#include "WorldWeldJoint2d.h"
 #include "Clock.h"
 #include "Exception.h"
 #include "Debug.h"
@@ -166,6 +167,17 @@ WorldJoint2d &WorldLayer2d::addWorldWheelJoint(WorldObject2d &bodyA, WorldObject
     b2WheelJointDef jointDef;
     jointDef.Initialize(bodyA._body, bodyB._body, {anchor.x, anchor.y}, {axis.x, axis.y});
     _joints.emplace_back(new WorldWheelJoint2d(world.CreateJoint(&jointDef), bodyA, bodyB));
+    return *(_joints.back());
+}
+
+WorldJoint2d &WorldLayer2d::addWorldWeldJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
+                                              ample::graphics::Vector2d<float> anchor,
+                                              float referenceAngle)
+{
+    b2WeldJointDef jointDef;
+    jointDef.Initialize(bodyA._body, bodyB._body, {anchor.x, anchor.y});
+    jointDef.referenceAngle = referenceAngle;
+    _joints.emplace_back(new WorldWeldJoint2d(world.CreateJoint(&jointDef), bodyA, bodyB));
     return *(_joints.back());
 }
 
