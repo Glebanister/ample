@@ -4,11 +4,10 @@
 namespace ample::physics
 {
 WorldDistanceJoint2d::WorldDistanceJoint2d(b2Joint *joint,
-                                           WorldObject2d &bodyA, WorldObject2d &bodyB,
-                                           const std::vector<ample::graphics::Vector2d<float>> &shape)
-    : WorldJoint2d(joint, bodyA, bodyB, shape) {}
+                                           WorldObject2d &bodyA, WorldObject2d &bodyB)
+    : WorldJoint2d(joint, bodyA, bodyB) {}
 
-void WorldDistanceJoint2d::onActive()
+/*void WorldDistanceJoint2d::onActive()
 {
     setTranslate({(_bodyA.getPosition().x + _bodyB.getPosition().x) / 2,
                   (_bodyA.getPosition().y + _bodyB.getPosition().y) / 2, getZ()});
@@ -35,7 +34,7 @@ void WorldDistanceJoint2d::onActive()
             setRotate({0.0f, 0.0f, 1.0f}, 180 - angle * 180.0f / M_PI);
         }
     }
-}
+}*/
 
 ample::graphics::Vector2d<float> WorldDistanceJoint2d::getLocalAnchorA() const
 {

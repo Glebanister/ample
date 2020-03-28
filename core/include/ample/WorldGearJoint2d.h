@@ -20,8 +20,7 @@ private:
     friend WorldLayer2d;
 
     WorldGearJoint2d(b2Joint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB,
-                     WorldJoint2d &joinA, WorldJoint2d &jointB,
-                     const std::vector<ample::graphics::Vector2d<float>> &shape);
+                     WorldJoint2d &joinA, WorldJoint2d &jointB);
     WorldJoint2d &_jointA;
     WorldJoint2d &_jointB;
 };

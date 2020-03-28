@@ -3,9 +3,8 @@
 namespace ample::physics
 {
 WorldGearJoint2d::WorldGearJoint2d(b2Joint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB,
-                                   WorldJoint2d &jointA, WorldJoint2d &jointB,
-                                   const std::vector<ample::graphics::Vector2d<float>> &shape)
-    : WorldJoint2d(joint, bodyA, bodyB, shape), _jointA(jointA), _jointB(jointB) {}
+                                   WorldJoint2d &jointA, WorldJoint2d &jointB)
+    : WorldJoint2d(joint, bodyA, bodyB), _jointA(jointA), _jointB(jointB) {}
 
 WorldJoint2d &WorldGearJoint2d::getJointA()
 {

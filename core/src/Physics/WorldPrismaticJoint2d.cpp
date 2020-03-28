@@ -3,9 +3,8 @@
 namespace ample::physics
 {
 WorldPrismaticJoint2d::WorldPrismaticJoint2d(b2Joint *joint,
-                                             WorldObject2d &bodyA, WorldObject2d &bodyB,
-                                             const std::vector<ample::graphics::Vector2d<float>> &shape)
-    : WorldJoint2d(joint, bodyA, bodyB, shape) {}
+                                             WorldObject2d &bodyA, WorldObject2d &bodyB)
+    : WorldJoint2d(joint, bodyA, bodyB) {}
 
 ample::graphics::Vector2d<float> WorldPrismaticJoint2d::getLocalAnchorA() const
 {

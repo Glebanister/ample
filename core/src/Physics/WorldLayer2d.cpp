@@ -61,7 +61,6 @@ WorldObject2d &WorldLayer2d::addWorldObject(const std::vector<ample::graphics::V
 WorldJoint2d &WorldLayer2d::addWorldDistanceJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
                                                   ample::graphics::Vector2d<float> anchorOnBodyA,
                                                   ample::graphics::Vector2d<float> anchorOnBodyB,
-                                                  float width,
                                                   float length,
                                                   bool collideConnected)
 {
@@ -70,18 +69,13 @@ WorldJoint2d &WorldLayer2d::addWorldDistanceJoint(WorldObject2d &bodyA, WorldObj
                         {anchorOnBodyA.x, anchorOnBodyA.y},
                         {anchorOnBodyB.x, anchorOnBodyB.y});
     jointDef.collideConnected = collideConnected;
-    if (length <= 0)
+    if (length > 0)
     {
-        length = sqrt(pow(bodyA.getPosition().x - bodyB.getPosition().x, 2) + pow(bodyA.getPosition().y - bodyB.getPosition().y, 2));
+        jointDef.length = length;
     }
     jointDef.length = length;
-    std::vector<ample::graphics::Vector2d<float>> distanceLine{{-width / 2, length / 2},
-                                                               {width / 2, length / 2},
-                                                               {width / 2, -length / 2},
-                                                               {-width / 2, -length / 2}};
     _joints.emplace_back(new WorldDistanceJoint2d((b2DistanceJoint *)world.CreateJoint(&jointDef),
-                                                  bodyA, bodyB, distanceLine));
-    graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
+                                                  bodyA, bodyB));
     return *(_joints.back());
 }
 
@@ -94,8 +88,7 @@ WorldJoint2d &WorldLayer2d::addWorldRevoluteJoint(WorldObject2d &bodyA, WorldObj
                         {anchor.x, anchor.y});
     jointDef.referenceAngle = referenceAngle;
     _joints.emplace_back(new WorldRevoluteJoint2d((b2RevoluteJoint *)world.CreateJoint(&jointDef),
-                                                  bodyA, bodyB, {{1, 1}}));
-    graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
+                                                  bodyA, bodyB));
     return *(_joints.back());
 }
 
@@ -108,8 +101,7 @@ WorldJoint2d &WorldLayer2d::addWorldPrismaticJoint(WorldObject2d &bodyA, WorldOb
     jointDef.Initialize(bodyA._body, bodyB._body, {anchor.x, anchor.y}, {worldAxis.x, worldAxis.y});
     jointDef.referenceAngle = referenceAngle;
     _joints.emplace_back(new WorldPrismaticJoint2d((b2PrismaticJoint *)world.CreateJoint(&jointDef),
-                                                   bodyA, bodyB, {{1, 1}}));
-    graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
+                                                   bodyA, bodyB));
     return *(_joints.back());
 }
 
@@ -137,8 +129,7 @@ WorldJoint2d &WorldLayer2d::addWorldPulleyJoint(WorldObject2d &bodyA, WorldObjec
         jointDef.lengthB = lengthB;
     }
     _joints.emplace_back(new WorldPulleyJoint2d((b2PulleyJoint *)world.CreateJoint(&jointDef),
-                                                bodyA, bodyB, {{1, 1}}));
-    graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
+                                                bodyA, bodyB));
     return *(_joints.back());
 }
 
@@ -153,8 +144,7 @@ WorldJoint2d &WorldLayer2d::addWorldGearJoint(WorldObject2d &bodyA, WorldObject2
     jointDef.joint2 = jointB._joint;
     jointDef.ratio = ratio;
     _joints.emplace_back(new WorldGearJoint2d((b2GearJoint *)world.CreateJoint(&jointDef),
-                                              bodyA, bodyB, jointA, jointB, {{1, 1}}));
-    graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
+                                              bodyA, bodyB, jointA, jointB));
     return *(_joints.back());
 }
 

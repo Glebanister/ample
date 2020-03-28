@@ -2,9 +2,8 @@
 
 namespace ample::physics
 {
-WorldJoint2d::WorldJoint2d(b2Joint* joint, WorldObject2d &bodyA, WorldObject2d &bodyB,
-                           const std::vector<ample::graphics::Vector2d<float>> &shape)
-    : GraphicalObject2d(shape, 1, 1), _joint(joint), _bodyA(bodyA), _bodyB(bodyB) {}
+WorldJoint2d::WorldJoint2d(b2Joint* joint, WorldObject2d &bodyA, WorldObject2d &bodyB)
+    : _joint(joint), _bodyA(bodyA), _bodyB(bodyB) {}
 
 ample::graphics::Vector2d<float> WorldJoint2d::getAnchorA() const
 {

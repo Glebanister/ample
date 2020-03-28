@@ -10,8 +10,6 @@ class WorldObject2d;
 class WorldDistanceJoint2d : public ample::physics::WorldJoint2d
 {
 public:
-    void onActive() override;
-
     ample::graphics::Vector2d<float> getLocalAnchorA() const;
     ample::graphics::Vector2d<float> getLocalAnchorB() const;
 
@@ -27,7 +25,6 @@ public:
 private:
     friend ample::physics::WorldLayer2d;
 
-    WorldDistanceJoint2d(b2Joint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB,
-                         const std::vector<ample::graphics::Vector2d<float>> &shape);
+    WorldDistanceJoint2d(b2Joint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB);
 };
 } // namespace ample::physics

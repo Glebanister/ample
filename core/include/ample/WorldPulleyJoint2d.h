@@ -28,7 +28,6 @@ private:
 	friend WorldLayer2d;
 
 	WorldPulleyJoint2d(b2Joint *joint,
-					   WorldObject2d &bodyA, WorldObject2d &bodyB,
-					   const std::vector<ample::graphics::Vector2d<float>> &shape);
+					   WorldObject2d &bodyA, WorldObject2d &bodyB);
 };
 } // namespace ample::physics

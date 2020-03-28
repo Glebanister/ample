@@ -41,7 +41,6 @@ public:
                                         ample::graphics::Vector2d<float> anchorOnBodyA,
                                         ample::graphics::Vector2d<float> anchorOnBodyB,
                                         float width = 1,
-                                        float length = -1,
                                         bool collideConnected = false);
     WorldJoint2d &addWorldRevoluteJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
                                         ample::graphics::Vector2d<float> anchor,

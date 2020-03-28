@@ -6,7 +6,7 @@
 namespace ample::physics
 {
 class WorldObject2d;
-class WorldJoint2d : public ample::graphics::GraphicalObject2d
+class WorldJoint2d
 {
 public:
     WorldObject2d &getBodyA();
@@ -19,8 +19,7 @@ public:
 protected:
     friend WorldLayer2d;
 
-    WorldJoint2d(b2Joint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB,
-                 const std::vector<ample::graphics::Vector2d<float>> &shape);
+    WorldJoint2d(b2Joint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB);
     b2Joint *_joint = nullptr;
     WorldObject2d &_bodyA;
     WorldObject2d &_bodyB;
