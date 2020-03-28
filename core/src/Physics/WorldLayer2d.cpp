@@ -12,6 +12,7 @@
 #include "WorldMouseJoint2d.h"
 #include "WorldWheelJoint2d.h"
 #include "WorldWeldJoint2d.h"
+#include "WorldRopeJoint2d.h"
 #include "Clock.h"
 #include "Exception.h"
 #include "Debug.h"
@@ -178,6 +179,21 @@ WorldJoint2d &WorldLayer2d::addWorldWeldJoint(WorldObject2d &bodyA, WorldObject2
     jointDef.Initialize(bodyA._body, bodyB._body, {anchor.x, anchor.y});
     jointDef.referenceAngle = referenceAngle;
     _joints.emplace_back(new WorldWeldJoint2d(world.CreateJoint(&jointDef), bodyA, bodyB));
+    return *(_joints.back());
+}
+
+WorldJoint2d &WorldLayer2d::addWorldRopeJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
+                                              ample::graphics::Vector2d<float> localAnchorA,
+                                              ample::graphics::Vector2d<float> localAnchorB,
+                                              float maxLength)
+{
+    b2RopeJointDef jointDef;
+    jointDef.bodyA = bodyA._body;
+    jointDef.bodyB = bodyB._body;
+    jointDef.localAnchorA.Set(localAnchorA.x, localAnchorA.y);
+    jointDef.localAnchorB.Set(localAnchorB.x, localAnchorB.y);
+    jointDef.maxLength = maxLength;
+    _joints.emplace_back(new WorldRopeJoint2d(world.CreateJoint(&jointDef), bodyA, bodyB));
     return *(_joints.back());
 }
 

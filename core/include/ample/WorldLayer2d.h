@@ -67,6 +67,10 @@ public:
     WorldJoint2d &addWorldWeldJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
                                     ample::graphics::Vector2d<float> anchor,
                                     float referenceAngle = 0);
+    WorldJoint2d &addWorldRopeJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
+                                    ample::graphics::Vector2d<float> localAnchorA,
+                                    ample::graphics::Vector2d<float> localAnchorB,
+                                    float maxLength);
     void setContactListener(ContactListener &listener);
 
 protected:
