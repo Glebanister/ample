@@ -71,6 +71,8 @@ public:
                                     ample::graphics::Vector2d<float> localAnchorA,
                                     ample::graphics::Vector2d<float> localAnchorB,
                                     float maxLength);
+    WorldJoint2d &addWorldFrictionJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
+                                        ample::graphics::Vector2d<float> anchor);
     void setContactListener(ContactListener &listener);
 
 protected:

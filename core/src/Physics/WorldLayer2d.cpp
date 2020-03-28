@@ -13,6 +13,7 @@
 #include "WorldWheelJoint2d.h"
 #include "WorldWeldJoint2d.h"
 #include "WorldRopeJoint2d.h"
+#include "WorldFrictionJoint2d.h"
 #include "Clock.h"
 #include "Exception.h"
 #include "Debug.h"
@@ -194,6 +195,15 @@ WorldJoint2d &WorldLayer2d::addWorldRopeJoint(WorldObject2d &bodyA, WorldObject2
     jointDef.localAnchorB.Set(localAnchorB.x, localAnchorB.y);
     jointDef.maxLength = maxLength;
     _joints.emplace_back(new WorldRopeJoint2d(world.CreateJoint(&jointDef), bodyA, bodyB));
+    return *(_joints.back());
+}
+
+WorldJoint2d &WorldLayer2d::addWorldFrictionJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
+                                                  ample::graphics::Vector2d<float> anchor)
+{
+    b2FrictionJointDef jointDef;
+    jointDef.Initialize(bodyA._body, bodyB._body, {anchor.x, anchor.y});
+    _joints.emplace_back(new WorldFrictionJoint2d(world.CreateJoint(&jointDef), bodyA, bodyB));
     return *(_joints.back());
 }
 
