@@ -61,6 +61,9 @@ public:
                                     WorldJoint2d &jointA, WorldJoint2d &jointB,
                                     float ratio = 1);
     WorldJoint2d &addWorldMouseJoint(WorldObject2d &bodyA, WorldObject2d &bodyB);
+    WorldJoint2d &addWorldWheelJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
+                                     ample::graphics::Vector2d<float> anchor,
+                                     ample::graphics::Vector2d<float> axis = {1.0, 0.0});
     void setContactListener(ContactListener &listener);
 
 protected:
