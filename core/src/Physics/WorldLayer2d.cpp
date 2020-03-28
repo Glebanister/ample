@@ -9,6 +9,7 @@
 #include "WorldPrismaticJoint2d.h"
 #include "WorldPulleyJoint2d.h"
 #include "WorldGearJoint2d.h"
+#include "WorldMouseJoint2d.h"
 #include "Clock.h"
 #include "Exception.h"
 #include "Debug.h"
@@ -145,6 +146,15 @@ WorldJoint2d &WorldLayer2d::addWorldGearJoint(WorldObject2d &bodyA, WorldObject2
     jointDef.ratio = ratio;
     _joints.emplace_back(new WorldGearJoint2d((b2GearJoint *)world.CreateJoint(&jointDef),
                                               bodyA, bodyB, jointA, jointB));
+    return *(_joints.back());
+}
+
+WorldJoint2d &WorldLayer2d::addWorldMouseJoint(WorldObject2d &bodyA, WorldObject2d &bodyB)
+{
+    b2MouseJointDef jointDef;
+    jointDef.bodyA = bodyA._body;
+    jointDef.bodyB = bodyB._body;
+    _joints.emplace_back(new WorldMouseJoint2d(world.CreateJoint(&jointDef), bodyA, bodyB));
     return *(_joints.back());
 }
 

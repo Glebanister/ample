@@ -60,6 +60,7 @@ public:
     WorldJoint2d &addWorldGearJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
                                     WorldJoint2d &jointA, WorldJoint2d &jointB,
                                     float ratio = 1);
+    WorldJoint2d &addWorldMouseJoint(WorldObject2d &bodyA, WorldObject2d &bodyB);
     void setContactListener(ContactListener &listener);
 
 protected:
