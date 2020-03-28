@@ -8,7 +8,7 @@ You can create ample directories anywhere, using ample script.
 
 ### Install (Linux)
 
-`$ ./ci/travis/install-linux.sh` \ - installs dependencies
+`$ ./ci/travis/install-linux.sh`  - installs dependencies \
 `$ mkdir build && cd build` \
 `$ cmake .. && cmake --build`
 
