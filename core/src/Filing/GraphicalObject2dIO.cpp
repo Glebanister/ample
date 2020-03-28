@@ -28,7 +28,7 @@ std::string GraphicalObject2dIO::saveJSONFile(const std::string &name, ample::gr
     doc.AddMember("vertices", vertices, allocator);
 
     rapidjson::StringBuffer buffer;
-    rapidjson::PrettyWriter <rapidjson::StringBuffer> writer(buffer);
+    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
     doc.Accept(writer);
 
     std::string new_str(buffer.GetString(), buffer.GetSize());
@@ -38,16 +38,8 @@ std::string GraphicalObject2dIO::saveJSONFile(const std::string &name, ample::gr
 
 RawObject &GraphicalObject2dIO::loadJSONFile(const std::string &dataDoc, RawObject &obj)
 {
-    rapidjson::Value val;
-    rapidjson::Document doc;
-    doc.SetObject();
-    doc.Parse(dataDoc.c_str());
-
-    for (size_t i = 0; i < doc["vertices"].Size(); i++)
-    {
-        obj.shape.push_back(ample::graphics::Vector2d<float> {doc["vertices"][i][0].GetFloat(), doc["vertices"][i][1].GetFloat()});
-    }
-
+    EditorIO e(dataDoc);
+    e.JSONreader("position", obj.shape);
     return obj;
 }
 } // namespace ample::filing

@@ -23,7 +23,7 @@ std::string WorldObject2dIO::saveJSONFile(const std::string &name, ample::graphi
     doc.AddMember("position", position, allocator);
 
     rapidjson::StringBuffer buffer;
-    rapidjson::PrettyWriter <rapidjson::StringBuffer> writer(buffer);
+    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
     doc.Accept(writer);
 
     std::string new_str(buffer.GetString(), buffer.GetSize());
@@ -32,15 +32,9 @@ std::string WorldObject2dIO::saveJSONFile(const std::string &name, ample::graphi
 
 RawObject &WorldObject2dIO::loadJSONFile(const std::string &dataDoc, RawObject &obj)
 {
-    rapidjson::Document doc;
-    doc.SetObject();
-    doc.Parse(dataDoc.c_str());
-
     obj = GraphicalObject2dIO::loadJSONFile(dataDoc, obj);
-
-    obj.pos.x = doc["position"][0].GetFloat();
-    obj.pos.y = doc["position"][1].GetFloat();
-
+    EditorIO e(dataDoc);
+    e.JSONreader("position", obj.pos);
     return obj;
 }
 } // namespace ample::filing

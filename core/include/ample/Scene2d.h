@@ -17,9 +17,9 @@ class Scene2d : public ample::physics::WorldLayer2d
 public:
     Scene2d();
 
-    void load(const std::string &name);
+    void load(const std::string &nameFile);
 
-    void saveScene(const std::string &name);
+    void saveScene(const std::string &nameFile);
 
     ample::graphics::GraphicalObject &getElementById(const std::string &id);
 

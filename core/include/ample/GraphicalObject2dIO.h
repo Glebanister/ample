@@ -3,6 +3,7 @@
 #include "GraphicalObjectIO.h"
 #include "GraphicalObject2d.h"
 
+
 namespace ample::filing
 {
 class GraphicalObject2dIO : public GraphicalObjectIO

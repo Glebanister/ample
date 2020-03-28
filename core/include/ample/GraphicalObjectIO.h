@@ -8,12 +8,13 @@
 
 #include "GraphicalObject.h"
 #include "WorldLayer2d.h"
+#include "EditorIO.h"
 
 namespace ample::filing
 {
 struct RawObject
 {
-    std::vector <ample::graphics::Vector2d<float>> shape;
+    std::vector<ample::graphics::Vector2d<float>> shape;
     ample::graphics::Vector2d<float> pos;
 };
 

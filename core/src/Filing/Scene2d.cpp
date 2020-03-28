@@ -7,26 +7,18 @@
 
 namespace ample::filing
 {
+
 Scene2d::Scene2d()
         : ample::physics::WorldLayer2d {{0.0, 0.0}, 0.0, 0.0}
 {}
 
-void Scene2d::load(const std::string &name)
+void Scene2d::load(const std::string &nameFile)
 {
-    std::ifstream inFile(name);
-    if (!inFile)
-    {
-        throw exception::Exception(exception::exId::FILE_READ,
-                                   exception::exType::CRITICAL);
-    }
-    std::stringstream jsonDocumentBuffer;
-    std::string inputLine;
-    while (std::getline(inFile, inputLine))
-    {
-        jsonDocumentBuffer << inputLine << "\n";
-    }
+    std::string buf = openJSONfile(nameFile);
+    EditorIO EditorFile(buf);
+
     rapidjson::Document config;
-    config.Parse(jsonDocumentBuffer.str().c_str());
+    config.Parse(buf.c_str());
 
     const rapidjson::Value &data = config["data"];
 
@@ -35,34 +27,40 @@ void Scene2d::load(const std::string &name)
         DEBUG("load from json file");
         const rapidjson::Value &attribute = *itr;
         rapidjson::StringBuffer sb;
-        rapidjson::Writer <rapidjson::StringBuffer> writer(sb);
+        rapidjson::Writer<rapidjson::StringBuffer> writer(sb);
         attribute.Accept(writer);
         std::string str = sb.GetString();
 
         rapidjson::Document doc;
         doc.Parse(str.c_str());
 
-        if (doc["name"] == "WorldObject2d")
+        EditorIO editorObj(str);
+        std::string name = "";
+        editorObj.JSONreader(str, name);
+
+        if (name == "WorldObject2d")
         {
             ample::filing::WorldObject2dIO temp;
             RawObject rawObj;
             rawObj = temp.loadJSONFile(str, rawObj);
             addWorldObject(rawObj.shape, rawObj.pos);
-            _storage[doc["id"].GetString()] = _bodies[_bodies.size() - 1];
+            std::string id = "";
+            editorObj.JSONreader(str, id);
+            _storage[id] = _bodies[_bodies.size() - 1];
         }
     }
 }
 
-void Scene2d::saveScene(const std::string &name)
+void Scene2d::saveScene(const std::string &nameFile)
 {
-    std::ofstream outFile(name);
+    std::ofstream outFile(nameFile);
 
     rapidjson::Document doc;
     doc.SetObject();
     auto &allocator = doc.GetAllocator();
 
     rapidjson::Value array(rapidjson::Type::kArrayType);
-    std::vector <std::string> strings;
+    std::vector<std::string> strings;
     for (size_t i = 0; i < _bodies.size(); i++)
     {
         rapidjson::Document docObj(&doc.GetAllocator());
@@ -81,11 +79,11 @@ void Scene2d::saveScene(const std::string &name)
     doc.AddMember("array", array, allocator);
 
     rapidjson::StringBuffer buffer;
-    rapidjson::PrettyWriter <rapidjson::StringBuffer> writer(buffer);
+    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
     doc.Accept(writer);
 
     std::string str(buffer.GetString(), buffer.GetSize());
-    outFile << str;
+    outFile << str << '\n';
     outFile.close();
 }
 
