@@ -75,6 +75,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Physics/WorldWeldJoint2d.cpp
     src/Physics/WorldRopeJoint2d.cpp
     src/Physics/WorldFrictionJoint2d.cpp
+    src/Physics/WorldMotorJoint2d.cpp
 
     src/Graphics/Layer.cpp
     src/Graphics/LayeredWindowActivity.cpp

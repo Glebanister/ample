@@ -73,6 +73,7 @@ public:
                                     float maxLength);
     WorldJoint2d &addWorldFrictionJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
                                         ample::graphics::Vector2d<float> anchor);
+    WorldJoint2d &addWorldMotorJoint(WorldObject2d &bodyA, WorldObject2d &bodyB);
     void setContactListener(ContactListener &listener);
 
 protected:
