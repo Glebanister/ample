@@ -23,9 +23,10 @@ enum class exId : size_t
     SDL_NOT_READY,
     OPENGL_NOT_FIT,
     OPENGL_SHADER,
+    WINDOW_NOT_READY,
     OPENGL,
     SDL,
-    WINDOW_NOT_READY,
+    DEVIL,
 };
 
 static std::string exIdInfo[] = {
@@ -42,9 +43,10 @@ static std::string exIdInfo[] = {
     "can't use SDL2: not initializated",
     "OpenGL context can't fit to the window",
     "OpenGL can't load shader",
+    "can't use window: not ready yet",
     "OpenGL error occured",
     "SDL error occured",
-    "can't use window: not ready yet",
+    "DevIL error occured",
 };
 
 enum class exType : size_t
@@ -62,14 +64,15 @@ class Exception : public std::exception
 {
 public:
     explicit Exception(const exId &id,
-                       const exType &type,
-                       const std::string &message = "");
+              const exType &type,
+              const std::string &message = "");
 
     const char *what() const throw();
 
     void report() const;
 
     exId getId() const;
+
     exType getType() const;
 
 private:
@@ -105,5 +108,14 @@ public:
 
 private:
     explicit SDLException(const std::string &message = "");
+};
+
+class DevILException : public Exception
+{
+public:
+    static void handle(const std::string &message = "", bool throwAnyway = false);
+
+private:
+    explicit DevILException(const std::string &message = "");
 };
 } // namespace ample::exception

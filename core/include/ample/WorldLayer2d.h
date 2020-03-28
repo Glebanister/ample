@@ -3,7 +3,6 @@
 #include "box2d/b2_world.h"
 
 #include "Layer.h"
-#include "Scene2d.h"
 #include "WorldObject2d.h"
 #include "WorldJoint2d.h"
 #include "ContactListener.h"
@@ -28,14 +27,16 @@ enum class BodyType
 
 namespace ample::physics
 {
-class WorldLayer2d final : public ample::graphics::Layer
+class WorldLayer2d : public ample::graphics::Layer
 {
 public:
-    explicit WorldLayer2d(const ample::graphics::Vector2d<float> &gravity);
+    explicit WorldLayer2d(const ample::graphics::Vector2d<float> &gravity, float z, float thickness);
     //void addWorldObject(WorldObject2d &object);
     WorldObject2d &addWorldObject(const std::vector<ample::graphics::Vector2d<float>> &shape,
                                   ample::graphics::Vector2d<float> pos,
-                                  BodyType type = BodyType::STATIC_BODY, float angle = 0);
+                                  BodyType type = BodyType::STATIC_BODY,
+                                  float angle = 0,
+                                  float relativeThickness = 1.0);
     WorldJoint2d &addWorldDistanceJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
                                         ample::graphics::Vector2d<float> anchorOnBodyA,
                                         ample::graphics::Vector2d<float> anchorOnBodyB,
@@ -58,16 +59,17 @@ public:
                                       float lengthB = -1,
                                       float ratio = 1);
     WorldJoint2d &addWorldGearJoint(WorldObject2d &bodyA, WorldObject2d &bodyB,
-                                    WorldJoint2d &jointA, WorldJoint2d & jointB,
+                                    WorldJoint2d &jointA, WorldJoint2d &jointB,
                                     float ratio = 1);
     void setContactListener(ContactListener &listener);
 
 protected:
     void onActive() override;
 
-private:
     std::vector<std::shared_ptr<WorldObject2d>> _bodies;
     std::vector<std::shared_ptr<WorldJoint2d>> _joints;
     b2World world;
+    const float _z;
+    const float _thickness;
 };
 } // namespace ample::physics

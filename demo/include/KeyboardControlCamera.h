@@ -2,6 +2,7 @@
 
 #include "EventManager.h"
 #include "CameraPerspective.h"
+#include "LightSource.h"
 
 template <class CameraT>
 class KeyboardControlCamera : public CameraT
@@ -9,9 +10,14 @@ class KeyboardControlCamera : public CameraT
 public:
     KeyboardControlCamera(ample::control::EventManager &manager);
     void onActive() override;
+    ample::graphics::light::LightSource &getLamp()
+    {
+        return _lamp;
+    }
 
 protected:
     ample::control::EventManager &_manager;
+    ample::graphics::light::LightSource _lamp;
 };
 
 template <class CameraT>
@@ -73,4 +79,30 @@ void KeyboardControlCamera<CameraT>::onActive()
     }
     this->rotateRight(-_manager.mouse()->getMouseXRel() / (1.0 / 0.1));
     this->rotateUp(-_manager.mouse()->getMouseYRel() / (1.0 / 0.1));
+    _lamp.setTranslate(this->_position);
+
+    if (_manager.keyboard()->isKeyDown(ample::control::keysym::NUM_1))
+    {
+        _lamp.addIntensitiy({-10, 0, 0});
+    }
+    if (_manager.keyboard()->isKeyDown(ample::control::keysym::NUM_2))
+    {
+        _lamp.addIntensitiy({10, 0, 0});
+    }
+    if (_manager.keyboard()->isKeyDown(ample::control::keysym::NUM_3))
+    {
+        _lamp.addIntensitiy({0, -10, 0});
+    }
+    if (_manager.keyboard()->isKeyDown(ample::control::keysym::NUM_4))
+    {
+        _lamp.addIntensitiy({0, 10, 0});
+    }
+    if (_manager.keyboard()->isKeyDown(ample::control::keysym::NUM_5))
+    {
+        _lamp.addIntensitiy({0, 0, -10});
+    }
+    if (_manager.keyboard()->isKeyDown(ample::control::keysym::NUM_6))
+    {
+        _lamp.addIntensitiy({0, 0, 10});
+    }
 }
