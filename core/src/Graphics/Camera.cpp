@@ -93,4 +93,17 @@ void Camera::setVisibility(const bool value)
 {
     _visible = value;
 }
+
+float Camera::getX() const noexcept
+{
+    return _position.x;
+}
+float Camera::getY() const noexcept
+{
+    return _position.y;
+}
+float Camera::getZ() const noexcept
+{
+    return _position.z;
+}
 } // namespace ample::graphics
