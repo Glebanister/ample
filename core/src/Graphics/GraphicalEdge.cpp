@@ -87,7 +87,7 @@ static std::vector<Vector3d<float>> generateSideNormals(const std::vector<Vector
 static std::vector<Vector2d<float>> generateSideUVCoords(const std::vector<Vector2d<float>> &graphicalShape,
                                                          const float z,
                                                          const float depth,
-                                                         const Vector2d<float> &repears)
+                                                         const Vector2d<float> &repeats)
 {
     auto shape = generateSideCoords(graphicalShape, z, depth);
     std::vector<Vector2d<float>> uvCoords(shape.size());
@@ -104,9 +104,9 @@ static std::vector<Vector2d<float>> generateSideUVCoords(const std::vector<Vecto
     for (size_t i = 0, vId = 0; i < uvCoords.size(); i += 6, vId += 1)
     {
         uvCoords[i + 0].x = uvCoords[i + 3].x = uvCoords[i + 5].x = 0.f;
-        uvCoords[i + 1].x = uvCoords[i + 2].x = uvCoords[i + 4].x = 1.f * 1.f;
-        uvCoords[i + 0].y = uvCoords[i + 1].y = uvCoords[i + 3].y = prefixBoardLenth[vId + 0] / boardLength * 10.f;
-        uvCoords[i + 2].y = uvCoords[i + 4].y = uvCoords[i + 5].y = prefixBoardLenth[vId + 1] / boardLength * 10.f;
+        uvCoords[i + 1].x = uvCoords[i + 2].x = uvCoords[i + 4].x = repeats.x;
+        uvCoords[i + 0].y = uvCoords[i + 1].y = uvCoords[i + 3].y = prefixBoardLenth[vId + 0] / boardLength * repeats.y;
+        uvCoords[i + 2].y = uvCoords[i + 4].y = uvCoords[i + 5].y = prefixBoardLenth[vId + 1] / boardLength * repeats.y;
     }
 
     return uvCoords;
@@ -120,11 +120,11 @@ GraphicalEdge::GraphicalEdge(const std::vector<Vector2d<float>> &shape,
                              const glm::mat4 &translated,
                              const glm::mat4 &scaled,
                              const glm::mat4 &rotated)
-    : GraphicalObject(translated, scaled, rotated),
-      _vertexArray(generateSideCoords(shape, z, thickness),
-                   generateSideUVCoords(shape, z, thickness, textureRepeats),
-                   generateSideNormals(shape, normMode, z, thickness))
+    : GraphicalObject(translated, scaled, rotated)
 {
+    bindVertexArray(std::make_shared<VertexArray>(generateSideCoords(shape, z, thickness),
+                                                  generateSideUVCoords(shape, z, thickness, textureRepeats),
+                                                  generateSideNormals(shape, normMode, z, thickness)));
 }
 
 } // namespace ample::graphics

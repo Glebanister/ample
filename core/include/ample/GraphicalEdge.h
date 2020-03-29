@@ -9,7 +9,7 @@ namespace ample::graphics
 {
 enum class normalsMode
 {
-    SINGLE,
+    FACE,
     VERTEX,
 };
 
@@ -27,6 +27,5 @@ public:
 
 private:
     std::vector<Vector2d<float>> _shape;
-    VertexArray _vertexArray;
 };
 } // namespace ample::graphics
