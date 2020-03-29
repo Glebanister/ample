@@ -2,8 +2,23 @@
 
 namespace ample::physics
 {
-WorldJoint2d::WorldJoint2d(b2Joint* joint, WorldObject2d &bodyA, WorldObject2d &bodyB)
+WorldJoint2d::WorldJoint2d(WorldObject2d &bodyA, WorldObject2d &bodyB, b2Joint *joint)
     : _joint(joint), _bodyA(bodyA), _bodyB(bodyB) {}
+
+b2Body *WorldJoint2d::getB2Body(WorldObject2d &obj) const
+{
+    return obj._body;
+}
+
+b2Joint *WorldJoint2d::getB2Joint(WorldJoint2d &joint) const
+{
+    return joint._joint;
+}
+
+void WorldJoint2d::initB2Joint(WorldLayer2d &layer, b2JointDef *jointDef)
+{
+    _joint = layer.addWorldJoint(*this, jointDef);
+}
 
 ample::graphics::Vector2d<float> WorldJoint2d::getAnchorA() const
 {

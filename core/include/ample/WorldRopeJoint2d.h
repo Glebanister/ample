@@ -5,7 +5,6 @@
 
 namespace ample::physics
 {
-class WorldLayer2d;
 class WorldObject2d;
 class WorldRopeJoint2d : public WorldJoint2d
 {
@@ -17,9 +16,12 @@ public:
     float getMaxLength() const;
 
     //b2LimitState getLimitState() const;
-private:
-    friend WorldLayer2d;
 
-    WorldRopeJoint2d(b2Joint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB);
+    WorldRopeJoint2d(WorldObject2d &bodyA,
+                     WorldObject2d &bodyB,
+                     const ample::graphics::Vector2d<float> &localAnchorA,
+                     const ample::graphics::Vector2d<float> &localAnchorB,
+                     float maxLength,
+                     bool collideConnected = false);
 };
 } // namespace ample::physics

@@ -2,8 +2,23 @@
 
 namespace ample::physics
 {
-WorldRopeJoint2d::WorldRopeJoint2d(b2Joint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB)
-    : WorldJoint2d(joint, bodyA, bodyB) {}
+WorldRopeJoint2d::WorldRopeJoint2d(WorldObject2d &bodyA,
+                                   WorldObject2d &bodyB,
+                                   const ample::graphics::Vector2d<float> &localAnchorA,
+                                   const ample::graphics::Vector2d<float> &localAnchorB,
+                                   float maxLength,
+                                   bool collideConnected)
+    : WorldJoint2d(bodyA, bodyB)
+{
+    b2RopeJointDef jointDef;
+    jointDef.bodyA = getB2Body(bodyA);
+    jointDef.bodyB = getB2Body(bodyB);
+    jointDef.localAnchorA.Set(localAnchorA.x, localAnchorA.y);
+    jointDef.localAnchorB.Set(localAnchorB.x, localAnchorB.y);
+    jointDef.maxLength = maxLength;
+    jointDef.collideConnected = collideConnected;
+    initB2Joint(bodyA.getWorldLayer(), &jointDef);
+}
 
 ample::graphics::Vector2d<float> WorldRopeJoint2d::getLocalAnchorA() const
 {

@@ -5,7 +5,6 @@
 
 namespace ample::physics
 {
-class WorldLayer2d;
 class WorldObject2d;
 class WorldWeldJoint2d : public WorldJoint2d
 {
@@ -24,9 +23,10 @@ public:
 
     float getDampingRatio() const;
 
-private:
-    friend WorldLayer2d;
-
-    WorldWeldJoint2d(b2Joint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB);
+    WorldWeldJoint2d(WorldObject2d &bodyA,
+                     WorldObject2d &bodyB,
+                     const ample::graphics::Vector2d<float> &anchor,
+                     float referenceAngle = 0,
+                     bool collideConnected = false);
 };
 } // namespace ample::physics

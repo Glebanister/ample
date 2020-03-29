@@ -5,7 +5,6 @@
 
 namespace ample::physics
 {
-class WorldLayer2d;
 class WorldObject2d;
 class WorldPrismaticJoint2d : public WorldJoint2d
 {
@@ -44,10 +43,11 @@ public:
 
 	float getMotorForce(float inv_dt) const;
 
-private:
-	friend WorldLayer2d;
-
-	WorldPrismaticJoint2d(b2Joint *joint,
-						  WorldObject2d &bodyA, WorldObject2d &bodyB);
+	WorldPrismaticJoint2d(WorldObject2d &bodyA,
+						  WorldObject2d &bodyB,
+						  const ample::graphics::Vector2d<float> &anchor,
+						  const ample::graphics::Vector2d<float> &worldAxis = {1, 0},
+						  float referenceAngle = 0,
+						  bool collideConnected = false);
 };
 } // namespace ample::physics

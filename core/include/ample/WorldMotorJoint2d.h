@@ -5,7 +5,6 @@
 
 namespace ample::physics
 {
-class WorldLayer2d;
 class WorldObject2d;
 class WorldMotorJoint2d : public WorldJoint2d
 {
@@ -28,9 +27,8 @@ public:
 
     float getCorrectionFactor() const;
 
-private:
-    friend WorldLayer2d;
-
-    WorldMotorJoint2d(b2Joint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB);
+    WorldMotorJoint2d(WorldObject2d &bodyA,
+                      WorldObject2d &bodyB,
+                      bool collideConnected = false);
 };
 } // namespace ample::physics

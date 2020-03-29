@@ -2,8 +2,17 @@
 
 namespace ample::physics
 {
-WorldMouseJoint2d::WorldMouseJoint2d(b2Joint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB)
-    : WorldJoint2d(joint, bodyA, bodyB) {}
+WorldMouseJoint2d::WorldMouseJoint2d(WorldObject2d &bodyA,
+                                     WorldObject2d &bodyB,
+                                     bool collideConnected)
+    : WorldJoint2d(bodyA, bodyB)
+{
+    b2MouseJointDef jointDef;
+    jointDef.bodyA = getB2Body(bodyA);
+    jointDef.bodyB = getB2Body(bodyB);
+    jointDef.collideConnected = collideConnected;
+    initB2Joint(bodyA.getWorldLayer(), &jointDef);
+}
 
 void WorldMouseJoint2d::setTarget(const ample::graphics::Vector2d<float> &target)
 {

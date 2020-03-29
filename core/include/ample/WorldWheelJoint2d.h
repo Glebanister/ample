@@ -5,12 +5,11 @@
 
 namespace ample::physics
 {
-class WorldLayer2d;
 class WorldObject2d;
 class WorldWheelJoint2d : public WorldJoint2d
 {
 public:
-    ample::graphics::Vector2d<float> getLocalAnchorA() const;
+	ample::graphics::Vector2d<float> getLocalAnchorA() const;
 
 	ample::graphics::Vector2d<float> getLocalAnchorB() const;
 
@@ -42,9 +41,11 @@ public:
 
 	void setSpringDampingRatio(float ratio);
 	float getSpringDampingRatio() const;
-    
-private:
-    friend WorldLayer2d;
-    WorldWheelJoint2d(b2Joint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB);
+
+	WorldWheelJoint2d(WorldObject2d &bodyA,
+					  WorldObject2d &bodyB,
+					  const ample::graphics::Vector2d<float> &anchor,
+					  const ample::graphics::Vector2d<float> &axis = {1.0, 0.0},
+					  bool collideConnected = false);
 };
 } // namespace ample::physics

@@ -2,8 +2,19 @@
 
 namespace ample::physics
 {
-WorldWheelJoint2d::WorldWheelJoint2d(b2Joint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB)
-    : WorldJoint2d(joint, bodyA, bodyB) {}
+WorldWheelJoint2d::WorldWheelJoint2d(WorldObject2d &bodyA,
+                                     WorldObject2d &bodyB,
+                                     const ample::graphics::Vector2d<float> &anchor,
+                                     const ample::graphics::Vector2d<float> &axis,
+                                     bool collideConnected)
+    : WorldJoint2d(bodyA, bodyB)
+{
+    b2WheelJointDef jointDef;
+    jointDef.Initialize(getB2Body(bodyA), getB2Body(bodyB),
+                        {anchor.x, anchor.y}, {axis.x, axis.y});
+    jointDef.collideConnected = collideConnected;
+    initB2Joint(bodyA.getWorldLayer(), &jointDef);
+}
 
 ample::graphics::Vector2d<float> WorldWheelJoint2d::getLocalAnchorA() const
 {

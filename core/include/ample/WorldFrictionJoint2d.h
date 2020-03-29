@@ -5,7 +5,6 @@
 
 namespace ample::physics
 {
-class WorldLayer2d;
 class WorldObject2d;
 class WorldFrictionJoint2d : public WorldJoint2d
 {
@@ -22,9 +21,9 @@ public:
 
     float getMaxTorque() const;
 
-private:
-    friend WorldLayer2d;
-
-    WorldFrictionJoint2d(b2Joint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB);
+    WorldFrictionJoint2d(WorldObject2d &bodyA,
+                         WorldObject2d &bodyB,
+                         const ample::graphics::Vector2d<float> &anchor,
+                         bool collideConnected = false);
 };
 } // namespace ample::physics

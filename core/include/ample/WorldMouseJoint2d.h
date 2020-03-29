@@ -5,7 +5,6 @@
 
 namespace ample::physics
 {
-class WorldLayer2d;
 class WorldObject2d;
 class WorldMouseJoint2d : public WorldJoint2d
 {
@@ -22,8 +21,8 @@ public:
     void setDampingRatio(float ratio);
     float getDampingRatio() const;
 
-private:
-    friend WorldLayer2d;
-    WorldMouseJoint2d(b2Joint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB);
+    WorldMouseJoint2d(WorldObject2d &bodyA,
+                      WorldObject2d &bodyB,
+                      bool collideConnected = false);
 };
 } // namespace ample::physics

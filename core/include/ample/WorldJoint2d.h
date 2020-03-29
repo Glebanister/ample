@@ -2,9 +2,11 @@
 
 #include "box2d/b2_joint.h"
 #include "WorldObject2d.h"
+#include "WorldLayer2d.h"
 
 namespace ample::physics
 {
+class WorldLayer2d;
 class WorldObject2d;
 class WorldJoint2d
 {
@@ -17,9 +19,10 @@ public:
     virtual float getReactionTorque(float inv_dt) const;
 
 protected:
-    friend WorldLayer2d;
-
-    WorldJoint2d(b2Joint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB);
+    WorldJoint2d(WorldObject2d &bodyA, WorldObject2d &bodyB, b2Joint *joint = nullptr);
+    b2Body *getB2Body(WorldObject2d &obj) const;
+    b2Joint *getB2Joint(WorldJoint2d &joint) const;
+    void initB2Joint(WorldLayer2d &layer, b2JointDef *jointDef);
     b2Joint *_joint = nullptr;
     WorldObject2d &_bodyA;
     WorldObject2d &_bodyB;

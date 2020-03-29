@@ -2,9 +2,22 @@
 
 namespace ample::physics
 {
-WorldPrismaticJoint2d::WorldPrismaticJoint2d(b2Joint *joint,
-                                             WorldObject2d &bodyA, WorldObject2d &bodyB)
-    : WorldJoint2d(joint, bodyA, bodyB) {}
+WorldPrismaticJoint2d::WorldPrismaticJoint2d(WorldObject2d &bodyA,
+                                             WorldObject2d &bodyB,
+                                             const ample::graphics::Vector2d<float> &anchor,
+                                             const ample::graphics::Vector2d<float> &worldAxis,
+                                             float referenceAngle,
+                                             bool collideConnected)
+    : WorldJoint2d(bodyA, bodyB)
+{
+    b2PrismaticJointDef jointDef;
+    jointDef.Initialize(getB2Body(bodyA), getB2Body(bodyB),
+                        {anchor.x, anchor.y},
+                        {worldAxis.x, worldAxis.y});
+    jointDef.referenceAngle = referenceAngle;
+    jointDef.collideConnected = collideConnected;
+    initB2Joint(bodyA.getWorldLayer(), &jointDef);
+}
 
 ample::graphics::Vector2d<float> WorldPrismaticJoint2d::getLocalAnchorA() const
 {

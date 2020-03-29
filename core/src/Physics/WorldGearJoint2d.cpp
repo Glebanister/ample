@@ -2,9 +2,23 @@
 
 namespace ample::physics
 {
-WorldGearJoint2d::WorldGearJoint2d(b2Joint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB,
-                                   WorldJoint2d &jointA, WorldJoint2d &jointB)
-    : WorldJoint2d(joint, bodyA, bodyB), _jointA(jointA), _jointB(jointB) {}
+WorldGearJoint2d::WorldGearJoint2d(WorldObject2d &bodyA,
+                                   WorldObject2d &bodyB,
+                                   WorldJoint2d &jointA,
+                                   WorldJoint2d &jointB,
+                                   float ratio,
+                                   bool collideConnected)
+    : WorldJoint2d(bodyA, bodyB), _jointA(jointA), _jointB(jointB)
+{
+    b2GearJointDef jointDef;
+    jointDef.bodyA = getB2Body(bodyA);
+    jointDef.bodyB = getB2Body(bodyB);
+    jointDef.joint1 = getB2Joint(jointA);
+    jointDef.joint2 = getB2Joint(jointB);
+    jointDef.ratio = ratio;
+    jointDef.collideConnected = collideConnected;
+    initB2Joint(bodyA.getWorldLayer(), &jointDef);
+}
 
 WorldJoint2d &WorldGearJoint2d::getJointA()
 {

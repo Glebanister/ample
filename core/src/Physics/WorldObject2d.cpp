@@ -293,7 +293,8 @@ void WorldObject2d::resetMassData()
     _body->ResetMassData();
 }
 
-WorldObject2d::WorldObject2d(b2Body *body,
+WorldObject2d::WorldObject2d(WorldLayer2d &layer,
+                             BodyType type,
                              const std::vector<ample::graphics::Vector2d<float>> &shape,
                              const float thickness,
                              const float z,
@@ -301,7 +302,7 @@ WorldObject2d::WorldObject2d(b2Body *body,
                              const graphics::Vector2d<float> &sideTextureRepeats,
                              const graphics::normalsMode sideNormalsMode,
                              const graphics::Vector2d<float> &translated,
-                             const float &rotated)
+                             float rotated)
     : GraphicalObject2d(shape,
                         thickness,
                         z,
@@ -309,5 +310,29 @@ WorldObject2d::WorldObject2d(b2Body *body,
                         sideTextureRepeats,
                         sideNormalsMode,
                         translated,
-                        rotated), _body(body) {}
+                        rotated),
+      _layer(layer)
+{
+    b2BodyDef bodyDef;
+    bodyDef.position.Set(translated.x, translated.y);
+    bodyDef.angle = rotated;
+    switch (type)
+    {
+    case BodyType::STATIC_BODY:
+        bodyDef.type = b2_staticBody;
+        break;
+    case BodyType::KINEMATIC_BODY:
+        bodyDef.type = b2_kinematicBody;
+        break;
+    case BodyType::DYNAMIC_BODY:
+        bodyDef.type = b2_dynamicBody;
+        break;
+    }
+    _body = _layer.addWorldObject(*this, &bodyDef);
+}
+
+WorldLayer2d &WorldObject2d::getWorldLayer() const
+{
+    return _layer;
+}
 } // namespace ample::physics

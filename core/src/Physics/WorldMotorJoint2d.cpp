@@ -2,8 +2,16 @@
 
 namespace ample::physics
 {
-WorldMotorJoint2d::WorldMotorJoint2d(b2Joint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB)
-    : WorldJoint2d(joint, bodyA, bodyB) {}
+WorldMotorJoint2d::WorldMotorJoint2d(WorldObject2d &bodyA,
+                                     WorldObject2d &bodyB,
+                                     bool collideConnected)
+    : WorldJoint2d(bodyA, bodyB)
+{
+    b2MotorJointDef jointDef;
+    jointDef.Initialize(getB2Body(bodyA), getB2Body(bodyB));
+    jointDef.collideConnected = collideConnected;
+    initB2Joint(bodyA.getWorldLayer(), &jointDef);
+}
 
 void WorldMotorJoint2d::setLinearOffset(const ample::graphics::Vector2d<float> &linearOffset)
 {

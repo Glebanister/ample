@@ -5,7 +5,6 @@
 
 namespace ample::physics
 {
-class WorldLayer2d;
 class WorldObject2d;
 class WorldPulleyJoint2d : public WorldJoint2d
 {
@@ -24,10 +23,15 @@ public:
 
 	float getCurrentLengthB() const;
 
-private:
-	friend WorldLayer2d;
-
-	WorldPulleyJoint2d(b2Joint *joint,
-					   WorldObject2d &bodyA, WorldObject2d &bodyB);
+	WorldPulleyJoint2d(WorldObject2d &bodyA,
+					   WorldObject2d &bodyB,
+					   const ample::graphics::Vector2d<float> &groundAnchorA,
+					   const ample::graphics::Vector2d<float> &groundAnchorB,
+					   const ample::graphics::Vector2d<float> &anchorA,
+					   const ample::graphics::Vector2d<float> &anchorB,
+					   float lengthA = -1,
+					   float lengthB = -1,
+					   float ratio = 1,
+					   bool collideConnected = false);
 };
 } // namespace ample::physics
