@@ -81,13 +81,17 @@ void GraphicalObject::draw(glm::mat4 scaled,
     _modelMatrixUniform.load();
     if (_texturePtr)
     {
-        _texturePtr->bind();
+        _texturePtr->pin();
     }
     if (_vertexArrayPtr)
     {
         _vertexArrayPtr->execute();
     }
     drawSelf();
+    if (_texturePtr)
+    {
+        _texturePtr->unpin();
+    }
     for (auto subObject : _subObjects)
     {
         subObject->draw(scaled, rotated, translated);
