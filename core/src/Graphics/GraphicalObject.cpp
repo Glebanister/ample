@@ -68,6 +68,8 @@ void GraphicalObject::bindVertexArray(std::shared_ptr<VertexArray> ptr) noexcept
     _vertexArrayPtr = ptr;
 }
 
+void GraphicalObject::drawSelf() {}
+
 void GraphicalObject::draw(glm::mat4 scaled,
                            glm::mat4 rotated,
                            glm::mat4 translated)

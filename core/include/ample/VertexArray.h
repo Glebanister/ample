@@ -12,12 +12,6 @@
 
 namespace ample::graphics
 {
-enum class normalsMode
-{
-    SINGLE,
-    VERTEX,
-};
-
 class VertexArray : public utils::Noncopyable
 {
 private:

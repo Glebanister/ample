@@ -23,7 +23,7 @@ public:
     void draw(glm::mat4 scaled = glm::mat4{1.0f},
               glm::mat4 rotated = glm::mat4{1.0f},
               glm::mat4 translated = glm::mat4{1.0f});
-    virtual void drawSelf() = 0;
+    virtual void drawSelf();
     void addSubObject(GraphicalObject &object);
 
     float getX() const;
