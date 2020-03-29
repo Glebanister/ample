@@ -49,8 +49,24 @@ Fixture &WorldObject2d::addFixture(
     b2PolygonShape polygonShape;
     polygonShape.Set(vertices.data(), shape.size());
     fixtureDef.shape = &polygonShape;
-    _fixtures.emplace_back(std::shared_ptr<Fixture>(new Fixture(_body->CreateFixture(&fixtureDef), *this))).get();
-    return *(_fixtures[_fixtures.size() - 1]);
+    _fixtures.emplace_back(new Fixture(_body->CreateFixture(&fixtureDef), *this));
+    return *(_fixtures.back());
+}
+
+void WorldObject2d::setSpeedX(float desiredVelX)
+{
+    ample::graphics::Vector2d<float> vel = getLinearVelocity();
+    float velChangeX = desiredVelX - vel.x;
+    float impulseX = getMass() * velChangeX;
+    applyLinearImpulseToCenter({impulseX, 0}, true);
+}
+
+void WorldObject2d::setSpeedY(float desiredVelY)
+{
+    ample::graphics::Vector2d<float> vel = getLinearVelocity();
+    float velChangeY = desiredVelY - vel.y;
+    float impulseY = getMass() * velChangeY;
+    applyLinearImpulseToCenter({0, impulseY}, true);
 }
 
 void WorldObject2d::onActive()
@@ -277,7 +293,8 @@ void WorldObject2d::resetMassData()
     _body->ResetMassData();
 }
 
-WorldObject2d::WorldObject2d(b2Body *body,
+WorldObject2d::WorldObject2d(WorldLayer2d &layer,
+                             BodyType type,
                              const std::vector<ample::graphics::Vector2d<float>> &shape,
                              const float thickness,
                              const float z,
@@ -285,7 +302,7 @@ WorldObject2d::WorldObject2d(b2Body *body,
                              const graphics::Vector2d<float> &sideTextureRepeats,
                              const graphics::normalsMode sideNormalsMode,
                              const graphics::Vector2d<float> &translated,
-                             const float &rotated)
+                             float rotated)
     : GraphicalObject2d(shape,
                         thickness,
                         z,
@@ -293,5 +310,29 @@ WorldObject2d::WorldObject2d(b2Body *body,
                         sideTextureRepeats,
                         sideNormalsMode,
                         translated,
-                        rotated), _body(body) {}
+                        rotated),
+      _layer(layer)
+{
+    b2BodyDef bodyDef;
+    bodyDef.position.Set(translated.x, translated.y);
+    bodyDef.angle = rotated;
+    switch (type)
+    {
+    case BodyType::STATIC_BODY:
+        bodyDef.type = b2_staticBody;
+        break;
+    case BodyType::KINEMATIC_BODY:
+        bodyDef.type = b2_kinematicBody;
+        break;
+    case BodyType::DYNAMIC_BODY:
+        bodyDef.type = b2_dynamicBody;
+        break;
+    }
+    _body = _layer.addWorldObject(*this, &bodyDef);
+}
+
+WorldLayer2d &WorldObject2d::getWorldLayer() const
+{
+    return _layer;
+}
 } // namespace ample::physics
