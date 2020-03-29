@@ -80,6 +80,8 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Graphics/Shaders/ShaderProcessor.cpp
     src/Graphics/Light/LightSource.cpp
     src/Graphics/Texture.cpp
+    src/Graphics/GraphicalEdge.cpp
+    src/Graphics/GraphicalPolygon.cpp
 
     src/Geometry/RegularPolygon.cpp
    )
