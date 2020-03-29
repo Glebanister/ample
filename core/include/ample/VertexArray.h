@@ -20,7 +20,7 @@ private:
     public:
         struct Executor final : utils::Noncopyable
         {
-            Executor(GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void *pointer, VertexBuffer &buf);
+            Executor(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void *pointer, VertexBuffer &buf);
             ~Executor();
 
         private:
