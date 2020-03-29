@@ -41,4 +41,8 @@ void Layer::clearObjecs()
 {
     _objects.clear();
 }
+size_t Layer::objectsCount() const noexcept
+{
+    return _objects.size();
+}
 } // namespace ample::graphics

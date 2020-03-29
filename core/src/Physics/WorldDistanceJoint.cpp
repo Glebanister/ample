@@ -3,12 +3,28 @@
 #include <iostream>
 namespace ample::physics
 {
-WorldDistanceJoint2d::WorldDistanceJoint2d(b2Joint *joint,
-                                           WorldObject2d &bodyA, WorldObject2d &bodyB,
-                                           const std::vector<ample::graphics::Vector2d<float>> &shape)
-    : WorldJoint2d(joint, bodyA, bodyB, shape) {}
+WorldDistanceJoint2d::WorldDistanceJoint2d(WorldObject2d &bodyA,
+                                           WorldObject2d &bodyB,
+                                           const ample::graphics::Vector2d<float> &anchorOnBodyA,
+                                           const ample::graphics::Vector2d<float> &anchorOnBodyB,
+                                           float length,
+                                           bool collideConnected)
+    : WorldJoint2d(bodyA, bodyB)
+{
+    b2DistanceJointDef jointDef;
+    jointDef.Initialize(getB2Body(bodyB), getB2Body(bodyA),
+                        {anchorOnBodyA.x, anchorOnBodyA.y},
+                        {anchorOnBodyB.x, anchorOnBodyB.y});
+    jointDef.collideConnected = collideConnected;
+    if (length > 0)
+    {
+        jointDef.length = length;
+    }
+    jointDef.length = length;
+    initB2Joint(bodyA.getWorldLayer(), &jointDef);
+}
 
-void WorldDistanceJoint2d::onActive()
+/*void WorldDistanceJoint2d::onActive()
 {
     setTranslate({(_bodyA.getPosition().x + _bodyB.getPosition().x) / 2,
                   (_bodyA.getPosition().y + _bodyB.getPosition().y) / 2, getZ()});
@@ -35,47 +51,47 @@ void WorldDistanceJoint2d::onActive()
             setRotate({0.0f, 0.0f, 1.0f}, 180 - angle * 180.0f / M_PI);
         }
     }
-}
+}*/
 
 ample::graphics::Vector2d<float> WorldDistanceJoint2d::getLocalAnchorA() const
 {
-    const b2Vec2 &anchor = static_cast<b2DistanceJoint*>(_joint)->GetLocalAnchorA();
+    const b2Vec2 &anchor = static_cast<b2DistanceJoint *>(_joint)->GetLocalAnchorA();
     return {anchor.x, anchor.y};
 }
 
 ample::graphics::Vector2d<float> WorldDistanceJoint2d::getLocalAnchorB() const
 {
-    const b2Vec2 &anchor = static_cast<b2DistanceJoint*>(_joint)->GetLocalAnchorB();
+    const b2Vec2 &anchor = static_cast<b2DistanceJoint *>(_joint)->GetLocalAnchorB();
     return {anchor.x, anchor.y};
 }
 
 void WorldDistanceJoint2d::setLength(float length)
 {
-    static_cast<b2DistanceJoint*>(_joint)->SetLength(length);
+    static_cast<b2DistanceJoint *>(_joint)->SetLength(length);
 }
 
 float WorldDistanceJoint2d::getLength() const
 {
-    return static_cast<b2DistanceJoint*>(_joint)->GetLength();
+    return static_cast<b2DistanceJoint *>(_joint)->GetLength();
 }
 
 void WorldDistanceJoint2d::setFrequency(float hz)
 {
-    static_cast<b2DistanceJoint*>(_joint)->SetFrequency(hz);
+    static_cast<b2DistanceJoint *>(_joint)->SetFrequency(hz);
 }
 
 float WorldDistanceJoint2d::getFrequency() const
 {
-    return static_cast<b2DistanceJoint*>(_joint)->GetFrequency();
+    return static_cast<b2DistanceJoint *>(_joint)->GetFrequency();
 }
 
 void WorldDistanceJoint2d::setDampingRatio(float ratio)
 {
-    static_cast<b2DistanceJoint*>(_joint)->SetDampingRatio(ratio);
+    static_cast<b2DistanceJoint *>(_joint)->SetDampingRatio(ratio);
 }
 
 float WorldDistanceJoint2d::getDampingRatio() const
 {
-    return static_cast<b2DistanceJoint*>(_joint)->GetDampingRatio();
+    return static_cast<b2DistanceJoint *>(_joint)->GetDampingRatio();
 }
 } // namespace ample::physics

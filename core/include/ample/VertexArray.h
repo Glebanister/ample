@@ -12,39 +12,41 @@
 
 namespace ample::graphics
 {
-enum class normalsMode
-{
-    SINGLE,
-    VERTEX,
-    FACE,
-};
-
-enum class textureMode
-{
-    TILE,
-    STRETCH,
-};
-
 class VertexArray : public utils::Noncopyable
 {
+private:
+    class VertexBuffer final : utils::Noncopyable
+    {
+    public:
+        struct Executor final : utils::Noncopyable
+        {
+            Executor(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void *pointer, VertexBuffer &buf);
+            ~Executor();
+
+        private:
+            GLuint _index;
+        };
+
+    public:
+        VertexBuffer(GLsizeiptr, void *);
+        ~VertexBuffer();
+
+    private:
+        GLuint _bufferId;
+        GLsizeiptr _size;
+        void *_data;
+    };
+
 public:
     VertexArray(const std::vector<Vector3d<float>> &coords,
                 const std::vector<Vector2d<float>> &uvCoords,
-                const std::vector<Vector3d<float>> &normals,
-                const std::string &texturePath,
-                const Vector2d<int> &textureSize = {0, 0},
-                const Vector2d<int> &texturePosition = {0, 0},
-                const channelMode mode = channelMode::RGB);
+                const std::vector<Vector3d<float>> &normal);
     void execute();
-    void setColor256(double r, double g, double b);
-    ~VertexArray();
 
 private:
-    GLuint _vertexBufferId;
-    GLuint _textureBufferId;
-    GLuint _normalBufferId;
+    VertexBuffer _xyzCoordsBuffer;
+    VertexBuffer _uvCoordsBuffer;
+    VertexBuffer _normalsBuffer;
     GLsizei _totalVerts;
-    GLsizei _normalStride;
-    std::unique_ptr<Texture> _texture;
 };
 } // namespace ample::graphics
