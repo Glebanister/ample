@@ -47,6 +47,8 @@ public:
     void rotateRight(float);
     void rotateUp(float);
 
+    void setVisibility(const bool);
+
     virtual ~Camera() = default;
 
 protected:
@@ -55,5 +57,7 @@ protected:
     glm::vec3 _direction{0.0, 0.0, 1.0};
     glm::vec3 _head{0.0, 1.0, 0.0};
     glm::vec3 _right{1.0, 0.0, 0.0};
+
+    bool _visible = true;
 };
 } // namespace ample::graphics

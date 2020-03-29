@@ -60,17 +60,6 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Graphics/Color.cpp
     src/Graphics/CameraPerspective.cpp
     src/Graphics/CameraOrtho.cpp
-
-    src/Physics/ContactListener.cpp
-    src/Physics/WorldObject2d.cpp
-    src/Physics/WorldLayer2d.cpp
-    src/Physics/WorldJoint2d.cpp
-    src/Physics/WorldDistanceJoint.cpp
-    src/Physics/WorldRevoluteJoint2d.cpp
-    src/Physics/WorldPrismaticJoint2d.cpp
-    src/Physics/WorldPulleyJoint2d.cpp
-    src/Physics/WorldGearJoint2d.cpp
-
     src/Graphics/Layer.cpp
     src/Graphics/LayeredWindowActivity.cpp
     src/Graphics/VertexArray.cpp
@@ -83,7 +72,21 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Graphics/GraphicalEdge.cpp
     src/Graphics/GraphicalPolygon.cpp
 
+    src/Physics/ContactListener.cpp
+    src/Physics/WorldObject2d.cpp
+    src/Physics/WorldLayer2d.cpp
+    src/Physics/WorldJoint2d.cpp
+    src/Physics/WorldDistanceJoint.cpp
+    src/Physics/WorldRevoluteJoint2d.cpp
+    src/Physics/WorldPrismaticJoint2d.cpp
+    src/Physics/WorldPulleyJoint2d.cpp
+    src/Physics/WorldGearJoint2d.cpp
+
     src/Geometry/RegularPolygon.cpp
+
+    src/Game/Game2d/Game2d.cpp
+    src/Game/Game2d/Level.cpp
+    src/Game/GameException.cpp
    )
 
 include_directories(${SDL2_INCLUDE_DIRS})

@@ -4,19 +4,11 @@
 #include <sstream>
 
 #include "DemoGame.h"
-#include "Clock.h"
-#include "Vector2d.h"
-#include "PerlinNoise.h"
-#include "KeyboardControlCamera.h"
-#include "WorldObject2d.h"
-#include "WorldDistanceJoint.h"
-#include "Debug.h"
 #include "RegularPolygon.h"
 
 DemoGame::DemoGame(ample::window::Window &window)
-    : ample::graphics::LayeredWindowActivity(window)
+    : ample::game::game2d::Game2d(window)
 {
-    layer.addCamera(camera);
     ample::graphics::GraphicalObject2dRaw sample1{ample::geometry::RegularPolygon<float>(50, 8),
                                                   10.0,
                                                   20.0,
@@ -59,48 +51,11 @@ DemoGame::DemoGame(ample::window::Window &window)
                                                   ample::graphics::normalsMode::FACE};
     object1 = std::make_unique<ample::graphics::GraphicalObject2d>(sample1);
     object2 = std::make_unique<ample::graphics::GraphicalObject2d>(sample2);
-    layer.addObject(*object1);
-    layer.addObject(*object2);
-    layer.addObject(camera.getLamp());
-    addLayer(layer);
     object2->translate({-30, 0, -30});
     _window.disableCursor();
-}
-
-void DemoGame::onActive()
-{
-    LayeredWindowActivity::onActive();
-    _window.moveCursor(0, 0);
-    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_p))
-    {
-        object2->scale({1.1, 1.1, 1.0});
-    }
-    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_o))
-    {
-        object2->scale({1.0 / 1.1, 1.0 / 1.1, 1.0});
-    }
-    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_z))
-    {
-        object2->translate({2.0, 0.0, 0.0});
-    }
-    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_x))
-    {
-        object2->translate({-2.0, 0.0, 0.0});
-    }
-    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_c))
-    {
-        object2->translate({0.0, 2.0, 0.0});
-    }
-    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_v))
-    {
-        object2->translate({0.0, -2.0, 0.0});
-    }
-    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_b))
-    {
-        object2->translate({0.0, 0.0, 2.0});
-    }
-    if (eventManager->keyboard()->isKeyDown(ample::control::keysym::KEY_n))
-    {
-        object2->translate({0.0, 0.0, -2.0});
-    }
+    auto &level = createLevel(1, 10.0f, 0.5f);
+    level.frontSlice().addObject(*object1);
+    level.frontSlice().addObject(*object2);
+    setCurrentLevel(1);
+    level.camera().translate({0.0, 0.0, -50.0});
 }

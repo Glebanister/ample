@@ -20,6 +20,8 @@ public:
     void addObject(GraphicalObject &object);
     void clearObjecs();
 
+    size_t objectsCount() const noexcept;
+
 private:
     std::vector<Camera *> _cameras;
     std::vector<GraphicalObject *> _objects;

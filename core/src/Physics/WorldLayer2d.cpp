@@ -10,12 +10,21 @@
 #include "WorldPulleyJoint2d.h"
 #include "WorldGearJoint2d.h"
 #include "Clock.h"
+#include "Exception.h"
 #include "Debug.h"
 
 namespace ample::physics
 {
-WorldLayer2d::WorldLayer2d(const graphics::Vector2d<float> &gravity)
-    : world(b2Vec2(gravity.x, gravity.y)) {}
+WorldLayer2d::WorldLayer2d(const graphics::Vector2d<float> &gravity,
+                           float z,
+                           float thickness,
+                           float relativePositionInSlice)
+    : world(b2Vec2(gravity.x, gravity.y)),
+      _z(z),
+      _thickness(thickness),
+      _relativePositionInSlice(relativePositionInSlice)
+{
+}
 
 /*void WorldLayer2d::addWorldObject(WorldObject2d &object)
 {
@@ -30,8 +39,16 @@ void WorldLayer2d::setContactListener(ContactListener &listener)
 
 WorldObject2d &WorldLayer2d::addWorldObject(const std::vector<ample::graphics::Vector2d<float>> &shape,
                                             ample::graphics::Vector2d<float> pos,
-                                            BodyType type, float angle)
+                                            BodyType type,
+                                            float angle,
+                                            float relativeThickness)
 {
+    if (!(0.0f <= relativeThickness && relativeThickness <= 1.0f))
+    {
+        throw exception::Exception(exception::exId::UNSPECIFIED,
+                                   exception::exType::CASUAL,
+                                   "relative thickness should be from 0.0 to 1.0");
+    }
     b2BodyDef bodyDef;
     bodyDef.position.Set(pos.x, pos.y);
     bodyDef.angle = angle;
@@ -47,7 +64,10 @@ WorldObject2d &WorldLayer2d::addWorldObject(const std::vector<ample::graphics::V
         bodyDef.type = b2_dynamicBody;
         break;
     }
-    _bodies.emplace_back(new WorldObject2d(world.CreateBody(&bodyDef), shape));
+    _bodies.emplace_back(new WorldObject2d(world.CreateBody(&bodyDef),
+                                           shape,
+                                           _thickness * relativeThickness,
+                                           _z + (_thickness * (1 - relativeThickness)) * _relativePositionInSlice));
     graphics::Layer::addObject(*(_bodies[_bodies.size() - 1]));
     return *(_bodies[_bodies.size() - 1]);
 }
@@ -147,7 +167,7 @@ WorldJoint2d &WorldLayer2d::addWorldGearJoint(WorldObject2d &bodyA, WorldObject2
     jointDef.joint2 = jointB._joint;
     jointDef.ratio = ratio;
     _joints.emplace_back(new WorldGearJoint2d((b2GearJoint *)world.CreateJoint(&jointDef),
-                                                bodyA, bodyB, jointA, jointB, {{1, 1}}));
+                                              bodyA, bodyB, jointA, jointB, {{1, 1}}));
     graphics::Layer::addObject(*(_joints[_joints.size() - 1]));
     return *(_joints[_joints.size() - 1]);
 }
