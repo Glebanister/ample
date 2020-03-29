@@ -37,7 +37,8 @@ public:
                const graphics::Vector2d<int> &startPosition,
                const graphics::Vector2d<size_t> &framesCount,
                const channelMode format,
-               const texturePlayback playback);
+               const texturePlayback playback,
+               const size_t total = 0UL);
 
     TextureRaw(const Texture &);
 
@@ -48,6 +49,7 @@ public:
     graphics::Vector2d<size_t> framesCount;
     channelMode format;
     texturePlayback playback;
+    size_t total;
 };
 
 class Texture final : public utils::Noncopyable
@@ -137,9 +139,11 @@ public:
 
     size_t getFramesTotal() const noexcept;
     size_t getCurrentFrame() const noexcept;
-    void setFrame(size_t num) noexcept;
+    void setFrame(size_t num);
+    void nextFrame() noexcept;
 
-    void bind() const noexcept;
+    void pin() const noexcept;
+    void unpin() const noexcept;
 
 private:
     TextureRaw _raw;

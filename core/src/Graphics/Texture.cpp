@@ -1,4 +1,5 @@
 #include <GL/glu.h>
+#include <algorithm>
 
 #include "Texture.h"
 #include "Exception.h"
@@ -13,13 +14,15 @@ TextureRaw::TextureRaw(const std::string &texturePath,
                        const graphics::Vector2d<int> &startPosition,
                        const graphics::Vector2d<size_t> &framesCount,
                        const channelMode format,
-                       const texturePlayback playback)
+                       const texturePlayback playback,
+                       const size_t total)
     : texturePath(texturePath),
       eachSize(eachSize),
       startPosition(startPosition),
       framesCount(framesCount),
       format(format),
-      playback(playback)
+      playback(playback),
+      total(!total ? framesCount.x * framesCount.y : total)
 {
 }
 
@@ -47,6 +50,7 @@ Texture::PixelMap::Pixel &Texture::PixelMap::Pixel::operator=(const PixelMap::Pi
     {
         _data[3] = 0xFFu;
     }
+    return *this;
 }
 
 Texture::PixelMap::PixelMapRow::PixelMapRow(channelMode format, uint8_t *data)
@@ -64,7 +68,7 @@ Texture::PixelMap::PixelMap(const graphics::Vector2d<size_t> &size,
     _rows.reserve(_size.y);
     for (size_t i = 0; i < _size.y; ++i)
     {
-        _rows.emplace_back(_format, _data.data() + i * _size.x);
+        _rows.emplace_back(_format, _data.data() + i * _size.x * channelsCount(_format));
     }
 }
 
@@ -131,8 +135,8 @@ Texture::ILimage::ILimage(const std::string &imagePath,
     {
         exception::DevILException::handle("can't load image");
     }
-    ILint realWidth = ilGetInteger(IL_IMAGE_WIDTH);
-    ILint realHeight = ilGetInteger(IL_IMAGE_HEIGHT);
+    ILuint realWidth = ilGetInteger(IL_IMAGE_WIDTH);
+    ILuint realHeight = ilGetInteger(IL_IMAGE_HEIGHT);
     if (realWidth < size.x || realHeight < size.y)
     {
         throw exception::DevILException{"requried size does not fit"};
@@ -189,19 +193,25 @@ Texture::Texture(const TextureRaw &rawTexture)
 
     DEBUG("Uploading texture to OpenGL");
     _frames.reserve(_raw.framesCount.x * _raw.framesCount.y);
-    for (size_t i = 0; i < _raw.framesCount.x; ++i)
+    bool readAllFrames = false;
+
+    for (size_t i = 0; i < _raw.framesCount.y; ++i)
     {
-        for (size_t j = 0; j < _raw.framesCount.y; ++j)
+        for (size_t j = 0; j < _raw.framesCount.x && !readAllFrames; ++j)
         {
             PixelMap framePixels{_raw.eachSize, _raw.format};
-            for (size_t pixelI = i * _raw.eachSize.x; pixelI < (i + 1) * _raw.eachSize.x; ++pixelI)
+            for (size_t pixelI = i * _raw.eachSize.y; pixelI < (i + 1) * _raw.eachSize.y; ++pixelI)
             {
-                for (size_t pixelJ = j * _raw.eachSize.y; pixelJ < (j + 1) * _raw.eachSize.y; ++pixelJ)
+                for (size_t pixelJ = j * _raw.eachSize.x; pixelJ < (j + 1) * _raw.eachSize.x; ++pixelJ)
                 {
-                    framePixels[pixelI - i * _raw.eachSize.x][pixelJ - j * _raw.eachSize.y] = image.pixels()[pixelI][pixelJ];
+                    framePixels[pixelI - i * _raw.eachSize.y][pixelJ - j * _raw.eachSize.x] = image.pixels()[pixelI][pixelJ];
                 }
             }
             _frames.emplace_back(framePixels, glFormat, glFormat);
+            if (_frames.size() == _raw.total)
+            {
+                break;
+            }
         }
     }
     DEBUG("OpenGL texture is ready");
@@ -229,9 +239,9 @@ size_t Texture::getCurrentFrame() const noexcept
     return _currentFrame;
 }
 
-void Texture::setFrame(size_t num) noexcept
+void Texture::setFrame(size_t num)
 {
-    if (num >= _frames.size())
+    if (num >= _raw.total)
     {
         throw exception::Exception{exception::exId::UNSPECIFIED,
                                    exception::exType::CASUAL,
@@ -240,8 +250,59 @@ void Texture::setFrame(size_t num) noexcept
     _currentFrame = num;
 }
 
-void Texture::bind() const noexcept
+void Texture::pin() const noexcept
 {
     glBindTexture(GL_TEXTURE_2D, _frames[_currentFrame].glTextureId());
+}
+
+void Texture::unpin() const noexcept
+{
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void Texture::nextFrame() noexcept
+{
+    switch (_raw.playback)
+    {
+    case texturePlayback::NORMAL:
+        ++_currentFrame;
+        if (_currentFrame == _raw.total)
+        {
+            _currentFrame = 0;
+        }
+        break;
+
+    case texturePlayback::REVERSED:
+        --_currentFrame;
+        if (_currentFrame >= _raw.total)
+        {
+            _currentFrame = _raw.total - 1;
+        }
+        break;
+
+    case texturePlayback::BOOMERANG:
+        if (_boomerangAnimationForward)
+        {
+            ++_currentFrame;
+            if (_currentFrame == _raw.total)
+            {
+                _currentFrame = _raw.total - 1;
+                _boomerangAnimationForward = false;
+            }
+        }
+        else
+        {
+            --_currentFrame;
+            if (_currentFrame >= _raw.total)
+            {
+                _currentFrame = 0;
+                _boomerangAnimationForward = true;
+            }
+        }
+        break;
+
+    default:
+        break;
+    }
 }
 } // namespace ample::graphics
