@@ -44,18 +44,9 @@ private:
     };
 
 public:
-    struct VertexArrayRaw
-    {
-        std::vector<Vector3d<float>> coords;
-        std::vector<Vector2d<float>> uvCoords;
-        std::vector<Vector3d<float>> normal;
-
-        VertexArrayRaw(const std::vector<Vector3d<float>> &coords,
-                       const std::vector<Vector2d<float>> &uvCoords,
-                       const std::vector<Vector3d<float>> &normals);
-    };
-
-    VertexArray(const VertexArrayRaw &);
+    VertexArray(const std::vector<Vector3d<float>> &coords,
+                const std::vector<Vector2d<float>> &uvCoords,
+                const std::vector<Vector3d<float>> &normal);
     void execute();
 
 private:

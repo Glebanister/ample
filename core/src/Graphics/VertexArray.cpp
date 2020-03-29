@@ -12,13 +12,6 @@
 
 namespace ample::graphics
 {
-VertexArray::VertexArrayRaw::VertexArrayRaw(const std::vector<Vector3d<float>> &coords,
-                                            const std::vector<Vector2d<float>> &uvCoords,
-                                            const std::vector<Vector3d<float>> &normals)
-    : coords(coords),
-      uvCoords(uvCoords),
-      normal(normals) {}
-
 VertexArray::VertexBuffer::Executor::Executor(GLint size,
                                               GLenum type,
                                               GLboolean normalized,
@@ -78,11 +71,13 @@ std::vector<float> expand(const std::vector<Vector3d<float>> &vector)
     return result;
 }
 
-VertexArray::VertexArray(const VertexArrayRaw &raw)
-    : _totalVerts(raw.coords.size()),
-      _xyzCoordsBuffer(sizeof(GLfloat) * raw.coords.size() * 3, static_cast<void *>(expand(raw.coords).data())),
-      _uvCoordsBuffer(sizeof(GLfloat) * raw.coords.size() * 2, static_cast<void *>(expand(raw.uvCoords).data())),
-      _normalsBuffer(sizeof(GLfloat) * raw.coords.size() * 3, static_cast<void *>(expand(raw.normal).data()))
+VertexArray::VertexArray(const std::vector<Vector3d<float>> &coords,
+                         const std::vector<Vector2d<float>> &uvCoords,
+                         const std::vector<Vector3d<float>> &normal)
+    : _totalVerts(coords.size()),
+      _xyzCoordsBuffer(sizeof(GLfloat) * coords.size() * 3, static_cast<void *>(expand(coords).data())),
+      _uvCoordsBuffer(sizeof(GLfloat) * coords.size() * 2, static_cast<void *>(expand(uvCoords).data())),
+      _normalsBuffer(sizeof(GLfloat) * coords.size() * 3, static_cast<void *>(expand(normal).data()))
 
 {
     exception::OpenGLException::handle();
