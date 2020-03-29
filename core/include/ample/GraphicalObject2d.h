@@ -32,6 +32,9 @@ public:
                       const Vector2d<float> &translated = {0.0f, 0.0f},
                       const float &rotated = 0.0f);
 
+    GraphicalEdge &side() noexcept;
+    GraphicalPolygon &face() noexcept;
+
 protected:
     GraphicalPolygon _face;
     GraphicalEdge _side;

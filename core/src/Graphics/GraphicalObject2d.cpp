@@ -48,4 +48,14 @@ GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphic
                         glm::rotate(rotated, glm::vec3{0.0f, 0.0f, 1.0f}))
 {
 }
+
+GraphicalEdge &GraphicalObject2d::side() noexcept
+{
+    return _side;
+}
+
+GraphicalPolygon &GraphicalObject2d::face() noexcept
+{
+    return _face;
+}
 } // namespace ample::graphics
