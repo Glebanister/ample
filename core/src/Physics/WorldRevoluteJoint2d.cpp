@@ -2,17 +2,19 @@
 
 namespace ample::physics
 {
-WorldRevoluteJoint2d::WorldRevoluteJoint2d(b2Joint *joint,
-                                           WorldObject2d &bodyA, WorldObject2d &bodyB,
-                                           const std::vector<ample::graphics::Vector2d<float>> &shape)
-    : WorldJoint2d(joint, bodyA, bodyB, shape) {}
-
-void WorldRevoluteJoint2d::onActive()
+WorldRevoluteJoint2d::WorldRevoluteJoint2d(WorldObject2d &bodyA,
+                                           WorldObject2d &bodyB,
+                                           const ample::graphics::Vector2d<float> &anchor,
+                                           float referenceAngle,
+                                           bool collideConnected)
+    : WorldJoint2d(bodyA, bodyB)
 {
-    const auto &posAnchor = static_cast<b2RevoluteJoint *>(_joint)->GetAnchorA();
-    const auto &pos = _bodyA.getWorldPoint({posAnchor.x, posAnchor.y});
-    setTranslate({pos.x, pos.y, getZ()});
-    setRotate({0.0f, 0.0f, 1.0f}, 0);
+    b2RevoluteJointDef jointDef;
+    jointDef.Initialize(getB2Body(bodyA), getB2Body(bodyB),
+                        {anchor.x, anchor.y});
+    jointDef.referenceAngle = referenceAngle;
+    jointDef.collideConnected = collideConnected;
+    initB2Joint(bodyA.getWorldLayer(), &jointDef);
 }
 
 ample::graphics::Vector2d<float> WorldRevoluteJoint2d::getLocalAnchorA() const

@@ -79,6 +79,12 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Physics/WorldPrismaticJoint2d.cpp
     src/Physics/WorldPulleyJoint2d.cpp
     src/Physics/WorldGearJoint2d.cpp
+    src/Physics/WorldMouseJoint2d.cpp
+    src/Physics/WorldWheelJoint2d.cpp
+    src/Physics/WorldWeldJoint2d.cpp
+    src/Physics/WorldRopeJoint2d.cpp
+    src/Physics/WorldFrictionJoint2d.cpp
+    src/Physics/WorldMotorJoint2d.cpp
 
     src/Geometry/RegularPolygon.cpp
 
