@@ -57,10 +57,11 @@ GraphicalPolygon::GraphicalPolygon(const std::vector<Vector2d<float>> &shape,
                                    const glm::mat4 &translated,
                                    const glm::mat4 &scaled,
                                    const glm::mat4 &rotated)
-    : GraphicalObject(translated, scaled, rotated),
-      _vertexArray(generateFaceCoords(shape, z),
-                   generateFaceUVCoords(shape, textureRepeats, z),
-                   generateFaceNormals(shape, z))
+    : GraphicalObject(translated, scaled, rotated)
 {
+    bindVertexArray(std::make_shared<VertexArray>(
+        generateFaceCoords(shape, z),
+        generateFaceUVCoords(shape, textureRepeats, z),
+        generateFaceNormals(shape, z)));
 }
 } // namespace ample::graphics
