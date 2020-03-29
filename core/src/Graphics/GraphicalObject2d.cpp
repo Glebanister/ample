@@ -74,22 +74,26 @@ GraphicalObject2d::GraphicalObject2d(const GraphicalObject2dRaw &raw)
 GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphicalShape,
                                      const float depth,
                                      const float z)
-    : GraphicalObject2d({
-          graphicalShape,
-          depth,
-          z,
-          "../../demo/textures/lena512.png",
-          {0, 0},
-          {512, 512},
-          {textureMode::STRETCH, textureMode::STRETCH},
-          channelMode::RGB,
-          "../../demo/textures/lena512.png",
-          {0, 0},
-          {512, 512},
-          {textureMode::STRETCH, textureMode::STRETCH},
-          channelMode::RGB,
-          normalsMode::FACE,
-      })
+    : GraphicalObject2d({graphicalShape,
+                         depth,
+                         z,
+                         "../../demo/textures/lena512.png",
+                         {512, 512},
+                         {0, 0},
+                         {
+                             ample::graphics::textureMode::STRETCH,
+                             ample::graphics::textureMode::STRETCH,
+                         },
+                         ample::graphics::channelMode::RGB,
+                         "../../demo/textures/lena512.png",
+                         {512, 512},
+                         {0, 0},
+                         {
+                             ample::graphics::textureMode::STRETCH,
+                             ample::graphics::textureMode::STRETCH,
+                         },
+                         ample::graphics::channelMode::RGB,
+                         ample::graphics::normalsMode::FACE})
 {
     DEBUG("Bad GraphicalObject2d constructor usage!");
     // TODO: remove this constructor
