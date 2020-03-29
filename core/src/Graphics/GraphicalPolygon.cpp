@@ -54,9 +54,9 @@ static std::vector<Vector2d<float>> generateFaceUVCoords(const std::vector<Vecto
 GraphicalPolygon::GraphicalPolygon(const std::vector<Vector2d<float>> &shape,
                                    const float z,
                                    const Vector2d<float> &textureRepeats,
-                                   const glm::mat4 &translated = glm::mat4{1.0f},
-                                   const glm::mat4 &scaled = glm::mat4{1.0f},
-                                   const glm::mat4 &rotated = glm::mat4{1.0f})
+                                   const glm::mat4 &translated,
+                                   const glm::mat4 &scaled,
+                                   const glm::mat4 &rotated)
     : GraphicalObject(translated, scaled, rotated),
       _vertexArray(generateFaceCoords(shape, z),
                    generateFaceUVCoords(shape, textureRepeats, z),

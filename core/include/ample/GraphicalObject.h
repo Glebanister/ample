@@ -43,12 +43,14 @@ public:
 
     void bindVertexArray(std::shared_ptr<VertexArray>) noexcept;
 
+protected:
+    glm::mat4 _modelMatrix{1.0f};
+
 private:
     std::vector<GraphicalObject *> _subObjects;
     glm::mat4 _translated{1.0f};
     glm::mat4 _scaled{1.0f};
     glm::mat4 _rotated{1.0f};
-    glm::mat4 _modelMatrix{1.0f};
     shaders::ShaderProcessor::Uniform _modelMatrixUniform;
     std::shared_ptr<Texture> _texturePtr = nullptr;
     std::shared_ptr<VertexArray> _vertexArrayPtr = nullptr;

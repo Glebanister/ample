@@ -280,6 +280,18 @@ void WorldObject2d::resetMassData()
 WorldObject2d::WorldObject2d(b2Body *body,
                              const std::vector<ample::graphics::Vector2d<float>> &shape,
                              const float thickness,
-                             const float z)
-    : GraphicalObject2d(shape, thickness, z), _body(body) {}
+                             const float z,
+                             const graphics::Vector2d<float> &faceTextureRepeats,
+                             const graphics::Vector2d<float> &sideTextureRepeats,
+                             const graphics::normalsMode sideNormalsMode,
+                             const graphics::Vector2d<float> &translated,
+                             const float &rotated)
+    : GraphicalObject2d(shape,
+                        thickness,
+                        z,
+                        faceTextureRepeats,
+                        sideTextureRepeats,
+                        sideNormalsMode,
+                        translated,
+                        rotated), _body(body) {}
 } // namespace ample::physics

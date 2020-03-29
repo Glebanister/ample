@@ -85,9 +85,9 @@ VertexArray::VertexArray(const std::vector<Vector3d<float>> &coords,
 
 void VertexArray::execute()
 {
-    VertexBuffer::Executor execCoords{3, GL_FLOAT, GL_FALSE, 0, NULL, _xyzCoordsBuffer};
-    VertexBuffer::Executor execCoords{2, GL_FLOAT, GL_FALSE, 0, NULL, _uvCoordsBuffer};
-    VertexBuffer::Executor execCoords{3, GL_FLOAT, GL_FALSE, 0, NULL, _normalsBuffer};
+    VertexBuffer::Executor execXYZ{3, GL_FLOAT, GL_FALSE, 0, NULL, _xyzCoordsBuffer};
+    VertexBuffer::Executor execUV{2, GL_FLOAT, GL_FALSE, 0, NULL, _uvCoordsBuffer};
+    VertexBuffer::Executor execTEX{3, GL_FLOAT, GL_FALSE, 0, NULL, _normalsBuffer};
     glDrawArrays(GL_TRIANGLES, 0, _totalVerts);
 }
 } // namespace ample::graphics

@@ -12,9 +12,9 @@
 
 namespace ample::graphics
 {
-GraphicalObject::GraphicalObject(const glm::mat4 &translated = glm::mat4{1.0f},
-                                 const glm::mat4 &scaled = glm::mat4{1.0f},
-                                 const glm::mat4 &rotated = glm::mat4{1.0f})
+GraphicalObject::GraphicalObject(const glm::mat4 &translated,
+                                 const glm::mat4 &scaled,
+                                 const glm::mat4 &rotated)
     : _translated(translated),
       _scaled(scaled),
       _rotated(rotated),

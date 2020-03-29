@@ -116,7 +116,12 @@ private:
     WorldObject2d(b2Body *body,
                   const std::vector<ample::graphics::Vector2d<float>> &shape,
                   const float thickness,
-                  const float z);
+                  const float z,
+                  const graphics::Vector2d<float> &faceTextureRepeats,
+                  const graphics::Vector2d<float> &sideTextureRepeats,
+                  const graphics::normalsMode sideNormalsMode,
+                  const graphics::Vector2d<float> &translated = {0.0f, 0.0f},
+                  const float &rotated = 0.0f);
     std::vector<std::shared_ptr<Fixture>> _fixtures;
     b2Body *_body = nullptr;
 };
