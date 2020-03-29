@@ -6,12 +6,13 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/normal.hpp>
 #include <cmath>
+#include <vector>
 
 #include "Vector3d.h"
 #include "Vector2d.h"
-#include "VertexArraySide2d.h"
-#include "Debug.h"
 #include "VertexArray.h"
+#include "GraphicalEdge.h"
+#include "Debug.h"
 
 namespace ample::graphics
 {
@@ -86,10 +87,7 @@ static std::vector<Vector3d<float>> generateSideNormals(const std::vector<Vector
 static std::vector<Vector2d<float>> generateSideUVCoords(const std::vector<Vector2d<float>> &graphicalShape,
                                                          const float z,
                                                          const float depth,
-                                                         const Vector2d<int> &size,
-                                                         const Vector2d<int> &position,
-                                                         const textureMode &texModeX,
-                                                         const textureMode &texModeY)
+                                                         const Vector2d<float> &repears)
 {
     auto shape = generateSideCoords(graphicalShape, z, depth);
     std::vector<Vector2d<float>> uvCoords(shape.size());
@@ -114,20 +112,19 @@ static std::vector<Vector2d<float>> generateSideUVCoords(const std::vector<Vecto
     return uvCoords;
 }
 
-VertexArraySide2d::VertexArraySide2d(const std::vector<Vector2d<float>> &graphicalShape,
-                                     const float z,
-                                     const float depth,
-                                     const std::string &texturePath,
-                                     const Vector2d<int> &textureSize,
-                                     const Vector2d<int> &texturePos,
-                                     const Vector2d<textureMode> &texMode,
-                                     const normalsMode &normMode,
-                                     const channelMode &mode)
-    : VertexArray(generateSideCoords(graphicalShape, z, depth),
-                  generateSideUVCoords(graphicalShape, z, depth, textureSize, texturePos, texMode.x, texMode.y),
-                  generateSideNormals(graphicalShape, normMode, z, depth),
-                  texturePath,
-                  textureSize,
-                  texturePos,
-                  mode) {}
+GraphicalEdge::GraphicalEdge(const std::vector<Vector2d<float>> &shape,
+                             const float z,
+                             const float thickness,
+                             const Vector2d<float> &textureRepeats,
+                             const normalsMode normMode,
+                             const glm::mat4 &translated,
+                             const glm::mat4 &scaled,
+                             const glm::mat4 &rotated)
+    : GraphicalObject(translated, scaled, rotated),
+      _vertexArray(generateSideCoords(shape, z, thickness),
+                   generateSideUVCoords(shape, z, thickness, textureRepeats),
+                   generateSideNormals(shape, normMode, z, thickness))
+{
+}
+
 } // namespace ample::graphics

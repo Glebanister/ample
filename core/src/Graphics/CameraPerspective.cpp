@@ -38,6 +38,10 @@ CameraPerspective::CameraPerspective(const Vector2d<pixel_t> &viewSize,
 
 void CameraPerspective::look()
 {
+    if (!_visible)
+    {
+        return;
+    }
     _viewport.set();
     _viewMatrix = glm::lookAt(_position, _position + _direction, _head);
     _projectionMatrix = glm::perspective(glm::radians(_fov),

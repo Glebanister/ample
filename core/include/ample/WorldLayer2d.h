@@ -30,7 +30,10 @@ namespace ample::physics
 class WorldLayer2d : public ample::graphics::Layer
 {
 public:
-    explicit WorldLayer2d(const ample::graphics::Vector2d<float> &gravity, float z, float thickness);
+    explicit WorldLayer2d(const ample::graphics::Vector2d<float> &gravity,
+                          float z,
+                          float thickness,
+                          float relativePositionInSlice);
     //void addWorldObject(WorldObject2d &object);
     WorldObject2d &addWorldObject(const std::vector<ample::graphics::Vector2d<float>> &shape,
                                   ample::graphics::Vector2d<float> pos,
@@ -84,5 +87,6 @@ protected:
     b2World world;
     const float _z;
     const float _thickness;
+    const float _relativePositionInSlice;
 };
 } // namespace ample::physics
