@@ -110,13 +110,7 @@ static std::vector<Vector2d<float>> generateSideUVCoords(const std::vector<Vecto
         uvCoords[i + 0].y = uvCoords[i + 1].y = uvCoords[i + 3].y = prefixBoardLength[vId + 0] / boardLength * repeats.y;
         uvCoords[i + 2].y = uvCoords[i + 4].y = uvCoords[i + 5].y = prefixBoardLength[vId + 1] / boardLength * repeats.y;
     }
-    uvCoords[uvCoords.size() - 1].y = uvCoords[uvCoords.size() - 2].y = uvCoords[uvCoords.size() - 4].y = 1.0f;
-
-    for (auto crd : uvCoords)
-    {
-        DEBUG(std::to_string(crd.x) + ' ' + std::to_string(crd.y));
-    }
-    DEBUG('\n');
+    uvCoords[uvCoords.size() - 1].y = uvCoords[uvCoords.size() - 2].y = uvCoords[uvCoords.size() - 4].y = repeats.y;
 
     return uvCoords;
 }
