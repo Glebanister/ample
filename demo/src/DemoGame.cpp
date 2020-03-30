@@ -24,18 +24,23 @@ DemoGame::DemoGame(ample::window::Window &window)
     level.frontSlice().addObject(object);
     setCurrentLevel(1);
     level.camera().translate({0.0, 10.0, 0.0});
-    cameraRemote = std::make_unique<KeyboardControlCamera>(*eventManager, level.camera());
+    cameraRemote = std::make_shared<KeyboardControlCamera>(*eventManager, level.camera());
     addBehaviour(*cameraRemote);
     level.frontSlice().addObject(cameraRemote->getLamp());
-    texture = new ample::graphics::Texture(ample::graphics::TextureRaw("../../demo/textures/braid.jpg",
-                                                                       {116UL, 135UL},
-                                                                       {0L, 0L},
-                                                                       {7, 4},
-                                                                       ample::graphics::channelMode::RGB,
-                                                                       ample::graphics::texturePlayback::NORMAL,
-                                                                       27));
-    object.face().bindTexture(std::shared_ptr<ample::graphics::Texture>(texture));
-    object.side().bindTexture(std::shared_ptr<ample::graphics::Texture>(texture));
-    swapperSide = new AnimationSwapper{texture, 15};
-    addBehaviour(*swapperSide);
+    texture = std::make_shared<ample::graphics::Texture>(ample::graphics::TextureRaw("../../demo/textures/braid.jpg",
+                                                                                     {820UL / 7 - 1, 546UL / 4 - 1},
+                                                                                     {2L, 2L},
+                                                                                     {7, 4},
+                                                                                     ample::graphics::channelMode::RGBA,
+                                                                                     ample::graphics::texturePlayback::NORMAL,
+                                                                                     27,
+                                                                                     {
+                                                                                         ample::graphics::textureOrigin::REVERSED,
+                                                                                         ample::graphics::textureOrigin::REVERSED,
+                                                                                     }));
+    object.side().bindTexture(texture);
+    object.face().bindTexture(texture);
+
+    swapper = std::make_shared<AnimationSwapper>(texture.get(), 15);
+    addBehaviour(*swapper);
 }
