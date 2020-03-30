@@ -36,8 +36,6 @@ class DemoGame : public ample::game::game2d::Game2d
 public:
     DemoGame(ample::window::Window &window);
 
-    void onActive() override;
-
 private:
     ample::graphics::GraphicalObject2d object;
     std::unique_ptr<KeyboardControlCamera> cameraRemote;
