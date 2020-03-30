@@ -14,10 +14,12 @@ You can create ample directories anywhere, using ample script.
 
 
 ### Create your project (in developing)
+
 `$ cd buile/gui` \
 `$ ./ample-gui`
 
 
 ### Run (demo)
+
 `$ cd build/demo` \
 `$ ./demo`
