@@ -188,6 +188,9 @@ Texture::Texture(const TextureRaw &rawTexture)
     DEBUG("Loading texture " + _raw.texturePath);
     os::environment::ILEnvironment::instance();
 
+    ASSERT(GL_RGB == IL_RGB);
+    ASSERT(GL_RGBA == IL_RGBA);
+
     GLenum glFormat = static_cast<GLenum>(_raw.format);
     ILenum ilFormat = static_cast<ILenum>(_raw.format);
 
@@ -212,9 +215,16 @@ Texture::Texture(const TextureRaw &rawTexture)
             {
                 for (size_t pixelJ = j * _raw.eachSize.x; pixelJ < (j + 1) * _raw.eachSize.x; ++pixelJ)
                 {
-                    size_t frameI = _raw.eachSize.y - (pixelI - i * _raw.eachSize.y) - 1;
-                    size_t frameJ = _raw.eachSize.x - (pixelJ - j * _raw.eachSize.x) - 1;
-                    // TODO: check origin
+                    size_t frameI = pixelI - i * _raw.eachSize.y;
+                    size_t frameJ = pixelJ - j * _raw.eachSize.x;
+                    if (_raw.origin.x == textureOrigin::REVERSED)
+                    {
+                        frameI = _raw.eachSize.y - 1 - frameI;
+                    }
+                    if (_raw.origin.y == textureOrigin::REVERSED)
+                    {
+                        frameJ = _raw.eachSize.x - 1 - frameJ;
+                    }
                     framePixels[frameI][frameJ] = image.pixels()[pixelI][pixelJ];
                 }
             }

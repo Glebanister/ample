@@ -38,9 +38,7 @@ public:
 
 private:
     ample::graphics::GraphicalObject2d object;
-    std::unique_ptr<KeyboardControlCamera> cameraRemote;
-    ample::graphics::Texture *texture;
-    ample::graphics::Texture *textureSide;
-    AnimationSwapper *swapper;
-    AnimationSwapper *swapperSide;
+    std::shared_ptr<KeyboardControlCamera> cameraRemote;
+    std::shared_ptr<ample::graphics::Texture> texture;
+    std::shared_ptr<AnimationSwapper> swapper;
 };
