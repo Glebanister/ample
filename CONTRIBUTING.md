@@ -4,24 +4,24 @@ First of all, thank you for taking the time to improve the ample! \
 Your questions: [ample.engine@gmail.com](mailto:ample.engine@gmail.com)
 
 ## Developing branches
-  - `master` - always stable branch, all pull requests coming from `development`, when some feauture is ready
+- `master` - always stable branch, all pull requests coming from `development`, when some feauture is ready
 
-  - `development` - mostly stable branch, progress of developing any
+- `development` - mostly stable branch, progress of developing any
     feauture can be shown in it
 
-  - `gui` - GUI branch, all work is in the `gui` folder, GUI is powered
+- `gui` - GUI branch, all work is in the `gui` folder, GUI is powered
     by imgui library
 
-  - `graphics` - basically work with `OpenGL`
+- `graphics` - basically work with `OpenGL`
 
 ## Code writing
 ### Sources
 All engine sources are placed at `core` folder
-  - Headers: `core/include/ample/`
+- Headers: `core/include/ample/`
 
-  - Sources: `core/src/`
+- Sources: `core/src/`
 
-  - Templates: `core/include/templates/`
+- Templates: `core/include/templates/`
 
 Remember, once you add source file, you must add it to the
 `core/CMakeLists.txt`.\
