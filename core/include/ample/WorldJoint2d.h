@@ -1,6 +1,7 @@
 #pragma once
 
 #include "box2d/b2_joint.h"
+#include "Behaviour.h"
 #include "WorldObject2d.h"
 #include "WorldLayer2d.h"
 
@@ -8,7 +9,7 @@ namespace ample::physics
 {
 class WorldLayer2d;
 class WorldObject2d;
-class WorldJoint2d
+class WorldJoint2d : public activity::Behaviour
 {
 public:
     WorldObject2d &getBodyA();
