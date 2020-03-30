@@ -30,11 +30,4 @@ std::string WorldObject2dIO::saveJSONFile(const std::string &name, ample::graphi
     return new_str;
 }
 
-RawObject &WorldObject2dIO::loadJSONFile(const std::string &dataDoc, RawObject &obj)
-{
-    obj = GraphicalObject2dIO::loadJSONFile(dataDoc, obj);
-    EditorIO e(dataDoc);
-    e.JSONreader("position", obj.pos);
-    return obj;
-}
 } // namespace ample::filing

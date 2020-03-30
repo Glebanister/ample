@@ -27,19 +27,21 @@ public:
 
     void JSONreader(const std::string &nameField, std::string &obj);
 
-    void JSONreader(const std::string &nameField, ample::graphics::Vector2d<float> &obj);
+    void JSONreader(const std::string &nameField, graphics::Vector2d<float> &obj);
 
-    void JSONreader(const std::string &nameField, std::vector<ample::graphics::Vector2d<float>> &obj);
+    void JSONreader(const std::string &nameField, std::vector<graphics::Vector2d<float>> &obj);
 
-    void JSONreader(const std::string &nameField, ample::graphics::Vector2d<int> &obj);
+    void JSONreader(const std::string &nameField, graphics::Vector2d<int> &obj);
 
-    void JSONreader(const std::string &nameField, ample::graphics::channelMode &obj);
+    void JSONreader(const std::string &nameField, graphics::channelMode &obj);
 
-    void JSONreader(const std::string &nameField, ample::graphics::normalsMode &obj);
+    void JSONreader(const std::string &nameField, graphics::normalsMode &obj);
 
-    void JSONreader(const std::string &nameField, ample::graphics::textureMode &obj);
+    void JSONreader(const std::string &nameField, graphics::textureMode &obj);
 
-    void JSONreader(const std::string &nameField, ample::graphics::Vector2d<ample::graphics::textureMode> &obj);
+    void JSONreader(const std::string &nameField, graphics::Vector2d<graphics::textureMode> &obj);
+
+    graphics::GraphicalObject2dRaw loadGO2d();
 
 private:
     std::string jsonStr;

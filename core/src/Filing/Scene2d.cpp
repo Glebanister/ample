@@ -1,9 +1,11 @@
 #include <iostream>
+#include <memory>
 
 #include "Scene2d.h"
 #include "WorldObject2dIO.h"
 #include "Exception.h"
 #include "Debug.h"
+#include "RegularPolygon.h"
 
 namespace ample::filing
 {
@@ -14,17 +16,18 @@ Scene2d::Scene2d()
 
 void Scene2d::load(const std::string &nameFile)
 {
-    std::string buf = openJSONfile(nameFile);
-    EditorIO EditorFile(buf);
+    DEBUG("load from json file");
+    std::string fileStr = openJSONfile(nameFile);
 
     rapidjson::Document config;
-    config.Parse(buf.c_str());
+    config.Parse(fileStr.c_str());
 
     const rapidjson::Value &data = config["data"];
 
+    int cnt = 0;
+    objs.resize(data.Size());
     for (rapidjson::Value::ConstValueIterator itr = data.Begin(); itr != data.End(); ++itr)
     {
-        DEBUG("load from json file");
         const rapidjson::Value &attribute = *itr;
         rapidjson::StringBuffer sb;
         rapidjson::Writer<rapidjson::StringBuffer> writer(sb);
@@ -34,20 +37,21 @@ void Scene2d::load(const std::string &nameFile)
         rapidjson::Document doc;
         doc.Parse(str.c_str());
 
-        EditorIO editorObj(str);
+        EditorIO editor(str);
         std::string name = "";
-        editorObj.JSONreader(str, name);
+        editor.JSONreader("name", name);
 
-        if (name == "WorldObject2d")
+        if (name == "GraphicalObject2d")
         {
-            ample::filing::WorldObject2dIO temp;
-            RawObject rawObj;
-            rawObj = temp.loadJSONFile(str, rawObj);
-            addWorldObject(rawObj.shape, rawObj.pos);
+            ample::graphics::GraphicalObject2dRaw rawObj = editor.loadGO2d();
+            objs[cnt] = std::make_shared<ample::graphics::GraphicalObject2d>(rawObj);
+            addObject(*objs[cnt]);
+            DEBUG("add GraphicalObject2d");
             std::string id = "";
-            editorObj.JSONreader(str, id);
-            _storage[id] = _bodies[_bodies.size() - 1];
+            editor.JSONreader("id", id);
+            _storage[id] = objs[cnt];
         }
+        cnt++;
     }
 }
 
