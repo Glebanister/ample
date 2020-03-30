@@ -92,22 +92,31 @@ static std::vector<Vector2d<float>> generateSideUVCoords(const std::vector<Vecto
     auto shape = generateSideCoords(graphicalShape, z, depth);
     std::vector<Vector2d<float>> uvCoords(shape.size());
 
-    float boardLength = std::sqrt((graphicalShape[0].x - graphicalShape.back().x) * (graphicalShape[0].x - graphicalShape.back().x) +
-                                  (graphicalShape[0].y - graphicalShape.back().y) * (graphicalShape[0].y - graphicalShape.back().y));
-    std::vector<float> prefixBoardLenth(shape.size() + 1);
-    for (size_t i = 1; i < graphicalShape.size(); ++i)
+    std::vector<float> prefixBoardLength(shape.size() + 1);
+    float boardLength = 0.0f;
+    for (size_t i = 1; i <= graphicalShape.size(); ++i)
     {
-        boardLength += std::sqrt((graphicalShape[i].x - graphicalShape[i - 1].x) * (graphicalShape[i].x - graphicalShape[i - 1].x) +
-                                 (graphicalShape[i].y - graphicalShape[i - 1].y) * (graphicalShape[i].y - graphicalShape[i - 1].y));
-        prefixBoardLenth[i] = boardLength;
+        size_t cur = i % graphicalShape.size();
+        size_t prv = i - 1;
+        boardLength += std::sqrt((graphicalShape[cur].x - graphicalShape[prv].x) * (graphicalShape[cur].x - graphicalShape[prv].x) +
+                                 (graphicalShape[cur].y - graphicalShape[prv].y) * (graphicalShape[cur].y - graphicalShape[prv].y));
+        prefixBoardLength[cur] = boardLength;
     }
+    prefixBoardLength[0] = 0.0f;
     for (size_t i = 0, vId = 0; i < uvCoords.size(); i += 6, vId += 1)
     {
         uvCoords[i + 0].x = uvCoords[i + 3].x = uvCoords[i + 5].x = 0.f;
         uvCoords[i + 1].x = uvCoords[i + 2].x = uvCoords[i + 4].x = repeats.x;
-        uvCoords[i + 0].y = uvCoords[i + 1].y = uvCoords[i + 3].y = prefixBoardLenth[vId + 0] / boardLength * repeats.y;
-        uvCoords[i + 2].y = uvCoords[i + 4].y = uvCoords[i + 5].y = prefixBoardLenth[vId + 1] / boardLength * repeats.y;
+        uvCoords[i + 0].y = uvCoords[i + 1].y = uvCoords[i + 3].y = prefixBoardLength[vId + 0] / boardLength * repeats.y;
+        uvCoords[i + 2].y = uvCoords[i + 4].y = uvCoords[i + 5].y = prefixBoardLength[vId + 1] / boardLength * repeats.y;
     }
+    uvCoords[uvCoords.size() - 1].y = uvCoords[uvCoords.size() - 2].y = uvCoords[uvCoords.size() - 4].y = 1.0f;
+
+    for (auto crd : uvCoords)
+    {
+        DEBUG(std::to_string(crd.x) + ' ' + std::to_string(crd.y));
+    }
+    DEBUG('\n');
 
     return uvCoords;
 }
