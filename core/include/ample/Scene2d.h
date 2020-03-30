@@ -24,6 +24,7 @@ public:
     ample::graphics::GraphicalObject &getElementById(const std::string &id);
 
 private:
+    std::vector<std::shared_ptr<ample::graphics::GraphicalObject2d>> objs;
     std::unordered_map<std::string, std::shared_ptr<ample::graphics::GraphicalObject>> _storage;
 };
 } // namespace ample::filing
