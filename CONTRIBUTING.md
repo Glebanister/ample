@@ -17,10 +17,8 @@ Your questions: [ample.engine@gmail.com](mailto:ample.engine@gmail.com)
 ## Code writing
 ### Sources
 All engine sources are placed at `core` folder
-- Headers: `core/include/ample/`
-
+-   Headers: `core/include/ample/`
 -   Sources: `core/src/`
-
 -   Templates: `core/include/templates/`
 
 Remember, once you add source file, you must add it to the
@@ -101,7 +99,7 @@ CamelCase::CamelCase(const std::string &name,
 
 ### For example
 I want to implement projector light source
-- If i have any questions,
+-   If i have any questions,
 i would ask [ample.engine@gmail.com](mailto:ample.engine@gmail.com) to
 help me
 
