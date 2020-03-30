@@ -39,5 +39,4 @@ private:
     ample::graphics::Layer layer;
     std::unique_ptr<ample::graphics::GraphicalObject2d> object1;
     std::unique_ptr<ample::graphics::GraphicalObject2d> object2;
-    ample::filing::Scene2d scene2D;
 };
