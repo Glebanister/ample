@@ -19,12 +19,12 @@ DemoGame::DemoGame(ample::window::Window &window)
              {0.0f, 0.0f},
              0.0f)
 {
-    _window.disableCursor();
+    osWindow().disableCursor();
     auto &level = createLevel(1, 10.0f, 0.5f);
     level.frontSlice().addObject(object);
     setCurrentLevel(1);
     level.camera().translate({0.0, 10.0, 0.0});
-    cameraRemote = std::make_shared<KeyboardControlCamera>(*eventManager, level.camera());
+    cameraRemote = std::make_shared<KeyboardControlCamera>(eventManager(), level.camera());
     addBehaviour(*cameraRemote);
     level.frontSlice().addObject(cameraRemote->getLamp());
     texture = std::make_shared<ample::graphics::Texture>(ample::graphics::TextureRaw("../../demo/textures/braid.jpg",

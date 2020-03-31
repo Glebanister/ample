@@ -49,8 +49,8 @@ public:
 
     ~EventManager() = default;
 
-    std::shared_ptr<KeyboardManager> keyboard() const;
-    std::shared_ptr<MouseHandler> mouse() const;
+    KeyboardManager &keyboard();
+    MouseHandler &mouse();
 
 private:
     std::shared_ptr<KeyboardManager> _keyboard;
