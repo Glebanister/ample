@@ -58,4 +58,19 @@ GraphicalPolygon &GraphicalObject2d::face() noexcept
 {
     return _face;
 }
+
+GraphicalObject2d::GraphicalObject2d(filing::JsonIO &input)
+    : GraphicalObject(input),
+      _face(input),
+      _side(input)
+{
+}
+
+void GraphicalObject2d::dump(filing::JsonIO &output)
+{
+    GraphicalObject::dump(output);
+    _face.dump(output);
+    _side.dump(output)
+}
+
 } // namespace ample::graphics

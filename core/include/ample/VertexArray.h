@@ -4,11 +4,13 @@
 #include <GL/glu.h>
 #include <vector>
 #include <memory>
+#include <string>
 
 #include "Vector2d.h"
 #include "Vector3d.h"
 #include "Noncopyable.h"
 #include "Texture.h"
+#include "JsonIO.h"
 
 namespace ample::graphics
 {
@@ -29,6 +31,8 @@ private:
 
     public:
         VertexBuffer(GLsizeiptr, void *);
+        VertexBuffer(std::vector<Vector2d<float>> &data);
+        VertexBuffer(std::vector<Vector3d<float>> &data);
         ~VertexBuffer();
 
     private:
@@ -41,9 +45,17 @@ public:
     VertexArray(const std::vector<Vector3d<float>> &coords,
                 const std::vector<Vector2d<float>> &uvCoords,
                 const std::vector<Vector3d<float>> &normal);
+
+    VertexArray(filing::JsonIO &input);
+
+    void dump(filing::JsonIO &output);
+
     void execute();
 
 private:
+    std::vector<Vector3d<float>> _coords;
+    std::vector<Vector3d<float>> _uvCoords;
+    std::vector<Vector3d<float>> _normals;
     VertexBuffer _xyzCoordsBuffer;
     VertexBuffer _uvCoordsBuffer;
     VertexBuffer _normalsBuffer;

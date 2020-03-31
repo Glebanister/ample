@@ -17,7 +17,12 @@ public:
                      const glm::mat4 &scaled = glm::mat4{1.0f},
                      const glm::mat4 &rotated = glm::mat4{1.0f});
 
+    GraphicalPolygon(filing::JsonIO &);
+
+    void dump(filing::JsonIO &) override;
+
 private:
     std::vector<Vector2d<float>> _shape;
+    Vector2d<float> _textureRepeats;
 };
 } // namespace ample::graphics

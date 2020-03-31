@@ -12,6 +12,21 @@
 
 namespace ample::graphics
 {
+struct VertexArrayImpl
+{
+    VertexArrayImpl() = default;
+    VertexArrayImpl(AbstractIO &input)
+    {
+        input.read("coords", coords);
+        input.read("uvCoords", uvCoords);
+        input.read("normals", normals);
+    }
+
+    std::vector<Vector3d<float>> coords;
+    std::vector<Vector3d<float>> uvCoords;
+    std::vector<Vector3d<float>> normals;
+};
+
 VertexArray::VertexBuffer::Executor::Executor(GLuint index,
                                               GLint size,
                                               GLenum type,
@@ -37,18 +52,6 @@ VertexArray::VertexBuffer::Executor::~Executor()
     glDisableVertexAttribArray(_index);
 }
 
-VertexArray::VertexBuffer::VertexBuffer(GLsizeiptr size, void *pointer)
-{
-    glGenBuffers(1, &_bufferId);
-    glBindBuffer(GL_ARRAY_BUFFER, _bufferId);
-    glBufferData(GL_ARRAY_BUFFER, size, pointer, GL_STATIC_DRAW);
-}
-
-VertexArray::VertexBuffer::~VertexBuffer()
-{
-    glDeleteBuffers(1, &_bufferId);
-}
-
 std::vector<float> expand(const std::vector<Vector2d<float>> &vector)
 {
     std::vector<GLfloat> result(vector.size() * 2);
@@ -72,16 +75,51 @@ std::vector<float> expand(const std::vector<Vector3d<float>> &vector)
     return result;
 }
 
+VertexArray::VertexBuffer::VertexBuffer(GLsizeiptr size, void *pointer)
+{
+    glGenBuffers(1, &_bufferId);
+    glBindBuffer(GL_ARRAY_BUFFER, _bufferId);
+    glBufferData(GL_ARRAY_BUFFER, size, pointer, GL_STATIC_DRAW);
+}
+
+VertexArray::VertexBuffer::VertexBuffer(std::vector<Vector2d<float>> &data)
+    : VertexBuffer(sizeof(GLfloat) * data.size() * 2, static_cast<void *>(expand(data).data())) {}
+
+VertexArray::VertexBuffer::VertexBuffer(std::vector<Vector3d<float>> &data)
+    : VertexBuffer(sizeof(GLfloat) * data.size() * 3, static_cast<void *>(expand(data).data())) {}
+
+VertexArray::VertexBuffer::~VertexBuffer()
+{
+    glDeleteBuffers(1, &_bufferId);
+}
+
 VertexArray::VertexArray(const std::vector<Vector3d<float>> &coords,
                          const std::vector<Vector2d<float>> &uvCoords,
                          const std::vector<Vector3d<float>> &normal)
-    : _xyzCoordsBuffer(sizeof(GLfloat) * coords.size() * 3, static_cast<void *>(expand(coords).data())),
-      _uvCoordsBuffer(sizeof(GLfloat) * uvCoords.size() * 2, static_cast<void *>(expand(uvCoords).data())),
-      _normalsBuffer(sizeof(GLfloat) * normal.size() * 3, static_cast<void *>(expand(normal).data())),
+    : _coords(coords),
+      _uvCoords(uvCoords),
+      _normalsBuffer(normal),
+      _xyzCoordsBuffer(coords),
+      _uvCoordsBuffer(uvCoords),
+      _normalsBuffer(normal),
       _totalVerts(coords.size())
 
 {
     exception::OpenGLException::handle();
+}
+
+VertexArray::VertexArray(filing::JsonIO &input)
+    : VertexArray(input.read<std::vector<Vector2d<float>>>("coords"),
+                  input.read<std::vector<Vector2d<float>>>("uvCoords"),
+                  input.read<std::vector<Vector3d<float>>>("normals"))
+{
+}
+
+void VertexArray::dump(filing::JsonIO &output)
+{
+    output.write<std::vector<Vector3d<float>>>("coords", _coords);
+    output.write<std::vector<Vector2d<float>>>("uvCoords", _uvCoords);
+    output.write<std::vector<Vector3d<float>>>("normals", _normals);
 }
 
 void VertexArray::execute()
