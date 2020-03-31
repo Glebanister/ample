@@ -31,26 +31,26 @@ void WindowEventHandler::handleEvent(const SDL_Event &event)
 }
 
 WindowActivity::WindowActivity(Window &window)
-    : eventManager(std::make_shared<control::EventManager>(window)),
+    : _eventManager(std::make_shared<control::EventManager>(window)),
       _window(window),
       _quitHandler(std::make_shared<QuitHandler>(*this)),
       _windowEventHandler(std::make_shared<WindowEventHandler>(*this, _window))
 {
-    eventManager->addEventHandler(SDL_QUIT, *_quitHandler);
-    eventManager->addEventHandler(SDL_WINDOWEVENT, *_windowEventHandler);
+    _eventManager->addEventHandler(SDL_QUIT, *_quitHandler);
+    _eventManager->addEventHandler(SDL_WINDOWEVENT, *_windowEventHandler);
     time::Clock::init();
 
     os::environment::OpenGLEnvironment::instance();
     time::Clock::update();
     this->_window.swapBuffer();
-    eventManager->update();
+    _eventManager->update();
 }
 
 void WindowActivity::onActive()
 {
     activity::Activity::onActive();
     time::Clock::update();
-    eventManager->update();
+    _eventManager->update();
 }
 
 pixel_t WindowActivity::getWidth() const
@@ -64,4 +64,14 @@ pixel_t WindowActivity::getHeight() const
 }
 
 void WindowActivity::onResize() {}
+
+control::EventManager &WindowActivity::eventManager() noexcept
+{
+    return *_eventManager;
+}
+
+Window &WindowActivity::osWindow()
+{
+    return _window;
+}
 } // namespace ample::window
