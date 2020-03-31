@@ -37,11 +37,11 @@ public:
 
     void JSONreader(const std::string &nameField, graphics::normalsMode &obj);
 
-    void JSONreader(const std::string &nameField, graphics::textureMode &obj);
-
-    void JSONreader(const std::string &nameField, graphics::Vector2d<graphics::textureMode> &obj);
-
-    graphics::GraphicalObject2dRaw loadGO2d();
+//    void JSONreader(const std::string &nameField, graphics::textureMode &obj);
+//
+//    void JSONreader(const std::string &nameField, graphics::Vector2d<graphics::textureMode> &obj);
+//
+//    graphics::GraphicalObject2dRaw loadGO2d();
 
 private:
     std::string jsonStr;

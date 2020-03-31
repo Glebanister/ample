@@ -16,15 +16,15 @@ std::string GraphicalObject2dIO::saveJSONFile(const std::string &name, ample::gr
 
     ample::graphics::GraphicalObject2d &newObj = dynamic_cast<ample::graphics::GraphicalObject2d &>(obj);
     rapidjson::Value vertices(rapidjson::Type::kArrayType);
-    for (size_t i = 0; i < newObj._raw.graphicalShape.size(); ++i)
-    {
-        rapidjson::Value coordinate(rapidjson::Type::kArrayType);
-        val.SetFloat(newObj._raw.graphicalShape[i].x);
-        coordinate.PushBack(val, allocator);
-        val.SetFloat(newObj._raw.graphicalShape[i].y);
-        coordinate.PushBack(val, allocator);
-        vertices.PushBack(coordinate, allocator);
-    }
+//    for (size_t i = 0; i < newObj._raw.graphicalShape.size(); ++i)
+//    {
+//        rapidjson::Value coordinate(rapidjson::Type::kArrayType);
+//        val.SetFloat(newObj._raw.graphicalShape[i].x);
+//        coordinate.PushBack(val, allocator);
+//        val.SetFloat(newObj._raw.graphicalShape[i].y);
+//        coordinate.PushBack(val, allocator);
+//        vertices.PushBack(coordinate, allocator);
+//    }
     doc.AddMember("vertices", vertices, allocator);
 
     rapidjson::StringBuffer buffer;

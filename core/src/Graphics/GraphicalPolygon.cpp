@@ -60,27 +60,27 @@ GraphicalPolygon::GraphicalPolygon(const std::vector<Vector2d<float>> &shape,
     : GraphicalObject(translated, scaled, rotated),
       _textureRepeats(textureRepeats)
 {
-    bindVertexArray(std::make_shared<VertexArray>(
-        generateFaceCoords(shape, z),
-        generateFaceUVCoords(shape, textureRepeats, z),
-        generateFaceNormals(shape, z)));
+//    bindVertexArray(std::make_shared<VertexArray>(
+//        generateFaceCoords(shape, z),
+//        generateFaceUVCoords(shape, textureRepeats, z),
+//        generateFaceNormals(shape, z)));
 }
 
-GraphicalPolygon::GraphicalPolygon(filing::JsonIO &input)
-    : GraphicalPolygon(input.read<std::vector<Vector2d<float>>>("shape"),
-                       input.read<float>("z"),
-                       input.read<Vector2d<float>>("textureRepeats"),
-                       input.read<glm::mat4>("translated"),
-                       input.read<glm::mat4>("scaled"),
-                       input.read<glm::mat4>("rotated"))
-{
-}
-
-void GraphicalPolygon::dump(filing::JsonIO &output)
-{
-    GraphicalObject::dump(output);
-    output.write<std::vector<Vector2d<float>>>("shape", _shape);
-    input.write<float>("z", getZ());
-    input.write<Vector2d<float>>("textureRepeats", _textureRepeats);
-}
+//GraphicalPolygon::GraphicalPolygon(filing::JsonIO &input)
+//    : GraphicalPolygon(input.read<std::vector<Vector2d<float>>>("shape"),
+//                       input.read<float>("z"),
+//                       input.read<Vector2d<float>>("textureRepeats"),
+//                       input.read<glm::mat4>("translated"),
+//                       input.read<glm::mat4>("scaled"),
+//                       input.read<glm::mat4>("rotated"))
+//{
+//}
+//
+//void GraphicalPolygon::dump(filing::JsonIO &output)
+//{
+//    GraphicalObject::dump(output);
+//    output.write<std::vector<Vector2d<float>>>("shape", _shape);
+//    input.write<float>("z", getZ());
+//    input.write<Vector2d<float>>("textureRepeats", _textureRepeats);
+//}
 } // namespace ample::graphics

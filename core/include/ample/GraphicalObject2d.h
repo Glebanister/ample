@@ -35,9 +35,9 @@ public:
     GraphicalEdge &side() noexcept;
     GraphicalPolygon &face() noexcept;
 
-    GraphicalObject2d(filing::JsonIO &);
-
-    void dump(filing::JsonIO &) override;
+//    GraphicalObject2d(filing::JsonIO &);
+//
+//    void dump(filing::JsonIO &) override;
 
 protected:
     GraphicalPolygon _face;

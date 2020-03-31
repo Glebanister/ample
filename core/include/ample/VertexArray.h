@@ -10,7 +10,7 @@
 #include "Vector3d.h"
 #include "Noncopyable.h"
 #include "Texture.h"
-#include "JsonIO.h"
+//#include "JsonIO.h"
 
 namespace ample::graphics
 {
@@ -42,13 +42,13 @@ private:
     };
 
 public:
-    VertexArray(const std::vector<Vector3d<float>> &coords,
-                const std::vector<Vector2d<float>> &uvCoords,
-                const std::vector<Vector3d<float>> &normal);
+//    VertexArray(const std::vector<Vector3d<float>> &coords,
+//                const std::vector<Vector2d<float>> &uvCoords,
+//                const std::vector<Vector3d<float>> &normal);
 
-    VertexArray(filing::JsonIO &input);
-
-    void dump(filing::JsonIO &output);
+//    VertexArray(filing::JsonIO &input);
+//
+//    void dump(filing::JsonIO &output);
 
     void execute();
 

@@ -25,9 +25,9 @@ public:
                   const glm::mat4 &scaled = glm::mat4{1.0f},
                   const glm::mat4 &rotated = glm::mat4{1.0f});
 
-    GraphicalEdge(filing::JsonIO &input);
-
-    void dump(filing::JsonIO &output);
+//    GraphicalEdge(filing::JsonIO &input);
+//
+//    void dump(filing::JsonIO &output);
 
 private:
     std::vector<Vector2d<float>> _shape;

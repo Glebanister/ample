@@ -41,16 +41,16 @@ void Scene2d::load(const std::string &nameFile)
         std::string name = "";
         editor.JSONreader("name", name);
 
-        if (name == "GraphicalObject2d")
-        {
-            ample::graphics::GraphicalObject2dRaw rawObj = editor.loadGO2d();
-            objs[cnt] = std::make_shared<ample::graphics::GraphicalObject2d>(rawObj);
-            addObject(*objs[cnt]);
-            DEBUG("add GraphicalObject2d");
-            std::string id = "";
-            editor.JSONreader("id", id);
-            _storage[id] = objs[cnt];
-        }
+//        if (name == "GraphicalObject2d")
+//        {
+//            ample::graphics::GraphicalObject2dRaw rawObj = editor.loadGO2d();
+//            objs[cnt] = std::make_shared<ample::graphics::GraphicalObject2d>(rawObj);
+//            addObject(*objs[cnt]);
+//            DEBUG("add GraphicalObject2d");
+//            std::string id = "";
+//            editor.JSONreader("id", id);
+//            _storage[id] = objs[cnt];
+//        }
         cnt++;
     }
 }
