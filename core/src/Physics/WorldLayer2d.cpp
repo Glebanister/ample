@@ -35,6 +35,7 @@ b2Body *WorldLayer2d::addWorldObject(WorldObject2d &obj, b2BodyDef *bodyDef)
 
 b2Joint *WorldLayer2d::addWorldJoint(WorldJoint2d &joint, b2JointDef *jointDef)
 {
+    addBehaviour(joint);
     _joints.push_back(&joint);
     return world.CreateJoint(jointDef);
 }

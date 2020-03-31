@@ -36,16 +36,10 @@ void WorldDistanceJoint2d::onActive()
     }
 }
 
-void WorldDistanceJoint2d::setForm(float width)
+void WorldDistanceJoint2d::setForm(graphics::GraphicalObject2d &form)
 {
-    float length = getLength() / 2;
-    width /= 2;
-    _initLength = getLength();
-    std::vector<graphics::Vector2d<float>> form{{width, length}, {width, -length}, {-width, -length}, {-width, length}};
-    graphics::Vector2d<float> p{1.0f, 1.0f};
-    _form = std::make_unique<graphics::GraphicalObject2d>(form, 1, _bodyA.getZ(), p, p, graphics::normalsMode::VERTEX, p, 0);
-    _bodyA.getWorldLayer().addObject(*_form);
-    _bodyA.getWorldLayer().addBehaviour(*this);
+    _form = &form;
+    _bodyA.getWorldLayer().addObject(form);
 }
 
 ample::graphics::Vector2d<float> WorldDistanceJoint2d::getLocalAnchorA() const
