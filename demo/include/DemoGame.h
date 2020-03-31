@@ -20,21 +20,22 @@ class DemoGame : public ample::graphics::LayeredWindowActivity
 {
 public:
     DemoGame(ample::window::Window &window);
+
     void onActive() override;
 
 private:
-    KeyboardControlCamera<ample::graphics::CameraPerspective> camera{*eventManager};
-    ample::graphics::CameraOrtho cameraOrtho{
-        {1920, 1080},
-        {0, 0},
-        {0.0, 0.0, 0.0},
-        {0.0, 0.0, 1.0},
-        -1920 / 10,
-        1920 / 10,
-        -1080 / 10,
-        1080 / 10,
-        0,
-        1000};
+    KeyboardControlCamera<ample::graphics::CameraPerspective> camera {*eventManager};
+    ample::graphics::CameraOrtho cameraOrtho {
+            {1920, 1080},
+            {0, 0},
+            {0.0, 0.0, 0.0},
+            {0.0, 0.0, 1.0},
+            -1920 / 10,
+            1920 / 10,
+            -1080 / 10,
+            1080 / 10,
+            0,
+            1000};
     ample::graphics::Layer layer;
     std::unique_ptr<ample::graphics::GraphicalObject2d> object1;
     std::unique_ptr<ample::graphics::GraphicalObject2d> object2;

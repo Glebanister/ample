@@ -14,7 +14,7 @@
 #include "RegularPolygon.h"
 
 DemoGame::DemoGame(ample::window::Window &window)
-    : ample::graphics::LayeredWindowActivity(window)
+        : ample::graphics::LayeredWindowActivity(window)
 {
     layer.addCamera(camera);
     ample::graphics::GraphicalObject2dRaw sample1{ample::geometry::RegularPolygon<float>(50, 8),

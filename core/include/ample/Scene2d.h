@@ -17,13 +17,14 @@ class Scene2d : public ample::physics::WorldLayer2d
 public:
     Scene2d();
 
-    void load(const std::string &name);
+    void load(const std::string &nameFile);
 
-    void saveScene(const std::string &name);
+    void saveScene(const std::string &nameFile);
 
     ample::graphics::GraphicalObject &getElementById(const std::string &id);
 
 private:
+    std::vector<std::shared_ptr<ample::graphics::GraphicalObject2d>> objs;
     std::unordered_map<std::string, std::shared_ptr<ample::graphics::GraphicalObject>> _storage;
 };
 } // namespace ample::filing
