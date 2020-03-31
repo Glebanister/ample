@@ -11,7 +11,7 @@ namespace ample::filing
 {
 
 Scene2d::Scene2d()
-        : ample::physics::WorldLayer2d {{0.0, 0.0}, 0.0, 0.0}
+        : ample::physics::WorldLayer2d {{0.0, 0.0}, 0.0, 0.0, 0.5}
 {}
 
 void Scene2d::load(const std::string &nameFile)

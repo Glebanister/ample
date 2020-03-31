@@ -5,13 +5,10 @@
 
 namespace ample::physics
 {
-class WorldLayer2d;
 class WorldObject2d;
 class WorldRevoluteJoint2d : public WorldJoint2d
 {
 public:
-	void onActive() override;
-
 	ample::graphics::Vector2d<float> getLocalAnchorA() const;
 	ample::graphics::Vector2d<float> getLocalAnchorB() const;
 
@@ -44,10 +41,10 @@ public:
 
 	float getMotorTorque(float inv_dt) const;
 
-private:
-	friend ample::physics::WorldLayer2d;
-
-	WorldRevoluteJoint2d(b2Joint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB,
-						 const std::vector<ample::graphics::Vector2d<float>> &shape);
+	WorldRevoluteJoint2d(WorldObject2d &bodyA,
+						 WorldObject2d &bodyB,
+						 const ample::graphics::Vector2d<float> &anchor,
+						 float referenceAngle = 0,
+						 bool collideConnected = false);
 };
 } // namespace ample::physics
