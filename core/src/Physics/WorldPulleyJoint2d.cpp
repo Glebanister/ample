@@ -32,6 +32,38 @@ WorldPulleyJoint2d::WorldPulleyJoint2d(WorldObject2d &bodyA,
     initB2Joint(bodyA.getWorldLayer(), &jointDef);
 }
 
+void WorldPulleyJoint2d::onActive()
+{
+    float curLengthA = sqrt(pow(getAnchorA().x - getGroundAnchorA().x, 2) + pow(getAnchorA().y - getGroundAnchorA().y, 2));
+    if (_formA)
+    {
+        _formA->setTranslate({(getAnchorA().x + getGroundAnchorA().x) / 2,
+                              (getAnchorA().y + getGroundAnchorA().y) / 2, _bodyA.getZ()});
+        float angle = atan((getAnchorA().x - getGroundAnchorA().x) / (getAnchorA().y - getGroundAnchorA().y));
+        _formA->setRotate({0.0f, 0.0f, 1.0f}, 180 - angle * 180.0f / M_PI);
+        _formA->setScale({1.0f, curLengthA / _initLengthA, 1.0f});
+    }
+    if (_formB)
+    {
+        _formB->setTranslate({(getAnchorB().x + getGroundAnchorB().x) / 2,
+                              (getAnchorB().y + getGroundAnchorB().y) / 2, _bodyB.getZ()});
+        float angle = atan((getAnchorB().x - getGroundAnchorB().x) / (getAnchorB().y - getGroundAnchorB().y));
+        _formB->setRotate({0.0f, 0.0f, 1.0f}, 180 - angle * 180.0f / M_PI);
+        float curLengthB = getLengthB() + getLengthA() - curLengthA;
+        _formB->setScale({1.0f, curLengthB / _initLengthB, 1.0f});
+    }
+}
+
+void WorldPulleyJoint2d::setForm(graphics::GraphicalObject2d &formA, graphics::GraphicalObject2d &formB)
+{
+    _formA = &formA;
+    _formB = &formB;
+    _initLengthA = getCurrentLengthA();
+    _initLengthB = getCurrentLengthB();
+    _bodyA.getWorldLayer().addObject(formA);
+    _bodyB.getWorldLayer().addObject(formB);
+}
+
 ample::graphics::Vector2d<float> WorldPulleyJoint2d::getGroundAnchorA() const
 {
     b2Vec2 anchor = static_cast<b2PulleyJoint *>(_joint)->GetGroundAnchorA();

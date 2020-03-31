@@ -39,6 +39,7 @@ void WorldDistanceJoint2d::onActive()
 void WorldDistanceJoint2d::setForm(graphics::GraphicalObject2d &form)
 {
     _form = &form;
+    _initLength = getLength();
     _bodyA.getWorldLayer().addObject(form);
 }
 
