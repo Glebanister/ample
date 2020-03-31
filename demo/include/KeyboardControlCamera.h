@@ -1,15 +1,90 @@
 #pragma once
 
 #include "EventManager.h"
-#include "CameraPerspective.h"
+#include "Camera.h"
 #include "LightSource.h"
+#include "Behaviour.h"
 
-template <class CameraT>
-class KeyboardControlCamera : public CameraT
+class KeyboardControlCamera : public ample::activity::Behaviour
 {
 public:
-    KeyboardControlCamera(ample::control::EventManager &manager);
-    void onActive() override;
+    KeyboardControlCamera(ample::control::EventManager &manager, ample::graphics::Camera &camera)
+        : _manager(manager), _camera(camera)
+    {
+    }
+
+    void onActive() override
+    {
+        if (_manager.keyboard().isKeyDown(ample::control::keysym::KEY_d))
+        {
+            _camera.moveRight(1);
+        }
+        if (_manager.keyboard().isKeyDown(ample::control::keysym::KEY_a))
+        {
+            _camera.moveRight(-1);
+        }
+        if (_manager.keyboard().isKeyDown(ample::control::keysym::ARROW_UP))
+        {
+            _camera.rotateUp(1);
+        }
+        if (_manager.keyboard().isKeyDown(ample::control::keysym::ARROW_DOWN))
+        {
+            _camera.rotateUp(-1);
+        }
+        if (_manager.keyboard().isKeyDown(ample::control::keysym::KEY_w))
+        {
+            _camera.moveForward(1);
+        }
+        if (_manager.keyboard().isKeyDown(ample::control::keysym::KEY_s))
+        {
+            _camera.moveForward(-1);
+        }
+        if (_manager.keyboard().isKeyDown(ample::control::keysym::ARROW_LEFT))
+        {
+            _camera.rotateRight(-1);
+        }
+        if (_manager.keyboard().isKeyDown(ample::control::keysym::ARROW_RIGHT))
+        {
+            _camera.rotateRight(1);
+        }
+        if (_manager.keyboard().isKeyDown(ample::control::keysym::COMMA))
+        {
+            _camera.rotateForward(-1);
+        }
+        if (_manager.keyboard().isKeyDown(ample::control::keysym::PERIOD))
+        {
+            _camera.rotateForward(1);
+        }
+        _camera.rotateRight(-_manager.mouse().getMouseXRel() / (1.0 / 0.1));
+        _camera.rotateUp(-_manager.mouse().getMouseYRel() / (1.0 / 0.1));
+        _lamp.setTranslate({_camera.getX(), _camera.getY(), _camera.getZ()});
+
+        if (_manager.keyboard().isKeyDown(ample::control::keysym::NUM_1))
+        {
+            _lamp.addIntensitiy({-10, 0, 0});
+        }
+        if (_manager.keyboard().isKeyDown(ample::control::keysym::NUM_2))
+        {
+            _lamp.addIntensitiy({10, 0, 0});
+        }
+        if (_manager.keyboard().isKeyDown(ample::control::keysym::NUM_3))
+        {
+            _lamp.addIntensitiy({0, -10, 0});
+        }
+        if (_manager.keyboard().isKeyDown(ample::control::keysym::NUM_4))
+        {
+            _lamp.addIntensitiy({0, 10, 0});
+        }
+        if (_manager.keyboard().isKeyDown(ample::control::keysym::NUM_5))
+        {
+            _lamp.addIntensitiy({0, 0, -10});
+        }
+        if (_manager.keyboard().isKeyDown(ample::control::keysym::NUM_6))
+        {
+            _lamp.addIntensitiy({0, 0, 10});
+        }
+    }
+
     ample::graphics::light::LightSource &getLamp()
     {
         return _lamp;
@@ -18,91 +93,5 @@ public:
 protected:
     ample::control::EventManager &_manager;
     ample::graphics::light::LightSource _lamp;
+    ample::graphics::Camera &_camera;
 };
-
-template <class CameraT>
-KeyboardControlCamera<CameraT>::KeyboardControlCamera(ample::control::EventManager &manager)
-    : CameraT({1920, 1080},
-              {0, 0},
-              {0.0, 0.0, 0.0},
-              {0.0, 0.0, 1.0},
-              60.0,
-              1920.0 / 1080.0,
-              0.1,
-              1000.0),
-      _manager(manager)
-{
-}
-
-template <class CameraT>
-void KeyboardControlCamera<CameraT>::onActive()
-{
-    if (_manager.keyboard()->isKeyDown(ample::control::keysym::KEY_d))
-    {
-        this->moveRight(1);
-    }
-    if (_manager.keyboard()->isKeyDown(ample::control::keysym::KEY_a))
-    {
-        this->moveRight(-1);
-    }
-    if (_manager.keyboard()->isKeyDown(ample::control::keysym::ARROW_UP))
-    {
-        this->rotateUp(1);
-    }
-    if (_manager.keyboard()->isKeyDown(ample::control::keysym::ARROW_DOWN))
-    {
-        this->rotateUp(-1);
-    }
-    if (_manager.keyboard()->isKeyDown(ample::control::keysym::KEY_w))
-    {
-        this->moveForward(1);
-    }
-    if (_manager.keyboard()->isKeyDown(ample::control::keysym::KEY_s))
-    {
-        this->moveForward(-1);
-    }
-    if (_manager.keyboard()->isKeyDown(ample::control::keysym::ARROW_LEFT))
-    {
-        this->rotateRight(-1);
-    }
-    if (_manager.keyboard()->isKeyDown(ample::control::keysym::ARROW_RIGHT))
-    {
-        this->rotateRight(1);
-    }
-    if (_manager.keyboard()->isKeyDown(ample::control::keysym::COMMA))
-    {
-        this->rotateForward(-1);
-    }
-    if (_manager.keyboard()->isKeyDown(ample::control::keysym::PERIOD))
-    {
-        this->rotateForward(1);
-    }
-    this->rotateRight(-_manager.mouse()->getMouseXRel() / (1.0 / 0.1));
-    this->rotateUp(-_manager.mouse()->getMouseYRel() / (1.0 / 0.1));
-    _lamp.setTranslate(this->_position);
-
-    if (_manager.keyboard()->isKeyDown(ample::control::keysym::NUM_1))
-    {
-        _lamp.addIntensitiy({-10, 0, 0});
-    }
-    if (_manager.keyboard()->isKeyDown(ample::control::keysym::NUM_2))
-    {
-        _lamp.addIntensitiy({10, 0, 0});
-    }
-    if (_manager.keyboard()->isKeyDown(ample::control::keysym::NUM_3))
-    {
-        _lamp.addIntensitiy({0, -10, 0});
-    }
-    if (_manager.keyboard()->isKeyDown(ample::control::keysym::NUM_4))
-    {
-        _lamp.addIntensitiy({0, 10, 0});
-    }
-    if (_manager.keyboard()->isKeyDown(ample::control::keysym::NUM_5))
-    {
-        _lamp.addIntensitiy({0, 0, -10});
-    }
-    if (_manager.keyboard()->isKeyDown(ample::control::keysym::NUM_6))
-    {
-        _lamp.addIntensitiy({0, 0, 10});
-    }
-}

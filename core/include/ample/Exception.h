@@ -116,8 +116,6 @@ class DevILException : public Exception
 {
 public:
     static void handle(const std::string &message = "", bool throwAnyway = false);
-
-private:
     explicit DevILException(const std::string &message = "");
 };
 } // namespace ample::exception

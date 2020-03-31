@@ -47,6 +47,10 @@ public:
     void rotateRight(float);
     void rotateUp(float);
 
+    float getX() const noexcept;
+    float getY() const noexcept;
+    float getZ() const noexcept;
+
     void setVisibility(const bool);
 
     virtual ~Camera() = default;

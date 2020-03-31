@@ -48,13 +48,13 @@ void EventManager::clearType(const int &eventType)
     _handlerByType[eventType].clear();
 }
 
-std::shared_ptr<KeyboardManager> EventManager::keyboard() const
+KeyboardManager &EventManager::keyboard()
 {
-    return _keyboard;
+    return *_keyboard;
 }
-std::shared_ptr<MouseHandler> EventManager::mouse() const
+MouseHandler &EventManager::mouse()
 {
-    return _mouse;
+    return *_mouse;
 }
 
 void KeyboardManager::addKeyHandler(const keysym key, KeyHandler &handler)

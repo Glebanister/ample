@@ -5,13 +5,10 @@
 
 namespace ample::physics
 {
-class WorldLayer2d;
 class WorldObject2d;
 class WorldDistanceJoint2d : public ample::physics::WorldJoint2d
 {
 public:
-    void onActive() override;
-
     ample::graphics::Vector2d<float> getLocalAnchorA() const;
     ample::graphics::Vector2d<float> getLocalAnchorB() const;
 
@@ -24,10 +21,11 @@ public:
     void setDampingRatio(float ratio);
     float getDampingRatio() const;
 
-private:
-    friend ample::physics::WorldLayer2d;
-
-    WorldDistanceJoint2d(b2Joint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB,
-                         const std::vector<ample::graphics::Vector2d<float>> &shape);
+    WorldDistanceJoint2d(WorldObject2d &bodyA,
+                         WorldObject2d &bodyB,
+                         const ample::graphics::Vector2d<float> &anchorOnBodyA,
+                         const ample::graphics::Vector2d<float> &anchorOnBodyB,
+                         float length = -1,
+                         bool collideConnected = false);
 };
 } // namespace ample::physics
