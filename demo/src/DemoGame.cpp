@@ -7,6 +7,9 @@
 #include "RegularPolygon.h"
 #include "Texture.h"
 #include "Clock.h"
+#include "KeyboardTransition.h"
+#include "MouseTransition.h"
+#include "TimerTransition.h"
 
 DemoGame::DemoGame(ample::window::Window &window)
     : ample::game::game2d::Game2d(window),
@@ -19,12 +22,11 @@ DemoGame::DemoGame(ample::window::Window &window)
              {0.0f, 0.0f},
              0.0f)
 {
-    _window.disableCursor();
     auto &level = createLevel(1, 10.0f, 0.5f);
     level.frontSlice().addObject(object);
     setCurrentLevel(1);
     level.camera().translate({0.0, 10.0, 0.0});
-    cameraRemote = std::make_shared<KeyboardControlCamera>(*eventManager, level.camera());
+    cameraRemote = std::make_shared<KeyboardControlCamera>(eventManager(), level.camera());
     addBehaviour(*cameraRemote);
     level.frontSlice().addObject(cameraRemote->getLamp());
     texture = std::make_shared<ample::graphics::Texture>(ample::graphics::TextureRaw("../../demo/textures/braid.jpg",
@@ -41,6 +43,23 @@ DemoGame::DemoGame(ample::window::Window &window)
     object.side().bindTexture(texture);
     object.face().bindTexture(texture);
 
-    swapper = std::make_shared<AnimationSwapper>(texture.get(), 15);
-    addBehaviour(*swapper);
+    machine = std::make_shared<ample::game::StateMachine>();
+    auto idle = std::make_shared<Idle>(object.face(), machine);
+    auto running = std::make_shared<Running>(object.face(), machine);
+    idle->addTransition(std::make_shared<ample::game::MouseTransition>(running,
+                                                                       eventManager(),
+                                                                       ample::game::MouseTransition::type::PRESSED,
+                                                                       ample::control::mouseButton::BUTTON_LEFT,
+                                                                       ample::geometry::Rectangle{
+                                                                           {{0.0f, 0.0f},
+                                                                            {static_cast<float>(getWidth()), static_cast<float>(getHeight())}},
+                                                                       }));
+    running->addTransition(std::make_shared<ample::game::KeyboardTransition>(idle,
+                                                                             eventManager(),
+                                                                             ample::game::KeyboardTransition::type::PRESSED,
+                                                                             ample::control::keysym::SPACE));
+    running->addTransition(std::make_shared<ample::game::TimerTransition>(idle, 3000));
+    machine->setStartState(idle);
+
+    addBehaviour(*machine);
 }

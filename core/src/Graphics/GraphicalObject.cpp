@@ -22,7 +22,7 @@ GraphicalObject::GraphicalObject(const glm::mat4 &translated,
 
 void GraphicalObject::addSubObject(GraphicalObject &object)
 {
-    activity::Behaviour::addBehaviour(object);
+    activity::Behavior::addBehaviour(object);
     _subObjects.push_back(&object);
 }
 
@@ -97,5 +97,10 @@ void GraphicalObject::draw(glm::mat4 scaled,
         subObject->draw(scaled, rotated, translated);
     }
     exception::OpenGLException::handle();
+}
+
+std::shared_ptr<Texture> GraphicalObject::texture() const noexcept
+{
+    return _texturePtr;
 }
 } // namespace ample::graphics

@@ -8,19 +8,19 @@ namespace ample::graphics
 {
 void Layer::addCamera(Camera &camera)
 {
-    activity::Behaviour::addBehaviour(camera);
+    activity::Behavior::addBehaviour(camera);
     _cameras.push_back(&camera);
 }
 
 void Layer::addObject(GraphicalObject &object)
 {
-    activity::Behaviour::addBehaviour(object);
+    activity::Behavior::addBehaviour(object);
     _objects.push_back(&object);
 }
 
 void Layer::onActive()
 {
-    activity::Behaviour::onActive();
+    activity::Behavior::onActive();
     for (auto cam : _cameras)
     {
         cam->look();

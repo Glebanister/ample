@@ -13,7 +13,7 @@
 
 namespace ample::graphics
 {
-class GraphicalObject : public activity::Behaviour
+class GraphicalObject : public activity::Behavior
 {
 public:
     GraphicalObject(const glm::mat4 &translated = glm::mat4{1.0f},
@@ -40,6 +40,7 @@ public:
     void translate(const glm::vec3 &) noexcept;
 
     void bindTexture(std::shared_ptr<Texture> texturePtr) noexcept;
+    std::shared_ptr<Texture> texture() const noexcept;
 
     void bindVertexArray(std::shared_ptr<VertexArray>) noexcept;
 

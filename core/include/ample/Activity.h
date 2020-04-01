@@ -12,7 +12,7 @@
 
 namespace ample::activity
 {
-class Activity : public Behaviour
+class Activity : public Behavior
 {
 public:
     void loop();
