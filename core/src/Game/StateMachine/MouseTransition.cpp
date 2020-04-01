@@ -1,4 +1,5 @@
 #include "MouseTransition.h"
+#include "Debug.h"
 
 namespace ample::game
 {
@@ -36,8 +37,9 @@ MouseTransition::MouseTransition(std::shared_ptr<ample::game::StateMachine::Stat
 bool MouseTransition::listen()
 {
     bool result = false;
+
     if (_area->inside({static_cast<float>(_manager.mouse().getMouseX()),
-                       static_cast<float>(_manager.mouse().getMouseX())}))
+                       static_cast<float>(_manager.mouse().getMouseY())}))
     {
         switch (_eventType)
         {
