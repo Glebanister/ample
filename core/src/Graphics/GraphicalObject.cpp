@@ -106,11 +106,11 @@ GraphicalObject::GraphicalObject(filing::JsonIO &input)
 {
 }
 
-void GraphicalObject::dump(filing::JsonIO &output, std::string prefix)
-{
-    output.write<glm::mat4>("translated", _translated);
-    output.write<glm::mat4>("scaled", _scaled);
-    output.write<glm::mat4>("rotated", _rotated);
-    output.write<int>("unique_id", getUniqueId());
-}
+
+//void GraphicalObject::dump(filing::JsonIO &output, std::string prefix)
+//{
+//    output.write<glm::mat4>("translated", _translated);
+//    output.write<glm::mat4>("scaled", _scaled);
+//    output.write<glm::mat4>("rotated", _rotated);
+//}
 } // namespace ample::graphics

@@ -1,20 +1,21 @@
 #include <iostream>
 #include <memory>
 
+#include <rapidjson/document.h>
+#include <rapidjson/writer.h>
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/prettywriter.h>
+
 #include "Scene2d.h"
-#include "WorldObject2dIO.h"
 #include "Exception.h"
 #include "Debug.h"
-#include "RegularPolygon.h"
+#include "JsonIO.h"
 
 namespace ample::filing
 {
 
-Scene2d::Scene2d()
+Scene2d::Scene2d(const std::string &nameFile)
         : ample::physics::WorldLayer2d {{0.0, 0.0}, 0.0, 0.0, 0.5}
-{}
-
-void Scene2d::load(const std::string &nameFile)
 {
     DEBUG("load from json file");
     std::string fileStr = openJSONfile(nameFile);
@@ -24,8 +25,8 @@ void Scene2d::load(const std::string &nameFile)
 
     const rapidjson::Value &data = config["data"];
 
-    int cnt = 0;
-    objs.resize(data.Size());
+    size_t cnt = 0;
+    _objs.resize(data.Size());
     for (rapidjson::Value::ConstValueIterator itr = data.Begin(); itr != data.End(); ++itr)
     {
         const rapidjson::Value &attribute = *itr;
@@ -37,20 +38,18 @@ void Scene2d::load(const std::string &nameFile)
         rapidjson::Document doc;
         doc.Parse(str.c_str());
 
-        EditorIO editor(str);
-        std::string name = "";
-        editor.JSONreader("name", name);
+        JsonIO editor(str);
+        std::string name = editor.read<std::string>("name");
 
         if (name == "GraphicalObject2d")
         {
-            ample::graphics::GraphicalObject2dRaw rawObj = editor.loadGO2d();
-            objs[cnt] = std::make_shared<ample::graphics::GraphicalObject2d>(rawObj);
-            addObject(*objs[cnt]);
+            ample::graphics::GraphicalObject2d obj(editor);
+            _objs[cnt] = std::make_shared<ample::graphics::GraphicalObject>(obj);
+            addObject(*_objs[cnt]);
             DEBUG("add GraphicalObject2d");
-            std::string id = "";
-            editor.JSONreader("id", id);
-            _storage[id] = objs[cnt];
         }
+        std::string id = editor.read<std::string>("id");
+        _storage[id] = _objs[cnt];
         cnt++;
     }
 }
@@ -61,26 +60,24 @@ void Scene2d::saveScene(const std::string &nameFile)
 
     rapidjson::Document doc;
     doc.SetObject();
-    auto &allocator = doc.GetAllocator();
 
     rapidjson::Value array(rapidjson::Type::kArrayType);
-    std::vector<std::string> strings;
-    for (size_t i = 0; i < _bodies.size(); i++)
+    for (size_t i = 0; i < _objs.size(); i++)
     {
         rapidjson::Document docObj(&doc.GetAllocator());
-        auto &allocatorObj = docObj.GetAllocator();
         docObj.SetObject();
-        std::string str = "";
-        if (typeid(*_bodies[i]) == typeid(ample::physics::WorldObject2d))
+
+        ample::filing::JsonIO io("");
+        if (typeid(*_objs[i]) == typeid(ample::graphics::GraphicalObject2d))
         {
-            ample::filing::WorldObject2dIO temp;
-            str = temp.saveJSONFile(std::to_string(i), dynamic_cast<ample::graphics::GraphicalObject &>(*_bodies[i]));
-            docObj.Parse(str.c_str());
-            docObj.AddMember("class", "WorldObject2d", allocatorObj);
+//            _objs[i]->dump(io);
+//            std::string str = io.getJSONstring();
+//            docObj.Parse(str.c_str());
+//            docObj.AddMember("class", "GraphicalObject2d", docObj.GetAllocator());
         }
-        array.PushBack(docObj, allocator);
+        array.PushBack(docObj, doc.GetAllocator());
     }
-    doc.AddMember("array", array, allocator);
+    doc.AddMember("array", array, doc.GetAllocator());
 
     rapidjson::StringBuffer buffer;
     rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);

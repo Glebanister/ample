@@ -66,11 +66,11 @@ GraphicalObject2d::GraphicalObject2d(filing::JsonIO &input)
 {
 }
 
-void GraphicalObject2d::dump(filing::JsonIO &output)
-{
-    GraphicalObject::dump(output);
-    _face.dump(output);
-    _side.dump(output)
-}
+//void GraphicalObject2d::dump(filing::JsonIO &output)
+//{
+//    GraphicalObject::dump(output);
+//    _face.dump(output);
+//    _side.dump(output)
+//}
 
 } // namespace ample::graphics

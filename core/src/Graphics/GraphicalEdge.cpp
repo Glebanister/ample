@@ -137,21 +137,21 @@ GraphicalEdge::GraphicalEdge(filing::JsonIO &input)
     : GraphicalEdge(input.read<std::vector<Vector2d<float>>>("shape"),
                     input.read<float>("z"),
                     input.read<float>("thickness"),
-                    input.read<Vector2d<float>>("textureRepeats"),
-                    input.read<normalsMode>("normMode"),
+                    input.read<Vector2d<float>>("sideTextureRepeats"),
+                    input.read<normalsMode>("sideNormalsMode"),
                     input.read<glm::mat4>("translated"),
                     input.read<glm::mat4>("scaled"),
                     input.read<glm::mat4>("rotated"))
 {
 }
 
-void GraphicalEdge::dump(filing::JsonIO &output)
-{
-    GraphicalObject::dump(output);
-    input.write<std::vector<Vector2d<float>>>("shape", _shape);
-    input.write<float>("z", getZ()); // TODO: check out if it is true
-    input.write<float>("thickness", _thickness);
-    input.write<Vector2d<float>>("textureRepeats", _textureRepeats);
-    input.write<normalsMode>("normMode");
-}
+//void GraphicalEdge::dump(filing::JsonIO &output)
+//{
+//    GraphicalObject::dump(output);
+//    input.write<std::vector<Vector2d<float>>>("shape", _shape);
+//    input.write<float>("z", getZ()); // TODO: check out if it is true
+//    input.write<float>("thickness", _thickness);
+//    input.write<Vector2d<float>>("textureRepeats", _textureRepeats);
+//    input.write<normalsMode>("normMode");
+//}
 } // namespace ample::graphics

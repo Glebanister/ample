@@ -10,7 +10,6 @@
 #include "Vector3d.h"
 #include "Noncopyable.h"
 #include "Texture.h"
-#include "JsonIO.h"
 
 namespace ample::graphics
 {
@@ -31,8 +30,8 @@ private:
 
     public:
         VertexBuffer(GLsizeiptr, void *);
-        VertexBuffer(std::vector<Vector2d<float>> &data);
-        VertexBuffer(std::vector<Vector3d<float>> &data);
+        VertexBuffer(const std::vector<Vector2d<float>> &data);
+        VertexBuffer(const std::vector<Vector3d<float>> &data);
         ~VertexBuffer();
 
     private:
@@ -46,15 +45,15 @@ public:
                 const std::vector<Vector2d<float>> &uvCoords,
                 const std::vector<Vector3d<float>> &normal);
 
-    VertexArray(filing::JsonIO &input);
-
-    void dump(filing::JsonIO &output);
+//    VertexArray(filing::JsonIO &input);
+//
+//    void dump(filing::JsonIO &output);
 
     void execute();
 
 private:
     std::vector<Vector3d<float>> _coords;
-    std::vector<Vector3d<float>> _uvCoords;
+    std::vector<Vector2d<float>> _uvCoords;
     std::vector<Vector3d<float>> _normals;
     VertexBuffer _xyzCoordsBuffer;
     VertexBuffer _uvCoordsBuffer;

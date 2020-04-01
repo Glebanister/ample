@@ -15,12 +15,12 @@ namespace ample::graphics
 struct VertexArrayImpl
 {
     VertexArrayImpl() = default;
-    VertexArrayImpl(AbstractIO &input)
-    {
-        input.read("coords", coords);
-        input.read("uvCoords", uvCoords);
-        input.read("normals", normals);
-    }
+//    VertexArrayImpl(AbstractIO &input)
+//    {
+//        input.read("coords", coords);
+//        input.read("uvCoords", uvCoords);
+//        input.read("normals", normals);
+//    }
 
     std::vector<Vector3d<float>> coords;
     std::vector<Vector3d<float>> uvCoords;
@@ -82,10 +82,10 @@ VertexArray::VertexBuffer::VertexBuffer(GLsizeiptr size, void *pointer)
     glBufferData(GL_ARRAY_BUFFER, size, pointer, GL_STATIC_DRAW);
 }
 
-VertexArray::VertexBuffer::VertexBuffer(std::vector<Vector2d<float>> &data)
+VertexArray::VertexBuffer::VertexBuffer(const std::vector<Vector2d<float>> &data)
     : VertexBuffer(sizeof(GLfloat) * data.size() * 2, static_cast<void *>(expand(data).data())) {}
 
-VertexArray::VertexBuffer::VertexBuffer(std::vector<Vector3d<float>> &data)
+VertexArray::VertexBuffer::VertexBuffer(const std::vector<Vector3d<float>> &data)
     : VertexBuffer(sizeof(GLfloat) * data.size() * 3, static_cast<void *>(expand(data).data())) {}
 
 VertexArray::VertexBuffer::~VertexBuffer()
@@ -98,7 +98,6 @@ VertexArray::VertexArray(const std::vector<Vector3d<float>> &coords,
                          const std::vector<Vector3d<float>> &normal)
     : _coords(coords),
       _uvCoords(uvCoords),
-      _normalsBuffer(normal),
       _xyzCoordsBuffer(coords),
       _uvCoordsBuffer(uvCoords),
       _normalsBuffer(normal),
@@ -108,20 +107,20 @@ VertexArray::VertexArray(const std::vector<Vector3d<float>> &coords,
     exception::OpenGLException::handle();
 }
 
-VertexArray::VertexArray(filing::JsonIO &input)
-    : VertexArray(input.read<std::vector<Vector2d<float>>>("coords"),
-                  input.read<std::vector<Vector2d<float>>>("uvCoords"),
-                  input.read<std::vector<Vector3d<float>>>("normals"))
-{
-}
+//VertexArray::VertexArray(filing::JsonIO &input)
+//    : VertexArray(input.read<std::vector<Vector2d<float>>>("coords"),
+//                  input.read<std::vector<Vector2d<float>>>("uvCoords"),
+//                  input.read<std::vector<Vector3d<float>>>("normals"))
+//{
+//}
 
-void VertexArray::dump(filing::JsonIO &output)
-{
-    output.write<std::vector<Vector3d<float>>>("coords", _coords);
-    output.write<std::vector<Vector2d<float>>>("uvCoords", _uvCoords);
-    output.write<std::vector<Vector3d<float>>>("normals", _normals);
-}
-
+//void VertexArray::dump(filing::JsonIO &output)
+//{
+//    output.write<std::vector<Vector3d<float>>>("coords", _coords);
+//    output.write<std::vector<Vector2d<float>>>("uvCoords", _uvCoords);
+//    output.write<std::vector<Vector3d<float>>>("normals", _normals);
+//}
+//
 void VertexArray::execute()
 {
     VertexBuffer::Executor execXYZ{0, 3, GL_FLOAT, GL_FALSE, 0, NULL, _xyzCoordsBuffer};

@@ -10,6 +10,7 @@
 #include "Behaviour.h"
 #include "Texture.h"
 #include "VertexArray.h"
+#include "JsonIO.h"
 #include "UniqueObject.h"
 
 namespace ample::graphics
@@ -21,8 +22,8 @@ public:
                     const glm::mat4 &scaled = glm::mat4{1.0f},
                     const glm::mat4 &rotated = glm::mat4{1.0f});
 
-    GraphicalObject(filing::JsonIO &input, std::string prefix = "");
-    virtual void dump(filing::JsonIO &output, std::string prefix = "");
+    explicit GraphicalObject(filing::JsonIO &input);
+//    virtual void dump(filing::JsonIO &output);
 
     void draw(glm::mat4 scaled = glm::mat4{1.0f},
               glm::mat4 rotated = glm::mat4{1.0f},

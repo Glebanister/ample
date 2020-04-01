@@ -69,18 +69,19 @@ GraphicalPolygon::GraphicalPolygon(const std::vector<Vector2d<float>> &shape,
 GraphicalPolygon::GraphicalPolygon(filing::JsonIO &input)
     : GraphicalPolygon(input.read<std::vector<Vector2d<float>>>("shape"),
                        input.read<float>("z"),
-                       input.read<Vector2d<float>>("textureRepeats"),
+                       input.read<Vector2d<float>>("faceTextureRepeats"),
                        input.read<glm::mat4>("translated"),
                        input.read<glm::mat4>("scaled"),
                        input.read<glm::mat4>("rotated"))
 {
+    DEBUG("FILING GP");
 }
 
-void GraphicalPolygon::dump(filing::JsonIO &output)
-{
-    GraphicalObject::dump(output);
-    output.write<std::vector<Vector2d<float>>>("shape", _shape);
-    input.write<float>("z", getZ());
-    input.write<Vector2d<float>>("textureRepeats", _textureRepeats);
-}
+//void GraphicalPolygon::dump(filing::JsonIO &output)
+//{
+//    GraphicalObject::dump(output);
+//    output.write<std::vector<Vector2d<float>>>("shape", _shape);
+//    input.write<float>("z", getZ());
+//    input.write<Vector2d<float>>("textureRepeats", _textureRepeats);
+//}
 } // namespace ample::graphics
