@@ -1,9 +1,10 @@
 #include "StateMachine.h"
 #include "GameException.h"
+#include "Debug.h"
 
 namespace ample::game
 {
-StateMachine::Transition::Transition(StateMachine::State &nextState)
+StateMachine::Transition::Transition(std::shared_ptr<StateMachine::State> nextState)
     : _nextState(nextState) {}
 
 void StateMachine::Transition::handleEvent()
@@ -11,7 +12,7 @@ void StateMachine::Transition::handleEvent()
     _activated = true;
 }
 
-StateMachine::State &StateMachine::Transition::getNextState() const noexcept
+std::shared_ptr<StateMachine::State> StateMachine::Transition::getNextState() const noexcept
 {
     return _nextState;
 }
@@ -26,20 +27,12 @@ void StateMachine::Transition::reset() noexcept
     _activated = false;
 }
 
-StateMachine::State::State(StateMachine &machine)
-    : _machine(&machine) {}
+StateMachine::State::State(std::shared_ptr<StateMachine> machine)
+    : _machine(machine) {}
 
-StateMachine::State::State()
-    : _machine(nullptr) {}
-
-void StateMachine::State::setMachine(StateMachine &machine)
+void StateMachine::State::addTransition(std::shared_ptr<StateMachine::Transition> transition) noexcept
 {
-    _machine = &machine;
-}
-
-void StateMachine::State::addTransition(StateMachine::Transition &transition) noexcept
-{
-    _transitions.push_back(&transition);
+    _transitions.push_back(transition);
 }
 
 void StateMachine::State::onActive()
@@ -64,12 +57,6 @@ void StateMachine::State::onActive()
     }
 }
 
-StateMachine::StateMachine(State &startState)
-    : _currentState(&startState)
-{
-    startState.onStart();
-}
-
 void StateMachine::onActive()
 {
     activity::Behavior::onActive();
@@ -80,14 +67,19 @@ void StateMachine::onActive()
     _currentState->onActive();
 }
 
-void StateMachine::setCurrentState(State &state)
+void StateMachine::setStartState(std::shared_ptr<State> state)
+{
+    _currentState = state;
+    _currentState->onStart();
+}
+
+void StateMachine::setCurrentState(std::shared_ptr<State> state)
 {
     if (_currentState)
     {
         _currentState->onStop();
     }
-    _currentState->onStop();
-    _currentState = &state;
+    _currentState = state;
     _currentState->onStart();
 }
 

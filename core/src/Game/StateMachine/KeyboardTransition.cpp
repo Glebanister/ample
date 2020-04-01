@@ -3,8 +3,8 @@
 namespace ample::game
 {
 
-KeyboardTransition::KeyboardTransition(ample::game::StateMachine::State &state,
-                                       ample::control::EventManager &manager,
+KeyboardTransition::KeyboardTransition(std::shared_ptr<StateMachine::State> state,
+                                       control::EventManager &manager,
                                        type pressType,
                                        ample::control::keysym key)
     : EnvironmentTransition(state, manager), _pressType(pressType), _key(key) {}

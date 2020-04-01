@@ -17,15 +17,15 @@ public:
     };
 
 public:
-    KeyboardTransition(ample::game::StateMachine::State &state,
-                       ample::control::EventManager &manager,
+    KeyboardTransition(std::shared_ptr<ample::game::StateMachine::State> state,
+                       control::EventManager &manager,
                        type pressType,
-                       ample::control::keysym key);
+                       control::keysym key);
 
     bool listen() override;
 
 private:
     type _pressType;
-    ample::control::keysym _key;
+    control::keysym _key;
 };
 } // namespace ample::game
