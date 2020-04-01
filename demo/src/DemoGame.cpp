@@ -7,6 +7,7 @@
 #include "RegularPolygon.h"
 #include "Texture.h"
 #include "Clock.h"
+#include "KeyboardTransition.h"
 
 DemoGame::DemoGame(ample::window::Window &window)
     : ample::game::game2d::Game2d(window),
@@ -41,6 +42,18 @@ DemoGame::DemoGame(ample::window::Window &window)
     object.side().bindTexture(texture);
     object.face().bindTexture(texture);
 
-    swapper = std::make_shared<AnimationSwapper>(texture.get(), 15);
-    addBehaviour(*swapper);
+    machine = std::make_shared<ample::game::StateMachine>();
+    auto idle = std::make_shared<Idle>(object.face(), machine);
+    auto running = std::make_shared<Running>(object.face(), machine);
+    idle->addTransition(std::make_shared<ample::game::KeyboardTransition>(running,
+                                                                          eventManager(),
+                                                                          ample::game::KeyboardTransition::type::DOWN,
+                                                                          ample::control::keysym::SPACE));
+    running->addTransition(std::make_shared<ample::game::KeyboardTransition>(idle,
+                                                                             eventManager(),
+                                                                             ample::game::KeyboardTransition::type::NOT_DOWN,
+                                                                             ample::control::keysym::SPACE));
+    machine->setStartState(idle);
+
+    addBehaviour(*machine);
 }
