@@ -32,6 +32,7 @@ StateMachine::State::State(std::shared_ptr<StateMachine> machine)
 
 void StateMachine::State::addTransition(std::shared_ptr<StateMachine::Transition> transition) noexcept
 {
+    addBehaviour(*transition);
     _transitions.push_back(transition);
 }
 
