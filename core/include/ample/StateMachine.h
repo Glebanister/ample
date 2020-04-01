@@ -8,36 +8,45 @@
 
 namespace ample::game
 {
-class StateMachine : public activity::Behaviour
+class StateMachine : public activity::Behavior
 {
 public:
     class State;
 
-    class Trigger : public events::EventListener
+    class Transition : public events::EventListener
     {
     public:
-        Trigger(const StateMachine &machine);
-        void handleEvent() override;
-    };
-
-    template <class EventListenerT, typename... Args>
-    class TransitionAbstract
-    {
-    public:
-        Transition(State &nextState, Args... eventListenerArgs);
+        Transition(State &nextState);
+        void handleEvent() final;
+        State &getNextState() const noexcept;
+        bool isActivated() const noexcept;
+        void reset() noexcept;
 
     private:
-        EventListenerT _listener;
+        State &_nextState;
+        bool _activated = false;
     };
 
-    class State : public activity::Behaviour
+    class State : public activity::Behavior
     {
     public:
+        State(StateMachine &machine);
+        void onActive() override;
+        void addTransition(Transition &) noexcept;
+
     private:
-        // std::vector<std::pair<std::shared_ptr<State>> _connections;
+        StateMachine &_machine;
+        std::vector<Transition *> _transitions;
     };
 
 public:
+    StateMachine(State &startState);
+    void setCurrentState(State &state);
+    void onActive() override;
+
+    virtual ~StateMachine();
+
 private:
+    State *_currentState;
 };
 } // namespace ample::game

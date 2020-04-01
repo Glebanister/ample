@@ -91,6 +91,8 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Game/Game2d/Game2d.cpp
     src/Game/Game2d/Level.cpp
     src/Game/GameException.cpp
+    src/Game/StateMachine.cpp
+    src/Game/Events/EventListener.cpp
    )
 
 include_directories(${SDL2_INCLUDE_DIRS})

@@ -6,7 +6,7 @@
 #include "KeyboardControlCamera.h"
 #include "Texture.h"
 
-class AnimationSwapper : public ample::activity::Behaviour
+class AnimationSwapper : public ample::activity::Behavior
 {
 public:
     AnimationSwapper(ample::graphics::Texture *texture, size_t delta)
@@ -16,7 +16,7 @@ public:
 
     void onActive() override
     {
-        ample::activity::Behaviour::onActive();
+        ample::activity::Behavior::onActive();
         auto curTime = ample::time::Clock::globalTimeMs();
         if (curTime - lastTime > delta)
         {

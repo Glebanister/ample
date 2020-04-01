@@ -13,7 +13,7 @@
 
 namespace ample::graphics
 {
-class GraphicalObject : public activity::Behaviour
+class GraphicalObject : public activity::Behavior
 {
 public:
     GraphicalObject(const glm::mat4 &translated = glm::mat4{1.0f},

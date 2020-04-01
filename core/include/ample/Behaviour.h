@@ -4,11 +4,11 @@
 
 namespace ample::activity
 {
-class Behaviour
+class Behavior
 {
 public:
-    void addBehaviour(Behaviour &act);
-    virtual ~Behaviour() = default;
+    void addBehaviour(Behavior &act);
+    virtual ~Behavior() = default;
 
     virtual void onAwake();
     virtual void onStart();
@@ -19,6 +19,6 @@ public:
     virtual void onPause();
 
 protected:
-    std::vector<Behaviour *> _behaviours;
+    std::vector<Behavior *> _behaviours;
 };
 } // namespace ample::activity

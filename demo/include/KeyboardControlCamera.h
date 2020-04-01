@@ -5,7 +5,7 @@
 #include "LightSource.h"
 #include "Behaviour.h"
 
-class KeyboardControlCamera : public ample::activity::Behaviour
+class KeyboardControlCamera : public ample::activity::Behavior
 {
 public:
     KeyboardControlCamera(ample::control::EventManager &manager, ample::graphics::Camera &camera)

@@ -22,7 +22,7 @@ GraphicalObject::GraphicalObject(const glm::mat4 &translated,
 
 void GraphicalObject::addSubObject(GraphicalObject &object)
 {
-    activity::Behaviour::addBehaviour(object);
+    activity::Behavior::addBehaviour(object);
     _subObjects.push_back(&object);
 }
 
