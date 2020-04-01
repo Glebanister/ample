@@ -8,6 +8,7 @@
 #include "Texture.h"
 #include "Clock.h"
 #include "KeyboardTransition.h"
+#include "MouseTransition.h"
 
 DemoGame::DemoGame(ample::window::Window &window)
     : ample::game::game2d::Game2d(window),
@@ -20,7 +21,6 @@ DemoGame::DemoGame(ample::window::Window &window)
              {0.0f, 0.0f},
              0.0f)
 {
-    osWindow().disableCursor();
     auto &level = createLevel(1, 10.0f, 0.5f);
     level.frontSlice().addObject(object);
     setCurrentLevel(1);
@@ -45,14 +45,16 @@ DemoGame::DemoGame(ample::window::Window &window)
     machine = std::make_shared<ample::game::StateMachine>();
     auto idle = std::make_shared<Idle>(object.face(), machine);
     auto running = std::make_shared<Running>(object.face(), machine);
-    idle->addTransition(std::make_shared<ample::game::KeyboardTransition>(running,
+    idle->addTransition(std::make_shared<ample::game::MouseTransition>(running,
+                                                                       eventManager(),
+                                                                       ample::game::MouseTransition::type::SCROLL_UP,
+                                                                       ample::control::mouseButton::BUTTON_LEFT,
+                                                                       ample::geometry::Circle{{0.0f, 0.0f}, 100.0f}));
+    running->addTransition(std::make_shared<ample::game::MouseTransition>(idle,
                                                                           eventManager(),
-                                                                          ample::game::KeyboardTransition::type::DOWN,
-                                                                          ample::control::keysym::SPACE));
-    running->addTransition(std::make_shared<ample::game::KeyboardTransition>(idle,
-                                                                             eventManager(),
-                                                                             ample::game::KeyboardTransition::type::NOT_DOWN,
-                                                                             ample::control::keysym::SPACE));
+                                                                          ample::game::MouseTransition::type::MOVE,
+                                                                          ample::control::mouseButton::BUTTON_LEFT,
+                                                                          ample::geometry::Circle{{0.0f, 0.0f}, 100.0f}));
     machine->setStartState(idle);
 
     addBehaviour(*machine);
