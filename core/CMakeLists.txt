@@ -87,6 +87,10 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Physics/WorldMotorJoint2d.cpp
 
     src/Geometry/RegularPolygon.cpp
+    src/Geometry/Shape.cpp
+    src/Geometry/Rectangle.cpp
+    src/Geometry/Circle.cpp
+    src/Geometry/Point.cpp
 
     src/Game/Game2d/Game2d.cpp
     src/Game/Game2d/Level.cpp
