@@ -1,4 +1,5 @@
 #include "StateMachine.h"
+#include "GameException.h"
 
 namespace ample::game
 {
@@ -46,10 +47,18 @@ void StateMachine::State::onActive()
     activity::Behavior::onActive();
     for (auto transition : _transitions)
     {
+        if (!transition)
+        {
+            throw GameException{"invalid transition"};
+        }
         transition->onActive();
         if (transition->isActivated())
         {
             transition->reset();
+            if (!_machine)
+            {
+                throw GameException{"state machine is empty, transition can not be done"};
+            }
             _machine->setCurrentState(transition->getNextState());
         }
     }
@@ -64,11 +73,19 @@ StateMachine::StateMachine(State &startState)
 void StateMachine::onActive()
 {
     activity::Behavior::onActive();
+    if (!_currentState)
+    {
+        throw GameException{"state machine current state is null"};
+    }
     _currentState->onActive();
 }
 
 void StateMachine::setCurrentState(State &state)
 {
+    if (_currentState)
+    {
+        _currentState->onStop();
+    }
     _currentState->onStop();
     _currentState = &state;
     _currentState->onStart();
@@ -76,6 +93,9 @@ void StateMachine::setCurrentState(State &state)
 
 StateMachine::~StateMachine()
 {
-    _currentState->onStop();
+    if (_currentState)
+    {
+        _currentState->onStop();
+    }
 }
 } // namespace ample::game

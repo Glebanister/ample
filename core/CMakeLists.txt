@@ -91,7 +91,10 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Game/Game2d/Game2d.cpp
     src/Game/Game2d/Level.cpp
     src/Game/GameException.cpp
-    src/Game/StateMachine.cpp
+    src/Game/StateMachine/StateMachine.cpp
+    src/Game/StateMachine/EnvironmentTransition.cpp
+    src/Game/StateMachine/KeyboardTransition.cpp
+    src/Game/StateMachine/MouseTransition.cpp
     src/Game/Events/EventListener.cpp
    )
 
