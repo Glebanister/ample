@@ -49,10 +49,6 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Utils/Singleton.cpp
     src/Utils/Noncopyable.cpp
 
-    src/Filing/EditorIO.cpp
-    src/Filing/GraphicalObjectIO.cpp
-    src/Filing/GraphicalObject2dIO.cpp
-    src/Filing/WorldObject2dIO.cpp
     src/Filing/Scene2d.cpp
 
     src/Graphics/GraphicalObject.cpp

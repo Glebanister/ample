@@ -3,11 +3,6 @@
 #include "GraphicalPolygon.h"
 #include "GraphicalEdge.h"
 
-namespace ample::filing
-{
-class GraphicalObject2dIO;
-}
-
 namespace ample::graphics
 {
 class GraphicalObject2d : public GraphicalObject
@@ -35,9 +30,9 @@ public:
     GraphicalEdge &side() noexcept;
     GraphicalPolygon &face() noexcept;
 
-//    GraphicalObject2d(filing::JsonIO &);
-//
-//    void dump(filing::JsonIO &) override;
+    explicit GraphicalObject2d(filing::JsonIO &input);
+
+//    void dump(filing::JsonIO &output) override;
 
 protected:
     GraphicalPolygon _face;

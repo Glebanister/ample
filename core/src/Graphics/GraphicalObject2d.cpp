@@ -59,12 +59,12 @@ GraphicalPolygon &GraphicalObject2d::face() noexcept
     return _face;
 }
 
-//GraphicalObject2d::GraphicalObject2d(filing::JsonIO &input)
-//    : GraphicalObject(input),
-//      _face(input),
-//      _side(input)
-//{
-//}
+GraphicalObject2d::GraphicalObject2d(filing::JsonIO &input)
+    : GraphicalObject(input),
+      _face(input),
+      _side(input)
+{
+}
 
 //void GraphicalObject2d::dump(filing::JsonIO &output)
 //{

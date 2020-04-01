@@ -99,12 +99,12 @@ void GraphicalObject::draw(glm::mat4 scaled,
     exception::OpenGLException::handle();
 }
 
-//GraphicalObject::GraphicalObject(filing::JsonIO &input)
-//    : GraphicalObject(input.read<glm::mat4>("translated"),
-//                      input.read<glm::mat4>("scaled"),
-//                      input.read<glm::mat4>("rotated"))
-//{
-//}
+GraphicalObject::GraphicalObject(filing::JsonIO &input)
+    : GraphicalObject(input.read<glm::mat4>("translated"),
+                      input.read<glm::mat4>("scaled"),
+                      input.read<glm::mat4>("rotated"))
+{
+}
 
 //void GraphicalObject::dump(filing::JsonIO &output, std::string prefix)
 //{
