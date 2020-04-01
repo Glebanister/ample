@@ -50,6 +50,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Utils/Noncopyable.cpp
 
     src/Filing/Scene2d.cpp
+    src/Filing/UniqueObject.cpp
 
     src/Graphics/GraphicalObject.cpp
     src/Graphics/GraphicalObject2d.cpp

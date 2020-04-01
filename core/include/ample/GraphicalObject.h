@@ -11,10 +11,11 @@
 #include "Texture.h"
 #include "VertexArray.h"
 #include "JsonIO.h"
+#include "UniqueObject.h"
 
 namespace ample::graphics
 {
-class GraphicalObject : public activity::Behaviour
+class GraphicalObject : public activity::Behaviour, public filing::UniqueObject
 {
 public:
     GraphicalObject(const glm::mat4 &translated = glm::mat4{1.0f},

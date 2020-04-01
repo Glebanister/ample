@@ -106,6 +106,7 @@ GraphicalObject::GraphicalObject(filing::JsonIO &input)
 {
 }
 
+
 //void GraphicalObject::dump(filing::JsonIO &output, std::string prefix)
 //{
 //    output.write<glm::mat4>("translated", _translated);
