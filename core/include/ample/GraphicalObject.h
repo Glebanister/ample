@@ -40,6 +40,7 @@ public:
     void translate(const glm::vec3 &) noexcept;
 
     void bindTexture(std::shared_ptr<Texture> texturePtr) noexcept;
+    std::shared_ptr<Texture> texture() const noexcept;
 
     void bindVertexArray(std::shared_ptr<VertexArray>) noexcept;
 

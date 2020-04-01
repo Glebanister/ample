@@ -98,4 +98,9 @@ void GraphicalObject::draw(glm::mat4 scaled,
     }
     exception::OpenGLException::handle();
 }
+
+std::shared_ptr<Texture> GraphicalObject::texture() const noexcept
+{
+    return _texturePtr;
+}
 } // namespace ample::graphics
