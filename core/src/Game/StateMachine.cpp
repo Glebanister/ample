@@ -25,6 +25,17 @@ void StateMachine::Transition::reset() noexcept
     _activated = false;
 }
 
+StateMachine::State::State(StateMachine &machine)
+    : _machine(&machine) {}
+
+StateMachine::State::State()
+    : _machine(nullptr) {}
+
+void StateMachine::State::setMachine(StateMachine &machine)
+{
+    _machine = &machine;
+}
+
 void StateMachine::State::addTransition(StateMachine::Transition &transition) noexcept
 {
     _transitions.push_back(&transition);
@@ -39,7 +50,7 @@ void StateMachine::State::onActive()
         if (transition->isActivated())
         {
             transition->reset();
-            _machine.setCurrentState(transition->getNextState());
+            _machine->setCurrentState(transition->getNextState());
         }
     }
 }

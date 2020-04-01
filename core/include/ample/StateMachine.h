@@ -31,11 +31,14 @@ public:
     {
     public:
         State(StateMachine &machine);
+        State();
+        void setMachine(StateMachine &machine);
+
         void onActive() override;
         void addTransition(Transition &) noexcept;
 
     private:
-        StateMachine &_machine;
+        StateMachine *_machine;
         std::vector<Transition *> _transitions;
     };
 
