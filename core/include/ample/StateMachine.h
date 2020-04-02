@@ -30,14 +30,20 @@ public:
     class State : public activity::Behavior
     {
     public:
-        State(std::shared_ptr<StateMachine> machine);
+        State(std::shared_ptr<StateMachine> machine, const std::string &name = "state_name");
+        State(const std::string &name = "state_name");
+
+        void setMachine(std::shared_ptr<StateMachine> machine) noexcept;
 
         void onActive() override;
         void addTransition(std::shared_ptr<Transition>) noexcept;
 
+        std::string getName() const noexcept;
+
     private:
         std::shared_ptr<StateMachine> _machine;
         std::vector<std::shared_ptr<Transition>> _transitions;
+        std::string _name;
 
         friend class StateMachine;
     };

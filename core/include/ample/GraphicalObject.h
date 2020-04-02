@@ -10,10 +10,11 @@
 #include "Behaviour.h"
 #include "Texture.h"
 #include "VertexArray.h"
+#include "ControlledObject.h"
 
 namespace ample::graphics
 {
-class GraphicalObject : public activity::Behavior
+class GraphicalObject : public game::ControlledObject
 {
 public:
     GraphicalObject(const glm::mat4 &translated = glm::mat4{1.0f},

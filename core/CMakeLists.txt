@@ -100,6 +100,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Game/StateMachine/KeyboardTransition.cpp
     src/Game/StateMachine/MouseTransition.cpp
     src/Game/StateMachine/TimerTransition.cpp
+    src/Game/StateMachine/ControlledObject.cpp
     src/Game/Events/EventListener.cpp
    )
 
