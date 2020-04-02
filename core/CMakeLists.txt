@@ -100,7 +100,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Game/StateMachine/Transitions/Os/KeyboardTransition.cpp
     src/Game/StateMachine/Transitions/Os/MouseTransition.cpp
     src/Game/StateMachine/Transitions/Os/TimerTransition.cpp
-    src/Game/StateMachine/Transitions/Physics/PhysicsTransition.cpp
+    src/Game/StateMachine/Transitions/Physics/PhysicalTransition.cpp
     src/Game/StateMachine/Transitions/Physics/DistanceTransition.cpp
     src/Game/StateMachine/Transitions/Physics/SpeedTransition.cpp
     src/Game/StateMachine/Transitions/Physics/PositionTransition.cpp
