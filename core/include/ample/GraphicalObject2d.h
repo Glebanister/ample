@@ -30,9 +30,9 @@ public:
     GraphicalEdge &side() noexcept;
     GraphicalPolygon &face() noexcept;
 
-    explicit GraphicalObject2d(filing::JsonIO &input);
+    explicit GraphicalObject2d(filing::JsonIO input);
 
-//    void dump(filing::JsonIO &output) override;
+    std::string dump(filing::JsonIO output, std::string nameField) override;
 
 protected:
     GraphicalPolygon _face;

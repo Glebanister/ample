@@ -14,10 +14,10 @@ public:
 
     void saveScene(const std::string &nameFile);
 
-    ample::graphics::GraphicalObject &getElementById(const std::string &id);
+    ample::graphics::GraphicalObject &getElementById(const int &id);
 
 private:
     std::vector<std::shared_ptr<ample::graphics::GraphicalObject>> _objs;
-    std::unordered_map<std::string, std::shared_ptr<ample::graphics::GraphicalObject>> _storage;
+    std::unordered_map<int, std::shared_ptr<ample::graphics::GraphicalObject>> _storage;
 };
 } // namespace ample::filing

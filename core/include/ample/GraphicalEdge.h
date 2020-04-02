@@ -21,9 +21,9 @@ public:
             const glm::mat4 &scaled = glm::mat4 {1.0f},
             const glm::mat4 &rotated = glm::mat4 {1.0f});
 
-    explicit GraphicalEdge(filing::JsonIO &input);
+    explicit GraphicalEdge(filing::JsonIO input);
 
-//    void dump(filing::JsonIO &output) override;
+    std::string dump(filing::JsonIO output, std::string nameField) override;
 
 private:
     std::vector<Vector2d<float>> _shape;

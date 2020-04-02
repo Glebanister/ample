@@ -3,11 +3,6 @@
 #include <fstream>
 #include <sstream>
 
-#include <rapidjson/document.h>
-#include <rapidjson/writer.h>
-#include <rapidjson/stringbuffer.h>
-#include <rapidjson/prettywriter.h>
-
 #include "Exception.h"
 #include "Debug.h"
 
@@ -43,6 +38,15 @@ std::string openJSONfile(const std::string &nameFile)
 }
 
 inline
+void MergeObject(rapidjson::Value &target, rapidjson::Value &source, rapidjson::Value::AllocatorType &allocator)
+{
+    for (rapidjson::Value::MemberIterator itr = source.MemberBegin(); itr != source.MemberEnd(); ++itr)
+    {
+        target.AddMember(itr->name, itr->value, allocator);
+    }
+}
+
+inline
 JsonIO::JsonIO(const std::string &jsonStr_)
         : jsonStr(jsonStr_)
 {}
@@ -52,6 +56,27 @@ std::string JsonIO::getJSONstring() const
 {
     return jsonStr;
 }
+
+inline
+filing::JsonIO JsonIO::updateJsonIO(std::string nameField)
+{
+    rapidjson::Document doc;
+    doc.SetObject();
+    doc.Parse(jsonStr.c_str());
+
+    rapidjson::Value field;
+    field.SetString(rapidjson::StringRef(nameField.c_str()));
+    const rapidjson::Value &value = doc[field];
+
+    rapidjson::StringBuffer sb;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(sb);
+    value.Accept(writer);
+    std::string newStr = sb.GetString();
+
+    JsonIO io(newStr);
+    return io;
+}
+
 
 template<>
 inline
@@ -200,6 +225,7 @@ void JsonIO::write<int>(const std::string &nameField, const int &obj)
 {
     rapidjson::Document doc;
     doc.SetObject();
+    doc.Parse(jsonStr.c_str());
 
     rapidjson::Value str;
     str.SetString(rapidjson::StringRef(nameField.c_str()));
@@ -219,6 +245,7 @@ void JsonIO::write<float>(const std::string &nameField, const float &obj)
 {
     rapidjson::Document doc;
     doc.SetObject();
+    doc.Parse(jsonStr.c_str());
 
     rapidjson::Value str;
     str.SetString(rapidjson::StringRef(nameField.c_str()));
@@ -239,6 +266,7 @@ void JsonIO::write<std::string>(const std::string &nameField, const std::string 
 {
     rapidjson::Document doc;
     doc.SetObject();
+    doc.Parse(jsonStr.c_str());
 
     rapidjson::Value str;
     str.SetString(rapidjson::StringRef(nameField.c_str()));
@@ -262,6 +290,7 @@ void JsonIO::write<ample::graphics::Vector2d<float>>(
 {
     rapidjson::Document doc;
     doc.SetObject();
+    doc.Parse(jsonStr.c_str());
 
     rapidjson::Value str;
     str.SetString(rapidjson::StringRef(nameField.c_str()));
@@ -289,6 +318,7 @@ void JsonIO::write<std::vector<ample::graphics::Vector2d<float>>>(
 {
     rapidjson::Document doc;
     doc.SetObject();
+    doc.Parse(jsonStr.c_str());
 
     rapidjson::Value str;
     str.SetString(rapidjson::StringRef(nameField.c_str()));
@@ -321,6 +351,7 @@ JsonIO::write<ample::graphics::Vector2d<int>>(const std::string &nameField, cons
 {
     rapidjson::Document doc;
     doc.SetObject();
+    doc.Parse(jsonStr.c_str());
 
     rapidjson::Value str;
     str.SetString(rapidjson::StringRef(nameField.c_str()));
@@ -347,6 +378,7 @@ void JsonIO::write<ample::graphics::channelMode>(const std::string &nameField, c
 {
     rapidjson::Document doc;
     doc.SetObject();
+    doc.Parse(jsonStr.c_str());
 
     rapidjson::Value str;
     str.SetString(rapidjson::StringRef(nameField.c_str()));
@@ -374,6 +406,7 @@ void JsonIO::write<ample::graphics::normalsMode>(const std::string &nameField, c
 {
     rapidjson::Document doc;
     doc.SetObject();
+    doc.Parse(jsonStr.c_str());
 
     rapidjson::Value str;
     str.SetString(rapidjson::StringRef(nameField.c_str()));
@@ -401,6 +434,7 @@ void JsonIO::write<glm::mat4>(const std::string &nameField, const glm::mat4 &obj
 {
     rapidjson::Document doc;
     doc.SetObject();
+    doc.Parse(jsonStr.c_str());
 
     rapidjson::Value str;
     str.SetString(rapidjson::StringRef(nameField.c_str()));

@@ -99,17 +99,38 @@ void GraphicalObject::draw(glm::mat4 scaled,
     exception::OpenGLException::handle();
 }
 
-GraphicalObject::GraphicalObject(filing::JsonIO &input)
+GraphicalObject::GraphicalObject(filing::JsonIO input)
     : GraphicalObject(input.read<glm::mat4>("translated"),
                       input.read<glm::mat4>("scaled"),
                       input.read<glm::mat4>("rotated"))
 {
+    DEBUG("load GO");
 }
 
-//void GraphicalObject::dump(filing::JsonIO &output, std::string prefix)
-//{
-//    output.write<glm::mat4>("translated", _translated);
-//    output.write<glm::mat4>("scaled", _scaled);
-//    output.write<glm::mat4>("rotated", _rotated);
-//}
+std::string GraphicalObject::dump(filing::JsonIO output, std::string nameField)
+{
+    rapidjson::Document doc;
+    doc.SetObject();
+
+    rapidjson::Document data;
+    data.SetObject();
+
+    output.write<glm::mat4>("translated", _translated);
+    output.write<glm::mat4>("scaled", _scaled);
+    output.write<glm::mat4>("rotated", _rotated);
+
+    data.Parse(output.getJSONstring().c_str());
+
+    rapidjson::Value name;
+    name.SetString(rapidjson::StringRef(nameField.c_str()));
+    doc.AddMember(name, data, doc.GetAllocator());
+
+    rapidjson::StringBuffer buffer;
+    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
+    doc.Accept(writer);
+
+    std::string str(buffer.GetString(), buffer.GetSize());
+
+    return str + '\n';
+}
 } // namespace ample::graphics

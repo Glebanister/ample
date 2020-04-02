@@ -66,7 +66,7 @@ GraphicalPolygon::GraphicalPolygon(const std::vector<Vector2d<float>> &shape,
         generateFaceNormals(shape, z)));
 }
 
-GraphicalPolygon::GraphicalPolygon(filing::JsonIO &input)
+GraphicalPolygon::GraphicalPolygon(filing::JsonIO input)
     : GraphicalPolygon(input.read<std::vector<Vector2d<float>>>("shape"),
                        input.read<float>("z"),
                        input.read<Vector2d<float>>("faceTextureRepeats"),
@@ -77,11 +77,30 @@ GraphicalPolygon::GraphicalPolygon(filing::JsonIO &input)
     DEBUG("FILING GP");
 }
 
-//void GraphicalPolygon::dump(filing::JsonIO &output)
-//{
-//    GraphicalObject::dump(output);
-//    output.write<std::vector<Vector2d<float>>>("shape", _shape);
-//    input.write<float>("z", getZ());
-//    input.write<Vector2d<float>>("textureRepeats", _textureRepeats);
-//}
+std::string GraphicalPolygon::dump(filing::JsonIO output, std::string nameField)
+{
+    rapidjson::Document doc;
+    doc.SetObject();
+
+    rapidjson::Document data;
+    data.SetObject();
+
+    output.write<std::vector<Vector2d<float>>>("shape", _shape);
+    output.write<float>("z", getZ());
+    output.write<Vector2d<float>>("textureRepeats", _textureRepeats);
+
+    data.Parse(output.getJSONstring().c_str());
+
+    rapidjson::Value name;
+    name.SetString(rapidjson::StringRef(nameField.c_str()));
+    doc.AddMember(name, data, doc.GetAllocator());
+
+    rapidjson::StringBuffer buffer;
+    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
+    doc.Accept(writer);
+
+    std::string str(buffer.GetString(), buffer.GetSize());
+
+    return str + '\n';
+}
 } // namespace ample::graphics

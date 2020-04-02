@@ -38,17 +38,17 @@ Scene2d::Scene2d(const std::string &nameFile)
         rapidjson::Document doc;
         doc.Parse(str.c_str());
 
-        JsonIO editor(str);
-        std::string name = editor.read<std::string>("name");
+        JsonIO input(str);
+        std::string name = input.read<std::string>("name");
 
         if (name == "GraphicalObject2d")
         {
-            ample::graphics::GraphicalObject2d obj(editor);
-            _objs[cnt] = std::make_shared<ample::graphics::GraphicalObject>(obj);
+            ample::graphics::GraphicalObject2d obj(input.updateJsonIO("GraphicalObject2d"));
+            _objs[cnt] = std::make_shared<ample::graphics::GraphicalObject2d>(obj);
             addObject(*_objs[cnt]);
             DEBUG("add GraphicalObject2d");
         }
-        std::string id = editor.read<std::string>("id");
+        int id = input.read<int>("id");
         _storage[id] = _objs[cnt];
         cnt++;
     }
@@ -56,25 +56,27 @@ Scene2d::Scene2d(const std::string &nameFile)
 
 void Scene2d::saveScene(const std::string &nameFile)
 {
+    DEBUG("save json file");
     std::ofstream outFile(nameFile);
 
     rapidjson::Document doc;
     doc.SetObject();
 
     rapidjson::Value array(rapidjson::Type::kArrayType);
-    for (size_t i = 0; i < _objs.size(); i++)
+    for (size_t i = 0; i < _objects.size(); i++)
     {
         rapidjson::Document docObj(&doc.GetAllocator());
         docObj.SetObject();
 
-        ample::filing::JsonIO io("");
-        if (typeid(*_objs[i]) == typeid(ample::graphics::GraphicalObject2d))
+        ample::filing::JsonIO out("");
+        if (typeid(*_objects[i]) == typeid(ample::graphics::GraphicalObject2d))
         {
-//            _objs[i]->dump(io);
-//            std::string str = io.getJSONstring();
-//            docObj.Parse(str.c_str());
-//            docObj.AddMember("class", "GraphicalObject2d", docObj.GetAllocator());
+            DEBUG("save GraphicalObject2d");
+            std::string str = _objects[i]->dump(out, "GraphicalObject2d");
+            docObj.Parse(str.c_str());
+            docObj.AddMember("name", "GraphicalObject2d", docObj.GetAllocator());
         }
+        docObj.AddMember("id", i, docObj.GetAllocator());
         array.PushBack(docObj, doc.GetAllocator());
     }
     doc.AddMember("array", array, doc.GetAllocator());
@@ -88,7 +90,7 @@ void Scene2d::saveScene(const std::string &nameFile)
     outFile.close();
 }
 
-ample::graphics::GraphicalObject &Scene2d::getElementById(const std::string &id)
+ample::graphics::GraphicalObject &Scene2d::getElementById(const int &id)
 {
     return *_storage[id];
 }
