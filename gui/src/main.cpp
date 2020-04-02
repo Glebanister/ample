@@ -10,7 +10,7 @@
 
 int main()
 {
-    ample::window::Window window{"ample gui", 0, 0, 1024, 512, ample::window::UNDEFINED_POS, ample::window::MINIMIZED | ample::window::RESIZABLE};
+    ample::window::Window window{"ample gui", 0, 0, 1024, 512 * 2, ample::window::UNDEFINED_POS, ample::window::MINIMIZED | ample::window::RESIZABLE};
     ample::gui::ImguiActivity ampleGui{window};
     ampleGui.loop();
 
