@@ -9,7 +9,7 @@
 
 namespace ample::graphics
 {
-class Layer : public activity::Behaviour
+class Layer : public activity::Behavior
 {
 public:
     void onActive() override;

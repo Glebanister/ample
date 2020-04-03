@@ -22,7 +22,7 @@ GraphicalObject::GraphicalObject(const glm::mat4 &translated,
 
 void GraphicalObject::addSubObject(GraphicalObject &object)
 {
-    activity::Behaviour::addBehaviour(object);
+    activity::Behavior::addBehaviour(object);
     _subObjects.push_back(&object);
 }
 
@@ -114,5 +114,9 @@ std::string GraphicalObject::dump(filing::JsonIO output, std::string nameField)
     output.write<glm::mat4>("rotated", _rotated);
 
     return filing::makeField(nameField, output.getJSONstring());
+
+std::shared_ptr<Texture> GraphicalObject::texture() const noexcept
+{
+    return _texturePtr;
 }
 } // namespace ample::graphics
