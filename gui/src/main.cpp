@@ -6,7 +6,7 @@
 #include <ample/Clock.h>
 #include <ample/WindowActivity.h>
 
-#include "ImguiActivity.h"
+#include "AmpleGui.h"
 
 int main()
 {
@@ -19,8 +19,7 @@ int main()
         ample::window::CENTERED_X | ample::window::CENTERED_Y,
         ample::window::MINIMIZED | ample::window::RESIZABLE,
     };
-    ample::gui::ImguiActivity ampleGui{window};
-    ampleGui.loop();
+    ample::gui::AmpleGui{window}.loop();
 
     return 0;
 }

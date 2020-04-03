@@ -24,6 +24,7 @@ set(IMGUI_SOURCES
 set(SOURCES
     src/main.cpp
     src/ImguiActivity.cpp
+    src/AmpleGui.cpp
     )
 
 add_executable(ample-gui ${SOURCES} ${IMGUI_SOURCES})

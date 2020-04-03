@@ -22,7 +22,7 @@ public:
 
 private:
     void updateEnvironment() noexcept;
-    virtual void presentGUI();
+    virtual void presentGui();
     class Renderer
     {
     public:

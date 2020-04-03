@@ -87,10 +87,9 @@ void ImguiActivity::updateEnvironment() noexcept
     }
 }
 
-void ImguiActivity::presentGUI()
+void ImguiActivity::presentGui()
 {
     ImGui::ShowDemoWindow();
-    ImGui::ShowStyleEditor();
 }
 
 void ImguiActivity::onActive()
@@ -98,7 +97,7 @@ void ImguiActivity::onActive()
     ample::window::WindowActivity::onActive();
     updateEnvironment();
     ImGui::NewFrame();
-    presentGUI();
+    presentGui();
     SDL_SetRenderDrawColor(_renderer.pointer(), 114, 144, 154, 255);
     SDL_RenderClear(_renderer.pointer());
     ImGui::Render();
