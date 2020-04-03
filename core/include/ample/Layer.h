@@ -22,7 +22,7 @@ public:
 
     size_t objectsCount() const noexcept;
 
-private:
+protected:
     std::vector<Camera *> _cameras;
     std::vector<GraphicalObject *> _objects;
 };

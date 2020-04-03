@@ -10,15 +10,20 @@
 #include "Behaviour.h"
 #include "Texture.h"
 #include "VertexArray.h"
+#include "JsonIO.h"
+#include "UniqueObject.h"
 
 namespace ample::graphics
 {
-class GraphicalObject : public activity::Behavior
+class GraphicalObject : public activity::Behavior, public filing::UniqueObject
 {
 public:
     GraphicalObject(const glm::mat4 &translated = glm::mat4{1.0f},
                     const glm::mat4 &scaled = glm::mat4{1.0f},
                     const glm::mat4 &rotated = glm::mat4{1.0f});
+
+    explicit GraphicalObject(filing::JsonIO input);
+    virtual std::string dump(filing::JsonIO output, std::string nameField);
 
     void draw(glm::mat4 scaled = glm::mat4{1.0f},
               glm::mat4 rotated = glm::mat4{1.0f},
