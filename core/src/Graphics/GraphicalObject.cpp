@@ -114,6 +114,7 @@ std::string GraphicalObject::dump(filing::JsonIO output, std::string nameField)
     output.write<glm::mat4>("rotated", _rotated);
 
     return filing::makeField(nameField, output.getJSONstring());
+}
 
 std::shared_ptr<Texture> GraphicalObject::texture() const noexcept
 {
