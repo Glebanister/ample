@@ -17,6 +17,27 @@ using Event = SDL_Event;
 
 class KeyboardManager final : public EventHandler
 {
+private:
+    struct Modificators
+    {
+        bool leftShift() const noexcept;
+        bool rightShift() const noexcept;
+        bool shift() const noexcept;
+        bool leftAlt() const noexcept;
+        bool rightAlt() const noexcept;
+        bool alt() const noexcept;
+        bool leftCtrl() const noexcept;
+        bool rightCtrl() const noexcept;
+        bool ctrl() const noexcept;
+        bool caps() const noexcept;
+        void clear();
+
+        bool _shift, _lShiftDown, _rShiftDown;
+        bool _alt, _lAltDown, _rAltDown;
+        bool _ctrl, _lCtrlDown, _rCtrlDown;
+        bool _caps;
+    };
+
 public:
     void addKeyHandler(const keysym key, KeyHandler &handler);
     void clearKey(const keysym key);
@@ -25,12 +46,14 @@ public:
     bool isKeyReleased(keysym key);
     bool isKeyDown(keysym key);
     void clear();
+    const Modificators &modificators() const noexcept;
 
 private:
     std::unordered_map<int32_t, std::vector<KeyHandler *>> _handlers;
     std::unordered_map<int32_t, int32_t> _keymapWasUp;
     std::unordered_map<int32_t, int32_t> _keymapWasDown;
     std::unordered_map<int32_t, int32_t> _keymapPressed;
+    Modificators _mods;
 };
 
 class EventManager final
