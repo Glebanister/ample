@@ -70,40 +70,13 @@ GraphicalObject2d::GraphicalObject2d(filing::JsonIO input)
 
 std::string GraphicalObject2d::dump(filing::JsonIO output, std::string nameField)
 {
-    rapidjson::Document doc;
-    doc.SetObject();
+    // work with subobjects
+    std::vector<std::string> strings;
+    strings.push_back(GraphicalObject::dump(output, "GraphicalObject"));
+    strings.push_back(_face.dump(output, "face"));
+    strings.push_back(_side.dump(output, "side"));
 
-    rapidjson::Document data1;
-    rapidjson::Document data2;
-    rapidjson::Document data3;
-
-    data1.SetObject();
-    data2.SetObject();
-    data3.SetObject();
-
-    std::string str = "";
-    str = GraphicalObject::dump(output, "GraphicalObject");
-    data1.Parse(str.c_str());
-
-    str = _face.dump(output, "face");
-    data2.Parse(str.c_str());
-    filing::MergeObject(data1, data2, data1.GetAllocator());
-
-    str = _side.dump(output, "side");
-    data3.Parse(str.c_str());
-    filing::MergeObject(data1, data3, data1.GetAllocator());
-
-    rapidjson::Value name;
-    name.SetString(rapidjson::StringRef(nameField.c_str()));
-    doc.AddMember(name, data1, doc.GetAllocator());
-
-    rapidjson::StringBuffer buffer;
-    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
-    doc.Accept(writer);
-
-    std::string newStr(buffer.GetString(), buffer.GetSize());
-
-    return newStr + '\n';
+    return filing::makeField(nameField, filing::mergeStrings(strings));
 }
 
 } // namespace ample::graphics

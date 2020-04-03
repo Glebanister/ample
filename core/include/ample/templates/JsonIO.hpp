@@ -27,23 +27,75 @@ std::string openJSONfile(const std::string &nameFile)
         throw exception::Exception(exception::exId::FILE_READ,
                                    exception::exType::CRITICAL);
     }
+
     std::stringstream jsonDocumentBuffer;
     std::string inputLine;
     while (std::getline(inFile, inputLine))
     {
         jsonDocumentBuffer << inputLine << "\n";
     }
+
     inFile.close();
+
     return jsonDocumentBuffer.str();
 }
 
 inline
-void MergeObject(rapidjson::Value &target, rapidjson::Value &source, rapidjson::Value::AllocatorType &allocator)
+void mergeObject(rapidjson::Value &target, rapidjson::Value &source, rapidjson::Value::AllocatorType &allocator)
 {
     for (rapidjson::Value::MemberIterator itr = source.MemberBegin(); itr != source.MemberEnd(); ++itr)
     {
         target.AddMember(itr->name, itr->value, allocator);
     }
+}
+
+inline
+std::string makeField(std::string nameField, std::string jsonStr)
+{
+    rapidjson::Document doc;
+    doc.SetObject();
+
+    rapidjson::Document data;
+    data.SetObject();
+
+    data.Parse(jsonStr.c_str());
+
+    rapidjson::Value name;
+    name.SetString(rapidjson::StringRef(nameField.c_str()));
+    doc.AddMember(name, data, doc.GetAllocator());
+
+    return giveStringDocument(doc) + '\n';
+}
+
+inline
+std::string mergeStrings(std::vector<std::string> &strings)
+{
+    if (!strings.size())
+    {
+        return "";
+    }
+
+    rapidjson::Document first, second;
+    first.SetObject();
+    second.SetObject();
+
+    first.Parse(strings[0].c_str());
+    for (size_t i = 1; i < strings.size(); ++i)
+    {
+        second.Parse(strings[i].c_str());
+        mergeObject(first, second, first.GetAllocator());
+    }
+
+    return giveStringDocument(first);
+}
+
+inline
+std::string giveStringDocument(rapidjson::Value &doc)
+{
+    rapidjson::StringBuffer sb;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(sb);
+    doc.Accept(writer);
+    return sb.GetString();
 }
 
 inline
@@ -66,15 +118,9 @@ filing::JsonIO JsonIO::updateJsonIO(std::string nameField)
 
     rapidjson::Value field;
     field.SetString(rapidjson::StringRef(nameField.c_str()));
-    const rapidjson::Value &value = doc[field];
+    rapidjson::Value &value = doc[field];
 
-    rapidjson::StringBuffer sb;
-    rapidjson::Writer<rapidjson::StringBuffer> writer(sb);
-    value.Accept(writer);
-    std::string newStr = sb.GetString();
-
-    JsonIO io(newStr);
-    return io;
+    return JsonIO {giveStringDocument(value)};
 }
 
 
@@ -231,12 +277,7 @@ void JsonIO::write<int>(const std::string &nameField, const int &obj)
     str.SetString(rapidjson::StringRef(nameField.c_str()));
     doc.AddMember(str, obj, doc.GetAllocator());
 
-    rapidjson::StringBuffer buffer;
-    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
-    doc.Accept(writer);
-
-    std::string newStr(buffer.GetString(), buffer.GetSize());
-    jsonStr = newStr;
+    jsonStr = giveStringDocument(doc);
 }
 
 template<>
@@ -251,13 +292,7 @@ void JsonIO::write<float>(const std::string &nameField, const float &obj)
     str.SetString(rapidjson::StringRef(nameField.c_str()));
     doc.AddMember(str, obj, doc.GetAllocator());
 
-    rapidjson::StringBuffer buffer;
-    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
-    doc.Accept(writer);
-
-    std::string newStr(buffer.GetString(), buffer.GetSize());
-    jsonStr = newStr;
-
+    jsonStr = giveStringDocument(doc);
 }
 
 template<>
@@ -275,12 +310,7 @@ void JsonIO::write<std::string>(const std::string &nameField, const std::string 
     val.SetString(obj.c_str(), doc.GetAllocator());
     doc.AddMember(str, val, doc.GetAllocator());
 
-    rapidjson::StringBuffer buffer;
-    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
-    doc.Accept(writer);
-
-    std::string newStr(buffer.GetString(), buffer.GetSize());
-    jsonStr = newStr;
+    jsonStr = giveStringDocument(doc);
 }
 
 template<>
@@ -303,12 +333,7 @@ void JsonIO::write<ample::graphics::Vector2d<float>>(
     val.PushBack(temp, doc.GetAllocator());
     doc.AddMember(str, val, doc.GetAllocator());
 
-    rapidjson::StringBuffer buffer;
-    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
-    doc.Accept(writer);
-
-    std::string newStr(buffer.GetString(), buffer.GetSize());
-    jsonStr = newStr;
+    jsonStr = giveStringDocument(doc);
 }
 
 template<>
@@ -336,12 +361,7 @@ void JsonIO::write<std::vector<ample::graphics::Vector2d<float>>>(
     }
     doc.AddMember(str, array, doc.GetAllocator());
 
-    rapidjson::StringBuffer buffer;
-    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
-    doc.Accept(writer);
-
-    std::string newStr(buffer.GetString(), buffer.GetSize());
-    jsonStr = newStr;
+    jsonStr = giveStringDocument(doc);
 }
 
 template<>
@@ -364,12 +384,7 @@ JsonIO::write<ample::graphics::Vector2d<int>>(const std::string &nameField, cons
     val.PushBack(temp, doc.GetAllocator());
     doc.AddMember(str, val, doc.GetAllocator());
 
-    rapidjson::StringBuffer buffer;
-    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
-    doc.Accept(writer);
-
-    std::string newStr(buffer.GetString(), buffer.GetSize());
-    jsonStr = newStr;
+    jsonStr = giveStringDocument(doc);
 }
 
 template<>
@@ -392,12 +407,7 @@ void JsonIO::write<ample::graphics::channelMode>(const std::string &nameField, c
         doc.AddMember(str, "RGBA", doc.GetAllocator());
     }
 
-    rapidjson::StringBuffer buffer;
-    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
-    doc.Accept(writer);
-
-    std::string newStr(buffer.GetString(), buffer.GetSize());
-    jsonStr = newStr;
+    jsonStr = giveStringDocument(doc);
 }
 
 template<>
@@ -420,12 +430,7 @@ void JsonIO::write<ample::graphics::normalsMode>(const std::string &nameField, c
         doc.AddMember(str, "VERTEX", doc.GetAllocator());
     }
 
-    rapidjson::StringBuffer buffer;
-    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
-    doc.Accept(writer);
-
-    std::string newStr(buffer.GetString(), buffer.GetSize());
-    jsonStr = newStr;
+    jsonStr = giveStringDocument(doc);
 }
 
 template<>
@@ -453,12 +458,7 @@ void JsonIO::write<glm::mat4>(const std::string &nameField, const glm::mat4 &obj
     }
     doc.AddMember(str, array, doc.GetAllocator());
 
-    rapidjson::StringBuffer buffer;
-    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
-    doc.Accept(writer);
-
-    std::string newStr(buffer.GetString(), buffer.GetSize());
-    jsonStr = newStr;
+    jsonStr = giveStringDocument(doc);
 }
 
 } //namespace ample::filing

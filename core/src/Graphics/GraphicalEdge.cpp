@@ -147,30 +147,12 @@ GraphicalEdge::GraphicalEdge(filing::JsonIO input)
 
 std::string GraphicalEdge::dump(filing::JsonIO output, std::string nameField)
 {
-    rapidjson::Document doc;
-    doc.SetObject();
-
-    rapidjson::Document data;
-    data.SetObject();
-
     output.write<std::vector<Vector2d<float>>>("shape", _shape);
     output.write<float>("z", getZ()); // TODO: check out if it is true
     output.write<float>("thickness", _thickness);
     output.write<Vector2d<float>>("textureRepeats", _textureRepeats);
     output.write<normalsMode>("normMode", _normMode);
 
-    data.Parse(output.getJSONstring().c_str());
-
-    rapidjson::Value name;
-    name.SetString(rapidjson::StringRef(nameField.c_str()));
-    doc.AddMember(name, data, doc.GetAllocator());
-
-    rapidjson::StringBuffer buffer;
-    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
-    doc.Accept(writer);
-
-    std::string str(buffer.GetString(), buffer.GetSize());
-
-    return str + '\n';
+    return filing::makeField(nameField, output.getJSONstring());
 }
 } // namespace ample::graphics

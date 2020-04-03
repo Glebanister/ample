@@ -12,7 +12,13 @@ namespace ample::filing
 
 std::string openJSONfile(const std::string &nameFile);
 
-void MergeObject(rapidjson::Value &target, rapidjson::Value &source, rapidjson::Value::AllocatorType &allocator);
+void mergeObject(rapidjson::Value &target, rapidjson::Value &source, rapidjson::Value::AllocatorType &allocator);
+
+std::string makeField(std::string nameField, std::string jsonStr);
+
+std::string mergeStrings(std::vector<std::string> &strings);
+
+std::string giveStringDocument(rapidjson::Value &doc);
 
 class JsonIO
 {

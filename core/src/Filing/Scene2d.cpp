@@ -1,11 +1,6 @@
 #include <iostream>
 #include <memory>
 
-#include <rapidjson/document.h>
-#include <rapidjson/writer.h>
-#include <rapidjson/stringbuffer.h>
-#include <rapidjson/prettywriter.h>
-
 #include "Scene2d.h"
 #include "Exception.h"
 #include "Debug.h"
