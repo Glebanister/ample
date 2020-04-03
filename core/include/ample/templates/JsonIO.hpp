@@ -233,12 +233,8 @@ ample::graphics::normalsMode JsonIO::read<ample::graphics::normalsMode>(const st
 {
     std::string value = read < std::string > (nameField);
 
-    ample::graphics::normalsMode obj;
-    if (value == "VERTEX")
-    {
-        obj = ample::graphics::normalsMode::VERTEX;
-    }
-    else if (value == "FACE")
+    ample::graphics::normalsMode obj = graphics::normalsMode::VERTEX;
+    if (value == "FACE")
     {
         obj = ample::graphics::normalsMode::FACE;
     }
