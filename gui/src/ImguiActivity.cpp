@@ -41,11 +41,23 @@ void ImguiActivity::onResize()
 void ImguiActivity::updateEnvironment() noexcept
 {
     ImGuiIO &io = ImGui::GetIO();
-    io.DeltaTime = 1.0f / std::max(20.0, std::min(120.0, ample::time::Clock::getFPS()));
     io.MousePos = ImVec2(static_cast<float>(eventManager().mouse().getMouseX()), static_cast<float>(eventManager().mouse().getMouseY()));
-    io.MouseDown[0] = eventManager().mouse().isLeftDown() & SDL_BUTTON(SDL_BUTTON_LEFT);
-    io.MouseDown[1] = eventManager().mouse().isRightDown() & SDL_BUTTON(SDL_BUTTON_RIGHT);
+    io.MouseDown[0] = eventManager().mouse().isLeftDown();
+    io.MouseDown[1] = eventManager().mouse().isRightDown();
+    io.MouseDown[2] = eventManager().mouse().isMiddleDown();
     io.MouseWheel = static_cast<float>(eventManager().mouse().getWheelY());
+    io.MouseWheelH = static_cast<float>(eventManager().mouse().getWheelX());
+    for (int i = 0; i < 512; ++i)
+    {
+        io.KeysDown[i] = eventManager().keyboard().isKeyDown(static_cast<ample::control::keysym>(i)) ? true : false;
+    }
+    for (char c = 0; c < CHAR_MAX; ++c)
+    {
+        if (eventManager().keyboard().isKeyPressed(static_cast<ample::control::keysym>(c)))
+        {
+            io.AddInputCharacterUTF16(c);
+        }
+    }
 }
 
 void ImguiActivity::presentGUI()

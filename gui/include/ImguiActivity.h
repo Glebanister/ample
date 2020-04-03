@@ -18,12 +18,11 @@ public:
     void onActive() override;
     void onResize() override;
 
-    void updateEnvironment() noexcept;
-    virtual void presentGUI();
-
     ~ImguiActivity();
 
 private:
+    void updateEnvironment() noexcept;
+    virtual void presentGUI();
     class Renderer
     {
     public:
