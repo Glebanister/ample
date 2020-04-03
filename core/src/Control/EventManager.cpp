@@ -4,6 +4,7 @@
 
 #include "EventHandler.h"
 #include "EventManager.h"
+#include "Debug.h"
 
 namespace ample::control
 {
@@ -85,11 +86,22 @@ void KeyboardManager::clearKey(const keysym key)
     _handlers[key].clear();
 }
 
+bool KeyboardManager::getPressedScancode() const noexcept
+{
+    return _scancode;
+}
+
 void KeyboardManager::handleEvent(const SDL_Event &event)
 {
     _keymapWasDown[event.key.keysym.sym] = event.type;
     _keymapWasUp[event.key.keysym.sym] = event.type;
     _keymapPressed[event.key.keysym.sym] = event.type;
+    _scancodePressed[event.key.keysym.scancode] = event.type;
+    if (event.type == KEY_DOWN)
+    {
+        _char = event.key.keysym.sym;
+    }
+    _scancode = event.key.keysym.scancode;
     for (auto &handler : _handlers[event.key.keysym.sym])
     {
         handler->handleEvent(event);
@@ -157,6 +169,11 @@ bool KeyboardManager::isKeyDown(keysym key)
     return _keymapPressed[key] == KEY_DOWN;
 }
 
+bool KeyboardManager::scancode(scancodes scancode)
+{
+    return _scancodePressed[scancode] == KEY_DOWN;
+}
+
 const KeyboardManager::Modificators &KeyboardManager::modificators() const noexcept
 {
     return _mods;
@@ -166,6 +183,72 @@ void KeyboardManager::clear()
 {
     _keymapWasDown.clear();
     _keymapWasUp.clear();
+    _scancodePressed.clear();
     _mods.clear();
+    _char = '\0';
+    _scancode = 0;
+}
+
+char KeyboardManager::getChar() const noexcept
+{
+    static std::unordered_map<char, char> shifted = {
+        {'a', 'A'},
+        {'b', 'B'},
+        {'c', 'C'},
+        {'d', 'D'},
+        {'e', 'E'},
+        {'f', 'F'},
+        {'g', 'G'},
+        {'h', 'H'},
+        {'i', 'I'},
+        {'k', 'K'},
+        {'l', 'L'},
+        {'m', 'M'},
+        {'n', 'N'},
+        {'o', 'O'},
+        {'p', 'P'},
+        {'q', 'Q'},
+        {'r', 'R'},
+        {'s', 'S'},
+        {'t', 'T'},
+        {'u', 'U'},
+        {'v', 'V'},
+        {'w', 'W'},
+        {'x', 'X'},
+        {'y', 'Y'},
+        {'z', 'Z'},
+        {'1', '!'},
+        {'2', '@'},
+        {'3', '#'},
+        {'4', '$'},
+        {'5', '%'},
+        {'6', '^'},
+        {'7', '&'},
+        {'8', '*'},
+        {'9', '('},
+        {'0', ')'},
+        {'[', '{'},
+        {']', '}'},
+        {';', ':'},
+        {'\'', '"'},
+        {',', '<'},
+        {'.', '>'},
+        {'/', '?'},
+        {'`', '~'},
+        {' ', ' '},
+        {'-', '_'},
+        {'=', '+'},
+        {'\\', '|'},
+        {'\n', '\n'},
+    };
+    if (!(shifted[_char]))
+    {
+        return 0;
+    }
+    if (modificators().shift() || modificators().caps())
+    {
+        return shifted[_char];
+    }
+    return _char;
 }
 } // namespace ample::control
