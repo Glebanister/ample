@@ -52,6 +52,7 @@ public:
     void resize(const pixel_t w, const pixel_t &h);
 
     SDL_Window *pointer();
+    SDL_GLContext *glContext() const noexcept;
 
     ~Window();
 
@@ -61,6 +62,7 @@ private:
     pixel_t _x, _y;
     pixel_t _width, _height;
     uint32_t _modeFlags;
-    SDL_GLContext _glContext;
+    SDL_GLContext *_glContext;
+    SDL_GLContext _glContextImpl;
 };
 } // namespace ample::window
