@@ -1,6 +1,5 @@
 #include <iostream>
 #include <imgui.h>
-#include <imgui_sdl.h>
 #include <ample/SDLEnvironment.h>
 #include <ample/Window.h>
 #include <ample/Clock.h>
