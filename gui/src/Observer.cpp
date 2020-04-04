@@ -11,21 +11,19 @@ Observer::Observer(ample::control::EventManager &manager, const graphics::Vector
               {0.0, 0.0, 0.0},
               {0.0, 0.0, 1.0},
               60.0,
-              static_cast<float>(size.x) / static_cast<float>(size.y),
-              0.1,
+              (static_cast<float>(size.x)) / (static_cast<float>(size.y)) * (_cfY / _cfX),
+              1.0,
               1000.0)
 {
-    int viewportW = size.x * _cf;
-    int viewportH = size.y * _cf;
-    _camera.setViewport({viewportW, viewportH}, {(size.x - viewportW) / 2, (size.y - viewportH)});
+    onWindowResized(size);
 }
 
 void Observer::onWindowResized(const graphics::Vector2d<int> &size)
 {
-    int viewportW = size.x * _cf;
-    int viewportH = size.y * _cf;
+    int viewportW = size.x * _cfX;
+    int viewportH = size.y * _cfY;
     _camera.setViewport({viewportW, viewportH}, {(size.x - viewportW) / 2, (size.y - viewportH)});
-    _camera.setAspectRatio(static_cast<float>(size.x) / static_cast<float>(size.y));
+    _camera.setAspectRatio((static_cast<float>(size.x)) / (static_cast<float>(size.y)) * (_cfX / _cfY));
 }
 
 void Observer::onActive()

@@ -23,7 +23,8 @@ protected:
     ample::control::EventManager &_manager;
     ample::graphics::light::LightSource _lamp;
     ample::graphics::CameraPerspective _camera;
-    const float _cf = 3.0f / 5.0f;
+    const float _cfX = 3.0f / 5.0f;
+    const float _cfY = 4.0f / 5.0f;
 };
 
 } // namespace ample::gui
