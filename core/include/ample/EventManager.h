@@ -110,10 +110,13 @@ public:
     KeyboardManager &keyboard();
     MouseHandler &mouse();
 
+    std::vector<SDL_Event> &events() noexcept;
+
 private:
     std::shared_ptr<KeyboardManager> _keyboard;
     std::shared_ptr<MouseHandler> _mouse;
-    SDL_Event ev;
+    std::vector<SDL_Event> _events;
+
     std::unordered_map<int, std::vector<EventHandler *>> _handlerByType;
     window::Window &_window;
 };

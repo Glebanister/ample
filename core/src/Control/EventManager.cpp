@@ -25,13 +25,21 @@ void EventManager::update()
 {
     _mouse->clear();
     _keyboard->clear();
+    _events.clear();
+    SDL_Event ev;
     while (SDL_PollEvent(&ev))
     {
+        _events.push_back(ev);
         for (auto &handler : _handlerByType[ev.type])
         {
-            handler->handleEvent(this->ev);
+            handler->handleEvent(_events.back());
         }
     }
+}
+
+std::vector<SDL_Event> &EventManager::events() noexcept
+{
+    return _events;
 }
 
 void EventManager::addKeyHandler(const keysym key, KeyHandler &handler)
