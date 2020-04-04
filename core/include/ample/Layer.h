@@ -19,11 +19,13 @@ public:
 
     void addObject(GraphicalObject &object);
     void clearObjecs();
+    void setVisibility(bool) noexcept;
 
     size_t objectsCount() const noexcept;
 
 private:
     std::vector<Camera *> _cameras;
     std::vector<GraphicalObject *> _objects;
+    bool _visible = true;
 };
 } // namespace ample::graphics

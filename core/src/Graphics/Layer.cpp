@@ -18,17 +18,28 @@ void Layer::addObject(GraphicalObject &object)
     _objects.push_back(&object);
 }
 
+void Layer::setVisibility(bool value) noexcept
+{
+    _visible = value;
+}
+
 void Layer::onActive()
 {
     activity::Behavior::onActive();
-    for (auto cam : _cameras)
+    if (_visible)
     {
-        cam->look();
-        for (auto obj : _objects)
+        for (auto cam : _cameras)
         {
-            obj->draw();
+            if (cam->visible())
+            {
+                cam->look();
+                for (auto obj : _objects)
+                {
+                    obj->draw();
+                }
+                cam->unlook();
+            }
         }
-        cam->unlook();
     }
 }
 
