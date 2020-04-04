@@ -16,7 +16,7 @@ int main()
         1920 / 1.5,
         1080 / 1.5,
         ample::window::CENTERED_X | ample::window::CENTERED_Y,
-        ample::window::MINIMIZED | ample::window::RESIZABLE,
+        ample::window::MAXIMIZED | ample::window::RESIZABLE,
     };
     ample::gui::AmpleGui{window}.loop();
 

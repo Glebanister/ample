@@ -1,27 +1,31 @@
 #include "ImguiActivity.h"
 #include "AmpleGui.h"
 #include "ample/RegularPolygon.h"
+#include "ample/WorldObject2d.h"
 
 namespace ample::gui
 {
 AmpleGui::AmpleGui(ample::window::Window &window)
     : ImguiActivity(window),
-      object(ample::geometry::RegularPolygon<float>(10.0, 30),
-             10.0f,
-             50.0f,
-             {1.0f, 1.0f},
-             {1.0f, 1.0f},
-             ample::graphics::normalsMode::FACE,
-             {0.0f, 0.0f},
-             0.0f)
+      _observer(eventManager())
 {
     auto &level = createLevel(1, 10.0f, 0.5f);
-    level.frontSlice().addObject(object);
+    object = std::make_shared<ample::physics::WorldObject2d>(level.frontSlice(),
+                                                             physics::BodyType::STATIC_BODY,
+                                                             ample::geometry::RegularPolygon<float>(10.0f, 7),
+                                                             1.0f,
+                                                             0.0f,
+                                                             graphics::Vector2d<float>{1.0f, 1.0f},
+                                                             graphics::Vector2d<float>{1.0f, 1.0f},
+                                                             graphics::normalsMode::FACE);
+    // level.frontSlice().addObject(object);
+    // auto obj = std::make_shared<ample::physics::WorldObject2d>(level.frontSlice(), physics::BodyType::STATIC_BODY, {{1.0f, 1.0f}}, 10.0f, 0.0f, {1.0f, 1.0f}, {1.0f, 1.0f}, graphics::normalsMode::FACE, {0.0f, 0.0f}, 0.0f);
+    // object = std::make_shared(obj);
     setCurrentLevel(1);
-    level.camera().translate({0.0, 10.0, 0.0});
-    cameraRemote = std::make_shared<KeyboardControlCamera>(eventManager(), level.camera());
-    addBehaviour(*cameraRemote);
-    level.frontSlice().addObject(cameraRemote->getLamp());
+    addBehaviour(_observer);
+    level.camera().setVisibility(false);
+    level.frontSlice().addCamera(_observer.getCamera());
+    level.frontSlice().addObject(_observer.getLamp());
     texture = std::make_shared<ample::graphics::Texture>(ample::graphics::TextureRaw("../../demo/textures/braid.jpg",
                                                                                      {820UL / 7 - 1, 546UL / 4 - 1},
                                                                                      {2L, 2L},
@@ -33,21 +37,32 @@ AmpleGui::AmpleGui(ample::window::Window &window)
                                                                                          ample::graphics::textureOrigin::REVERSED,
                                                                                          ample::graphics::textureOrigin::REVERSED,
                                                                                      }));
-    object.side().bindTexture(texture);
-    object.face().bindTexture(texture);
+    object->face().bindTexture(texture);
+    object->side().bindTexture(texture);
+    object->bindTexture(texture);
 
     swapper = std::make_shared<AnimationSwapper>(texture.get(), 15);
     addBehaviour(*swapper);
 }
 
+void AmpleGui::onResize()
+{
+    ImguiActivity::onResize();
+    _observer.onWindowResized({static_cast<int>(getWidth()), static_cast<int>(getHeight())});
+}
+
 void AmpleGui::drawInterface()
 {
-    ImguiActivity::drawInterface();
-    // ImGui::Begin("Triangle Position/Color");
-    // static float rotation = 0.0;
-    // ImGui::SliderFloat("rotation", &rotation, 0, 2 * M_PI);
-    // static float translation[] = {0.0, 0.0};
-    // ImGui::SliderFloat2("position", translation, -1.0, 1.0);
-    // ImGui::End();
+    ImGui::Begin("Slices");
+    ImGui::End();
+
+    ImGui::Begin("Preview");
+    ImGui::End();
+
+    ImGui::Begin("Levels");
+    ImGui::End();
+
+    ImGui::Begin("Editor");
+    ImGui::End();
 }
 } // namespace ample::gui
