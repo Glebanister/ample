@@ -2,6 +2,7 @@
 
 #include "Game2d.h"
 #include "GameException.h"
+#include "Utils.h"
 
 namespace ample::game::game2d
 {
@@ -46,6 +47,7 @@ void Game2d::setCurrentLevel(size_t num)
     currentLevel().camera().setVisibility(true);
     for (auto &[_, layer] : currentLevel().layers())
     {
+        utils::ignore(_);
         addLayer(*layer);
     }
     addLayer(*currentLevel().layers()[0]);
