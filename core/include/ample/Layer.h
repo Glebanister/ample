@@ -9,7 +9,7 @@
 
 namespace ample::graphics
 {
-class Layer : public activity::Behaviour
+class Layer : public activity::Behavior
 {
 public:
     void onActive() override;
@@ -20,7 +20,9 @@ public:
     void addObject(GraphicalObject &object);
     void clearObjecs();
 
-private:
+    size_t objectsCount() const noexcept;
+
+protected:
     std::vector<Camera *> _cameras;
     std::vector<GraphicalObject *> _objects;
 };

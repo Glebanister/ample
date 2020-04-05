@@ -1,10 +1,8 @@
 #define GLM_ENABLE_EXPERIMENTAL
-#define GL_GLEXT_PROTOTYPES 1
 
-#include <memory>
-#include <algorithm>
-#include <GL/gl.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
 
 #include "GraphicalObject2d.h"
 #include "Vector2d.h"
@@ -14,91 +12,71 @@
 
 namespace ample::graphics
 {
-GraphicalObject2dRaw::GraphicalObject2dRaw(const std::vector<graphics::Vector2d<float>> graphicalShape,
-                                           float depth,
-                                           float z,
-                                           const std::string faceTexturePath,
-                                           Vector2d<int> faceTextureSize,
-                                           Vector2d<int> faceTexturePos,
-                                           const Vector2d<textureMode> faceTextureMode,
-                                           const channelMode faceChannelMode,
-                                           const std::string sideTexturePath,
-                                           Vector2d<int> sideTextureSize,
-                                           Vector2d<int> sideTexturePos,
-                                           const Vector2d<textureMode> sideTextureMode,
-                                           const channelMode sideChannelMode,
-                                           const normalsMode sideNormalsMode)
-    : graphicalShape(graphicalShape),
-      depth(depth),
-      z(z),
-      faceTexturePath(faceTexturePath),
-      faceTextureSize(faceTextureSize),
-      faceTexturePos(faceTexturePos),
-      faceTextureMode(faceTextureMode),
-      faceChannelMode(faceChannelMode),
-      sideTexturePath(sideTexturePath),
-      sideTextureSize(sideTextureSize),
-      sideTexturePos(sideTexturePos),
-      sideTextureMode(sideTextureMode),
-      sideNormalsMode(sideNormalsMode),
-      sideChannelMode(sideChannelMode)
+GraphicalObject2d::GraphicalObject2d(
+        const std::vector<Vector2d<float>> &graphicalShape,
+        const float thickness,
+        const float z,
+        const Vector2d<float> &faceTextureRepeats,
+        const Vector2d<float> &sideTextureRepeats,
+        const normalsMode sideNormalsMode,
+        const glm::mat4 &translated,
+        const glm::mat4 &scaled,
+        const glm::mat4 &rotated)
+        : GraphicalObject(translated, scaled, rotated),
+          _face(graphicalShape, z, faceTextureRepeats),
+          _side(graphicalShape, z, thickness, sideTextureRepeats, sideNormalsMode)
+{
+    addSubObject(_face);
+    addSubObject(_side);
+}
+
+GraphicalObject2d::GraphicalObject2d(
+        const std::vector<Vector2d<float>> &graphicalShape,
+        const float thickness,
+        const float z,
+        const Vector2d<float> &faceTextureRepeats,
+        const Vector2d<float> &sideTextureRepeats,
+        const normalsMode sideNormalsMode,
+        const Vector2d<float> &translated,
+        const float &rotated)
+        : GraphicalObject2d(graphicalShape,
+                            thickness,
+                            z,
+                            faceTextureRepeats,
+                            sideTextureRepeats,
+                            sideNormalsMode,
+                            glm::translate(glm::vec3 {translated.x, translated.y, z}),
+                            glm::scale(glm::vec3 {1.0f}),
+                            glm::rotate(rotated, glm::vec3 {0.0f, 0.0f, 1.0f}))
 {
 }
 
-GraphicalObject2dRaw::GraphicalObject2dRaw(const GraphicalObject2d &other)
-    : GraphicalObject2dRaw(other._raw) {}
-
-GraphicalObject2d::GraphicalObject2d(const GraphicalObject2dRaw &raw)
-    : _raw(raw)
+GraphicalEdge &GraphicalObject2d::side() noexcept
 {
-    DEBUG("Setup graphical object 2d") << _raw.faceTextureSize.x << ' ' << _raw.faceTextureSize.y << std::endl;
-    _faceArray = std::make_unique<VertexArrayFace2d>(_raw.graphicalShape,
-                                                     _raw.z,
-                                                     _raw.faceTexturePath,
-                                                     _raw.faceTextureSize,
-                                                     _raw.faceTexturePos,
-                                                     _raw.faceTextureMode,
-                                                     _raw.faceChannelMode);
-    _sideArray = std::make_unique<VertexArraySide2d>(_raw.graphicalShape,
-                                                     _raw.z,
-                                                     _raw.depth,
-                                                     _raw.sideTexturePath,
-                                                     _raw.sideTextureSize,
-                                                     _raw.sideTexturePos,
-                                                     _raw.sideTextureMode,
-                                                     _raw.sideNormalsMode,
-                                                     _raw.sideChannelMode);
-    DEBUG("Setup graphical object 2d done!");
+    return _side;
 }
 
-GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphicalShape,
-                                     const float depth,
-                                     const float z)
-    : GraphicalObject2d({
-          graphicalShape,
-          depth,
-          z,
-          "../../demo/textures/lena512.png",
-          {0, 0},
-          {512, 512},
-          {textureMode::STRETCH, textureMode::STRETCH},
-          channelMode::RGB,
-          "../../demo/textures/lena512.png",
-          {0, 0},
-          {512, 512},
-          {textureMode::STRETCH, textureMode::STRETCH},
-          channelMode::RGB,
-          normalsMode::FACE,
-      })
+GraphicalPolygon &GraphicalObject2d::face() noexcept
 {
-    DEBUG("Bad GraphicalObject2d constructor usage!");
-    // TODO: remove this constructor
+    return _face;
 }
 
-void GraphicalObject2d::drawSelf()
+GraphicalObject2d::GraphicalObject2d(filing::JsonIO input)
+        : GraphicalObject(input.updateJsonIO("Graphical object")),
+          _face(input.updateJsonIO("face")),
+          _side(input.updateJsonIO("side"))
 {
-    _sideArray->execute();
-    _faceArray->execute();
-    exception::OpenGLException::handle();
 }
+
+std::string GraphicalObject2d::dump(filing::JsonIO output, std::string nameField)
+{
+    // work with subobjects
+    std::vector<std::string> strings;
+    strings.push_back(GraphicalObject::dump(output, "GraphicalObject"));
+    strings.push_back(_face.dump(output, "face"));
+    strings.push_back(_side.dump(output, "side"));
+
+    return filing::makeField(nameField, filing::mergeStrings(strings));
+}
+
 } // namespace ample::graphics

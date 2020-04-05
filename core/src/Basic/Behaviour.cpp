@@ -5,47 +5,47 @@
 
 namespace ample::activity
 {
-void Behaviour::addBehaviour(Behaviour &act)
+void Behavior::addBehaviour(Behavior &act)
 {
     _behaviours.push_back(&act);
 }
-void Behaviour::onAwake()
+void Behavior::onAwake()
 {
     std::for_each(_behaviours.begin(), _behaviours.end(),
                   [](auto &x) { x->onAwake(); });
 }
 
-void Behaviour::onStart()
+void Behavior::onStart()
 {
     std::for_each(_behaviours.begin(), _behaviours.end(),
                   [](auto &x) { x->onStart(); });
 }
 
-void Behaviour::onActive()
+void Behavior::onActive()
 {
     std::for_each(_behaviours.begin(), _behaviours.end(),
                   [](auto &x) { x->onActive(); });
 }
 
-void Behaviour::onStop()
+void Behavior::onStop()
 {
     std::for_each(_behaviours.begin(), _behaviours.end(),
                   [](auto &x) { x->onStop(); });
 }
 
-void Behaviour::onDestroy()
+void Behavior::onDestroy()
 {
     std::for_each(_behaviours.begin(), _behaviours.end(),
                   [](auto &x) { x->onDestroy(); });
 }
 
-void Behaviour::onKill()
+void Behavior::onKill()
 {
     std::for_each(_behaviours.begin(), _behaviours.end(),
                   [](auto &x) { x->onKill(); });
 }
 
-void Behaviour::onPause()
+void Behavior::onPause()
 {
     std::for_each(_behaviours.begin(), _behaviours.end(),
                   [](auto &x) { x->onPause(); });

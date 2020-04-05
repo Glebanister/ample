@@ -10,7 +10,7 @@
 namespace ample::graphics
 {
 using pixel_t = std::int32_t;
-class Camera : public activity::Behaviour
+class Camera : public activity::Behavior
 {
 protected:
     struct Viewport final
@@ -47,6 +47,12 @@ public:
     void rotateRight(float);
     void rotateUp(float);
 
+    float getX() const noexcept;
+    float getY() const noexcept;
+    float getZ() const noexcept;
+
+    void setVisibility(const bool);
+
     virtual ~Camera() = default;
 
 protected:
@@ -55,5 +61,7 @@ protected:
     glm::vec3 _direction{0.0, 0.0, 1.0};
     glm::vec3 _head{0.0, 1.0, 0.0};
     glm::vec3 _right{1.0, 0.0, 0.0};
+
+    bool _visible = true;
 };
 } // namespace ample::graphics

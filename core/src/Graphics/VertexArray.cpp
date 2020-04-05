@@ -12,111 +12,120 @@
 
 namespace ample::graphics
 {
-VertexArray::VertexArray(const std::vector<Vector3d<float>> &shape,
-                         const std::vector<Vector2d<float>> &uvCoords,
-                         const std::vector<Vector3d<float>> &normals,
-                         const std::string &texrutePath,
-                         const Vector2d<int> &textureSize,
-                         const Vector2d<int> &texturePosition,
-                         const channelMode mode)
-    : _totalVerts(shape.size())
+struct VertexArrayImpl
 {
-    {
-        std::vector<GLfloat> _coords(shape.size() * 3);
-        for (size_t i = 0; i < shape.size(); ++i)
-        {
-            _coords[i * 3 + 0] = shape[i].x;
-            _coords[i * 3 + 1] = shape[i].y;
-            _coords[i * 3 + 2] = shape[i].z;
-        }
-        glGenBuffers(1, &_vertexBufferId);
-        glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferId);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * _coords.size(), _coords.data(), GL_STATIC_DRAW);
-    }
+    VertexArrayImpl() = default;
+//    VertexArrayImpl(AbstractIO &input)
+//    {
+//        input.read("coords", coords);
+//        input.read("uvCoords", uvCoords);
+//        input.read("normals", normals);
+//    }
 
-    {
-        DEBUG("Generating uv buffer");
-        std::vector<GLfloat> _texCoords(uvCoords.size() * 2);
-        for (size_t i = 0; i < shape.size(); ++i)
-        {
-            _texCoords[i * 2 + 0] = uvCoords[i].x;
-            _texCoords[i * 2 + 1] = uvCoords[i].y;
-        }
-        glGenBuffers(1, &_textureBufferId);
-        glBindBuffer(GL_ARRAY_BUFFER, _textureBufferId);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * _texCoords.size(), _texCoords.data(), GL_STATIC_DRAW);
-        _texture = std::make_unique<Texture>(texrutePath, textureSize, texturePosition, mode);
-    }
+    std::vector<Vector3d<float>> coords;
+    std::vector<Vector3d<float>> uvCoords;
+    std::vector<Vector3d<float>> normals;
+};
 
-    {
-        DEBUG("Generating normals buffer");
-        std::vector<GLfloat> _normals(normals.size() * 3);
-        for (size_t i = 0; i < normals.size(); ++i)
-        {
-            _normals[i * 3] = normals[i].x;
-            _normals[i * 3 + 1] = normals[i].y;
-            _normals[i * 3 + 2] = normals[i].z;
-        }
-        glGenBuffers(1, &_normalBufferId);
-        glBindBuffer(GL_ARRAY_BUFFER, _normalBufferId);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * _normals.size(), _normals.data(), GL_STATIC_DRAW);
-    }
+VertexArray::VertexBuffer::Executor::Executor(GLuint index,
+                                              GLint size,
+                                              GLenum type,
+                                              GLboolean normalized,
+                                              GLsizei stride,
+                                              const void *pointer,
+                                              VertexBuffer &buf)
+    : _index(index)
+{
+    glEnableVertexAttribArray(_index);
+    glBindBuffer(GL_ARRAY_BUFFER, buf._bufferId);
+    glVertexAttribPointer(
+        _index,
+        size,
+        type,
+        normalized,
+        stride,
+        pointer);
+}
 
+VertexArray::VertexBuffer::Executor::~Executor()
+{
+    glDisableVertexAttribArray(_index);
+}
+
+std::vector<float> expand(const std::vector<Vector2d<float>> &vector)
+{
+    std::vector<GLfloat> result(vector.size() * 2);
+    for (size_t i = 0; i < vector.size(); ++i)
+    {
+        result[i * 2 + 0] = vector[i].x;
+        result[i * 2 + 1] = vector[i].y;
+    }
+    return result;
+}
+
+std::vector<float> expand(const std::vector<Vector3d<float>> &vector)
+{
+    std::vector<GLfloat> result(vector.size() * 3);
+    for (size_t i = 0; i < vector.size(); ++i)
+    {
+        result[i * 3 + 0] = vector[i].x;
+        result[i * 3 + 1] = vector[i].y;
+        result[i * 3 + 2] = vector[i].z;
+    }
+    return result;
+}
+
+VertexArray::VertexBuffer::VertexBuffer(GLsizeiptr size, void *pointer)
+{
+    glGenBuffers(1, &_bufferId);
+    glBindBuffer(GL_ARRAY_BUFFER, _bufferId);
+    glBufferData(GL_ARRAY_BUFFER, size, pointer, GL_STATIC_DRAW);
+}
+
+VertexArray::VertexBuffer::VertexBuffer(const std::vector<Vector2d<float>> &data)
+    : VertexBuffer(sizeof(GLfloat) * data.size() * 2, static_cast<void *>(expand(data).data())) {}
+
+VertexArray::VertexBuffer::VertexBuffer(const std::vector<Vector3d<float>> &data)
+    : VertexBuffer(sizeof(GLfloat) * data.size() * 3, static_cast<void *>(expand(data).data())) {}
+
+VertexArray::VertexBuffer::~VertexBuffer()
+{
+    glDeleteBuffers(1, &_bufferId);
+}
+
+VertexArray::VertexArray(const std::vector<Vector3d<float>> &coords,
+                         const std::vector<Vector2d<float>> &uvCoords,
+                         const std::vector<Vector3d<float>> &normal)
+    : _coords(coords),
+      _uvCoords(uvCoords),
+      _xyzCoordsBuffer(coords),
+      _uvCoordsBuffer(uvCoords),
+      _normalsBuffer(normal),
+      _totalVerts(coords.size())
+
+{
     exception::OpenGLException::handle();
 }
 
+//VertexArray::VertexArray(filing::JsonIO &input)
+//    : VertexArray(input.read<std::vector<Vector2d<float>>>("coords"),
+//                  input.read<std::vector<Vector2d<float>>>("uvCoords"),
+//                  input.read<std::vector<Vector3d<float>>>("normals"))
+//{
+//}
+
+//void VertexArray::dump(filing::JsonIO &output)
+//{
+//    output.write<std::vector<Vector3d<float>>>("coords", _coords);
+//    output.write<std::vector<Vector2d<float>>>("uvCoords", _uvCoords);
+//    output.write<std::vector<Vector3d<float>>>("normals", _normals);
+//}
+//
 void VertexArray::execute()
 {
-    glBindTexture(GL_TEXTURE_2D, _texture->getGlTextureId());
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferId);
-    glVertexAttribPointer(
-        0,        // attribute 0. No particular reason for 0, but must match the layout in the shader.
-        3,        // size
-        GL_FLOAT, // type
-        GL_FALSE, // normalized?
-        0,        // stride
-        NULL      // array buffer offset
-    );
-
-    glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, _textureBufferId);
-    glVertexAttribPointer(
-        1,        // attribute
-        2,        // size
-        GL_FLOAT, // type
-        GL_TRUE,  // normalized?
-        0,        // stride
-        NULL      // array buffer offset
-    );
-
-    glEnableVertexAttribArray(2);
-    glBindBuffer(GL_ARRAY_BUFFER, _normalBufferId);
-    glVertexAttribPointer(
-        2,        // attribute
-        3,        // size
-        GL_FLOAT, // type
-        GL_FALSE, // normalized?
-        0,        // stride
-        NULL      // array buffer offset
-    );
-
+    VertexBuffer::Executor execXYZ{0, 3, GL_FLOAT, GL_FALSE, 0, NULL, _xyzCoordsBuffer};
+    VertexBuffer::Executor execUV{1, 2, GL_FLOAT, GL_FALSE, 0, NULL, _uvCoordsBuffer};
+    VertexBuffer::Executor execNormals{2, 3, GL_FLOAT, GL_FALSE, 0, NULL, _normalsBuffer};
     glDrawArrays(GL_TRIANGLES, 0, _totalVerts);
-
-    glDisableVertexAttribArray(2);
-    glDisableVertexAttribArray(1);
-    glDisableVertexAttribArray(0);
-}
-
-void VertexArray::setColor256(double, double, double)
-{
-    // TODO: remove stub
-}
-
-VertexArray::~VertexArray()
-{
-    glDeleteBuffers(1, &_vertexBufferId);
-    glDeleteBuffers(1, &_textureBufferId);
-    glDeleteBuffers(1, &_normalBufferId);
 }
 } // namespace ample::graphics

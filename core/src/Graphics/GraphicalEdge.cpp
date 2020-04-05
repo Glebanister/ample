@@ -6,12 +6,13 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/normal.hpp>
 #include <cmath>
+#include <vector>
 
 #include "Vector3d.h"
 #include "Vector2d.h"
-#include "VertexArraySide2d.h"
-#include "Debug.h"
 #include "VertexArray.h"
+#include "GraphicalEdge.h"
+#include "Debug.h"
 
 namespace ample::graphics
 {
@@ -86,48 +87,72 @@ static std::vector<Vector3d<float>> generateSideNormals(const std::vector<Vector
 static std::vector<Vector2d<float>> generateSideUVCoords(const std::vector<Vector2d<float>> &graphicalShape,
                                                          const float z,
                                                          const float depth,
-                                                         const Vector2d<int> &size,
-                                                         const Vector2d<int> &position,
-                                                         const textureMode &texModeX,
-                                                         const textureMode &texModeY)
+                                                         const Vector2d<float> &repeats)
 {
     auto shape = generateSideCoords(graphicalShape, z, depth);
     std::vector<Vector2d<float>> uvCoords(shape.size());
 
-    float boardLength = std::sqrt((graphicalShape[0].x - graphicalShape.back().x) * (graphicalShape[0].x - graphicalShape.back().x) +
-                                  (graphicalShape[0].y - graphicalShape.back().y) * (graphicalShape[0].y - graphicalShape.back().y));
-    std::vector<float> prefixBoardLenth(shape.size() + 1);
-    for (size_t i = 1; i < graphicalShape.size(); ++i)
+    std::vector<float> prefixBoardLength(shape.size() + 1);
+    float boardLength = 0.0f;
+    for (size_t i = 1; i <= graphicalShape.size(); ++i)
     {
-        boardLength += std::sqrt((graphicalShape[i].x - graphicalShape[i - 1].x) * (graphicalShape[i].x - graphicalShape[i - 1].x) +
-                                 (graphicalShape[i].y - graphicalShape[i - 1].y) * (graphicalShape[i].y - graphicalShape[i - 1].y));
-        prefixBoardLenth[i] = boardLength;
+        size_t cur = i % graphicalShape.size();
+        size_t prv = i - 1;
+        boardLength += std::sqrt((graphicalShape[cur].x - graphicalShape[prv].x) * (graphicalShape[cur].x - graphicalShape[prv].x) +
+                                 (graphicalShape[cur].y - graphicalShape[prv].y) * (graphicalShape[cur].y - graphicalShape[prv].y));
+        prefixBoardLength[cur] = boardLength;
     }
+    prefixBoardLength[0] = 0.0f;
     for (size_t i = 0, vId = 0; i < uvCoords.size(); i += 6, vId += 1)
     {
         uvCoords[i + 0].x = uvCoords[i + 3].x = uvCoords[i + 5].x = 0.f;
-        uvCoords[i + 1].x = uvCoords[i + 2].x = uvCoords[i + 4].x = 1.f * 1.f;
-        uvCoords[i + 0].y = uvCoords[i + 1].y = uvCoords[i + 3].y = prefixBoardLenth[vId + 0] / boardLength * 10.f;
-        uvCoords[i + 2].y = uvCoords[i + 4].y = uvCoords[i + 5].y = prefixBoardLenth[vId + 1] / boardLength * 10.f;
+        uvCoords[i + 1].x = uvCoords[i + 2].x = uvCoords[i + 4].x = repeats.x;
+        uvCoords[i + 0].y = uvCoords[i + 1].y = uvCoords[i + 3].y = prefixBoardLength[vId + 0] / boardLength * repeats.y;
+        uvCoords[i + 2].y = uvCoords[i + 4].y = uvCoords[i + 5].y = prefixBoardLength[vId + 1] / boardLength * repeats.y;
     }
+    uvCoords[uvCoords.size() - 1].y = uvCoords[uvCoords.size() - 2].y = uvCoords[uvCoords.size() - 4].y = repeats.y;
 
     return uvCoords;
 }
 
-VertexArraySide2d::VertexArraySide2d(const std::vector<Vector2d<float>> &graphicalShape,
-                                     const float z,
-                                     const float depth,
-                                     const std::string &texturePath,
-                                     const Vector2d<int> &textureSize,
-                                     const Vector2d<int> &texturePos,
-                                     const Vector2d<textureMode> &texMode,
-                                     const normalsMode &normMode,
-                                     const channelMode &mode)
-    : VertexArray(generateSideCoords(graphicalShape, z, depth),
-                  generateSideUVCoords(graphicalShape, z, depth, textureSize, texturePos, texMode.x, texMode.y),
-                  generateSideNormals(graphicalShape, normMode, z, depth),
-                  texturePath,
-                  textureSize,
-                  texturePos,
-                  mode) {}
+GraphicalEdge::GraphicalEdge(const std::vector<Vector2d<float>> &shape,
+                             const float z,
+                             const float thickness,
+                             const Vector2d<float> &textureRepeats,
+                             const normalsMode normMode,
+                             const glm::mat4 &translated,
+                             const glm::mat4 &scaled,
+                             const glm::mat4 &rotated)
+    : GraphicalObject(translated, scaled, rotated),
+      _thickness(thickness),
+      _textureRepeats(textureRepeats),
+      _normMode(normMode)
+{
+    bindVertexArray(std::make_shared<VertexArray>(generateSideCoords(shape, z, thickness),
+                                                  generateSideUVCoords(shape, z, thickness, textureRepeats),
+                                                  generateSideNormals(shape, normMode, z, thickness)));
+}
+
+GraphicalEdge::GraphicalEdge(filing::JsonIO input)
+    : GraphicalEdge(input.read<std::vector<Vector2d<float>>>("shape"),
+                    input.read<float>("z"),
+                    input.read<float>("thickness"),
+                    input.read<Vector2d<float>>("sideTextureRepeats"),
+                    input.read<normalsMode>("sideNormalsMode"),
+                    input.read<glm::mat4>("translated"),
+                    input.read<glm::mat4>("scaled"),
+                    input.read<glm::mat4>("rotated"))
+{
+}
+
+std::string GraphicalEdge::dump(filing::JsonIO output, std::string nameField)
+{
+    output.write<std::vector<Vector2d<float>>>("shape", _shape);
+    output.write<float>("z", getZ()); // TODO: check out if it is true
+    output.write<float>("thickness", _thickness);
+    output.write<Vector2d<float>>("textureRepeats", _textureRepeats);
+    output.write<normalsMode>("normMode", _normMode);
+
+    return filing::makeField(nameField, output.getJSONstring());
+}
 } // namespace ample::graphics

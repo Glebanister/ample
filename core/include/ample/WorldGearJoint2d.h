@@ -5,7 +5,6 @@
 
 namespace ample::physics
 {
-class WorldLayer2d;
 class WorldObject2d;
 class WorldGearJoint2d : public WorldJoint2d
 {
@@ -16,12 +15,12 @@ public:
     void setRatio(float ratio);
     float getRatio() const;
 
-private:
-    friend WorldLayer2d;
-
-    WorldGearJoint2d(b2Joint *joint, WorldObject2d &bodyA, WorldObject2d &bodyB,
-                     WorldJoint2d &joinA, WorldJoint2d &jointB,
-                     const std::vector<ample::graphics::Vector2d<float>> &shape);
+    WorldGearJoint2d(WorldObject2d &bodyA,
+                     WorldObject2d &bodyB,
+                     WorldJoint2d &jointA,
+                     WorldJoint2d &jointB,
+                     float ratio = 1,
+                     bool collideConnected = false);
     WorldJoint2d &_jointA;
     WorldJoint2d &_jointB;
 };

@@ -49,10 +49,8 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Utils/Singleton.cpp
     src/Utils/Noncopyable.cpp
 
-    src/Filing/GraphicalObjectIO.cpp
-    src/Filing/GraphicalObject2dIO.cpp
-    src/Filing/WorldObject2dIO.cpp
     src/Filing/Scene2d.cpp
+    src/Filing/UniqueObject.cpp
 
     src/Graphics/GraphicalObject.cpp
     src/Graphics/GraphicalObject2d.cpp
@@ -60,6 +58,15 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Graphics/Color.cpp
     src/Graphics/CameraPerspective.cpp
     src/Graphics/CameraOrtho.cpp
+    src/Graphics/Layer.cpp
+    src/Graphics/LayeredWindowActivity.cpp
+    src/Graphics/VertexArray.cpp
+    src/Graphics/Shaders/Shader.cpp
+    src/Graphics/Shaders/ShaderProcessor.cpp
+    src/Graphics/Light/LightSource.cpp
+    src/Graphics/Texture.cpp
+    src/Graphics/GraphicalEdge.cpp
+    src/Graphics/GraphicalPolygon.cpp
 
     src/Physics/ContactListener.cpp
     src/Physics/WorldObject2d.cpp
@@ -70,18 +77,34 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Physics/WorldPrismaticJoint2d.cpp
     src/Physics/WorldPulleyJoint2d.cpp
     src/Physics/WorldGearJoint2d.cpp
-
-    src/Graphics/Layer.cpp
-    src/Graphics/LayeredWindowActivity.cpp
-    src/Graphics/VertexArray.cpp
-    src/Graphics/VertexArraySide2d.cpp
-    src/Graphics/VertexArrayFace2d.cpp
-    src/Graphics/Shaders/Shader.cpp
-    src/Graphics/Shaders/ShaderProcessor.cpp
-    src/Graphics/Light/LightSource.cpp
-    src/Graphics/Texture.cpp
+    src/Physics/WorldMouseJoint2d.cpp
+    src/Physics/WorldWheelJoint2d.cpp
+    src/Physics/WorldWeldJoint2d.cpp
+    src/Physics/WorldRopeJoint2d.cpp
+    src/Physics/WorldFrictionJoint2d.cpp
+    src/Physics/WorldMotorJoint2d.cpp
 
     src/Geometry/RegularPolygon.cpp
+    src/Geometry/Shape.cpp
+    src/Geometry/Rectangle.cpp
+    src/Geometry/Circle.cpp
+    src/Geometry/Point.cpp
+
+    src/Game/Game2d/Game2d.cpp
+    src/Game/Game2d/Level.cpp
+    src/Game/GameException.cpp
+    src/Game/StateMachine/StateMachine.cpp
+    src/Game/StateMachine/Transitions/Os/EnvironmentTransition.cpp
+    src/Game/StateMachine/Transitions/Os/KeyboardTransition.cpp
+    src/Game/StateMachine/Transitions/Os/MouseTransition.cpp
+    src/Game/StateMachine/Transitions/Os/TimerTransition.cpp
+    src/Game/StateMachine/Transitions/Physics/PhysicalTransition.cpp
+    src/Game/StateMachine/Transitions/Physics/DistanceTransition.cpp
+    src/Game/StateMachine/Transitions/Physics/SpeedTransition.cpp
+    src/Game/StateMachine/Transitions/Physics/PositionTransition.cpp
+    src/Game/StateMachine/Transitions/Physics/CollisionTransition.cpp
+    src/Game/StateMachine/ControlledObject.cpp
+    src/Game/Events/EventListener.cpp
    )
 
 include_directories(${SDL2_INCLUDE_DIRS})
