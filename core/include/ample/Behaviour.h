@@ -1,15 +1,13 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
 namespace ample::activity
 {
 class Behavior
 {
 public:
-    void addBehaviour(Behavior &act);
-    virtual ~Behavior() = default;
-
     virtual void onAwake();
     virtual void onStart();
     virtual void onActive();
@@ -18,7 +16,12 @@ public:
     virtual void onKill();
     virtual void onPause();
 
+    void addBehavior(std::shared_ptr<Behavior>);
+    void removeBehavior(std::shared_ptr<Behavior>);
+
+    virtual ~Behavior() = default;
+
 protected:
-    std::vector<Behavior *> _behaviours;
+    std::vector<std::shared_ptr<Behavior>> _behaviours;
 };
 } // namespace ample::activity
