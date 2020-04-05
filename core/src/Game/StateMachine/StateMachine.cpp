@@ -27,8 +27,21 @@ void StateMachine::Transition::reset() noexcept
     _activated = false;
 }
 
-StateMachine::State::State(std::shared_ptr<StateMachine> machine)
-    : _machine(machine) {}
+StateMachine::State::State(std::shared_ptr<StateMachine> machine, const std::string &name)
+    : _machine(machine), _name(name) {}
+
+StateMachine::State::State(const std::string &name)
+    : _machine(std::make_shared<StateMachine>()), _name(name) {}
+
+void StateMachine::State::setMachine(std::shared_ptr<StateMachine> machine) noexcept
+{
+    _machine = machine;
+}
+
+std::string StateMachine::State::getName() const noexcept
+{
+    return _name;
+}
 
 void StateMachine::State::addTransition(std::shared_ptr<StateMachine::Transition> transition) noexcept
 {
@@ -61,11 +74,10 @@ void StateMachine::State::onActive()
 void StateMachine::onActive()
 {
     activity::Behavior::onActive();
-    if (!_currentState)
+    if (_currentState)
     {
-        throw GameException{"state machine current state is null"};
+        _currentState->onActive();
     }
-    _currentState->onActive();
 }
 
 void StateMachine::setStartState(std::shared_ptr<State> state)

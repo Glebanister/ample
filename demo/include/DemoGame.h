@@ -6,69 +6,63 @@
 #include "KeyboardControlCamera.h"
 #include "Texture.h"
 #include "StateMachine.h"
+#include "ControlledObject.h"
+#include "Debug.h"
+#include "RegularPolygon.h"
 
-class AnimationSwapper : public ample::activity::Behavior
+class Braid : public ample::graphics::GraphicalObject2d
 {
 public:
-    AnimationSwapper(ample::graphics::Texture *texture, size_t delta)
-        : delta(delta), texture(texture)
+    Braid()
+        : GraphicalObject2d(ample::geometry::RegularPolygon<float>(10.0f, 6),
+                            10.0f,
+                            0.0f,
+                            {1.0f, 1.0f},
+                            {1.0f, 1.0f},
+                            ample::graphics::normalsMode::FACE,
+                            {0.0f, 0.0f},
+                            0.0f)
     {
-    }
 
-    void onActive() override
-    {
-        ample::activity::Behavior::onActive();
-        auto curTime = ample::time::Clock::globalTimeMs();
-        if (curTime - lastTime > delta)
-        {
-            texture->nextFrame();
-            lastTime = curTime;
-        }
-    }
-
-private:
-    ample::graphics::Texture *texture;
-    size_t delta;
-    int lastTime = 0;
-};
-
-class GraphicalObjectState : public ample::game::StateMachine::State
-{
-public:
-    GraphicalObjectState(ample::graphics::GraphicalObject &object, std::shared_ptr<ample::game::StateMachine> machine)
-        : State(machine), _object(object) {}
-
-    ample::graphics::GraphicalObject &object()
-    {
-        return _object;
-    }
-
-private:
-    ample::graphics::GraphicalObject &_object;
-};
-
-class Idle : public GraphicalObjectState
-{
-public:
-    Idle(ample::graphics::GraphicalObject &object, std::shared_ptr<ample::game::StateMachine> machine)
-        : GraphicalObjectState(object, machine) {}
-
-    void onActive() override
-    {
-        GraphicalObjectState::onActive();
+        auto texture = std::make_shared<ample::graphics::Texture>(ample::graphics::TextureRaw("../../demo/textures/braid.jpg",
+                                                                                              {820UL / 7 - 1, 546UL / 4 - 1},
+                                                                                              {2L, 2L},
+                                                                                              {7, 4},
+                                                                                              ample::graphics::channelMode::RGBA,
+                                                                                              ample::graphics::texturePlayback::NORMAL,
+                                                                                              27,
+                                                                                              {
+                                                                                                  ample::graphics::textureOrigin::REVERSED,
+                                                                                                  ample::graphics::textureOrigin::REVERSED,
+                                                                                              }));
+        bindTexture(texture);
+        face().bindTexture(texture);
+        side().bindTexture(texture);
     }
 };
 
-class Running : public GraphicalObjectState
+class BraidIdle : public ample::game::ControlledObject::ObjectState<Braid>
 {
 public:
-    Running(ample::graphics::GraphicalObject &object, std::shared_ptr<ample::game::StateMachine> machine)
-        : GraphicalObjectState(object, machine) {}
+    BraidIdle(const std::string &name, std::shared_ptr<Braid> braid)
+        : ObjectState(name, braid) {}
 
     void onActive() override
     {
-        GraphicalObjectState::onActive();
-        object().texture()->nextFrame();
+        ObjectState::onActive();
+    }
+};
+
+class BraidRun : public ample::game::ControlledObject::ObjectState<Braid>
+{
+public:
+    BraidRun(const std::string &name, std::shared_ptr<Braid> braid)
+        : ObjectState(name, braid) {}
+
+    void onActive() override
+    {
+        ObjectState::onActive();
+        object()->texture()->nextFrame();
     }
 };
 
@@ -78,8 +72,7 @@ public:
     DemoGame(ample::window::Window &window);
 
 private:
-    ample::graphics::GraphicalObject2d object;
+    std::shared_ptr<Braid> braid;
     std::shared_ptr<KeyboardControlCamera> cameraRemote;
     std::shared_ptr<ample::graphics::Texture> texture;
-    std::shared_ptr<ample::game::StateMachine> machine;
 };

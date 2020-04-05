@@ -94,10 +94,16 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Game/Game2d/Level.cpp
     src/Game/GameException.cpp
     src/Game/StateMachine/StateMachine.cpp
-    src/Game/StateMachine/EnvironmentTransition.cpp
-    src/Game/StateMachine/KeyboardTransition.cpp
-    src/Game/StateMachine/MouseTransition.cpp
-    src/Game/StateMachine/TimerTransition.cpp
+    src/Game/StateMachine/Transitions/Os/EnvironmentTransition.cpp
+    src/Game/StateMachine/Transitions/Os/KeyboardTransition.cpp
+    src/Game/StateMachine/Transitions/Os/MouseTransition.cpp
+    src/Game/StateMachine/Transitions/Os/TimerTransition.cpp
+    src/Game/StateMachine/Transitions/Physics/PhysicalTransition.cpp
+    src/Game/StateMachine/Transitions/Physics/DistanceTransition.cpp
+    src/Game/StateMachine/Transitions/Physics/SpeedTransition.cpp
+    src/Game/StateMachine/Transitions/Physics/PositionTransition.cpp
+    src/Game/StateMachine/Transitions/Physics/CollisionTransition.cpp
+    src/Game/StateMachine/ControlledObject.cpp
     src/Game/Events/EventListener.cpp
    )
 

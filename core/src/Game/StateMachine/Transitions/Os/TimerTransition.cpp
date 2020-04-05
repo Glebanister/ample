@@ -10,7 +10,6 @@ void TimerTransition::onStart()
 {
     Transition::onStart();
     _startTime = time::Clock::globalTimeMs();
-    DEBUG("ON START!");
 }
 
 bool TimerTransition::listen()

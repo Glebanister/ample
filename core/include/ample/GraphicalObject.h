@@ -10,12 +10,13 @@
 #include "Behaviour.h"
 #include "Texture.h"
 #include "VertexArray.h"
+#include "ControlledObject.h"
 #include "JsonIO.h"
 #include "UniqueObject.h"
 
 namespace ample::graphics
 {
-class GraphicalObject : public activity::Behavior, public filing::UniqueObject
+class GraphicalObject : public game::ControlledObject, public filing::UniqueObject
 {
 public:
     GraphicalObject(const glm::mat4 &translated = glm::mat4{1.0f},
