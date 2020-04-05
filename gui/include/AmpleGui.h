@@ -21,7 +21,6 @@ public:
 private:
     void drawInterface() override;
 
-    gui::Observer _observer;
-    Editor editor;
+    std::shared_ptr<gui::Observer> _observer;
 };
 } // namespace ample::gui

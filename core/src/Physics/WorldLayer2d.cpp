@@ -27,16 +27,16 @@ void WorldLayer2d::setContactListener(ContactListener &listener)
     world.SetContactListener(&listener);
 }
 
-b2Body *WorldLayer2d::addWorldObject(WorldObject2d &obj, b2BodyDef *bodyDef)
+b2Body *WorldLayer2d::addWorldObject(std::shared_ptr<WorldObject2d> obj, b2BodyDef *bodyDef)
 {
-    graphics::Layer::addObject(obj);
-    _bodies.push_back(&obj);
+    graphics::Layer::addObject(std::static_pointer_cast<graphics::GraphicalObject>(obj));
+    _bodies.push_back(obj);
     return world.CreateBody(bodyDef);
 }
 
-b2Joint *WorldLayer2d::addWorldJoint(WorldJoint2d &joint, b2JointDef *jointDef)
+b2Joint *WorldLayer2d::addWorldJoint(std::shared_ptr<WorldJoint2d> joint, b2JointDef *jointDef)
 {
-    _joints.push_back(&joint);
+    _joints.push_back(joint);
     return world.CreateJoint(jointDef);
 }
 

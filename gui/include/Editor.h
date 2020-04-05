@@ -38,11 +38,11 @@ public:
         float angleStep = 1.0f;
     };
 
-    void setCurrentLayer(ample::physics::WorldLayer2d &layer);
+    void setCurrentLayer(std::shared_ptr<ample::physics::WorldLayer2d> layer);
 
 private:
     RawWO2d worldObject2d;
-    ample::physics::WorldLayer2d *currentLayer;
+    std::shared_ptr<ample::physics::WorldLayer2d> currentLayer;
     std::vector<std::shared_ptr<ample::physics::WorldObject2d>> objects;
     const float cellSize = 10.0f;
 };

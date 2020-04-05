@@ -327,7 +327,7 @@ WorldObject2d::WorldObject2d(WorldLayer2d &layer,
         bodyDef.type = b2_dynamicBody;
         break;
     }
-    _body = _layer.addWorldObject(*this, &bodyDef);
+    _body = _layer.addWorldObject(std::shared_ptr<WorldObject2d>(this), &bodyDef);
 }
 
 WorldLayer2d &WorldObject2d::getWorldLayer() const

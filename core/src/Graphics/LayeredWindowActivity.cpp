@@ -10,10 +10,10 @@ LayeredWindowActivity::LayeredWindowActivity(window::Window &window)
     graphics::shaders::ShaderProcessor::instance().use();
 }
 
-void LayeredWindowActivity::addLayer(Layer &layer)
+void LayeredWindowActivity::addLayer(std::shared_ptr<Layer> layer)
 {
-    Activity::addBehaviour(layer);
-    _layers.push_back(&layer);
+    Activity::addBehavior(std::static_pointer_cast<Behavior>(layer));
+    _layers.push_back(layer);
 }
 
 void LayeredWindowActivity::cleanLayers()

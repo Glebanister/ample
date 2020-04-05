@@ -58,8 +58,8 @@ void Editor::drawInterface()
     ImGui::End();
 }
 
-void Editor::setCurrentLayer(ample::physics::WorldLayer2d &layer)
+void Editor::setCurrentLayer(std::shared_ptr<ample::physics::WorldLayer2d> layer)
 {
-    currentLayer = &layer;
+    currentLayer = layer;
 }
 } // namespace ample::gui

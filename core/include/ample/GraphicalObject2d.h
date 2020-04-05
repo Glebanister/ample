@@ -35,8 +35,11 @@ public:
     GraphicalEdge &side() noexcept;
     GraphicalPolygon &face() noexcept;
 
+    std::shared_ptr<GraphicalEdge> sidePointer() noexcept;
+    std::shared_ptr<GraphicalPolygon> facePointer() noexcept;
+
 protected:
-    GraphicalPolygon _face;
-    GraphicalEdge _side;
+    std::shared_ptr<GraphicalPolygon> _face;
+    std::shared_ptr<GraphicalEdge> _side;
 };
 } // namespace ample::graphics

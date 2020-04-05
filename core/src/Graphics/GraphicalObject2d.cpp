@@ -22,11 +22,11 @@ GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphic
                                      const glm::mat4 &scaled,
                                      const glm::mat4 &rotated)
     : GraphicalObject(translated, scaled, rotated),
-      _face(graphicalShape, z, faceTextureRepeats),
-      _side(graphicalShape, z, thickness, sideTextureRepeats, sideNormalsMode)
+      _face(std::make_shared<GraphicalPolygon>(graphicalShape, z, faceTextureRepeats)),
+      _side(std::make_shared<GraphicalEdge>(graphicalShape, z, thickness, sideTextureRepeats, sideNormalsMode))
 {
-    addSubObject(_face);
-    addSubObject(_side);
+    addSubObject(std::static_pointer_cast<GraphicalObject>(_face));
+    addSubObject(std::static_pointer_cast<GraphicalObject>(_side));
 }
 
 GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphicalShape,
@@ -51,10 +51,20 @@ GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphic
 
 GraphicalEdge &GraphicalObject2d::side() noexcept
 {
-    return _side;
+    return *_side;
 }
 
 GraphicalPolygon &GraphicalObject2d::face() noexcept
+{
+    return *_face;
+}
+
+std::shared_ptr<GraphicalEdge> GraphicalObject2d::sidePointer() noexcept
+{
+    return _side;
+}
+
+std::shared_ptr<GraphicalPolygon> GraphicalObject2d::facePointer() noexcept
 {
     return _face;
 }

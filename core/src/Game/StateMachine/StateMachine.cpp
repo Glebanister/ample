@@ -1,3 +1,5 @@
+#include <memory>
+
 #include "StateMachine.h"
 #include "GameException.h"
 #include "Debug.h"
@@ -45,7 +47,7 @@ std::string StateMachine::State::getName() const noexcept
 
 void StateMachine::State::addTransition(std::shared_ptr<StateMachine::Transition> transition) noexcept
 {
-    addBehaviour(*transition);
+    addBehavior(std::static_pointer_cast<Behavior>(transition));
     _transitions.push_back(transition);
 }
 

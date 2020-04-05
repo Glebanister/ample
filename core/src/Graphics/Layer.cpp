@@ -6,16 +6,16 @@
 
 namespace ample::graphics
 {
-void Layer::addCamera(Camera &camera)
+void Layer::addCamera(std::shared_ptr<Camera> camera)
 {
-    activity::Behavior::addBehaviour(camera);
-    _cameras.push_back(&camera);
+    activity::Behavior::addBehavior(std::static_pointer_cast<Behavior>(camera));
+    _cameras.push_back(camera);
 }
 
-void Layer::addObject(GraphicalObject &object)
+void Layer::addObject(std::shared_ptr<GraphicalObject> object)
 {
-    activity::Behavior::addBehaviour(object);
-    _objects.push_back(&object);
+    activity::Behavior::addBehavior(std::static_pointer_cast<Behavior>(object));
+    _objects.push_back(object);
 }
 
 void Layer::setVisibility(bool value) noexcept
