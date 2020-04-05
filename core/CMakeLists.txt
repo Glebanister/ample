@@ -87,6 +87,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Physics/WorldMotorJoint2d.cpp
 
     src/Geometry/RegularPolygon.cpp
+    src/Geometry/VectorRectangle.cpp
     src/Geometry/Shape.cpp
     src/Geometry/Rectangle.cpp
     src/Geometry/Circle.cpp
