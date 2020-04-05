@@ -326,4 +326,9 @@ void Texture::nextFrame() noexcept
         break;
     }
 }
+
+std::string Texture::path() const noexcept
+{
+    return _raw.texturePath;
+}
 } // namespace ample::graphics

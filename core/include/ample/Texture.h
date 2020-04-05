@@ -153,6 +153,8 @@ public:
     void pin() const noexcept;
     void unpin() const noexcept;
 
+    std::string path() const noexcept;
+
 private:
     TextureRaw _raw;
     std::vector<GLSingleTexture> _frames;
