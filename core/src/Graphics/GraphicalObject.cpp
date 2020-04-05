@@ -4,6 +4,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <memory>
+#include <algorithm>
 
 #include "GraphicalObject.h"
 #include "ShaderProcessor.h"
@@ -18,12 +20,20 @@ GraphicalObject::GraphicalObject(const glm::mat4 &translated,
     : _translated(translated),
       _scaled(scaled),
       _rotated(rotated),
-      _modelMatrixUniform(_modelMatrix, "model_matrix") {}
-
-void GraphicalObject::addSubObject(GraphicalObject &object)
+      _modelMatrixUniform(_modelMatrix, "model_matrix")
 {
-    activity::Behavior::addBehaviour(object);
-    _subObjects.push_back(&object);
+}
+
+void GraphicalObject::addSubObject(std::shared_ptr<GraphicalObject> object)
+{
+    activity::Behavior::addBehavior(std::static_pointer_cast<Behavior>(object));
+    _subObjects.push_back(object);
+}
+
+void GraphicalObject::removeSubObject(std::shared_ptr<GraphicalObject> object)
+{
+    activity::Behavior::removeBehavior(std::static_pointer_cast<Behavior>(object));
+    std::remove(_subObjects.begin(), _subObjects.end(), object);
 }
 
 float GraphicalObject::getX() const { return _translated[0][0]; }

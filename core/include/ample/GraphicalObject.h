@@ -25,7 +25,8 @@ public:
               glm::mat4 rotated = glm::mat4{1.0f},
               glm::mat4 translated = glm::mat4{1.0f});
     virtual void drawSelf();
-    void addSubObject(GraphicalObject &object);
+    void addSubObject(std::shared_ptr<GraphicalObject> object);
+    void removeSubObject(std::shared_ptr<GraphicalObject> object);
 
     float getX() const;
     float getY() const;
@@ -49,7 +50,7 @@ protected:
     glm::mat4 _modelMatrix{1.0f};
 
 private:
-    std::vector<GraphicalObject *> _subObjects;
+    std::vector<std::shared_ptr<GraphicalObject>> _subObjects;
     glm::mat4 _translated{1.0f};
     glm::mat4 _scaled{1.0f};
     glm::mat4 _rotated{1.0f};
