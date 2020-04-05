@@ -30,6 +30,10 @@ public:
                           float relativePositionInSlice);
     void setContactListener(ContactListener &listener);
 
+    float getZ() const noexcept;
+    float getThickness() const noexcept;
+    float getRelativePositionInSlice() const noexcept;
+
 protected:
     friend WorldObject2d;
     friend WorldJoint2d;

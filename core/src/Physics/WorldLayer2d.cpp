@@ -19,6 +19,7 @@ WorldLayer2d::WorldLayer2d(const graphics::Vector2d<float> &gravity,
       _thickness(thickness),
       _relativePositionInSlice(relativePositionInSlice)
 {
+    ASSERT(0.0 <= _relativePositionInSlice && _relativePositionInSlice <= 1.0);
 }
 
 void WorldLayer2d::setContactListener(ContactListener &listener)
@@ -43,5 +44,18 @@ void WorldLayer2d::onActive()
 {
     graphics::Layer::onActive();
     world.Step(1.0 / time::Clock::getFPS(), 8, 3);
+}
+
+float WorldLayer2d::getZ() const noexcept
+{
+    return _z;
+}
+float WorldLayer2d::getThickness() const noexcept
+{
+    return _thickness;
+}
+float WorldLayer2d::getRelativePositionInSlice() const noexcept
+{
+    return _relativePositionInSlice;
 }
 } // namespace ample::physics
