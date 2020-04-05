@@ -32,7 +32,7 @@ public:
         const char *normalsMode[2] = {"face", "vertex"};
         int currentNormalMode = 0;
         graphics::Vector2d<float> position = {0.0f, 0.0f};
-        float positionStep = 1.0f;
+        float positionStep = 10.0f;
         float positionStepFast = 10.0f;
         float angle = 0.0f;
         float angleStep = 1.0f;
