@@ -312,26 +312,30 @@ WorldObject2d::WorldObject2d(WorldLayer2d &layer,
                         rotated),
       _layer(layer)
 {
-    b2BodyDef bodyDef;
-    bodyDef.position.Set(translated.x, translated.y);
-    bodyDef.angle = rotated;
+    _bodyDef.position.Set(translated.x, translated.y);
+    _bodyDef.angle = rotated;
     switch (type)
     {
     case BodyType::STATIC_BODY:
-        bodyDef.type = b2_staticBody;
+        _bodyDef.type = b2_staticBody;
         break;
     case BodyType::KINEMATIC_BODY:
-        bodyDef.type = b2_kinematicBody;
+        _bodyDef.type = b2_kinematicBody;
         break;
     case BodyType::DYNAMIC_BODY:
-        bodyDef.type = b2_dynamicBody;
+        _bodyDef.type = b2_dynamicBody;
         break;
     }
-    _body = _layer.addWorldObject(std::shared_ptr<WorldObject2d>(this), &bodyDef);
 }
 
 WorldLayer2d &WorldObject2d::getWorldLayer() const
 {
     return _layer;
+}
+
+void WorldObject2d::onAwake()
+{
+    GraphicalObject2d::onAwake();
+    ASSERT(_body);
 }
 } // namespace ample::physics

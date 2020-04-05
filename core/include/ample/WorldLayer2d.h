@@ -29,6 +29,7 @@ public:
                           float thickness,
                           float relativePositionInSlice);
     void setContactListener(ContactListener &listener);
+    void addWorldObject(std::shared_ptr<WorldObject2d> obj);
 
     float getZ() const noexcept;
     float getThickness() const noexcept;
@@ -39,7 +40,7 @@ protected:
     friend WorldJoint2d;
     void onActive() override;
 
-    b2Body *addWorldObject(std::shared_ptr<WorldObject2d> obj, b2BodyDef *bodyDef);
+    // b2Body *addWorldObject(std::shared_ptr<WorldObject2d> obj, b2BodyDef *bodyDef);
     b2Joint *addWorldJoint(std::shared_ptr<WorldJoint2d> joint, b2JointDef *jointDef);
 
     std::vector<std::shared_ptr<WorldObject2d>> _bodies;

@@ -19,8 +19,9 @@ AmpleGui::AmpleGui(ample::window::Window &window)
     addBehavior(std::static_pointer_cast<Behavior>(_observer));
     level->camera()->setVisibility(false);
     level->frontSlice()->addCamera(std::static_pointer_cast<graphics::Camera>(_observer->getCamera()));
-    level->frontSlice()->addObject(_observer->getLamp());
+    level->addGlobalObject(_observer->getLamp());
     Editor::instance().setCurrentLayer(level->frontSlice());
+    SliceManager::instance().setLevel(level);
 }
 
 void AmpleGui::onResize()

@@ -67,6 +67,8 @@ public:
                   const graphics::normalsMode sideNormalsMode,
                   const graphics::Vector2d<float> &translated = {0.0f, 0.0f},
                   float rotated = 0.0f);
+    
+    void onAwake() override;
     //void onPause() override;//TODO
 
     Fixture &addFixture(const std::vector<ample::graphics::Vector2d<float>> &shape);
@@ -132,10 +134,12 @@ public:
 
 private:
     friend WorldJoint2d;
+    friend WorldLayer2d;
     friend ample::filing::WorldObject2dIO;
 
     std::vector<std::shared_ptr<Fixture>> _fixtures;
     WorldLayer2d &_layer;
     b2Body *_body = nullptr;
+    b2BodyDef _bodyDef;
 };
 } // namespace ample::physics
