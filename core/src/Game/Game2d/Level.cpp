@@ -1,6 +1,7 @@
 #include "Level.h"
 #include "GameException.h"
 #include "Debug.h"
+#include "Utils.h"
 
 namespace ample::game::game2d
 {
@@ -58,5 +59,23 @@ std::shared_ptr<graphics::CameraPerspective> Level::camera()
 std::unordered_map<size_t, std::shared_ptr<physics::WorldLayer2d>> &Level::layers() noexcept
 {
     return _sliceByDistance;
+}
+
+void Level::addGlobalObject(std::shared_ptr<graphics::GraphicalObject> obj)
+{
+    for (auto &[_, slice] : _sliceByDistance)
+    {
+        utils::ignore(_);
+        slice->addObject(obj);
+    }
+}
+
+void Level::removeGlobalObject(std::shared_ptr<graphics::GraphicalObject> obj)
+{
+    for (auto &[_, slice] : _sliceByDistance)
+    {
+        utils::ignore(_);
+        slice->removeObject(obj);
+    }
 }
 } // namespace ample::game::game2d

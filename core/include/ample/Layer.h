@@ -18,7 +18,7 @@ public:
     void clearCameras();
 
     void addObject(std::shared_ptr<GraphicalObject> object);
-    void clearObjecs();
+    void removeObject(std::shared_ptr<GraphicalObject> object);
     void setVisibility(bool) noexcept;
 
     size_t objectsCount() const noexcept;

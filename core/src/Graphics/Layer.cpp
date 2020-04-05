@@ -1,5 +1,6 @@
 #include <cassert>
 #include <glm/glm.hpp>
+#include <algorithm>
 
 #include "Debug.h"
 #include "Layer.h"
@@ -16,6 +17,13 @@ void Layer::addObject(std::shared_ptr<GraphicalObject> object)
 {
     activity::Behavior::addBehavior(std::static_pointer_cast<Behavior>(object));
     _objects.push_back(object);
+}
+
+void Layer::removeObject(std::shared_ptr<GraphicalObject> object)
+{
+    activity::Behavior::removeBehavior(std::static_pointer_cast<Behavior>(object));
+    _objects.push_back(object);
+    std::remove(_objects.begin(), _objects.end(), object);
 }
 
 void Layer::setVisibility(bool value) noexcept
@@ -48,10 +56,6 @@ void Layer::clearCameras()
     _cameras.clear();
 }
 
-void Layer::clearObjecs()
-{
-    _objects.clear();
-}
 size_t Layer::objectsCount() const noexcept
 {
     return _objects.size();
