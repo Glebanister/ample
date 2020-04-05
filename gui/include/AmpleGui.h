@@ -8,7 +8,6 @@
 #include "ample/WorldObject2d.h"
 
 #include "Observer.h"
-#include "Editor.h"
 
 namespace ample::gui
 {

@@ -31,6 +31,7 @@ set(SOURCES
     src/Observer.cpp
     src/InterfaceUnit.cpp
     src/Editor.cpp
+    src/SliceManager.cpp
     )
 
 add_executable(ample-gui ${SOURCES} ${IMGUI_SOURCES})

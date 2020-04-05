@@ -5,6 +5,9 @@
 #include "ample/RegularPolygon.h"
 #include "ample/WorldObject2d.h"
 
+#include "Editor.h"
+#include "SliceManager.h"
+
 namespace ample::gui
 {
 AmpleGui::AmpleGui(ample::window::Window &window)
@@ -30,5 +33,6 @@ void AmpleGui::drawInterface()
 {
     ImguiActivity::drawInterface();
     Editor::instance().drawInterface();
+    SliceManager::instance().drawInterface();
 }
 } // namespace ample::gui
