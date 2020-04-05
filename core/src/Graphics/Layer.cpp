@@ -56,4 +56,9 @@ size_t Layer::objectsCount() const noexcept
 {
     return _objects.size();
 }
+
+std::vector<std::shared_ptr<GraphicalObject>> &Layer::objects() noexcept
+{
+    return _objects;
+}
 } // namespace ample::graphics

@@ -23,6 +23,8 @@ public:
 
     size_t objectsCount() const noexcept;
 
+    std::vector<std::shared_ptr<GraphicalObject>> &objects() noexcept;
+
 private:
     std::vector<std::shared_ptr<Camera>> _cameras;
     std::vector<std::shared_ptr<GraphicalObject>> _objects;
