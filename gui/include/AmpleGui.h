@@ -8,35 +8,10 @@
 #include "ample/WorldObject2d.h"
 
 #include "Observer.h"
+#include "Editor.h"
 
 namespace ample::gui
 {
-
-class AnimationSwapper : public ample::activity::Behavior
-{
-public:
-    AnimationSwapper(ample::graphics::Texture *texture, size_t delta)
-        : delta(delta), texture(texture)
-    {
-    }
-
-    void onActive() override
-    {
-        ample::activity::Behavior::onActive();
-        auto curTime = ample::time::Clock::globalTimeMs();
-        if (curTime - lastTime > delta)
-        {
-            texture->nextFrame();
-            lastTime = curTime;
-        }
-    }
-
-private:
-    size_t delta;
-    ample::graphics::Texture *texture;
-    size_t lastTime = 0;
-};
-
 class AmpleGui : public ImguiActivity
 {
 public:
@@ -46,9 +21,7 @@ public:
 private:
     void drawInterface() override;
 
-    std::shared_ptr<ample::physics::WorldObject2d> object;
     gui::Observer _observer;
-    std::shared_ptr<ample::graphics::Texture> texture;
-    std::shared_ptr<AnimationSwapper> swapper;
+    Editor editor;
 };
 } // namespace ample::gui

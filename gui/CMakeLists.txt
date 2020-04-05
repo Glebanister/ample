@@ -29,6 +29,8 @@ set(SOURCES
     src/ImguiActivity.cpp
     src/AmpleGui.cpp
     src/Observer.cpp
+    src/InterfaceUnit.cpp
+    src/Editor.cpp
     )
 
 add_executable(ample-gui ${SOURCES} ${IMGUI_SOURCES})
