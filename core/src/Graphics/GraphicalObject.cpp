@@ -112,7 +112,8 @@ void GraphicalObject::draw(glm::mat4 scaled,
 }
 
 GraphicalObject::GraphicalObject(filing::JsonIO input)
-    : GraphicalObject(input.read<glm::mat4>("translated"),
+    : GraphicalObject(input.read<std::string>("name"),
+                      input.read<glm::mat4>("translated"),
                       input.read<glm::mat4>("scaled"),
                       input.read<glm::mat4>("rotated"))
 {
@@ -121,6 +122,7 @@ GraphicalObject::GraphicalObject(filing::JsonIO input)
 
 std::string GraphicalObject::dump(filing::JsonIO output, std::string nameField)
 {
+    output.write<std::string>("name", name());
     output.write<glm::mat4>("translated", _translated);
     output.write<glm::mat4>("scaled", _scaled);
     output.write<glm::mat4>("rotated", _rotated);

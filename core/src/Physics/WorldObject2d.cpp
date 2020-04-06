@@ -293,23 +293,23 @@ void WorldObject2d::resetMassData()
     _body->ResetMassData();
 }
 
-WorldObject2d::WorldObject2d(WorldLayer2d &layer,
+WorldObject2d::WorldObject2d(const std::string &name,
+                             WorldLayer2d &layer,
                              BodyType type,
                              const std::vector<ample::graphics::Vector2d<float>> &shape,
                              const float relativeThickness,
                              const graphics::Vector2d<float> &faceTextureRepeats,
                              const graphics::Vector2d<float> &sideTextureRepeats,
                              const graphics::normalsMode sideNormalsMode,
-                             const std::string &name,
                              const graphics::Vector2d<float> &translated,
                              float rotated)
-    : GraphicalObject2d(shape,
+    : GraphicalObject2d(name,
+                        shape,
                         layer.getThickness() * relativeThickness,
                         layer.getThickness() * layer.getRelativePositionInSlice() - layer.getThickness() * relativeThickness / 2.0f,
                         faceTextureRepeats,
                         sideTextureRepeats,
                         sideNormalsMode,
-                        name,
                         translated,
                         rotated),
       _layer(layer)

@@ -14,13 +14,13 @@ class Braid : public ample::graphics::GraphicalObject2d
 {
 public:
     Braid()
-        : GraphicalObject2d(ample::geometry::RegularPolygon<float>(10.0f, 6),
+        : GraphicalObject2d("Braid",
+                            ample::geometry::RegularPolygon<float>(10.0f, 6),
                             10.0f,
                             0.0f,
                             {1.0f, 1.0f},
                             {1.0f, 1.0f},
                             ample::graphics::normalsMode::FACE,
-                            "Braid",
                             {0.0f, 0.0f},
                             0.0f)
     {

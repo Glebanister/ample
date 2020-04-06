@@ -11,6 +11,7 @@ set(GLEW_LIBRARY /usr/lib/x86_64-linux-gnu/libGLEW.so.2.0.0)
 
 include_directories(include)
 include_directories(../extern/imgui/)
+include_directories(../extern/rapidjson/include)
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(../core/include)
 

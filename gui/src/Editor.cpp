@@ -46,16 +46,17 @@ void Editor::drawInterface()
             }
             std::string name(worldObject2d.nameBuffer);
             graphics::normalsMode normalsMode = worldObject2d.currentNormalMode == 0 ? graphics::normalsMode::FACE : graphics::normalsMode::VERTEX;
-            currentLayer->addWorldObject(std::make_shared<physics::WorldObject2d>(*currentLayer,
-                                                                                  bodyType,
-                                                                                  geometry::VectorRectangle<float>({worldObject2d.size.x * cellSize, worldObject2d.size.y * cellSize}),
-                                                                                  worldObject2d.relativeThickness,
-                                                                                  worldObject2d.textureRepeatsFront,
-                                                                                  worldObject2d.textureRepeatsSide,
-                                                                                  normalsMode,
-                                                                                  name,
-                                                                                  worldObject2d.position,
-                                                                                  worldObject2d.angle));
+            currentLayer->addWorldObject(std::make_shared<physics::WorldObject2d>(
+                name,
+                *currentLayer,
+                bodyType,
+                geometry::VectorRectangle<float>({worldObject2d.size.x * cellSize, worldObject2d.size.y * cellSize}),
+                worldObject2d.relativeThickness,
+                worldObject2d.textureRepeatsFront,
+                worldObject2d.textureRepeatsSide,
+                normalsMode,
+                worldObject2d.position,
+                worldObject2d.angle));
         }
     }
     ImGui::End();

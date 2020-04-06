@@ -3,9 +3,6 @@
 #include <fstream>
 #include <sstream>
 
-#include "Exception.h"
-#include "Debug.h"
-
 namespace ample::graphics
 {
 enum class normalsMode
