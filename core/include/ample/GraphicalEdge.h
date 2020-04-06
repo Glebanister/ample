@@ -21,6 +21,7 @@ public:
                   const float thickness,
                   const Vector2d<float> &textureRepeats,
                   const normalsMode normMode,
+                  const std::string &name,
                   const glm::mat4 &translated = glm::mat4{1.0f},
                   const glm::mat4 &scaled = glm::mat4{1.0f},
                   const glm::mat4 &rotated = glm::mat4{1.0f});

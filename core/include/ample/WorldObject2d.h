@@ -65,9 +65,10 @@ public:
                   const graphics::Vector2d<float> &faceTextureRepeats,
                   const graphics::Vector2d<float> &sideTextureRepeats,
                   const graphics::normalsMode sideNormalsMode,
+                  const std::string &name,
                   const graphics::Vector2d<float> &translated = {0.0f, 0.0f},
                   float rotated = 0.0f);
-    
+
     void onAwake() override;
     //void onPause() override;//TODO
 

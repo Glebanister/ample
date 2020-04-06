@@ -120,10 +120,11 @@ GraphicalEdge::GraphicalEdge(const std::vector<Vector2d<float>> &shape,
                              const float thickness,
                              const Vector2d<float> &textureRepeats,
                              const normalsMode normMode,
+                             const std::string &name,
                              const glm::mat4 &translated,
                              const glm::mat4 &scaled,
                              const glm::mat4 &rotated)
-    : GraphicalObject(translated, scaled, rotated)
+    : GraphicalObject(name, translated, scaled, rotated)
 {
     bindVertexArray(std::make_shared<VertexArray>(generateSideCoords(shape, z, thickness),
                                                   generateSideUVCoords(shape, z, thickness, textureRepeats),

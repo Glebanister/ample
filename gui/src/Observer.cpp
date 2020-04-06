@@ -6,7 +6,7 @@ namespace ample::gui
 {
 Observer::Observer(ample::control::EventManager &manager, const graphics::Vector2d<int> &size)
     : _manager(manager),
-      _lamp(std::make_shared<graphics::light::LightSource>()),
+      _lamp(std::make_shared<graphics::light::LightSource>("observer_lamp")),
       _camera(std::make_shared<graphics::CameraPerspective>(graphics::Vector2d<graphics::pixel_t>{size.x, size.y},
                                                             graphics::Vector2d<graphics::pixel_t>{0, 0},
                                                             graphics::Vector3d<float>{0.0, 0.0, 0.0},

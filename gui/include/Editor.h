@@ -20,6 +20,7 @@ public:
 
     struct RawWO2d
     {
+        char nameBuffer[255];
         const char *bodyTypes[3] = {"dynamic", "kinematic", "static"};
         int currentBodyType = 0;
         graphics::Vector2d<size_t> size = {1, 1};

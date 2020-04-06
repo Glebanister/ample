@@ -12,6 +12,7 @@ namespace ample::gui
 void Editor::drawInterface()
 {
     ImGui::Begin("Editor");
+    ImGui::InputText("Name", worldObject2d.nameBuffer, 255);
     ImGui::Combo("Body type", &worldObject2d.currentBodyType, worldObject2d.bodyTypes, IM_ARRAYSIZE(worldObject2d.bodyTypes));
     ImGui::InputScalar("Width", ImGuiDataType_U32, &worldObject2d.size.x, &worldObject2d.sizeStep);
     ImGui::InputScalar("Height", ImGuiDataType_U32, &worldObject2d.size.y, &worldObject2d.sizeStep);
@@ -43,6 +44,7 @@ void Editor::drawInterface()
             {
                 bodyType = physics::BodyType::STATIC_BODY;
             }
+            std::string name(worldObject2d.nameBuffer);
             graphics::normalsMode normalsMode = worldObject2d.currentNormalMode == 0 ? graphics::normalsMode::FACE : graphics::normalsMode::VERTEX;
             currentLayer->addWorldObject(std::make_shared<physics::WorldObject2d>(*currentLayer,
                                                                                   bodyType,
@@ -51,6 +53,7 @@ void Editor::drawInterface()
                                                                                   worldObject2d.textureRepeatsFront,
                                                                                   worldObject2d.textureRepeatsSide,
                                                                                   normalsMode,
+                                                                                  name,
                                                                                   worldObject2d.position,
                                                                                   worldObject2d.angle));
         }

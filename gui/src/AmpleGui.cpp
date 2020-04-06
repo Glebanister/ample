@@ -7,6 +7,7 @@
 
 #include "Editor.h"
 #include "SliceManager.h"
+#include "TextureManager.h"
 
 namespace ample::gui
 {
@@ -32,8 +33,9 @@ void AmpleGui::onResize()
 
 void AmpleGui::drawInterface()
 {
-    ImguiActivity::drawInterface();
+    // ImguiActivity::drawInterface();
     Editor::instance().drawInterface();
     SliceManager::instance().drawInterface();
+    TextureManager::instance().drawInterface();
 }
 } // namespace ample::gui

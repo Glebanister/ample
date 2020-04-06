@@ -23,7 +23,6 @@ public:
                             {0.0f, 0.0f},
                             0.0f)
     {
-
         auto texture = std::make_shared<ample::graphics::Texture>(ample::graphics::TextureRaw("../../demo/textures/braid.jpg",
                                                                                               {820UL / 7 - 1, 546UL / 4 - 1},
                                                                                               {2L, 2L},

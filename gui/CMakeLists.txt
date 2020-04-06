@@ -32,6 +32,7 @@ set(SOURCES
     src/InterfaceUnit.cpp
     src/Editor.cpp
     src/SliceManager.cpp
+    src/TextureManager.cpp
     )
 
 add_executable(ample-gui ${SOURCES} ${IMGUI_SOURCES})

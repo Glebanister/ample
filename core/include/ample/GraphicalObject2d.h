@@ -19,6 +19,7 @@ public:
                       const Vector2d<float> &faceTextureRepeats,
                       const Vector2d<float> &sideTextureRepeats,
                       const normalsMode sideNormalsMode,
+                      const std::string &name,
                       const glm::mat4 &translated = glm::mat4{1.0f},
                       const glm::mat4 &scaled = glm::mat4{1.0f},
                       const glm::mat4 &rotated = glm::mat4{1.0f});
@@ -29,6 +30,7 @@ public:
                       const Vector2d<float> &faceTextureRepeats,
                       const Vector2d<float> &sideTextureRepeats,
                       const normalsMode sideNormalsMode,
+                      const std::string &name,
                       const Vector2d<float> &translated = {0.0f, 0.0f},
                       const float &rotated = 0.0f);
 

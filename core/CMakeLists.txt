@@ -108,6 +108,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Game/StateMachine/Transitions/Physics/CollisionTransition.cpp
     src/Game/StateMachine/ControlledObject.cpp
     src/Game/Events/EventListener.cpp
+    src/Game/NamedObject.cpp
    )
 
 include_directories(${SDL2_INCLUDE_DIRS})

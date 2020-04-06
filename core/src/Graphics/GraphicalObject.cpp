@@ -14,10 +14,12 @@
 
 namespace ample::graphics
 {
-GraphicalObject::GraphicalObject(const glm::mat4 &translated,
+GraphicalObject::GraphicalObject(const std::string &name,
+                                 const glm::mat4 &translated,
                                  const glm::mat4 &scaled,
                                  const glm::mat4 &rotated)
-    : _translated(translated),
+    : ControlledObject(name),
+      _translated(translated),
       _scaled(scaled),
       _rotated(rotated),
       _modelMatrixUniform(_modelMatrix, "model_matrix")

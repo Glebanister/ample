@@ -54,10 +54,11 @@ static std::vector<Vector2d<float>> generateFaceUVCoords(const std::vector<Vecto
 GraphicalPolygon::GraphicalPolygon(const std::vector<Vector2d<float>> &shape,
                                    const float z,
                                    const Vector2d<float> &textureRepeats,
+                                   const std::string &name,
                                    const glm::mat4 &translated,
                                    const glm::mat4 &scaled,
                                    const glm::mat4 &rotated)
-    : GraphicalObject(translated, scaled, rotated)
+    : GraphicalObject(name, translated, scaled, rotated)
 {
     bindVertexArray(std::make_shared<VertexArray>(
         generateFaceCoords(shape, z),

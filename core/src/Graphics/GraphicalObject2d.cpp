@@ -18,12 +18,13 @@ GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphic
                                      const Vector2d<float> &faceTextureRepeats,
                                      const Vector2d<float> &sideTextureRepeats,
                                      const normalsMode sideNormalsMode,
+                                     const std::string &name,
                                      const glm::mat4 &translated,
                                      const glm::mat4 &scaled,
                                      const glm::mat4 &rotated)
-    : GraphicalObject(translated, scaled, rotated),
-      _face(std::make_shared<GraphicalPolygon>(graphicalShape, z, faceTextureRepeats)),
-      _side(std::make_shared<GraphicalEdge>(graphicalShape, z, thickness, sideTextureRepeats, sideNormalsMode))
+    : GraphicalObject(name, translated, scaled, rotated),
+      _face(std::make_shared<GraphicalPolygon>(graphicalShape, z, faceTextureRepeats, "face")),
+      _side(std::make_shared<GraphicalEdge>(graphicalShape, z, thickness, sideTextureRepeats, sideNormalsMode, "side"))
 {
     addSubObject(std::static_pointer_cast<GraphicalObject>(_face));
     addSubObject(std::static_pointer_cast<GraphicalObject>(_side));
@@ -35,6 +36,7 @@ GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphic
                                      const Vector2d<float> &faceTextureRepeats,
                                      const Vector2d<float> &sideTextureRepeats,
                                      const normalsMode sideNormalsMode,
+                                     const std::string &name,
                                      const Vector2d<float> &translated,
                                      const float &rotated)
     : GraphicalObject2d(graphicalShape,
@@ -43,6 +45,7 @@ GraphicalObject2d::GraphicalObject2d(const std::vector<Vector2d<float>> &graphic
                         faceTextureRepeats,
                         sideTextureRepeats,
                         sideNormalsMode,
+                        name,
                         glm::translate(glm::vec3{translated.x, translated.y, z}),
                         glm::scale(glm::vec3{1.0f}),
                         glm::rotate(rotated, glm::vec3{0.0f, 0.0f, 1.0f}))
