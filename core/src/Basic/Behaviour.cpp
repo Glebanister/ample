@@ -5,10 +5,16 @@
 
 namespace ample::activity
 {
-void Behavior::addBehaviour(Behavior &act)
+void Behavior::addBehavior(std::shared_ptr<Behavior> beh)
 {
-    _behaviours.push_back(&act);
+    _behaviours.push_back(beh);
 }
+
+void Behavior::removeBehavior(std::shared_ptr<Behavior> beh)
+{
+    std::remove(_behaviours.begin(), _behaviours.end(), beh);
+}
+
 void Behavior::onAwake()
 {
     std::for_each(_behaviours.begin(), _behaviours.end(),

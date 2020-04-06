@@ -85,6 +85,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Physics/WorldMotorJoint2d.cpp
 
     src/Geometry/RegularPolygon.cpp
+    src/Geometry/VectorRectangle.cpp
     src/Geometry/Shape.cpp
     src/Geometry/Rectangle.cpp
     src/Geometry/Circle.cpp
@@ -105,6 +106,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Game/StateMachine/Transitions/Physics/CollisionTransition.cpp
     src/Game/StateMachine/ControlledObject.cpp
     src/Game/Events/EventListener.cpp
+    src/Game/NamedObject.cpp
    )
 
 include_directories(${SDL2_INCLUDE_DIRS})

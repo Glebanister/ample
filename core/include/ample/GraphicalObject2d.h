@@ -8,7 +8,8 @@ namespace ample::graphics
 class GraphicalObject2d : public GraphicalObject
 {
 public:
-    GraphicalObject2d(const std::vector<Vector2d<float>> &graphicalShape,
+    GraphicalObject2d(const std::string &name,
+                      const std::vector<Vector2d<float>> &graphicalShape,
                       const float thickness,
                       const float z,
                       const Vector2d<float> &faceTextureRepeats,
@@ -18,7 +19,8 @@ public:
                       const glm::mat4 &scaled = glm::mat4{1.0f},
                       const glm::mat4 &rotated = glm::mat4{1.0f});
 
-    GraphicalObject2d(const std::vector<Vector2d<float>> &graphicalShape,
+    GraphicalObject2d(const std::string &name,
+                      const std::vector<Vector2d<float>> &graphicalShape,
                       const float thickness,
                       const float z,
                       const Vector2d<float> &faceTextureRepeats,
@@ -30,12 +32,14 @@ public:
     GraphicalEdge &side() noexcept;
     GraphicalPolygon &face() noexcept;
 
-    explicit GraphicalObject2d(filing::JsonIO input);
+    std::shared_ptr<GraphicalEdge> sidePointer() noexcept;
+    std::shared_ptr<GraphicalPolygon> facePointer() noexcept;
 
+    explicit GraphicalObject2d(filing::JsonIO input);
     std::string dump(filing::JsonIO output, std::string nameField) override;
 
 protected:
-    GraphicalPolygon _face;
-    GraphicalEdge _side;
+    std::shared_ptr<GraphicalPolygon> _face;
+    std::shared_ptr<GraphicalEdge> _side;
 };
 } // namespace ample::graphics

@@ -11,6 +11,7 @@
 
 #include "Vector2d.h"
 #include "Noncopyable.h"
+#include "NamedObject.h"
 
 namespace ample::graphics
 {
@@ -35,10 +36,11 @@ enum class textureOrigin
 
 class Texture;
 
-class TextureRaw
+class TextureRaw : public game::NamedObject
 {
 public:
     TextureRaw(const std::string &texturePath,
+               const std::string &name,
                const graphics::Vector2d<size_t> &eachSize,
                const graphics::Vector2d<int> &startPosition,
                const graphics::Vector2d<size_t> &framesCount,
@@ -50,7 +52,7 @@ public:
     TextureRaw(const Texture &);
 
 public:
-    const std::string &texturePath;
+    std::string path;
     graphics::Vector2d<size_t> eachSize;
     graphics::Vector2d<int> startPosition;
     graphics::Vector2d<size_t> framesCount;
@@ -60,7 +62,7 @@ public:
     Vector2d<textureOrigin> origin;
 };
 
-class Texture final : public utils::Noncopyable
+class Texture final : public utils::Noncopyable, public game::NamedObject
 {
 private:
     class PixelMap
@@ -152,6 +154,8 @@ public:
 
     void pin() const noexcept;
     void unpin() const noexcept;
+
+    std::string path() const noexcept;
 
 private:
     TextureRaw _raw;

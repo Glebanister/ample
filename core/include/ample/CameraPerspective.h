@@ -25,10 +25,12 @@ public:
     void setFov(float);
     void setNearClip(float);
     void setFarClip(float);
+    void setAspectRatio(float);
 
     float getFov() const;
     float getNearClip() const;
     float getFarClip() const;
+    float getAspectRatio() const;
 
 private:
     float _fov;

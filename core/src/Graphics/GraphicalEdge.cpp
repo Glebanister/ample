@@ -115,7 +115,8 @@ static std::vector<Vector2d<float>> generateSideUVCoords(const std::vector<Vecto
     return uvCoords;
 }
 
-GraphicalEdge::GraphicalEdge(const std::vector<Vector2d<float>> &shape,
+GraphicalEdge::GraphicalEdge(const std::string &name,
+                             const std::vector<Vector2d<float>> &shape,
                              const float z,
                              const float thickness,
                              const Vector2d<float> &textureRepeats,
@@ -123,7 +124,7 @@ GraphicalEdge::GraphicalEdge(const std::vector<Vector2d<float>> &shape,
                              const glm::mat4 &translated,
                              const glm::mat4 &scaled,
                              const glm::mat4 &rotated)
-    : GraphicalObject(translated, scaled, rotated),
+    : GraphicalObject(name, translated, scaled, rotated),
       _thickness(thickness),
       _textureRepeats(textureRepeats),
       _normMode(normMode)
@@ -134,7 +135,8 @@ GraphicalEdge::GraphicalEdge(const std::vector<Vector2d<float>> &shape,
 }
 
 GraphicalEdge::GraphicalEdge(filing::JsonIO input)
-    : GraphicalEdge(input.read<std::vector<Vector2d<float>>>("shape"),
+    : GraphicalEdge(input.read<std::string>("name"),
+                    input.read<std::vector<Vector2d<float>>>("shape"),
                     input.read<float>("z"),
                     input.read<float>("thickness"),
                     input.read<Vector2d<float>>("sideTextureRepeats"),
@@ -147,6 +149,7 @@ GraphicalEdge::GraphicalEdge(filing::JsonIO input)
 
 std::string GraphicalEdge::dump(filing::JsonIO output, std::string nameField)
 {
+    output.write<std::string>("name", name());
     output.write<std::vector<Vector2d<float>>>("shape", _shape);
     output.write<float>("z", getZ()); // TODO: check out if it is true
     output.write<float>("thickness", _thickness);
