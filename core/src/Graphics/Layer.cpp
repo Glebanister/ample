@@ -1,34 +1,53 @@
 #include <cassert>
 #include <glm/glm.hpp>
+#include <algorithm>
 
 #include "Debug.h"
 #include "Layer.h"
 
 namespace ample::graphics
 {
-void Layer::addCamera(Camera &camera)
+void Layer::addCamera(std::shared_ptr<Camera> camera)
 {
-    activity::Behavior::addBehaviour(camera);
-    _cameras.push_back(&camera);
+    activity::Behavior::addBehavior(std::static_pointer_cast<Behavior>(camera));
+    _cameras.push_back(camera);
 }
 
-void Layer::addObject(GraphicalObject &object)
+void Layer::addObject(std::shared_ptr<GraphicalObject> object)
 {
-    activity::Behavior::addBehaviour(object);
-    _objects.push_back(&object);
+    activity::Behavior::addBehavior(std::static_pointer_cast<Behavior>(object));
+    _objects.push_back(object);
+}
+
+void Layer::removeObject(std::shared_ptr<GraphicalObject> object)
+{
+    activity::Behavior::removeBehavior(std::static_pointer_cast<Behavior>(object));
+    _objects.push_back(object);
+    std::remove(_objects.begin(), _objects.end(), object);
+}
+
+void Layer::setVisibility(bool value) noexcept
+{
+    _visible = value;
 }
 
 void Layer::onActive()
 {
     activity::Behavior::onActive();
-    for (auto cam : _cameras)
+    if (_visible)
     {
-        cam->look();
-        for (auto obj : _objects)
+        for (auto cam : _cameras)
         {
-            obj->draw();
+            if (cam->visible())
+            {
+                cam->look();
+                for (auto obj : _objects)
+                {
+                    obj->draw();
+                }
+                cam->unlook();
+            }
         }
-        cam->unlook();
     }
 }
 
@@ -37,12 +56,13 @@ void Layer::clearCameras()
     _cameras.clear();
 }
 
-void Layer::clearObjecs()
-{
-    _objects.clear();
-}
 size_t Layer::objectsCount() const noexcept
 {
     return _objects.size();
+}
+
+std::vector<std::shared_ptr<GraphicalObject>> &Layer::objects() noexcept
+{
+    return _objects;
 }
 } // namespace ample::graphics

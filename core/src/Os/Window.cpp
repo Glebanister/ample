@@ -46,8 +46,9 @@ Window::Window(const std::string &name,
     {
         exception::SDLException::handle();
     }
-    _glContext = SDL_GL_CreateContext(_winPtr);
-    if (!_glContext)
+    _glContextImpl = SDL_GL_CreateContext(_winPtr);
+    _glContext = &_glContextImpl;
+    if (!_glContextImpl)
     {
         SDL_DestroyWindow(_winPtr);
         exception::OpenGLException::handle();
@@ -99,9 +100,14 @@ SDL_Window *Window::pointer()
     return _winPtr;
 }
 
+SDL_GLContext *ample::window::Window::glContext() const noexcept
+{
+    return _glContext;
+}
+
 Window::~Window()
 {
+    SDL_GL_DeleteContext(_glContextImpl);
     SDL_DestroyWindow(_winPtr);
-    SDL_GL_DeleteContext(_glContext);
 }
 } // namespace ample::window

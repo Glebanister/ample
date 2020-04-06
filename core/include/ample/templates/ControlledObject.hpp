@@ -1,7 +1,9 @@
 #pragma once
 
-#include "GameException.h"
-#include "Debug.h"
+// #include "GameException.h"
+// #include "Debug.h"
+// #include "ample/Debug.h"
+// #include "ample/GameException.h"
 
 namespace ample::game
 {

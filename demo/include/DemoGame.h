@@ -14,7 +14,8 @@ class Braid : public ample::graphics::GraphicalObject2d
 {
 public:
     Braid()
-        : GraphicalObject2d(ample::geometry::RegularPolygon<float>(10.0f, 6),
+        : GraphicalObject2d("Braid",
+                            ample::geometry::RegularPolygon<float>(10.0f, 6),
                             10.0f,
                             0.0f,
                             {1.0f, 1.0f},
@@ -23,8 +24,8 @@ public:
                             {0.0f, 0.0f},
                             0.0f)
     {
-
         auto texture = std::make_shared<ample::graphics::Texture>(ample::graphics::TextureRaw("../../demo/textures/braid.jpg",
+                                                                                              "Braid textre",
                                                                                               {820UL / 7 - 1, 546UL / 4 - 1},
                                                                                               {2L, 2L},
                                                                                               {7, 4},

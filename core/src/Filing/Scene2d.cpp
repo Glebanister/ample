@@ -40,7 +40,7 @@ Scene2d::Scene2d(const std::string &nameFile)
         {
             ample::graphics::GraphicalObject2d obj(input.updateJsonIO("GraphicalObject2d"));
             _objs[cnt] = std::make_shared<ample::graphics::GraphicalObject2d>(obj);
-            addObject(*_objs[cnt]);
+            addObject(std::static_pointer_cast<graphics::GraphicalObject>(_objs[cnt]));
             DEBUG("add GraphicalObject2d");
         }
         int id = input.read<int>("id");

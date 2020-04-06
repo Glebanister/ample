@@ -10,6 +10,7 @@
 namespace ample::graphics
 {
 TextureRaw::TextureRaw(const std::string &texturePath,
+                       const std::string &name,
                        const graphics::Vector2d<size_t> &eachSize,
                        const graphics::Vector2d<int> &startPosition,
                        const graphics::Vector2d<size_t> &framesCount,
@@ -17,7 +18,8 @@ TextureRaw::TextureRaw(const std::string &texturePath,
                        const texturePlayback playback,
                        const size_t total,
                        const Vector2d<textureOrigin> &origin)
-    : texturePath(texturePath),
+    : NamedObject(name),
+      path(texturePath),
       eachSize(eachSize),
       startPosition(startPosition),
       framesCount(framesCount),
@@ -118,6 +120,7 @@ Texture::GLSingleTexture::GLSingleTexture(PixelMap &pixels,
         pixels.data());
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
     exception::OpenGLException::handle();
 }
 
@@ -185,7 +188,8 @@ Texture::ILimage::~ILimage()
 Texture::Texture(const TextureRaw &rawTexture)
     : _raw(rawTexture)
 {
-    DEBUG("Loading texture " + _raw.texturePath);
+    name() = _raw.name();
+    DEBUG("Loading texture " + _raw.path);
     os::environment::ILEnvironment::instance();
 
     ASSERT(GL_RGB == IL_RGB);
@@ -194,7 +198,7 @@ Texture::Texture(const TextureRaw &rawTexture)
     GLenum glFormat = static_cast<GLenum>(_raw.format);
     ILenum ilFormat = static_cast<ILenum>(_raw.format);
 
-    ILimage image{_raw.texturePath,
+    ILimage image{_raw.path,
                   ilFormat,
                   {
                       _raw.eachSize.x * _raw.framesCount.x,
@@ -270,6 +274,7 @@ void Texture::setFrame(size_t num)
     }
     _currentFrame = num;
 }
+std::string &name() noexcept;
 
 void Texture::pin() const noexcept
 {
@@ -325,5 +330,10 @@ void Texture::nextFrame() noexcept
     default:
         break;
     }
+}
+
+std::string Texture::path() const noexcept
+{
+    return _raw.path;
 }
 } // namespace ample::graphics

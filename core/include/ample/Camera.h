@@ -52,6 +52,7 @@ public:
     float getZ() const noexcept;
 
     void setVisibility(const bool);
+    bool visible() const noexcept;
 
     virtual ~Camera() = default;
 

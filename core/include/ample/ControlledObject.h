@@ -6,10 +6,11 @@
 
 #include "StateMachine.h"
 #include "Behaviour.h"
+#include "NamedObject.h"
 
 namespace ample::game
 {
-class ControlledObject : public activity::Behavior
+class ControlledObject : public activity::Behavior, public NamedObject
 {
 public:
     template <typename ObjectT>
@@ -26,7 +27,7 @@ public:
     };
 
 public:
-    ControlledObject();
+    ControlledObject(const std::string &name = "object_name");
     std::shared_ptr<StateMachine> stateMachine() noexcept;
 
 private:

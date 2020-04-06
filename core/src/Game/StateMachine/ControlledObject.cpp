@@ -3,10 +3,11 @@
 
 namespace ample::game
 {
-ControlledObject::ControlledObject()
-    : _stateMachine(std::make_shared<StateMachine>())
+ControlledObject::ControlledObject(const std::string &name)
+    : NamedObject(name),
+      _stateMachine(std::make_shared<StateMachine>())
 {
-    addBehaviour(*_stateMachine);
+    addBehavior(std::static_pointer_cast<Behavior>(_stateMachine));
 }
 
 std::shared_ptr<StateMachine> ControlledObject::stateMachine() noexcept
