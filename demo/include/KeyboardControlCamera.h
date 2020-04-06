@@ -10,7 +10,7 @@ class KeyboardControlCamera : public ample::activity::Behavior
 public:
     KeyboardControlCamera(ample::control::EventManager &manager, std::shared_ptr<ample::graphics::Camera> camera)
         : _manager(manager),
-          _lamp(std::make_shared<ample::graphics::light::LightSource>()),
+          _lamp(std::make_shared<ample::graphics::light::LightSource>("lamp")),
           _camera(camera)
     {
     }
