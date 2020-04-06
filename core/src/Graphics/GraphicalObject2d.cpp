@@ -71,4 +71,23 @@ std::shared_ptr<GraphicalPolygon> GraphicalObject2d::facePointer() noexcept
 {
     return _face;
 }
+
+GraphicalObject2d::GraphicalObject2d(filing::JsonIO input)
+        : GraphicalObject(input.updateJsonIO("Graphical object")),
+          _face(input.updateJsonIO("face")),
+          _side(input.updateJsonIO("side"))
+{
+}
+
+std::string GraphicalObject2d::dump(filing::JsonIO output, std::string nameField)
+{
+    // work with subobjects
+    std::vector<std::string> strings;
+    strings.push_back(GraphicalObject::dump(output, "GraphicalObject"));
+    strings.push_back(_face.dump(output, "face"));
+    strings.push_back(_side.dump(output, "side"));
+
+    return filing::makeField(nameField, filing::mergeStrings(strings));
+}
+
 } // namespace ample::graphics

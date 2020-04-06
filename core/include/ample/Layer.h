@@ -25,7 +25,7 @@ public:
 
     std::vector<std::shared_ptr<GraphicalObject>> &objects() noexcept;
 
-private:
+protected:
     std::vector<std::shared_ptr<Camera>> _cameras;
     std::vector<std::shared_ptr<GraphicalObject>> _objects;
     bool _visible = true;

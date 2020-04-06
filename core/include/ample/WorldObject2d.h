@@ -11,11 +11,6 @@
 #include <memory>
 #include <vector>
 
-namespace ample::filing
-{
-class WorldObject2dIO;
-}
-
 namespace ample::physics
 {
 class WorldLayer2d;
@@ -135,8 +130,6 @@ public:
 
 private:
     friend WorldJoint2d;
-    friend WorldLayer2d;
-    friend ample::filing::WorldObject2dIO;
 
     std::vector<std::shared_ptr<Fixture>> _fixtures;
     WorldLayer2d &_layer;
