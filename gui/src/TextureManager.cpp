@@ -113,26 +113,26 @@ void TextureManager::TextureLoader()
         rawTexture.success = false;
         ImGui::CloseCurrentPopup();
     }
+    rawTexture.fileDialog.Display();
+    if (rawTexture.fileDialog.HasSelected())
+    {
+        rawTexture.pathBuffer = rawTexture.fileDialog.GetSelected();
+        rawTexture.fileDialog.ClearSelected();
+    }
 }
 
 void TextureManager::drawInterface()
 {
     ImGui::Begin("Texture manager");
     TexturesList();
-    if (ImGui::Button("Upload texture"))
+    if (ImGui::Button("Upload new texture"))
     {
-        ImGui::OpenPopup("Upload new texture");
+        ImGui::OpenPopup("Texture loader");
     }
-    if (ImGui::BeginPopupModal("Upload new texture", NULL, ImGuiWindowFlags_MenuBar))
+    if (ImGui::BeginPopupModal("Texture loader", NULL, ImGuiWindowFlags_MenuBar))
     {
         TextureLoader();
         ImGui::EndPopup();
-    }
-    rawTexture.fileDialog.Display();
-    if (rawTexture.fileDialog.HasSelected())
-    {
-        rawTexture.pathBuffer = rawTexture.fileDialog.GetSelected();
-        rawTexture.fileDialog.ClearSelected();
     }
     ImGui::End();
 }
