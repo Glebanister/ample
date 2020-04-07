@@ -20,7 +20,12 @@ void TextureManager::TexturesList()
     {
         if (ImGui::TreeNode(_textures[i]->name().c_str()))
         {
-            ImGui::Text("path: %s", _textures[i]->path().c_str());
+            ImGui::Text("Path: %s", _textures[i]->path().c_str());
+            ImGui::Text("Size: %dx%d", _textures[i]->getWidth(), _textures[i]->getHeight());
+            ImGui::Text("Preview:");
+            ImGui::SameLine();
+            ImGui::Image((void *)(intptr_t)_textures[i]->getCurrentTexture().glTextureId(),
+                         ImVec2(64, 64));
             ImGui::TreePop();
         }
     }
