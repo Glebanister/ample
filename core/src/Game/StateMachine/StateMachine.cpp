@@ -98,6 +98,11 @@ void StateMachine::setCurrentState(std::shared_ptr<State> state)
     _currentState->onStart();
 }
 
+std::shared_ptr<StateMachine::State> StateMachine::getCurrentState() noexcept
+{
+    return _currentState;
+}
+
 StateMachine::~StateMachine()
 {
     if (_currentState)
