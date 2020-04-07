@@ -15,6 +15,7 @@ class Scene2d;
 namespace ample::physics
 {
 class WorldObject2d;
+class WorldContact2d;
 class WorldJoint2d;
 class ContactListener;
 } // namespace ample::physics
@@ -29,6 +30,8 @@ public:
                           float thickness,
                           float relativePositionInSlice);
     void setContactListener(ContactListener &listener);
+
+    WorldContact2d getContactList();
 
 protected:
     friend WorldObject2d;

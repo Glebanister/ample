@@ -26,6 +26,10 @@ void WorldLayer2d::setContactListener(ContactListener &listener)
     world.SetContactListener(&listener);
 }
 
+WorldContact2d WorldLayer2d::getContactList() {
+    return {world.GetContactList()};
+}
+
 b2Body *WorldLayer2d::addWorldObject(WorldObject2d &obj, b2BodyDef *bodyDef)
 {
     graphics::Layer::addObject(obj);
