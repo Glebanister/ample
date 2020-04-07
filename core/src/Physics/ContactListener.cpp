@@ -6,16 +6,40 @@ namespace ample::physics
 {
 void ContactListener::BeginContact(b2Contact *contact)
 {
-    auto fixtureA = static_cast<Fixture *>(contact->GetFixtureA()->GetUserData());
-    auto fixtureB = static_cast<Fixture *>(contact->GetFixtureB()->GetUserData());
-    //check nullptr
-    startContact(*fixtureA, *fixtureB);
+    startContact({contact});
 }
+
 void ContactListener::EndContact(b2Contact *contact)
 {
-    auto fixtureA = static_cast<Fixture *>(contact->GetFixtureA()->GetUserData());
-    auto fixtureB = static_cast<Fixture *>(contact->GetFixtureB()->GetUserData());
-    //check nullptr
-    endContact(*fixtureA, *fixtureB);
+    endContact({contact});
+}
+
+void ContactListener::PreSolve(b2Contact *contact, const b2Manifold *oldManifold)
+{
+    preSolve({contact}, oldManifold);
+}
+
+void ContactListener::PostSolve(b2Contact *contact, const b2ContactImpulse *impulse)
+{
+    postSolve({contact}, impulse);
+}
+
+void ContactListener::startContact(WorldContact2d contact)
+{
+    (void)contact;
+}
+void ContactListener::endContact(WorldContact2d contact)
+{
+    (void)contact;
+}
+void ContactListener::preSolve(WorldContact2d contact, const b2Manifold *oldManifold)
+{
+    (void)contact;
+    (void)oldManifold;
+}
+void ContactListener::postSolve(WorldContact2d contact, const b2ContactImpulse *impulse)
+{
+    (void)contact;
+    (void)impulse;
 }
 } // namespace ample::physics
