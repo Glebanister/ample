@@ -41,9 +41,9 @@ public:
     void clearForces();
 
     WorldObject2d &getBodyList();
-	const WorldObject2d &getBodyList() const;
+    const WorldObject2d &getBodyList() const;
 
-	WorldJoint2d &getJointList();
+    WorldJoint2d &getJointList();
 	const WorldJoint2d &getJointList() const;
 
 	void setAllowSleeping(bool flag);
