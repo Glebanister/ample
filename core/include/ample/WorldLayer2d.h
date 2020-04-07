@@ -44,22 +44,22 @@ public:
     const WorldObject2d &getBodyList() const;
 
     WorldJoint2d &getJointList();
-	const WorldJoint2d &getJointList() const;
+    const WorldJoint2d &getJointList() const;
 
-	void setAllowSleeping(bool flag);
-	bool getAllowSleeping() const;
+    void setAllowSleeping(bool flag);
+    bool getAllowSleeping() const;
 
     void setGravity(const b2Vec2& gravity);
 	
-	b2Vec2 getGravity() const;
+    b2Vec2 getGravity() const;
 
-	bool isLocked() const;
+    bool isLocked() const;
 
-	void setAutoClearForces(bool flag);
+    void setAutoClearForces(bool flag);
 
-	bool getAutoClearForces() const;
+    bool getAutoClearForces() const;
 
-	void shiftOrigin(const b2Vec2& newOrigin);
+    void shiftOrigin(const b2Vec2& newOrigin);
 
     /*
     void SetDestructionListener(b2DestructionListener* listener);
