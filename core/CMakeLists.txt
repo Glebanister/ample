@@ -51,6 +51,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
 
     src/Filing/Scene2d.cpp
     src/Filing/UniqueObject.cpp
+    src/Filing/StoredObject.cpp
 
     src/Graphics/GraphicalObject.cpp
     src/Graphics/GraphicalObject2d.cpp
