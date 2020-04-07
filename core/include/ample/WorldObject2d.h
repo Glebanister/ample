@@ -34,10 +34,8 @@ public:
 private:
     friend WorldObject2d;
 
-    Fixture(b2Fixture *fixture, WorldObject2d &wObject);
-
+    Fixture(b2Fixture *fixture);
     b2Fixture *_fixture = nullptr;
-    WorldObject2d &worldObject;
 };
 
 enum class BodyType
@@ -70,7 +68,7 @@ public:
                   float rotated = 0.0f);
     //void onPause() override;//TODO
 
-    Fixture &addFixture(const std::vector<ample::graphics::Vector2d<float>> &shape);
+    Fixture addFixture(const std::vector<ample::graphics::Vector2d<float>> &shape);
     WorldLayer2d &getWorldLayer() const;
 
     void setSpeedX(float desiredVelX);
