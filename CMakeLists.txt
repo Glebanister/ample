@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.3)
 
-set(CMAKE_CXX_COMPILER /usr/bin/g++-9)
+set(CMAKE_CXX_COMPILER g++-9)
 
 project(ample)
 
