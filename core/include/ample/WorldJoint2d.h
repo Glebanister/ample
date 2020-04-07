@@ -10,7 +10,7 @@ namespace ample::physics
 {
 class WorldLayer2d;
 class WorldObject2d;
-class WorldJoint2d : public activity::Behaviour, public filing::UniqueObject
+class WorldJoint2d : public activity::Behavior, public filing::UniqueObject
 {
 public:
     WorldObject2d &getBodyA();

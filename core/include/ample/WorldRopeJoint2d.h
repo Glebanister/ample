@@ -11,7 +11,7 @@ class WorldRopeJoint2d : public WorldJoint2d
 public:
     void onActive() override;
 
-    void setForm(graphics::GraphicalObject2d &form);
+    void setForm(std::shared_ptr<graphics::GraphicalObject2d> form);
 
     ample::graphics::Vector2d<float> getLocalAnchorA() const;
     ample::graphics::Vector2d<float> getLocalAnchorB() const;
@@ -29,7 +29,7 @@ public:
                      bool collideConnected = false);
 
 private:
-    graphics::GraphicalObject2d *_form = nullptr;
+    std::shared_ptr<graphics::GraphicalObject2d> _form = nullptr;
     float _initLength;
 };
 } // namespace ample::physics

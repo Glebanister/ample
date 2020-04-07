@@ -28,9 +28,9 @@ void WorldMouseJoint2d::onActive()
     }
 }
 
-void WorldMouseJoint2d::setForm(graphics::GraphicalObject2d &form, float standardLength)
+void WorldMouseJoint2d::setForm(std::shared_ptr<graphics::GraphicalObject2d> form, float standardLength)
 {
-    _form = &form;
+    _form = form;
     _initLength = standardLength; //TODO check standardLength > 0
     _bodyA.getWorldLayer().addObject(form);
 }

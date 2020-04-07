@@ -11,7 +11,8 @@ class WorldPulleyJoint2d : public WorldJoint2d
 public:
 	void onActive() override;
 
-	void setForm(graphics::GraphicalObject2d &formA, graphics::GraphicalObject2d &formB);
+	void setForm(std::shared_ptr<graphics::GraphicalObject2d> formA,
+				 std::shared_ptr<graphics::GraphicalObject2d> formB);
 
 	ample::graphics::Vector2d<float> getGroundAnchorA() const;
 
@@ -39,8 +40,8 @@ public:
 					   bool collideConnected = false);
 
 private:
-	graphics::GraphicalObject2d *_formA = nullptr;
-	graphics::GraphicalObject2d *_formB = nullptr;
+	std::shared_ptr<graphics::GraphicalObject2d> _formA;
+	std::shared_ptr<graphics::GraphicalObject2d> _formB;
 	float _initLengthA;
 	float _initLengthB;
 };

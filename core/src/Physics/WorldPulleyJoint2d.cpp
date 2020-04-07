@@ -54,10 +54,11 @@ void WorldPulleyJoint2d::onActive()
     }
 }
 
-void WorldPulleyJoint2d::setForm(graphics::GraphicalObject2d &formA, graphics::GraphicalObject2d &formB)
+void WorldPulleyJoint2d::setForm(std::shared_ptr<graphics::GraphicalObject2d> formA,
+                                 std::shared_ptr<graphics::GraphicalObject2d> formB)
 {
-    _formA = &formA;
-    _formB = &formB;
+    _formA = formA;
+    _formB = formB;
     _initLengthA = getCurrentLengthA();
     _initLengthB = getCurrentLengthB();
     _bodyA.getWorldLayer().addObject(formA);

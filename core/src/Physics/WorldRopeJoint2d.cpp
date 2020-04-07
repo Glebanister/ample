@@ -33,9 +33,9 @@ void WorldRopeJoint2d::onActive()
     }
 }
 
-void WorldRopeJoint2d::setForm(graphics::GraphicalObject2d &form)
+void WorldRopeJoint2d::setForm(std::shared_ptr<graphics::GraphicalObject2d> form)
 {
-    _form = &form;
+    _form = form;
     _initLength = sqrt(pow(getAnchorA().x - getAnchorB().x, 2) + pow(getAnchorA().y - getAnchorB().y, 2));
     _bodyA.getWorldLayer().addObject(form);
 }

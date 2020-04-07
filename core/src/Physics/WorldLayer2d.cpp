@@ -109,12 +109,12 @@ void ample::physics::WorldLayer2d::addWorldObject(std::shared_ptr<ample::physics
     graphics::Layer::addObject(std::static_pointer_cast<graphics::GraphicalObject>(obj));
     _bodies.push_back(obj);
     obj->_body = world.CreateBody(&obj->_bodyDef);
-    obj->_body->SetUserData(obj->get());
+    obj->_body->SetUserData(obj.get());
 }
 
 b2Joint *WorldLayer2d::addWorldJoint(std::shared_ptr<WorldJoint2d> joint, b2JointDef *jointDef)
 {
-    addBehaviour(joint);
+    addBehavior(joint);
     _joints.push_back(joint);
     return world.CreateJoint(jointDef);
 }
