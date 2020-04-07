@@ -89,4 +89,27 @@ float WorldContact2d::getTangentSpeed() const
 {
     return _contact->GetTangentSpeed();
 }
+
+WorldContactEdge2d::WorldContactEdge2d(b2ContactEdge *contactEdge)
+    : _contactEdge(contactEdge) {}
+
+WorldObject2d &WorldContactEdge2d::getOther()
+{
+    return *static_cast<WorldObject2d *>(_contactEdge->other->GetUserData());
+}
+
+WorldContact2d WorldContactEdge2d::getContact()
+{
+    return {_contactEdge->contact};
+}
+
+WorldContactEdge2d WorldContactEdge2d::getPrev()
+{
+    return {_contactEdge->next};
+}
+
+WorldContactEdge2d WorldContactEdge2d::getNext()
+{
+    return {_contactEdge->prev};
+}
 } // namespace ample::physics

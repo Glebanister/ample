@@ -5,6 +5,8 @@
 
 namespace ample::physics
 {
+class Fixture;
+class WorldObject2d;
 class WorldContact2d
 {
 public:
@@ -48,5 +50,20 @@ public:
 
 private:
     b2Contact *_contact = nullptr;
+};
+
+class WorldContactEdge2d
+{
+public:
+    WorldObject2d &getOther();
+    WorldContact2d getContact();
+    WorldContactEdge2d getPrev();
+    WorldContactEdge2d getNext();
+
+private:
+    friend WorldObject2d;
+
+    WorldContactEdge2d(b2ContactEdge *contactEdge);
+    b2ContactEdge *_contactEdge = nullptr;
 };
 } // namespace ample::physics

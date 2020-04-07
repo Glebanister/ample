@@ -291,6 +291,11 @@ void WorldObject2d::resetMassData()
     _body->ResetMassData();
 }
 
+WorldContactEdge2d WorldObject2d::getContactList()
+{
+    return {_body->GetContactList()};
+}
+
 WorldObject2d::WorldObject2d(WorldLayer2d &layer,
                              BodyType type,
                              const std::vector<ample::graphics::Vector2d<float>> &shape,
@@ -327,6 +332,7 @@ WorldObject2d::WorldObject2d(WorldLayer2d &layer,
         break;
     }
     _body = _layer.addWorldObject(*this, &bodyDef);
+    _body->SetUserData(this);
 }
 
 WorldLayer2d &WorldObject2d::getWorldLayer() const

@@ -3,6 +3,7 @@
 #include "GraphicalObject2d.h"
 #include "WorldLayer2d.h"
 #include "Vector2d.h"
+#include "WorldContact2d.h"
 #include "box2d/b2_body.h"
 #include "box2d/b2_fixture.h"
 
@@ -20,6 +21,7 @@ namespace ample::physics
 {
 class WorldLayer2d;
 class WorldContact2d;
+class WorldContactEdge2d;
 class WorldObject2d;
 class WorldJoint2d;
 class Fixture final
@@ -128,6 +130,8 @@ public:
 
     void setFixedRotation(bool flag);
     bool isFixedRotation() const;
+
+    WorldContactEdge2d getContactList();
 
     void dump();
 
