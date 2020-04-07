@@ -18,6 +18,8 @@ public:
     virtual ample::graphics::Vector2d<float> getAnchorB() const;
     virtual ample::graphics::Vector2d<float> getReactionForce(float inv_dt) const;
     virtual float getReactionTorque(float inv_dt) const;
+    WorldJoint2d &getNext();
+    const WorldJoint2d &getNext() const;
 
 protected:
     WorldJoint2d(WorldObject2d &bodyA, WorldObject2d &bodyB, b2Joint *joint = nullptr);

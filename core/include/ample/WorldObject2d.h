@@ -133,6 +133,9 @@ public:
 
     WorldContactEdge2d getContactList();
 
+    WorldObject2d &getNext();
+    const WorldObject2d &getNext() const;
+
     void dump();
 
 private:

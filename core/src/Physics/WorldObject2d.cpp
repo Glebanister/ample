@@ -296,6 +296,16 @@ WorldContactEdge2d WorldObject2d::getContactList()
     return {_body->GetContactList()};
 }
 
+WorldObject2d &WorldObject2d::getNext()
+{
+    return *static_cast<WorldObject2d *>(_body->GetNext()->GetUserData());
+}
+
+const WorldObject2d &WorldObject2d::getNext() const
+{
+    return *static_cast<WorldObject2d *>(_body->GetNext()->GetUserData());
+}
+
 WorldObject2d::WorldObject2d(WorldLayer2d &layer,
                              BodyType type,
                              const std::vector<ample::graphics::Vector2d<float>> &shape,
