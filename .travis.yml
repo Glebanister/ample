@@ -12,7 +12,7 @@ install:
 script:
   - mkdir build 
   - cd build
-  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DTARGET_CPU=$TARGET_CPU
+  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DTARGET_CPU=$TARGET_CPU -DCMAKE_CXX_COMPILER=g++-4.2
   - make -j4
   # - mkdir TestingDir
   # - ./test/test_Ample
