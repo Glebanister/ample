@@ -6,9 +6,9 @@ sudo apt install software-properties-common
 
 sudo apt-get update
 
-sudo apt-get install g++-7 > output
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 40
-sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 40
+sudo apt-get install g++-9
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 40
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 40
 
 g++ --version
 gcc --version
