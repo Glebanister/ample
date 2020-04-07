@@ -3,6 +3,7 @@
 #include "GraphicalObject2d.h"
 #include "WorldLayer2d.h"
 #include "Vector2d.h"
+#include "WorldContact2d.h"
 #include "box2d/b2_body.h"
 #include "box2d/b2_fixture.h"
 
@@ -14,6 +15,8 @@
 namespace ample::physics
 {
 class WorldLayer2d;
+class WorldContact2d;
+class WorldContactEdge2d;
 class WorldObject2d;
 class WorldJoint2d;
 class Fixture final
@@ -28,11 +31,10 @@ public:
 
 private:
     friend WorldObject2d;
+    friend WorldContact2d;
 
-    Fixture(b2Fixture *fixture, WorldObject2d &wObject);
-
+    Fixture(b2Fixture *fixture);
     b2Fixture *_fixture = nullptr;
-    WorldObject2d &worldObject;
 };
 
 enum class BodyType
@@ -67,7 +69,7 @@ public:
     void onAwake() override;
     //void onPause() override;//TODO
 
-    Fixture &addFixture(const std::vector<ample::graphics::Vector2d<float>> &shape);
+    Fixture addFixture(const std::vector<ample::graphics::Vector2d<float>> &shape);
     WorldLayer2d &getWorldLayer() const;
 
     void setSpeedX(float desiredVelX);
@@ -126,13 +128,17 @@ public:
     void setFixedRotation(bool flag);
     bool isFixedRotation() const;
 
+    WorldContactEdge2d getContactList();
+
+    WorldObject2d &getNext();
+    const WorldObject2d &getNext() const;
+
     void dump();
 
 private:
     friend WorldJoint2d;
     friend WorldLayer2d;
 
-    std::vector<std::shared_ptr<Fixture>> _fixtures;
     WorldLayer2d &_layer;
     b2Body *_body = nullptr;
     b2BodyDef _bodyDef;

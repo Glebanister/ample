@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include "box2d/b2_distance_joint.h"
 
 #include "WorldJoint2d.h"
@@ -9,6 +10,10 @@ class WorldObject2d;
 class WorldDistanceJoint2d : public ample::physics::WorldJoint2d
 {
 public:
+    void onActive() override;
+
+    void setForm(std::shared_ptr<graphics::GraphicalObject2d> form);
+
     ample::graphics::Vector2d<float> getLocalAnchorA() const;
     ample::graphics::Vector2d<float> getLocalAnchorB() const;
 
@@ -27,5 +32,9 @@ public:
                          const ample::graphics::Vector2d<float> &anchorOnBodyB,
                          float length = -1,
                          bool collideConnected = false);
+
+private:
+    std::shared_ptr<graphics::GraphicalObject2d> _form;
+    float _initLength;
 };
 } // namespace ample::physics
