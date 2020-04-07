@@ -1,7 +1,10 @@
 #pragma once
 
+#define GLM_ENABLE_EXPERIMENTAL
+
 #include <fstream>
 #include <sstream>
+#include <glm/glm.hpp>
 
 namespace ample::graphics
 {

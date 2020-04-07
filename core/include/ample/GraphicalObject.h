@@ -1,13 +1,13 @@
 #pragma once
 
+#include <GL/gl.h>
+#include <glm/glm.hpp>
 #include <vector>
 #include <memory>
-#include <glm/glm.hpp>
-#include <GL/gl.h>
+#include <string>
 
 #include "Vector3d.h"
 #include "ShaderProcessor.h"
-#include "Behaviour.h"
 #include "Texture.h"
 #include "VertexArray.h"
 #include "ControlledObject.h"
