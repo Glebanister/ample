@@ -8,7 +8,6 @@ public:
     NamedObject(const std::string &name = "noname");
 
     void setClassName(const std::string &className) noexcept;
-
     std::string &name() noexcept;
     std::string &className() noexcept;
 
