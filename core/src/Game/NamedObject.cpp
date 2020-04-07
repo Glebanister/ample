@@ -14,7 +14,7 @@ NamedObject::NamedObject(const std::string &name)
     }
 }
 
-void NamedObject::setClassName(const std::string &className)
+void NamedObject::setClassName(const std::string &className) noexcept
 {
     _className = className;
 }
