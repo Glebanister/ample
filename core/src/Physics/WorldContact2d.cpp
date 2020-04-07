@@ -40,11 +40,15 @@ WorldContact2d WorldContact2d::getNext()
     return {_contact->GetNext()};
 }
 
-/*Fixture &WorldContact2d::getFixtureA();
-const Fixture &WorldContact2d::getFixtureA() const;
+Fixture WorldContact2d::getFixtureA()
+{
+    return {_contact->GetFixtureA()};
+}
 
-Fixture &WorldContact2d::getFixtureB();
-const Fixture &WorldContact2d::getFixtureB() const;*/
+Fixture WorldContact2d::getFixtureB()
+{
+    return {_contact->GetFixtureB()};
+}
 
 void WorldContact2d::setFriction(float friction)
 {

@@ -19,6 +19,7 @@ class WorldObject2dIO;
 namespace ample::physics
 {
 class WorldLayer2d;
+class WorldContact2d;
 class WorldObject2d;
 class WorldJoint2d;
 class Fixture final
@@ -33,6 +34,7 @@ public:
 
 private:
     friend WorldObject2d;
+    friend WorldContact2d;
 
     Fixture(b2Fixture *fixture);
     b2Fixture *_fixture = nullptr;
@@ -133,7 +135,6 @@ private:
     friend WorldJoint2d;
     friend ample::filing::WorldObject2dIO;
 
-    std::vector<std::shared_ptr<Fixture>> _fixtures;
     WorldLayer2d &_layer;
     b2Body *_body = nullptr;
 };

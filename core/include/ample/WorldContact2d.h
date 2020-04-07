@@ -20,16 +20,12 @@ public:
     bool isEnabled() const;
 
     WorldContact2d getNext();
-    //const WorldContact2d getNext() const;
 
-    /*Fixture &getFixtureA();
-    const Fixture &getFixtureA() const;
+    Fixture getFixtureA();
+
+    Fixture getFixtureB();
 
     //int32 GetChildIndexA() const;
-
-    Fixture &getFixtureB();
-    const Fixture &getFixtureB() const;*/
-
     //int32 GetChildIndexB() const;
 
     void setFriction(float friction);
