@@ -42,7 +42,6 @@ private:
 class WindowActivity : public activity::Activity
 {
 public:
-    std::shared_ptr<control::EventManager> eventManager;
 
     WindowActivity() = delete;
     WindowActivity(Window &window);
@@ -54,10 +53,14 @@ public:
 
     virtual void onActive() override;
 
+    control::EventManager &eventManager() noexcept;
+
+    Window &osWindow();
+
 protected:
     virtual void onResize();
 
-
+    std::shared_ptr<control::EventManager> _eventManager;
     Window &_window;
     std::shared_ptr<QuitHandler> _quitHandler;
     std::shared_ptr<WindowEventHandler> _windowEventHandler;

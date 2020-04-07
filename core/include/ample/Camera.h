@@ -10,7 +10,7 @@
 namespace ample::graphics
 {
 using pixel_t = std::int32_t;
-class Camera : public activity::Behaviour
+class Camera : public activity::Behavior
 {
 protected:
     struct Viewport final
@@ -52,6 +52,7 @@ public:
     float getZ() const noexcept;
 
     void setVisibility(const bool);
+    bool visible() const noexcept;
 
     virtual ~Camera() = default;
 

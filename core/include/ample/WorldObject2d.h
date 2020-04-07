@@ -12,11 +12,6 @@
 #include <memory>
 #include <vector>
 
-namespace ample::filing
-{
-class WorldObject2dIO;
-}
-
 namespace ample::physics
 {
 class WorldLayer2d;
@@ -60,16 +55,18 @@ class WorldObject2d final : public ample::graphics::GraphicalObject2d
 {
 public:
     void onActive() override;
-    WorldObject2d(WorldLayer2d &layer,
+    WorldObject2d(const std::string &name,
+                  WorldLayer2d &layer,
                   BodyType type,
                   const std::vector<ample::graphics::Vector2d<float>> &shape,
-                  const float thickness,
-                  const float z,
+                  const float relativeThickness,
                   const graphics::Vector2d<float> &faceTextureRepeats,
                   const graphics::Vector2d<float> &sideTextureRepeats,
                   const graphics::normalsMode sideNormalsMode,
                   const graphics::Vector2d<float> &translated = {0.0f, 0.0f},
                   float rotated = 0.0f);
+
+    void onAwake() override;
     //void onPause() override;//TODO
 
     Fixture addFixture(const std::vector<ample::graphics::Vector2d<float>> &shape);
@@ -140,9 +137,10 @@ public:
 
 private:
     friend WorldJoint2d;
-    friend ample::filing::WorldObject2dIO;
+    friend WorldLayer2d;
 
     WorldLayer2d &_layer;
     b2Body *_body = nullptr;
+    b2BodyDef _bodyDef;
 };
 } // namespace ample::physics

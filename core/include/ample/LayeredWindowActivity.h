@@ -15,12 +15,12 @@ class LayeredWindowActivity : public window::WindowActivity
 public:
     LayeredWindowActivity(window::Window &window);
 
-    void addLayer(Layer &layer);
+    void addLayer(std::shared_ptr<Layer> layer);
     void cleanLayers();
     void onActive() override;
     void onAwake() override;
 
 private:
-    std::vector<Layer *> _layers;
+    std::vector<std::shared_ptr<Layer>> _layers;
 };
 } // namespace ample::graphics

@@ -4,12 +4,17 @@
 #include "Behaviour.h"
 #include "WorldObject2d.h"
 #include "WorldLayer2d.h"
+#include "UniqueObject.h"
 
 namespace ample::physics
 {
 class WorldLayer2d;
 class WorldObject2d;
+<<<<<<< HEAD
 class WorldJoint2d : public activity::Behaviour
+=======
+class WorldJoint2d : public filing::UniqueObject
+>>>>>>> 7a3be8e65eda37bd4a5bdc52b6ae198aef0858b5
 {
 public:
     WorldObject2d &getBodyA();

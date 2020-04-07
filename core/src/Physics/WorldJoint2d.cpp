@@ -30,7 +30,7 @@ b2Joint *WorldJoint2d::getB2Joint(WorldJoint2d &joint) const
 
 void WorldJoint2d::initB2Joint(WorldLayer2d &layer, b2JointDef *jointDef)
 {
-    _joint = layer.addWorldJoint(*this, jointDef);
+    _joint = layer.addWorldJoint(std::shared_ptr<WorldJoint2d>(this), jointDef);
 }
 
 ample::graphics::Vector2d<float> WorldJoint2d::getAnchorA() const

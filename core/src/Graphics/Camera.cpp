@@ -93,6 +93,10 @@ void Camera::setVisibility(const bool value)
 {
     _visible = value;
 }
+bool Camera::visible() const noexcept
+{
+    return _visible;
+}
 
 float Camera::getX() const noexcept
 {

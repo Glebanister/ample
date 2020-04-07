@@ -10,20 +10,30 @@
 namespace ample::graphics
 {
 TextureRaw::TextureRaw(const std::string &texturePath,
+                       const std::string &name,
                        const graphics::Vector2d<size_t> &eachSize,
                        const graphics::Vector2d<int> &startPosition,
                        const graphics::Vector2d<size_t> &framesCount,
                        const channelMode format,
                        const texturePlayback playback,
-                       const size_t total)
-    : texturePath(texturePath),
+                       const size_t total,
+                       const Vector2d<textureOrigin> &origin)
+    : NamedObject(name),
+      path(texturePath),
       eachSize(eachSize),
       startPosition(startPosition),
       framesCount(framesCount),
       format(format),
       playback(playback),
-      total(!total ? framesCount.x * framesCount.y : total)
+      total(!total ? framesCount.x * framesCount.y : total),
+      origin(origin)
 {
+    if (total > framesCount.x * framesCount.y)
+    {
+        throw exception::Exception{exception::exId::DEVIL,
+                                   exception::exType::CASUAL,
+                                   "the number of frames exceeds the maximum"};
+    }
 }
 
 inline size_t channelsCount(const channelMode &mode)
@@ -110,6 +120,7 @@ Texture::GLSingleTexture::GLSingleTexture(PixelMap &pixels,
         pixels.data());
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
     exception::OpenGLException::handle();
 }
 
@@ -177,13 +188,17 @@ Texture::ILimage::~ILimage()
 Texture::Texture(const TextureRaw &rawTexture)
     : _raw(rawTexture)
 {
-    DEBUG("Loading texture " + _raw.texturePath);
+    name() = _raw.name();
+    DEBUG("Loading texture " + _raw.path);
     os::environment::ILEnvironment::instance();
+
+    ASSERT(GL_RGB == IL_RGB);
+    ASSERT(GL_RGBA == IL_RGBA);
 
     GLenum glFormat = static_cast<GLenum>(_raw.format);
     ILenum ilFormat = static_cast<ILenum>(_raw.format);
 
-    ILimage image{_raw.texturePath,
+    ILimage image{_raw.path,
                   ilFormat,
                   {
                       _raw.eachSize.x * _raw.framesCount.x,
@@ -204,7 +219,17 @@ Texture::Texture(const TextureRaw &rawTexture)
             {
                 for (size_t pixelJ = j * _raw.eachSize.x; pixelJ < (j + 1) * _raw.eachSize.x; ++pixelJ)
                 {
-                    framePixels[pixelI - i * _raw.eachSize.y][pixelJ - j * _raw.eachSize.x] = image.pixels()[pixelI][pixelJ];
+                    size_t frameI = pixelI - i * _raw.eachSize.y;
+                    size_t frameJ = pixelJ - j * _raw.eachSize.x;
+                    if (_raw.origin.x == textureOrigin::REVERSED)
+                    {
+                        frameI = _raw.eachSize.y - 1 - frameI;
+                    }
+                    if (_raw.origin.y == textureOrigin::REVERSED)
+                    {
+                        frameJ = _raw.eachSize.x - 1 - frameJ;
+                    }
+                    framePixels[frameI][frameJ] = image.pixels()[pixelI][pixelJ];
                 }
             }
             _frames.emplace_back(framePixels, glFormat, glFormat);
@@ -249,6 +274,7 @@ void Texture::setFrame(size_t num)
     }
     _currentFrame = num;
 }
+std::string &name() noexcept;
 
 void Texture::pin() const noexcept
 {
@@ -304,5 +330,10 @@ void Texture::nextFrame() noexcept
     default:
         break;
     }
+}
+
+std::string Texture::path() const noexcept
+{
+    return _raw.path;
 }
 } // namespace ample::graphics

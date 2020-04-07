@@ -49,10 +49,8 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Utils/Singleton.cpp
     src/Utils/Noncopyable.cpp
 
-    # src/Filing/GraphicalObjectIO.cpp
-    # src/Filing/GraphicalObject2dIO.cpp
-    # src/Filing/WorldObject2dIO.cpp
-    # src/Filing/Scene2d.cpp
+    src/Filing/Scene2d.cpp
+    src/Filing/UniqueObject.cpp
 
     src/Graphics/GraphicalObject.cpp
     src/Graphics/GraphicalObject2d.cpp
@@ -88,10 +86,28 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Physics/WorldContact2d.cpp
 
     src/Geometry/RegularPolygon.cpp
+    src/Geometry/VectorRectangle.cpp
+    src/Geometry/Shape.cpp
+    src/Geometry/Rectangle.cpp
+    src/Geometry/Circle.cpp
+    src/Geometry/Point.cpp
 
     src/Game/Game2d/Game2d.cpp
     src/Game/Game2d/Level.cpp
     src/Game/GameException.cpp
+    src/Game/StateMachine/StateMachine.cpp
+    src/Game/StateMachine/Transitions/Os/EnvironmentTransition.cpp
+    src/Game/StateMachine/Transitions/Os/KeyboardTransition.cpp
+    src/Game/StateMachine/Transitions/Os/MouseTransition.cpp
+    src/Game/StateMachine/Transitions/Os/TimerTransition.cpp
+    src/Game/StateMachine/Transitions/Physics/PhysicalTransition.cpp
+    src/Game/StateMachine/Transitions/Physics/DistanceTransition.cpp
+    src/Game/StateMachine/Transitions/Physics/SpeedTransition.cpp
+    src/Game/StateMachine/Transitions/Physics/PositionTransition.cpp
+    src/Game/StateMachine/Transitions/Physics/CollisionTransition.cpp
+    src/Game/StateMachine/ControlledObject.cpp
+    src/Game/Events/EventListener.cpp
+    src/Game/NamedObject.cpp
    )
 
 include_directories(${SDL2_INCLUDE_DIRS})

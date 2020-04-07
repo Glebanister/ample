@@ -99,31 +99,26 @@ ShaderProcessor::Uniform::Uniform(glm::mat4 &data, const std::string &name)
     : Uniform(glm::value_ptr(data), name)
 {
     type = UniformType::MAT4;
-    DEBUG("MAT4");
 }
 ShaderProcessor::Uniform::Uniform(glm::mat3 &data, const std::string &name)
     : Uniform(glm::value_ptr(data), name)
 {
     type = UniformType::MAT3;
-    DEBUG("MAT3");
 }
 ShaderProcessor::Uniform::Uniform(glm::vec4 &data, const std::string &name)
     : Uniform(glm::value_ptr(data), name)
 {
     type = UniformType::VEC4;
-    DEBUG("VEC4");
 }
 ShaderProcessor::Uniform::Uniform(glm::vec3 &data, const std::string &name)
     : Uniform(glm::value_ptr(data), name)
 {
     type = UniformType::VEC3;
-    DEBUG("VEC3");
 }
 
 void ShaderProcessor::Uniform::load()
 {
     ASSERT(_name.length() != 0);
-    // DEBUG("Loading uniform " + _name);
     if (!pointer)
     {
         throw exception::Exception(exception::exId::OPENGL,
@@ -146,6 +141,5 @@ void ShaderProcessor::Uniform::load()
         break;
     }
     exception::OpenGLException::handle();
-    // DEBUG("Load uniform");
 }
 } // namespace ample::graphics::shaders

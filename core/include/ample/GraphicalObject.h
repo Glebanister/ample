@@ -10,21 +10,29 @@
 #include "Behaviour.h"
 #include "Texture.h"
 #include "VertexArray.h"
+#include "ControlledObject.h"
+#include "JsonIO.h"
+#include "UniqueObject.h"
 
 namespace ample::graphics
 {
-class GraphicalObject : public activity::Behaviour
+class GraphicalObject : public game::ControlledObject, public filing::UniqueObject
 {
 public:
-    GraphicalObject(const glm::mat4 &translated = glm::mat4{1.0f},
+    GraphicalObject(const std::string &name,
+                    const glm::mat4 &translated = glm::mat4{1.0f},
                     const glm::mat4 &scaled = glm::mat4{1.0f},
                     const glm::mat4 &rotated = glm::mat4{1.0f});
+
+    explicit GraphicalObject(filing::JsonIO input);
+    virtual std::string dump(filing::JsonIO output, std::string nameField);
 
     void draw(glm::mat4 scaled = glm::mat4{1.0f},
               glm::mat4 rotated = glm::mat4{1.0f},
               glm::mat4 translated = glm::mat4{1.0f});
     virtual void drawSelf();
-    void addSubObject(GraphicalObject &object);
+    void addSubObject(std::shared_ptr<GraphicalObject> object);
+    void removeSubObject(std::shared_ptr<GraphicalObject> object);
 
     float getX() const;
     float getY() const;
@@ -40,6 +48,7 @@ public:
     void translate(const glm::vec3 &) noexcept;
 
     void bindTexture(std::shared_ptr<Texture> texturePtr) noexcept;
+    std::shared_ptr<Texture> texture() const noexcept;
 
     void bindVertexArray(std::shared_ptr<VertexArray>) noexcept;
 
@@ -47,7 +56,7 @@ protected:
     glm::mat4 _modelMatrix{1.0f};
 
 private:
-    std::vector<GraphicalObject *> _subObjects;
+    std::vector<std::shared_ptr<GraphicalObject>> _subObjects;
     glm::mat4 _translated{1.0f};
     glm::mat4 _scaled{1.0f};
     glm::mat4 _rotated{1.0f};

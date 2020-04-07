@@ -4,6 +4,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <memory>
+#include <algorithm>
 
 #include "GraphicalObject.h"
 #include "ShaderProcessor.h"
@@ -12,18 +14,28 @@
 
 namespace ample::graphics
 {
-GraphicalObject::GraphicalObject(const glm::mat4 &translated,
+GraphicalObject::GraphicalObject(const std::string &name,
+                                 const glm::mat4 &translated,
                                  const glm::mat4 &scaled,
                                  const glm::mat4 &rotated)
-    : _translated(translated),
+    : ControlledObject(name),
+      _translated(translated),
       _scaled(scaled),
       _rotated(rotated),
-      _modelMatrixUniform(_modelMatrix, "model_matrix") {}
-
-void GraphicalObject::addSubObject(GraphicalObject &object)
+      _modelMatrixUniform(_modelMatrix, "model_matrix")
 {
-    activity::Behaviour::addBehaviour(object);
-    _subObjects.push_back(&object);
+}
+
+void GraphicalObject::addSubObject(std::shared_ptr<GraphicalObject> object)
+{
+    activity::Behavior::addBehavior(std::static_pointer_cast<Behavior>(object));
+    _subObjects.push_back(object);
+}
+
+void GraphicalObject::removeSubObject(std::shared_ptr<GraphicalObject> object)
+{
+    activity::Behavior::removeBehavior(std::static_pointer_cast<Behavior>(object));
+    std::remove(_subObjects.begin(), _subObjects.end(), object);
 }
 
 float GraphicalObject::getX() const { return _translated[0][0]; }
@@ -97,5 +109,29 @@ void GraphicalObject::draw(glm::mat4 scaled,
         subObject->draw(scaled, rotated, translated);
     }
     exception::OpenGLException::handle();
+}
+
+GraphicalObject::GraphicalObject(filing::JsonIO input)
+    : GraphicalObject(input.read<std::string>("name"),
+                      input.read<glm::mat4>("translated"),
+                      input.read<glm::mat4>("scaled"),
+                      input.read<glm::mat4>("rotated"))
+{
+    DEBUG("load GO");
+}
+
+std::string GraphicalObject::dump(filing::JsonIO output, std::string nameField)
+{
+    output.write<std::string>("name", name());
+    output.write<glm::mat4>("translated", _translated);
+    output.write<glm::mat4>("scaled", _scaled);
+    output.write<glm::mat4>("rotated", _rotated);
+
+    return filing::makeField(nameField, output.getJSONstring());
+}
+
+std::shared_ptr<Texture> GraphicalObject::texture() const noexcept
+{
+    return _texturePtr;
 }
 } // namespace ample::graphics

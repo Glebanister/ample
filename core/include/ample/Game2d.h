@@ -19,33 +19,23 @@ class Game2d : public graphics::LayeredWindowActivity
 public:
     Game2d(window::Window &window);
 
-    graphics::CameraPerspective &camera() noexcept;
-    graphics::CameraOrtho &view() noexcept;
+    std::shared_ptr<graphics::CameraPerspective> camera() noexcept;
+    std::shared_ptr<graphics::CameraOrtho> view() noexcept;
 
-    graphics::Layer &layout() noexcept;
+    std::shared_ptr<graphics::Layer> layout() noexcept;
 
     template <typename... Args>
-    Level &createLevel(size_t num, Args... args);
-    Level &numberedLevel(size_t num);
-    Level &currentLevel();
+    std::shared_ptr<Level> createLevel(size_t num, Args... args);
+    std::shared_ptr<Level> numberedLevel(size_t num);
+    std::shared_ptr<Level> currentLevel();
 
     void setCurrentLevel(size_t levelNum);
 
 private:
     std::unordered_map<size_t, std::shared_ptr<Level>> _levels;
     size_t _currentLevel = 0;
-    graphics::Layer _layout;
-    graphics::CameraOrtho _orthoCamera{
-        {1920, 1080},
-        {0, 0},
-        {0.0, 0.0, 0.0},
-        {0.0, 0.0, 1.0},
-        -1920 / 10,
-        1920 / 10,
-        -1080 / 10,
-        1080 / 10,
-        0,
-        1000};
+    std::shared_ptr<graphics::Layer> _layout;
+    std::shared_ptr<graphics::CameraOrtho> _orthoCamera;
 };
 } // namespace ample::game::game2d
 

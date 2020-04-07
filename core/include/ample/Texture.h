@@ -11,48 +11,58 @@
 
 #include "Vector2d.h"
 #include "Noncopyable.h"
+#include "NamedObject.h"
 
 namespace ample::graphics
 {
-enum channelMode
+enum class channelMode
 {
     RGB = IL_RGB,
     RGBA = IL_RGBA,
 };
 
-enum texturePlayback
+enum class texturePlayback
 {
     NORMAL,
     REVERSED,
     BOOMERANG,
 };
 
+enum class textureOrigin
+{
+    NORMAL,
+    REVERSED,
+};
+
 class Texture;
 
-class TextureRaw
+class TextureRaw : public game::NamedObject
 {
 public:
     TextureRaw(const std::string &texturePath,
+               const std::string &name,
                const graphics::Vector2d<size_t> &eachSize,
                const graphics::Vector2d<int> &startPosition,
                const graphics::Vector2d<size_t> &framesCount,
                const channelMode format,
                const texturePlayback playback,
-               const size_t total = 0UL);
+               const size_t total = 0UL,
+               const Vector2d<textureOrigin> &origin = {textureOrigin::NORMAL, textureOrigin::NORMAL});
 
     TextureRaw(const Texture &);
 
 public:
-    const std::string &texturePath;
+    std::string path;
     graphics::Vector2d<size_t> eachSize;
     graphics::Vector2d<int> startPosition;
     graphics::Vector2d<size_t> framesCount;
     channelMode format;
     texturePlayback playback;
     size_t total;
+    Vector2d<textureOrigin> origin;
 };
 
-class Texture final : public utils::Noncopyable
+class Texture final : public utils::Noncopyable, public game::NamedObject
 {
 private:
     class PixelMap
@@ -144,6 +154,8 @@ public:
 
     void pin() const noexcept;
     void unpin() const noexcept;
+
+    std::string path() const noexcept;
 
 private:
     TextureRaw _raw;
