@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.3)
 
 project(ample-gui)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -std=c++17 -fPIC")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -std=c++17 -fPIC -lstdc++fs")
 
 set(SDL2_LIBRARY /usr/lib/x86_64-linux-gnu/libSDL2.so)
 set(SDL2_INCLUDE_DIRS /usr/include/SDL2/)
