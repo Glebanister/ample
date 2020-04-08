@@ -1,4 +1,5 @@
 #include "WorldRevoluteJoint2d.h"
+#include "Debug.h"
 
 namespace ample::physics
 {
@@ -15,6 +16,7 @@ WorldRevoluteJoint2d::WorldRevoluteJoint2d(WorldObject2d &bodyA,
     jointDef.referenceAngle = referenceAngle;
     jointDef.collideConnected = collideConnected;
     initB2Joint(bodyA.getWorldLayer(), &jointDef);
+    _joint->SetUserData(this);
 }
 
 ample::graphics::Vector2d<float> WorldRevoluteJoint2d::getLocalAnchorA() const
