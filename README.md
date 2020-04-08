@@ -15,7 +15,7 @@ You can create ample directories anywhere, using ample script.
 
 ### Create your project (in developing)
 
-`$ cd buile/gui` \
+`$ cd build/gui` \
 `$ ./ample-gui`
 
 
