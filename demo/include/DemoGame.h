@@ -95,7 +95,7 @@ struct Rope
                                                                  relativeThickness,
                                                                  {1.0f, 1.0f},
                                                                  {1.0f, 1.0f},
-                                                                 ample::graphics::normalsMode::VERTEX,
+                                                                 ample::graphics::normalsMode::FACE,
                                                                  pos));
             layer->addWorldObject(nodes[0]);
             auto fixture = nodes[0]->addFixture(shape);
@@ -116,7 +116,7 @@ struct Rope
                                                                  relativeThickness,
                                                                  {1.0f, 1.0f},
                                                                  {1.0f, 1.0f},
-                                                                 ample::graphics::normalsMode::VERTEX,
+                                                                 ample::graphics::normalsMode::FACE,
                                                                  pos));
             layer->addWorldObject(nodes[i]);
             ample::physics::MassData d = nodes[i]->getMassData();
@@ -161,5 +161,40 @@ private:
     std::shared_ptr<KeyboardControlCamera> cameraRemote;
     std::shared_ptr<Rope> rope;
     std::shared_ptr<ample::physics::WorldObject2d> ball;
-    std::shared_ptr<ample::graphics::Texture> texture;
+    std::shared_ptr<ample::graphics::Texture> braid = std::make_shared<ample::graphics::Texture>(ample::graphics::TextureRaw{"../../demo/textures/braid.jpg",
+                                                                                                                             "braid",
+                                                                                                                             {820 / 7 - 1, 546 / 4 - 1},
+                                                                                                                             {0, 0},
+                                                                                                                             {7, 4},
+                                                                                                                             ample::graphics::channelMode::RGBA,
+                                                                                                                             ample::graphics::texturePlayback::NORMAL,
+                                                                                                                             27});
+    std::shared_ptr<ample::graphics::Texture> grass = std::make_shared<ample::graphics::Texture>(ample::graphics::TextureRaw{"../../demo/textures/grass.jpg",
+                                                                                                                             "braid",
+                                                                                                                             {626, 626},
+                                                                                                                             {0, 0},
+                                                                                                                             {1, 1},
+                                                                                                                             ample::graphics::channelMode::RGBA,
+                                                                                                                             ample::graphics::texturePlayback::NORMAL});
+    std::shared_ptr<ample::graphics::Texture> dirt = std::make_shared<ample::graphics::Texture>(ample::graphics::TextureRaw{"../../demo/textures/dirt.png",
+                                                                                                                             "braid",
+                                                                                                                             {200, 200},
+                                                                                                                             {0, 0},
+                                                                                                                             {1, 1},
+                                                                                                                             ample::graphics::channelMode::RGB,
+                                                                                                                             ample::graphics::texturePlayback::NORMAL});
+    std::shared_ptr<ample::graphics::Texture> lena = std::make_shared<ample::graphics::Texture>(ample::graphics::TextureRaw{"../../demo/textures/lena512.png",
+                                                                                                                             "braid",
+                                                                                                                             {512, 512},
+                                                                                                                             {0, 0},
+                                                                                                                             {1, 1},
+                                                                                                                             ample::graphics::channelMode::RGB,
+                                                                                                                             ample::graphics::texturePlayback::NORMAL});
+    std::shared_ptr<ample::graphics::Texture> ropeTexture = std::make_shared<ample::graphics::Texture>(ample::graphics::TextureRaw{"../../demo/textures/rope.jpg",
+                                                                                                                             "braid",
+                                                                                                                             {900, 900},
+                                                                                                                             {0, 0},
+                                                                                                                             {1, 1},
+                                                                                                                             ample::graphics::channelMode::RGB,
+                                                                                                                             ample::graphics::texturePlayback::NORMAL});
 };
