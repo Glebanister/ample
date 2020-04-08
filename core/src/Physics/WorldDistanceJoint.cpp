@@ -21,6 +21,7 @@ WorldDistanceJoint2d::WorldDistanceJoint2d(WorldObject2d &bodyA,
         jointDef.length = length;
     }
     initB2Joint(bodyA.getWorldLayer(), &jointDef);
+    _joint->SetUserData(this);
 }
 
 void WorldDistanceJoint2d::onActive()

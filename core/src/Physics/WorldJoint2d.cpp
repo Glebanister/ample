@@ -5,7 +5,6 @@ namespace ample::physics
 WorldJoint2d::WorldJoint2d(WorldObject2d &bodyA, WorldObject2d &bodyB, b2Joint *joint)
     : _joint(joint), _bodyA(bodyA), _bodyB(bodyB)
 {
-    _joint->SetUserData(this);
 }
 
 WorldJoint2d &WorldJoint2d::getNext()
