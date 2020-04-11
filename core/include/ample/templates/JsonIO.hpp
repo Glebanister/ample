@@ -362,6 +362,32 @@ void JsonIO::write<std::vector<ample::graphics::Vector2d<float>>>(
 
 template<>
 inline
+void JsonIO::write<std::vector<std::string>>(
+        const std::string &nameField, const std::vector<std::string> &obj)
+{
+    rapidjson::Document doc;
+    doc.SetObject();
+    doc.Parse(jsonStr.c_str());
+
+    rapidjson::Value str;
+    str.SetString(rapidjson::StringRef(nameField.c_str()));
+
+    rapidjson::Value array(rapidjson::Type::kStringType);
+    for (size_t i = 0; i < obj.size(); ++i)
+    {
+        rapidjson::Value val(rapidjson::Type::kArrayType);
+        rapidjson::Value temp;
+        temp.SetString(rapidjson::StringRef(obj[i].c_str()));
+        val.PushBack(temp, doc.GetAllocator());
+        array.PushBack(val, doc.GetAllocator());
+    }
+    doc.AddMember(str, array, doc.GetAllocator());
+
+    jsonStr = giveStringDocument(doc);
+}
+
+template<>
+inline
 void
 JsonIO::write<ample::graphics::Vector2d<int>>(const std::string &nameField, const ample::graphics::Vector2d<int> &obj)
 {
