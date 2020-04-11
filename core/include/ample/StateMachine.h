@@ -42,6 +42,10 @@ public:
         void onActive() override;
         void onStop() override;
 
+        void addOnStartAction(std::shared_ptr<Action>);
+        void addOnActiveAction(std::shared_ptr<Action>);
+        void addOnStopAction(std::shared_ptr<Action>);
+
         void addTransition(std::shared_ptr<Transition>) noexcept;
 
         // TODO : apply function using dfs

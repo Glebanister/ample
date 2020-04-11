@@ -35,6 +35,21 @@ StateMachine::State::State(std::shared_ptr<StateMachine> machine, const std::str
 StateMachine::State::State(const std::string &name)
     : NamedObject(name), _machine(std::make_shared<StateMachine>()) {}
 
+void StateMachine::State::addOnStartAction(std::shared_ptr<Action> action)
+{
+    _onStartActions.push_back(action);
+}
+
+void StateMachine::State::addOnActiveAction(std::shared_ptr<Action> action)
+{
+    _onActiveActions.push_back(action);
+}
+
+void StateMachine::State::addOnStopAction(std::shared_ptr<Action> action)
+{
+    _onStopActions.push_back(action);
+}
+
 void StateMachine::State::setMachine(std::shared_ptr<StateMachine> machine) noexcept
 {
     _machine = machine;
