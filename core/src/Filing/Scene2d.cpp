@@ -10,7 +10,7 @@ namespace ample::filing
 {
 
 Scene2d::Scene2d(const std::string &nameFile)
-        : ample::physics::WorldLayer2d {{0.0, 0.0}, 0.0, 0.0, 0.5}
+    : ample::physics::WorldLayer2d{{0.0, 0.0}, 0.0, 0.0, 0.5}
 {
     DEBUG("load from json file");
     std::string fileStr = openJSONfile(nameFile);
@@ -88,5 +88,10 @@ void Scene2d::saveScene(const std::string &nameFile)
 ample::graphics::GraphicalObject &Scene2d::getElementById(const int &id)
 {
     return *_storage[id];
+}
+
+float Scene2d::getDistance() const
+{
+    return _distance;
 }
 } // namespace ample::filing
