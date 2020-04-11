@@ -14,15 +14,15 @@ class Braid : public ample::graphics::GraphicalObject2d
 {
 public:
     Braid()
-        : GraphicalObject2d("Braid",
-                            ample::geometry::RegularPolygon<float>(10.0f, 6),
-                            10.0f,
-                            0.0f,
-                            {1.0f, 1.0f},
-                            {1.0f, 1.0f},
-                            ample::graphics::normalsMode::FACE,
-                            {0.0f, 0.0f},
-                            0.0f)
+            : GraphicalObject2d("Braid",
+                                ample::geometry::RegularPolygon<float>(10.0f, 6),
+                                10.0f,
+                                0.0f,
+                                {1.0f, 1.0f},
+                                {1.0f, 1.0f},
+                                ample::graphics::normalsMode::FACE,
+                                {0.0f, 0.0f},
+                                0.0f)
     {
         auto texture = std::make_shared<ample::graphics::Texture>(ample::graphics::TextureRaw("../../demo/textures/braid.jpg",
                                                                                               "Braid textre",
@@ -33,8 +33,8 @@ public:
                                                                                               ample::graphics::texturePlayback::NORMAL,
                                                                                               27,
                                                                                               {
-                                                                                                  ample::graphics::textureOrigin::REVERSED,
-                                                                                                  ample::graphics::textureOrigin::REVERSED,
+                                                                                                      ample::graphics::textureOrigin::REVERSED,
+                                                                                                      ample::graphics::textureOrigin::REVERSED,
                                                                                               }));
         bindTexture(texture);
         face().bindTexture(texture);
@@ -46,7 +46,7 @@ class BraidIdle : public ample::game::ControlledObject::ObjectState<Braid>
 {
 public:
     BraidIdle(const std::string &name, std::shared_ptr<Braid> braid)
-        : ObjectState(name, braid) {}
+            : ObjectState(name, braid) {}
 
     void onActive() override
     {
@@ -58,7 +58,7 @@ class BraidRun : public ample::game::ControlledObject::ObjectState<Braid>
 {
 public:
     BraidRun(const std::string &name, std::shared_ptr<Braid> braid)
-        : ObjectState(name, braid) {}
+            : ObjectState(name, braid) {}
 
     void onActive() override
     {

@@ -12,8 +12,8 @@
 #include "TimerTransition.h"
 
 DemoGame::DemoGame(ample::window::Window &window)
-    : ample::game::game2d::Game2d(window),
-      braid(std::make_shared<Braid>())
+        : ample::game::game2d::Game2d(window),
+          braid(std::make_shared<Braid>())
 {
     auto level = createLevel(1, 10.0f, 0.5f);
     level->frontSlice()->addObject(braid);
@@ -29,8 +29,8 @@ DemoGame::DemoGame(ample::window::Window &window)
                                                                        ample::game::MouseTransition::type::PRESSED,
                                                                        ample::control::mouseButton::BUTTON_LEFT,
                                                                        ample::geometry::Rectangle{
-                                                                           {{0.0f, 0.0f},
-                                                                            {static_cast<float>(getWidth()), static_cast<float>(getHeight())}},
+                                                                               {{0.0f, 0.0f},
+                                                                                       {static_cast<float>(getWidth()), static_cast<float>(getHeight())}},
                                                                        }));
     run->addTransition(std::make_shared<ample::game::KeyboardTransition>(idle,
                                                                          eventManager(),
