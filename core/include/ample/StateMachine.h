@@ -7,6 +7,7 @@
 #include "EventListener.h"
 #include "NamedObject.h"
 #include "StoredObject.h"
+#include "Action.h"
 
 namespace ample::game
 {
@@ -37,7 +38,10 @@ public:
 
         void setMachine(std::shared_ptr<StateMachine> machine) noexcept;
 
+        void onStart() override;
         void onActive() override;
+        void onStop() override;
+
         void addTransition(std::shared_ptr<Transition>) noexcept;
 
         // TODO : apply function using dfs
@@ -46,6 +50,9 @@ public:
     private:
         std::shared_ptr<StateMachine> _machine;
         std::vector<std::shared_ptr<Transition>> _transitions;
+        std::vector<std::shared_ptr<Action>> _onStartActions;
+        std::vector<std::shared_ptr<Action>> _onActiveActions;
+        std::vector<std::shared_ptr<Action>> _onStopActions;
 
         friend class StateMachine;
     };

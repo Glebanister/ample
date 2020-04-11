@@ -46,9 +46,29 @@ void StateMachine::State::addTransition(std::shared_ptr<StateMachine::Transition
     _transitions.push_back(transition);
 }
 
+void StateMachine::State::onStart()
+{
+    for (const auto &action : _onStartActions)
+    {
+        action->onActive();
+    }
+}
+
+void StateMachine::State::onStop()
+{
+    for (const auto &action : _onStartActions)
+    {
+        action->onActive();
+    }
+}
+
 void StateMachine::State::onActive()
 {
     activity::Behavior::onActive();
+    for (const auto &action : _onActiveActions)
+    {
+        action->onActive();
+    }
     for (auto transition : _transitions)
     {
         if (!transition)

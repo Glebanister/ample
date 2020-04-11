@@ -4,8 +4,9 @@
 
 namespace ample::game
 {
-class Action : public activity::Behavior
+class Action : protected activity::Behavior
 {
-
-}
+public:
+    void onActive() override;
+};
 } // namespace ample::game
