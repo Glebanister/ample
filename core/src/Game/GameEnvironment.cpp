@@ -2,11 +2,7 @@
 
 namespace ample::game
 {
-
-GameEnvironment::GameEnvironment(const std::string &projectAbsolutePath)
-    : _projectAbsolutePath(projectAbsolutePath) {}
-
-const std::string &GameEnvironment::projectAbsolutePath() const
+std::filesystem::path &GameEnvironment::projectAbsolutePath()
 {
     return _projectAbsolutePath;
 }

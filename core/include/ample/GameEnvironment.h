@@ -1,21 +1,20 @@
 #pragma once
 
 #include <string>
+#include <filesystem>
 
 #include "Singleton.h"
 #include "JsonIO.h"
 
-namespace ample::game
-{
-
-/*                                                                                              
-Every project structre:
+/*
+Project structre:
 .
 ├── layouts                                 -- main menu, settings, user interface, etc.
 │   └── <...>.json
 ├── levels                                  -- levels list
 │   └── level_1
 │       ├── behavior.json                   -- current level behavior
+│       ├── settings.json                   -- current level settings
 │       ├── scenes                          -- all 'slices' of level: foreground, backgrounds
 │       │   └── <...>.json
 │       └── textures                        -- level textures
@@ -23,13 +22,14 @@ Every project structre:
 └── settings.json                           -- project settings
 */
 
+namespace ample::game
+{
 class GameEnvironment : public utils::Singleton<GameEnvironment>
 {
 public:
-    GameEnvironment(const std::string &projectAbsolutePath);
-    const std::string &projectAbsolutePath() const;
+    std::filesystem::path &projectAbsolutePath();
 
 private:
-    const std::string _projectAbsolutePath;
+    std::filesystem::path _projectAbsolutePath;
 };
 } // namespace ample::game
