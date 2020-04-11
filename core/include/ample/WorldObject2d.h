@@ -1,7 +1,9 @@
 #pragma once
 
 #include "GraphicalObject2d.h"
+#include "WorldLayer2d.h"
 #include "Vector2d.h"
+#include "WorldContact2d.h"
 #include "box2d/b2_body.h"
 #include "box2d/b2_fixture.h"
 
@@ -10,16 +12,13 @@
 #include <memory>
 #include <vector>
 
-namespace ample::filing
-{
-class WorldObject2dIO;
-}
-
 namespace ample::physics
 {
 class WorldLayer2d;
+class WorldContact2d;
+class WorldContactEdge2d;
 class WorldObject2d;
-
+class WorldJoint2d;
 class Fixture final
 {
 public:
@@ -32,11 +31,17 @@ public:
 
 private:
     friend WorldObject2d;
+    friend WorldContact2d;
 
-    Fixture(b2Fixture *fixture, WorldObject2d &wObject);
-
+    Fixture(b2Fixture *fixture);
     b2Fixture *_fixture = nullptr;
-    WorldObject2d &worldObject;
+};
+
+enum class BodyType
+{
+    STATIC_BODY = 0,
+    KINEMATIC_BODY,
+    DYNAMIC_BODY
 };
 
 struct MassData
@@ -50,9 +55,25 @@ class WorldObject2d final : public ample::graphics::GraphicalObject2d
 {
 public:
     void onActive() override;
+    WorldObject2d(const std::string &name,
+                  WorldLayer2d &layer,
+                  BodyType type,
+                  const std::vector<ample::graphics::Vector2d<float>> &shape,
+                  const float relativeThickness,
+                  const graphics::Vector2d<float> &faceTextureRepeats,
+                  const graphics::Vector2d<float> &sideTextureRepeats,
+                  const graphics::normalsMode sideNormalsMode,
+                  const graphics::Vector2d<float> &translated = {0.0f, 0.0f},
+                  float rotated = 0.0f);
+
+    void onAwake() override;
     //void onPause() override;//TODO
 
-    Fixture &addFixture(const std::vector<ample::graphics::Vector2d<float>> &shape);
+    Fixture addFixture(const std::vector<ample::graphics::Vector2d<float>> &shape);
+    WorldLayer2d &getWorldLayer() const;
+
+    void setSpeedX(float desiredVelX);
+    void setSpeedY(float desiredVelY);
 
     void setTransform(const graphics::Vector2d<float> &position, float angle);
     graphics::Vector2d<float> getPosition() const;
@@ -107,17 +128,19 @@ public:
     void setFixedRotation(bool flag);
     bool isFixedRotation() const;
 
+    WorldContactEdge2d getContactList();
+
+    WorldObject2d &getNext();
+    const WorldObject2d &getNext() const;
+
     void dump();
 
 private:
-    friend ample::physics::WorldLayer2d;
-    friend ample::filing::WorldObject2dIO;
+    friend WorldJoint2d;
+    friend WorldLayer2d;
 
-    WorldObject2d(b2Body *body,
-                  const std::vector<ample::graphics::Vector2d<float>> &shape,
-                  const float thickness,
-                  const float z);
-    std::vector<std::shared_ptr<Fixture>> _fixtures;
+    WorldLayer2d &_layer;
     b2Body *_body = nullptr;
+    b2BodyDef _bodyDef;
 };
 } // namespace ample::physics

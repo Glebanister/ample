@@ -44,21 +44,19 @@ Window::Window(const std::string &name,
                                _modeFlags | SDL_WINDOW_OPENGL);
     if (!_winPtr)
     {
-        SDL_Quit();
         exception::SDLException::handle();
     }
-    _glContext = SDL_GL_CreateContext(_winPtr);
-    if (!_glContext)
+    _glContextImpl = SDL_GL_CreateContext(_winPtr);
+    _glContext = &_glContextImpl;
+    if (!_glContextImpl)
     {
         SDL_DestroyWindow(_winPtr);
-        SDL_Quit();
         exception::OpenGLException::handle();
     }
     DEBUG(glGetString(GL_VERSION));
     if (SDL_GL_SetSwapInterval(1) < 0)
     {
         SDL_DestroyWindow(_winPtr);
-        SDL_Quit();
         exception::SDLException::handle();
     }
 }
@@ -102,9 +100,14 @@ SDL_Window *Window::pointer()
     return _winPtr;
 }
 
+SDL_GLContext *ample::window::Window::glContext() const noexcept
+{
+    return _glContext;
+}
+
 Window::~Window()
 {
+    SDL_GL_DeleteContext(_glContextImpl);
     SDL_DestroyWindow(_winPtr);
-    SDL_GL_DeleteContext(_glContext);
 }
 } // namespace ample::window

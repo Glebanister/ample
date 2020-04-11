@@ -3,23 +3,25 @@
 #include <SDL2/SDL.h>
 #include <ample/WindowActivity.h>
 #include <ample/Window.h>
-#include <imgui_sdl.h>
 #include <imgui.h>
+#include <memory>
+
+#include "ample/Window.h"
+#include "ample/LayeredWindowActivity.h"
+#include "ample/Game2d.h"
 
 namespace ample::gui
 {
-class ImguiActivity : public ample::window::WindowActivity
+class ImguiActivity : public ample::game::game2d::Game2d
 {
 public:
     ImguiActivity(ample::window::Window &window);
 
     void onActive() override;
-    void onResize() override;
 
     ~ImguiActivity();
 
-private:
-    SDL_Renderer *_renderer;
-    SDL_Texture *texture;
+protected:
+    virtual void drawInterface();
 };
 } // namespace ample::gui

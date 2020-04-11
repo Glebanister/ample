@@ -38,6 +38,10 @@ CameraPerspective::CameraPerspective(const Vector2d<pixel_t> &viewSize,
 
 void CameraPerspective::look()
 {
+    if (!_visible)
+    {
+        return;
+    }
     _viewport.set();
     _viewMatrix = glm::lookAt(_position, _position + _direction, _head);
     _projectionMatrix = glm::perspective(glm::radians(_fov),
@@ -59,8 +63,10 @@ void CameraPerspective::unlook()
 void CameraPerspective::setFov(float fov) { _fov = fov; }
 void CameraPerspective::setNearClip(float nearClip) { _nearClip = nearClip; }
 void CameraPerspective::setFarClip(float farClip) { _farClip = farClip; }
+void CameraPerspective::setAspectRatio(float ratio) { _aspectRatio = ratio; }
 
 float CameraPerspective::getFov() const { return _fov; }
 float CameraPerspective::getNearClip() const { return _nearClip; }
 float CameraPerspective::getFarClip() const { return _farClip; }
+float CameraPerspective::getAspectRatio() const { return _aspectRatio; }
 } // namespace ample::graphics

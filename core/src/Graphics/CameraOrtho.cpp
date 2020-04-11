@@ -32,8 +32,8 @@ CameraOrtho::CameraOrtho(const Vector2d<pixel_t> &viewSize,
       _top(top),
       _near(near),
       _far(far),
-      _viewMatrixUniform(std::make_unique<shaders::ShaderProcessor::Uniform>(_viewMatrix, "view_matrix")),
-      _projectionMatrixUniform(std::make_unique<shaders::ShaderProcessor::Uniform>(_projectionMatrix, "projection_matrix"))
+      _viewMatrixUniform(_viewMatrix, "view_matrix"),
+      _projectionMatrixUniform(_projectionMatrix, "projection_matrix")
 {
     DEBUG("Setup ortho camera");
     exception::OpenGLException::handle();
@@ -41,11 +41,15 @@ CameraOrtho::CameraOrtho(const Vector2d<pixel_t> &viewSize,
 
 void CameraOrtho::look()
 {
+    if (!_visible)
+    {
+        return;
+    }
     _viewport.set();
     _viewMatrix = glm::lookAt(_position, _position + _direction, _head);
     _projectionMatrix = glm::ortho(_left, _right, _bottom, _top, _near, _far);
-    _viewMatrixUniform->load();
-    _projectionMatrixUniform->load();
+    _viewMatrixUniform.load();
+    _projectionMatrixUniform.load();
 
     exception::OpenGLException::handle();
 }

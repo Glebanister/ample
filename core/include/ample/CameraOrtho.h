@@ -47,8 +47,7 @@ private:
     glm::mat4 _viewMatrix{1.0f};
     glm::mat4 _projectionMatrix{1.0f};
 
-    std::unique_ptr<shaders::ShaderProcessor::Uniform> _viewMatrixUniform;
-    std::unique_ptr<shaders::ShaderProcessor::Uniform> _projectionMatrixUniform;
-    std::unique_ptr<shaders::ShaderProcessor::Uniform> _eyeVectorUniform;
+    shaders::ShaderProcessor::Uniform _viewMatrixUniform;
+    shaders::ShaderProcessor::Uniform _projectionMatrixUniform;
 };
 } // namespace ample::graphics

@@ -1,84 +1,45 @@
 #pragma once
 
-#define GLM_ENABLE_EXPERIMENTAL
-
-#include <vector>
-#include <GL/gl.h>
-#include <glm/glm.hpp>
-#include <string>
-
-#include "GraphicalObject.h"
-#include "Vector2d.h"
-#include "Vector3d.h"
-#include "VertexArray.h"
-#include "VertexArrayFace2d.h"
-#include "VertexArraySide2d.h"
-#include "Color.h"
-
-namespace ample::filing
-{
-class GraphicalObject2dIO;
-}
+#include "GraphicalPolygon.h"
+#include "GraphicalEdge.h"
 
 namespace ample::graphics
 {
-class GraphicalObject2d;
-
-struct GraphicalObject2dRaw final
-{
-    const std::vector<graphics::Vector2d<float>> graphicalShape;
-    float depth;
-    float z;
-
-    const std::string faceTexturePath;
-    Vector2d<int> faceTextureSize;
-    Vector2d<int> faceTexturePos;
-    const Vector2d<textureMode> faceTextureMode;
-    const channelMode faceChannelMode;
-
-    const std::string sideTexturePath;
-    Vector2d<int> sideTextureSize;
-    Vector2d<int> sideTexturePos;
-    const Vector2d<textureMode> sideTextureMode;
-    const normalsMode sideNormalsMode;
-    const channelMode sideChannelMode;
-
-    GraphicalObject2dRaw(const std::vector<graphics::Vector2d<float>> graphicalShape,
-                         float depth,
-                         float z,
-                         const std::string faceTexturePath,
-                         Vector2d<int> faceTextureSize,
-                         Vector2d<int> faceTexturePos,
-                         const Vector2d<textureMode> faceTextureMode,
-                         const channelMode faceChannelMode,
-                         const std::string sideTexturePath,
-                         Vector2d<int> sideTextureSize,
-                         Vector2d<int> sideTexturePos,
-                         const Vector2d<textureMode> sideTextureMode,
-                         const channelMode sideChannelMode,
-                         const normalsMode sideNormalsMode);
-
-    GraphicalObject2dRaw(const GraphicalObject2d &other);
-};
-
 class GraphicalObject2d : public GraphicalObject
 {
 public:
-    GraphicalObject2d(const GraphicalObject2dRaw &raw);
+    GraphicalObject2d(const std::string &name,
+                      const std::vector<Vector2d<float>> &graphicalShape,
+                      const float thickness,
+                      const float z,
+                      const Vector2d<float> &faceTextureRepeats,
+                      const Vector2d<float> &sideTextureRepeats,
+                      const normalsMode sideNormalsMode,
+                      const glm::mat4 &translated = glm::mat4{1.0f},
+                      const glm::mat4 &scaled = glm::mat4{1.0f},
+                      const glm::mat4 &rotated = glm::mat4{1.0f});
 
-    GraphicalObject2d(const std::vector<Vector2d<float>> &graphicalShape,
-                      const float depth,
-                      const float z);
+    GraphicalObject2d(const std::string &name,
+                      const std::vector<Vector2d<float>> &graphicalShape,
+                      const float thickness,
+                      const float z,
+                      const Vector2d<float> &faceTextureRepeats,
+                      const Vector2d<float> &sideTextureRepeats,
+                      const normalsMode sideNormalsMode,
+                      const Vector2d<float> &translated = {0.0f, 0.0f},
+                      const float &rotated = 0.0f);
 
-    void drawSelf() override;
+    GraphicalEdge &side() noexcept;
+    GraphicalPolygon &face() noexcept;
+
+    std::shared_ptr<GraphicalEdge> sidePointer() noexcept;
+    std::shared_ptr<GraphicalPolygon> facePointer() noexcept;
+
+    explicit GraphicalObject2d(filing::JsonIO input);
+    std::string dump(filing::JsonIO output, std::string nameField) override;
 
 protected:
-    friend class ample::graphics::GraphicalObject2dRaw;
-    friend class ample::filing::GraphicalObject2dIO;
-
-    GraphicalObject2dRaw _raw;
-
-    std::unique_ptr<VertexArrayFace2d> _faceArray;
-    std::unique_ptr<VertexArraySide2d> _sideArray;
+    std::shared_ptr<GraphicalPolygon> _face;
+    std::shared_ptr<GraphicalEdge> _side;
 };
 } // namespace ample::graphics

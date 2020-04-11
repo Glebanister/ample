@@ -1,28 +1,20 @@
 #!/bin/bash
 echo toolchain
-sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test > output
+sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
 
-echo software-properties-common
-sudo apt install software-properties-common > output
+sudo apt install software-properties-common
 
-# echo ppa:deadsnakes/ppa
-# sudo add-apt-repository ppa:deadsnakes/ppa > output
+sudo apt-get update
 
-echo apt-get update
-sudo apt-get update > output
-
-echo g++
 sudo apt-get install g++-7 > output
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 40 > output
-sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 40 > output
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 40
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 40
 
 g++ --version
 gcc --version
 
-echo checkinstall
-sudo apt-get install build-essential checkinstall > output
+sudo apt-get install build-essential checkinstall
 
-echo cmake
 CMAKE_VERSION=3.17.0
 CMAKE_VERSION_DIR=v3.17
 
@@ -33,33 +25,16 @@ CMAKE_DIR=$(pwd)/cmake-$CMAKE_VERSION
 
 wget --quiet $CMAKE_URL
 mkdir -p $CMAKE_DIR
-tar --strip-components=1 -xzf $CMAKE_TAR -C $CMAKE_DIR > output
+tar --strip-components=1 -xzf $CMAKE_TAR -C $CMAKE_DIR
 export PATH=$CMAKE_DIR/bin:$PATH
 rm -rf cmake-$CMAKE_VERSION*
 
 cmake --version
 
-echo libraries
-sudo apt-get install libgl1-mesa-dev > output
-sudo apt-get install libglm-dev > output
-sudo apt-get install libgles2-mesa-dev > output
-sudo apt-get install libegl1-mesa-dev > output
-sudo apt-get install libsdl2-dev > output
-sudo apt-get install libdevil1c2 libdevil-dev > output
-
-# echo python3
-# sudo apt-get install python3.6 > output
-# sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 1 > output
-# sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 2 > output
-# sudo update-alternatives --config python3 > output
-# python3 --version
-
-# echo pip3
-# sudo apt install python3-pip > output
-
-# echo linters
-# pip3 install --user pytest pytest-cov pytest-mock flake8 pep8-naming flake8-quotes mypy pylint > output
-# sudo apt install pylint3 > output
-# pylint --version
-
-rm -rf output
+sudo apt-get install libgl1-mesa-dev
+sudo apt-get install libglm-dev
+sudo apt-get install libgles2-mesa-dev
+sudo apt-get install libegl1-mesa-dev
+sudo apt-get install libsdl2-dev
+sudo apt-get install libdevil1c2 libdevil-dev
+sudo apt-get install libglew-dev

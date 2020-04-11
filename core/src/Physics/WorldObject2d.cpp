@@ -7,14 +7,11 @@
 namespace ample::physics
 {
 
-Fixture::Fixture(b2Fixture *fixture, WorldObject2d &wObject) : _fixture(fixture), worldObject(wObject)
-{
-    _fixture->SetUserData(this);
-}
+Fixture::Fixture(b2Fixture *fixture) : _fixture(fixture) {}
 
 WorldObject2d &Fixture::getObject()
 {
-    return worldObject;
+    return *static_cast<WorldObject2d *>(_fixture->GetUserData());
 }
 
 void Fixture::setDensity(float density)
@@ -37,7 +34,7 @@ void Fixture::setSensor(bool sensor)
     _fixture->SetSensor(sensor);
 }
 
-Fixture &WorldObject2d::addFixture(
+Fixture WorldObject2d::addFixture(
     const std::vector<ample::graphics::Vector2d<float>> &shape)
 {
     b2FixtureDef fixtureDef;
@@ -49,8 +46,25 @@ Fixture &WorldObject2d::addFixture(
     b2PolygonShape polygonShape;
     polygonShape.Set(vertices.data(), shape.size());
     fixtureDef.shape = &polygonShape;
-    _fixtures.emplace_back(std::shared_ptr<Fixture>(new Fixture(_body->CreateFixture(&fixtureDef), *this))).get();
-    return *(_fixtures[_fixtures.size() - 1]);
+    b2Fixture *fixture = _body->CreateFixture(&fixtureDef);
+    fixture->SetUserData(this);
+    return {fixture};
+}
+
+void WorldObject2d::setSpeedX(float desiredVelX)
+{
+    ample::graphics::Vector2d<float> vel = getLinearVelocity();
+    float velChangeX = desiredVelX - vel.x;
+    float impulseX = getMass() * velChangeX;
+    applyLinearImpulseToCenter({impulseX, 0}, true);
+}
+
+void WorldObject2d::setSpeedY(float desiredVelY)
+{
+    ample::graphics::Vector2d<float> vel = getLinearVelocity();
+    float velChangeY = desiredVelY - vel.y;
+    float impulseY = getMass() * velChangeY;
+    applyLinearImpulseToCenter({0, impulseY}, true);
 }
 
 void WorldObject2d::onActive()
@@ -277,9 +291,66 @@ void WorldObject2d::resetMassData()
     _body->ResetMassData();
 }
 
-WorldObject2d::WorldObject2d(b2Body *body,
+WorldContactEdge2d WorldObject2d::getContactList()
+{
+    return {_body->GetContactList()};
+}
+
+WorldObject2d &WorldObject2d::getNext()
+{
+    return *static_cast<WorldObject2d *>(_body->GetNext()->GetUserData());
+}
+
+const WorldObject2d &WorldObject2d::getNext() const
+{
+    return *static_cast<WorldObject2d *>(_body->GetNext()->GetUserData());
+}
+
+WorldObject2d::WorldObject2d(const std::string &name,
+                             WorldLayer2d &layer,
+                             BodyType type,
                              const std::vector<ample::graphics::Vector2d<float>> &shape,
-                             const float thickness,
-                             const float z)
-    : GraphicalObject2d(shape, thickness, z), _body(body) {}
+                             const float relativeThickness,
+                             const graphics::Vector2d<float> &faceTextureRepeats,
+                             const graphics::Vector2d<float> &sideTextureRepeats,
+                             const graphics::normalsMode sideNormalsMode,
+                             const graphics::Vector2d<float> &translated,
+                             float rotated)
+    : GraphicalObject2d(name,
+                        shape,
+                        layer.getThickness() * relativeThickness,
+                        layer.getThickness() * layer.getRelativePositionInSlice() - layer.getThickness() * relativeThickness / 2.0f,
+                        faceTextureRepeats,
+                        sideTextureRepeats,
+                        sideNormalsMode,
+                        translated,
+                        rotated),
+      _layer(layer)
+{
+    _bodyDef.position.Set(translated.x, translated.y);
+    _bodyDef.angle = rotated;
+    switch (type)
+    {
+    case BodyType::STATIC_BODY:
+        _bodyDef.type = b2_staticBody;
+        break;
+    case BodyType::KINEMATIC_BODY:
+        _bodyDef.type = b2_kinematicBody;
+        break;
+    case BodyType::DYNAMIC_BODY:
+        _bodyDef.type = b2_dynamicBody;
+        break;
+    }
+}
+
+WorldLayer2d &WorldObject2d::getWorldLayer() const
+{
+    return _layer;
+}
+
+void WorldObject2d::onAwake()
+{
+    GraphicalObject2d::onAwake();
+    ASSERT(_body);
+}
 } // namespace ample::physics

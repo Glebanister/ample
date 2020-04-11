@@ -10,10 +10,10 @@ LayeredWindowActivity::LayeredWindowActivity(window::Window &window)
     graphics::shaders::ShaderProcessor::instance().use();
 }
 
-void LayeredWindowActivity::addLayer(Layer &layer)
+void LayeredWindowActivity::addLayer(std::shared_ptr<Layer> layer)
 {
-    Activity::addBehaviour(layer);
-    _layers.push_back(&layer);
+    Activity::addBehavior(std::static_pointer_cast<Behavior>(layer));
+    _layers.push_back(layer);
 }
 
 void LayeredWindowActivity::cleanLayers()
@@ -30,9 +30,9 @@ void LayeredWindowActivity::onAwake()
 
 void LayeredWindowActivity::onActive()
 {
-    WindowActivity::onActive();
     this->_window.swapBuffer();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     graphics::shaders::ShaderProcessor::instance().use();
+    WindowActivity::onActive();
 }
 } // namespace ample::graphics

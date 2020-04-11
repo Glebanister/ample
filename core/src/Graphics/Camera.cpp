@@ -88,4 +88,26 @@ void Camera::rotateUp(float angle)
 {
     rotate(_right, -angle);
 }
+
+void Camera::setVisibility(const bool value)
+{
+    _visible = value;
+}
+bool Camera::visible() const noexcept
+{
+    return _visible;
+}
+
+float Camera::getX() const noexcept
+{
+    return _position.x;
+}
+float Camera::getY() const noexcept
+{
+    return _position.y;
+}
+float Camera::getZ() const noexcept
+{
+    return _position.z;
+}
 } // namespace ample::graphics

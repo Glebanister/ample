@@ -12,7 +12,7 @@ namespace ample::graphics::light
 class LightSource : public GraphicalObject
 {
 public:
-    LightSource();
+    LightSource(const std::string &name);
 
     void drawSelf() override;
     void addIntensitiy(const Color &);
