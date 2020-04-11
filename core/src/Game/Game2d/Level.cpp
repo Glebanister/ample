@@ -1,15 +1,45 @@
+#include <filesystem>
+
 #include "Level.h"
-#include "GameException.h"
-#include "Debug.h"
+#include "JsonIO.h"
+#include "Exception.h"
 #include "Utils.h"
+#include "GameEnvironment.h"
 
 namespace ample::game::game2d
 {
-Level::Level(float layerThikness, float physicsLayerPosition,
-             const graphics::Vector2d<float> &frontLayerGravity)
-    : _sliceThikness(layerThikness),
+Level::Level(const std::string &name, std::shared_ptr<GameController> controller)
+    : ObjectState(name, controller)
+{
+    filing::JsonIO settings{filing::openJSONfile(GameEnvironment::instance().projectAbsolutePath() / name / "settings.json")};
+    _sliceThikness = settings.read<float>("slice_thickness");
+    _physicsLayerPosition = settings.read<float>("physics_layer_poistion");
+    ASSERT(0.0f <= _physicsLayerPosition && _physicsLayerPosition <= 1.0f);
+    _defaultGravity = settings.read<graphics::Vector2d<float>>("gravity");
+    for (const auto &entry : std::filesystem::directory_iterator(GameEnvironment::instance().projectAbsolutePath() / name / "scenes"))
+    {
+        if (entry.path().extension() == "json")
+        {
+            throw exception::Exception{exception::exId::UNSPECIFIED,
+                                       exception::exType::CASUAL,
+                                       "non-json file found " + entry.path().string()};
+        }
+        auto newScene = std::make_shared<filing::Scene2d>(entry.path());
+        _sliceByDistance[newScene->getDistance()] = newScene;
+    }
+    addTransition()
+    // TODO: addTransition(); from behavior.json
+}
+
+Level::Level(const std::string &name,
+             std::shared_ptr<GameController> controller,
+             float sliceThikness,
+             float physicsLayerPosition,
+             const graphics::Vector2d<float> &gravity)
+    : ObjectState(name, controller),
+      _sliceThikness(sliceThikness),
       _physicsLayerPosition(physicsLayerPosition),
-      _defaultGravity(frontLayerGravity),
+      _defaultGravity(gravity),
       _perspectiveCamera(std::make_shared<graphics::CameraPerspective>(graphics::Vector2d<graphics::pixel_t>{1920, 1080},
                                                                        graphics::Vector2d<graphics::pixel_t>{0, 0},
                                                                        graphics::Vector3d<float>{0.0, 0.0, 0.0},
