@@ -13,3 +13,6 @@
 [submodule "extern/imgui_sdl"]
 	path = extern/imgui_sdl
 	url = https://github.com/Tyyppi77/imgui_sdl
+[submodule "extern/imgui-filebrowser"]
+	path = extern/imgui-filebrowser
+	url = https://github.com/AirGuanZ/imgui-filebrowser

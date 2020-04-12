@@ -149,6 +149,7 @@ GraphicalEdge::GraphicalEdge(filing::JsonIO input)
 
 std::string GraphicalEdge::dump(filing::JsonIO output, std::string nameField)
 {
+    
     output.write<std::string>("name", name());
     output.write<std::vector<Vector2d<float>>>("shape", _shape);
     output.write<float>("z", getZ()); // TODO: check out if it is true

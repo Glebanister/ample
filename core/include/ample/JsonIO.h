@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include <rapidjson/writer.h>
 #include <rapidjson/stringbuffer.h>
@@ -9,6 +10,9 @@
 
 #include "Exception.h"
 #include "Debug.h"
+#include "Vector2d.h"
+#include "Vector3d.h"
+#include "Texture.h"
 
 namespace ample::graphics
 {
@@ -21,7 +25,6 @@ enum class normalsMode
 
 namespace ample::filing
 {
-
 std::string openJSONfile(const std::string &nameFile);
 
 void mergeObject(rapidjson::Value &target, rapidjson::Value &source, rapidjson::Value::AllocatorType &allocator);
@@ -31,6 +34,9 @@ std::string makeField(std::string nameField, std::string jsonStr);
 std::string mergeStrings(std::vector<std::string> &strings);
 
 std::string giveStringDocument(rapidjson::Value &doc);
+
+template<typename T>
+std::string saveArrayObjects(std::string nameField, std::vector<T>& objs);
 
 class JsonIO
 {

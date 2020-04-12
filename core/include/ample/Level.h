@@ -8,17 +8,34 @@
 #include "Vector2d.h"
 #include "Camera.h"
 #include "CameraPerspective.h"
+#include "GameController.h"
+#include "StoredObject.h"
+#include "Scene2d.h"
+
+/*
+Level structure:
+.
+├── transitions                   -- transitions to other levels
+├── settings.json                   -- current level settings
+├── scenes                          -- all 'slices' of level: foreground, backgrounds
+│   └── <...>.json
+└── textures                        -- level textures
+    └── <...>.[png, jpg, jpeg, bmp]
+*/
 
 namespace ample::game::game2d
 {
-class Level
+
+class Level : public ControlledObject::ObjectState<GameController>, public filing::StoredObject
 {
 public:
-    Level(float sliceThikness,
-          float physicsLayerPosition,
-          const graphics::Vector2d<float> &gravity = {0.f, -10.f});
+    Level(const std::string &name, std::shared_ptr<GameController> controller);
 
-    Level(const std::string &levelPath);
+    Level(const std::string &name,
+          std::shared_ptr<GameController> controller,
+          float sliceThikness,
+          float physicsLayerPosition,
+          const graphics::Vector2d<float> &gravity);
 
     std::shared_ptr<physics::WorldLayer2d> createSlice(const size_t num);
     std::shared_ptr<physics::WorldLayer2d> frontSlice() noexcept;
@@ -32,10 +49,10 @@ public:
     std::unordered_map<size_t, std::shared_ptr<physics::WorldLayer2d>> &layers() noexcept;
 
 private:
-    const float _sliceThikness;
-    const float _physicsLayerPosition;
-    const graphics::Vector2d<float> _defaultGravity;
-    std::unordered_map<size_t, std::shared_ptr<physics::WorldLayer2d>> _sliceByDistance;
+    float _sliceThikness;
+    float _physicsLayerPosition;
+    graphics::Vector2d<float> _defaultGravity;
+    std::unordered_map<size_t, std::shared_ptr<filing::Scene2d>> _sliceByDistance;
     std::shared_ptr<graphics::CameraPerspective> _perspectiveCamera;
 };
 } // namespace ample::game::game2d

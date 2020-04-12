@@ -1,7 +1,10 @@
 #pragma once
 
+#define GLM_ENABLE_EXPERIMENTAL
+
 #include <fstream>
 #include <sstream>
+#include <glm/glm.hpp>
 
 namespace ample::graphics
 {
@@ -88,6 +91,31 @@ std::string giveStringDocument(rapidjson::Value &doc)
     doc.Accept(writer);
     return sb.GetString();
 }
+
+template<typename T>
+inline
+std::string saveArrayObjects(std::string nameField, std::vector<T> &objs)
+{
+    rapidjson::Document doc;
+    doc.SetObject();
+
+    rapidjson::Value array(rapidjson::Type::kArrayType);
+    for (size_t i = 0; i < objs.size(); ++i)
+    {
+        rapidjson::Document temp;
+        temp.SetObject();
+        JsonIO io("");
+
+        temp.Parse(objs[i].dump(io, "name").c_str());
+        array.PushBack(temp, doc.GetAllocator());
+    }
+    rapidjson::Value field;
+    field.SetString(rapidjson::StringRef(nameField.c_str()));
+    doc.AddMember(field, array, doc.GetAllocator());
+
+    return giveStringDocument(doc);
+}
+
 
 inline
 JsonIO::JsonIO(const std::string &jsonStr_)
@@ -343,6 +371,32 @@ void JsonIO::write<std::vector<ample::graphics::Vector2d<float>>>(
         temp.SetFloat(obj[i].x);
         val.PushBack(temp, doc.GetAllocator());
         temp.SetFloat(obj[i].y);
+        val.PushBack(temp, doc.GetAllocator());
+        array.PushBack(val, doc.GetAllocator());
+    }
+    doc.AddMember(str, array, doc.GetAllocator());
+
+    jsonStr = giveStringDocument(doc);
+}
+
+template<>
+inline
+void JsonIO::write<std::vector<std::string>>(
+        const std::string &nameField, const std::vector<std::string> &obj)
+{
+    rapidjson::Document doc;
+    doc.SetObject();
+    doc.Parse(jsonStr.c_str());
+
+    rapidjson::Value str;
+    str.SetString(rapidjson::StringRef(nameField.c_str()));
+
+    rapidjson::Value array(rapidjson::Type::kStringType);
+    for (size_t i = 0; i < obj.size(); ++i)
+    {
+        rapidjson::Value val(rapidjson::Type::kArrayType);
+        rapidjson::Value temp;
+        temp.SetString(rapidjson::StringRef(obj[i].c_str()));
         val.PushBack(temp, doc.GetAllocator());
         array.PushBack(val, doc.GetAllocator());
     }
