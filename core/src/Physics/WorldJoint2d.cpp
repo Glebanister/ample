@@ -3,7 +3,20 @@
 namespace ample::physics
 {
 WorldJoint2d::WorldJoint2d(WorldObject2d &bodyA, WorldObject2d &bodyB, b2Joint *joint)
-    : _joint(joint), _bodyA(bodyA), _bodyB(bodyB) {}
+    : _joint(joint), _bodyA(bodyA), _bodyB(bodyB)
+{
+    _joint->SetUserData(this);
+}
+
+WorldJoint2d &WorldJoint2d::getNext()
+{
+    return *static_cast<WorldJoint2d *>(_joint->GetNext()->GetUserData());
+}
+
+const WorldJoint2d &WorldJoint2d::getNext() const
+{
+    return *static_cast<WorldJoint2d *>(_joint->GetNext()->GetUserData());
+}
 
 b2Body *WorldJoint2d::getB2Body(WorldObject2d &obj) const
 {

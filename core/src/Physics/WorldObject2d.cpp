@@ -7,14 +7,11 @@
 namespace ample::physics
 {
 
-Fixture::Fixture(b2Fixture *fixture, WorldObject2d &wObject) : _fixture(fixture), worldObject(wObject)
-{
-    _fixture->SetUserData(this);
-}
+Fixture::Fixture(b2Fixture *fixture) : _fixture(fixture) {}
 
 WorldObject2d &Fixture::getObject()
 {
-    return worldObject;
+    return *static_cast<WorldObject2d *>(_fixture->GetUserData());
 }
 
 void Fixture::setDensity(float density)
@@ -37,7 +34,7 @@ void Fixture::setSensor(bool sensor)
     _fixture->SetSensor(sensor);
 }
 
-Fixture &WorldObject2d::addFixture(
+Fixture WorldObject2d::addFixture(
     const std::vector<ample::graphics::Vector2d<float>> &shape)
 {
     b2FixtureDef fixtureDef;
@@ -49,8 +46,9 @@ Fixture &WorldObject2d::addFixture(
     b2PolygonShape polygonShape;
     polygonShape.Set(vertices.data(), shape.size());
     fixtureDef.shape = &polygonShape;
-    _fixtures.emplace_back(new Fixture(_body->CreateFixture(&fixtureDef), *this));
-    return *(_fixtures.back());
+    b2Fixture *fixture = _body->CreateFixture(&fixtureDef);
+    fixture->SetUserData(this);
+    return {fixture};
 }
 
 void WorldObject2d::setSpeedX(float desiredVelX)
@@ -291,6 +289,21 @@ void WorldObject2d::setMassData(const MassData &data)
 void WorldObject2d::resetMassData()
 {
     _body->ResetMassData();
+}
+
+WorldContactEdge2d WorldObject2d::getContactList()
+{
+    return {_body->GetContactList()};
+}
+
+WorldObject2d &WorldObject2d::getNext()
+{
+    return *static_cast<WorldObject2d *>(_body->GetNext()->GetUserData());
+}
+
+const WorldObject2d &WorldObject2d::getNext() const
+{
+    return *static_cast<WorldObject2d *>(_body->GetNext()->GetUserData());
 }
 
 WorldObject2d::WorldObject2d(const std::string &name,
