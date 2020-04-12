@@ -30,19 +30,14 @@ void StateMachine::Transition::reset() noexcept
 }
 
 StateMachine::State::State(std::shared_ptr<StateMachine> machine, const std::string &name)
-    : _machine(machine), _name(name) {}
+    : NamedObject(name), _machine(machine) {}
 
 StateMachine::State::State(const std::string &name)
-    : _machine(std::make_shared<StateMachine>()), _name(name) {}
+    : NamedObject(name), _machine(std::make_shared<StateMachine>()) {}
 
 void StateMachine::State::setMachine(std::shared_ptr<StateMachine> machine) noexcept
 {
     _machine = machine;
-}
-
-std::string StateMachine::State::getName() const noexcept
-{
-    return _name;
 }
 
 void StateMachine::State::addTransition(std::shared_ptr<StateMachine::Transition> transition) noexcept
@@ -51,9 +46,29 @@ void StateMachine::State::addTransition(std::shared_ptr<StateMachine::Transition
     _transitions.push_back(transition);
 }
 
+void StateMachine::State::onStart()
+{
+    for (const auto &action : _onStartActions)
+    {
+        action->onActive();
+    }
+}
+
+void StateMachine::State::onStop()
+{
+    for (const auto &action : _onStartActions)
+    {
+        action->onActive();
+    }
+}
+
 void StateMachine::State::onActive()
 {
     activity::Behavior::onActive();
+    for (const auto &action : _onActiveActions)
+    {
+        action->onActive();
+    }
     for (auto transition : _transitions)
     {
         if (!transition)
@@ -73,6 +88,17 @@ void StateMachine::State::onActive()
     }
 }
 
+void StateMachine::State::dumpTransitions(std::vector<std::string> &strings, filing::JsonIO output)
+{
+    filing::JsonIO writer("");
+    std::vector<std::string> transitions;
+    for (const auto &transition : _transitions)
+    {
+        transitions.push_back(transition -)
+            writer.write<std::string>("")
+    }
+}
+
 void StateMachine::onActive()
 {
     activity::Behavior::onActive();
@@ -85,6 +111,7 @@ void StateMachine::onActive()
 void StateMachine::setStartState(std::shared_ptr<State> state)
 {
     _currentState = state;
+    _startState = state;
     _currentState->onStart();
 }
 
@@ -96,6 +123,27 @@ void StateMachine::setCurrentState(std::shared_ptr<State> state)
     }
     _currentState = state;
     _currentState->onStart();
+}
+
+std::shared_ptr<StateMachine::State> StateMachine::getCurrentState() noexcept
+{
+    return _currentState;
+}
+
+StateMachine::StateMachine(const std::string &name)
+    : NamedObject(name) {}
+
+std::string StateMachine::dump(filing::JsonIO input, const std::string &fieldName)
+{
+    if (!_startState)
+    {
+        throw GameException{"state machine start state has not been recorded, dump can not be handled"};
+    }
+    std::vector<std::string> statesStrings;
+    input.write<std::string>("name", name());
+    input.write<std::string>("start_state", _startState->name());
+    _startState->dumpTransitions(statesStrings);
+    return filing::makeField(fieldName, filing::mergeStrings(statesStrings));
 }
 
 StateMachine::~StateMachine()
