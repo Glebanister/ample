@@ -5,9 +5,14 @@
 
 #include "GraphicalObject.h"
 
+enum class normalsMode
+{
+    FACE,
+    VERTEX,
+};
+
 namespace ample::graphics
 {
-
 class GraphicalEdge : public GraphicalObject
 {
 public:

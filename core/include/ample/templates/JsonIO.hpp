@@ -5,16 +5,10 @@
 
 namespace ample::graphics
 {
-enum class normalsMode
-{
-    FACE,
-    VERTEX,
-};
 }
 
 namespace ample::filing
 {
-
 inline
 std::string openJSONfile(const std::string &nameFile)
 {

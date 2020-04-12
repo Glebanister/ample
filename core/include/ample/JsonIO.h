@@ -10,6 +10,15 @@
 #include "Exception.h"
 #include "Debug.h"
 
+namespace ample::graphics
+{
+enum class normalsMode
+{
+    FACE,
+    VERTEX,
+};
+}
+
 namespace ample::filing
 {
 
@@ -32,10 +41,10 @@ public:
 
     filing::JsonIO updateJsonIO(std::string nameField);
 
-    template<typename T>
+    template <typename T>
     T read(const std::string &name);
 
-    template<typename T>
+    template <typename T>
     void write(const std::string &nameField, const T &obj);
 
 private:
@@ -45,4 +54,3 @@ private:
 } //namespace ample::filing
 
 #include "templates/JsonIO.hpp"
-
