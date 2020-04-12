@@ -2,6 +2,10 @@
 
 #include <string>
 #include <vector>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <glm/glm.hpp>
 
 #include <rapidjson/writer.h>
 #include <rapidjson/stringbuffer.h>
@@ -14,17 +18,27 @@
 #include "Vector3d.h"
 #include "Texture.h"
 
-namespace ample::graphics
-{
-enum class normalsMode
-{
-    FACE,
-    VERTEX,
-};
-}
-
 namespace ample::filing
 {
+class JsonIO
+{
+public:
+    JsonIO(const std::string &jsonStr_);
+
+    std::string getJSONstring() const;
+
+    JsonIO updateJsonIO(std::string nameField);
+
+    template <typename T>
+    T read(const std::string &name) const;
+
+    template <typename T>
+    void write(const std::string &nameField, const T &obj);
+
+private:
+    std::string jsonStr;
+};
+
 std::string openJSONfile(const std::string &nameFile);
 
 void mergeObject(rapidjson::Value &target, rapidjson::Value &source, rapidjson::Value::AllocatorType &allocator);
@@ -35,27 +49,8 @@ std::string mergeStrings(std::vector<std::string> &strings);
 
 std::string giveStringDocument(rapidjson::Value &doc);
 
-template<typename T>
-std::string saveArrayObjects(std::string nameField, std::vector<T>& objs);
-
-class JsonIO
-{
-public:
-    JsonIO(const std::string &jsonStr_);
-
-    std::string getJSONstring() const;
-
-    filing::JsonIO updateJsonIO(std::string nameField);
-
-    template <typename T>
-    T read(const std::string &name);
-
-    template <typename T>
-    void write(const std::string &nameField, const T &obj);
-
-private:
-    std::string jsonStr;
-};
+template <typename T>
+std::string saveArrayObjects(std::string nameField, std::vector<T> &objs);
 
 } //namespace ample::filing
 

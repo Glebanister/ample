@@ -50,6 +50,9 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Utils/Noncopyable.cpp
 
     src/Filing/Scene2d.cpp
+    src/Filing/NamedObject.cpp
+    src/Filing/StoredObject.cpp
+    src/Filing/NamedStoredObject.cpp
 
     src/Graphics/GraphicalObject.cpp
     src/Graphics/GraphicalObject2d.cpp
@@ -108,7 +111,6 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Game/StateMachine/ControlledObject.cpp
     src/Game/StateMachine/Action.cpp
     src/Game/Events/EventListener.cpp
-    src/Game/NamedObject.cpp
    )
 
 include_directories(${SDL2_INCLUDE_DIRS})
