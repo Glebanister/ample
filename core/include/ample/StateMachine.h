@@ -49,7 +49,7 @@ public:
         void addTransition(std::shared_ptr<Transition>) noexcept;
 
         // TODO : apply function using dfs
-        void dumpTransitions(std::vector<std::string> &strings, filing::JsonIO);
+        void dumpTransitionsToVector(std::vector<std::string> &strings, filing::JsonIO);
 
     private:
         std::shared_ptr<StateMachine> _machine;

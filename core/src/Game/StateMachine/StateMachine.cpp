@@ -30,10 +30,10 @@ void StateMachine::Transition::reset() noexcept
 }
 
 StateMachine::State::State(std::shared_ptr<StateMachine> machine, const std::string &name)
-    : NamedObject(name), _machine(machine) {}
+    : NamedObject("State", name), _machine(machine) {}
 
 StateMachine::State::State(const std::string &name)
-    : NamedObject(name), _machine(std::make_shared<StateMachine>()) {}
+    : NamedObject("State", name), _machine(std::make_shared<StateMachine>()) {}
 
 void StateMachine::State::addOnStartAction(std::shared_ptr<Action> action)
 {
@@ -103,7 +103,7 @@ void StateMachine::State::onActive()
     }
 }
 
-void StateMachine::State::dumpTransitions(std::vector<std::string> &strings, filing::JsonIO output)
+void StateMachine::State::dumpTransitionsToVector(std::vector<std::string> &strings, filing::JsonIO output)
 {
     filing::JsonIO writer("");
     std::vector<std::string> transitions;
@@ -146,7 +146,7 @@ std::shared_ptr<StateMachine::State> StateMachine::getCurrentState() noexcept
 }
 
 StateMachine::StateMachine(const std::string &name)
-    : NamedObject(name) {}
+    : NamedObject("StateMachine", name) {}
 
 std::string StateMachine::dump(filing::JsonIO input, const std::string &fieldName)
 {
@@ -157,7 +157,8 @@ std::string StateMachine::dump(filing::JsonIO input, const std::string &fieldNam
     std::vector<std::string> statesStrings;
     input.write<std::string>("name", name());
     input.write<std::string>("start_state", _startState->name());
-    _startState->dumpTransitions(statesStrings);
+
+    _startState->dumpTransitionsToVector(statesStrings);
     return filing::makeField(fieldName, filing::mergeStrings(statesStrings));
 }
 
