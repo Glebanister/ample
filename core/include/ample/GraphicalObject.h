@@ -12,11 +12,10 @@
 #include "VertexArray.h"
 #include "ControlledObject.h"
 #include "JsonIO.h"
-#include "UniqueObject.h"
 
 namespace ample::graphics
 {
-class GraphicalObject : public game::ControlledObject, public filing::UniqueObject
+class GraphicalObject : public game::ControlledObject
 {
 public:
     GraphicalObject(const std::string &name,

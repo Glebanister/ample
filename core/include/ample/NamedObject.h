@@ -12,6 +12,6 @@ public:
 
 private:
     std::string _name;
-    std::string _className = "";
+    std::string _className;
 };
 } // namespace ample::game

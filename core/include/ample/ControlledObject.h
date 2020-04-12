@@ -10,14 +10,14 @@
 
 namespace ample::game
 {
-class ControlledObject : public activity::Behavior, public NamedObject
+class ControlledObject : public activity::Behavior
 {
 public:
     template <typename ObjectT>
     class ObjectState : public StateMachine::State
     {
     public:
-        ObjectState(const std::string &name, std::shared_ptr<ObjectT> object);
+        ObjectState(std::shared_ptr<ObjectT> object);
         std::shared_ptr<ObjectT> object() const noexcept;
 
     private:

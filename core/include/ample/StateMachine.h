@@ -5,13 +5,12 @@
 
 #include "Behaviour.h"
 #include "EventListener.h"
-#include "NamedObject.h"
-#include "StoredObject.h"
+#include "StoredNamedObject.h"
 #include "Action.h"
 
 namespace ample::game
 {
-class StateMachine : public activity::Behavior, public filing::StoredObject, public NamedObject
+class StateMachine : public activity::Behavior, public StoredNamedObject
 {
 public:
     class State;
@@ -25,16 +24,20 @@ public:
         bool isActivated() const noexcept;
         void reset() noexcept;
 
+        std::string dump(filing::JsonIO output, const std::string &fieldName) override; // TODO
+
     private:
         std::shared_ptr<State> _nextState;
         bool _activated = false;
     };
 
-    class State : public activity::Behavior, public NamedObject, public filing::StoredObject
+    class State : public activity::Behavior, public StoredNamedObject
     {
     public:
         State(std::shared_ptr<StateMachine> machine, const std::string &name);
         State(const std::string &name);
+
+        State(filing::JsonIO input); // TODO
 
         void setMachine(std::shared_ptr<StateMachine> machine) noexcept;
 
@@ -47,6 +50,8 @@ public:
         void addOnStopAction(std::shared_ptr<Action>);
 
         void addTransition(std::shared_ptr<Transition>) noexcept;
+
+        std::string dump(filing::JsonIO output, const std::string &fieldName) override; // TODO
 
         // TODO : apply function using dfs
         void dumpTransitionsToVector(std::vector<std::string> &strings, filing::JsonIO);
@@ -68,7 +73,8 @@ public:
     std::shared_ptr<State> getCurrentState() noexcept;
     void onActive() override;
 
-    std::string dump(filing::JsonIO input, const std::string &) override;
+    StateMachine(filing::JsonIO input); // TODO
+    std::string dump(filing::JsonIO input, const std::string &) override; // TODO
 
     virtual ~StateMachine();
 

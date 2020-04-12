@@ -93,6 +93,8 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Geometry/Circle.cpp
     src/Geometry/Point.cpp
 
+    src/Game/NamedObject.cpp
+    src/Game/StoredNamedObject.cpp
     src/Game/Game2d/Game2d.cpp
     src/Game/Game2d/Level.cpp
     src/Game/GameException.cpp
@@ -111,7 +113,6 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Game/StateMachine/ControlledObject.cpp
     src/Game/StateMachine/Action.cpp
     src/Game/Events/EventListener.cpp
-    src/Game/NamedObject.cpp
    )
 
 include_directories(${SDL2_INCLUDE_DIRS})

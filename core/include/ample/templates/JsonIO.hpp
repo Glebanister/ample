@@ -6,15 +6,6 @@
 #include <sstream>
 #include <glm/glm.hpp>
 
-namespace ample::graphics
-{
-enum class normalsMode
-{
-    FACE,
-    VERTEX,
-};
-}
-
 namespace ample::filing
 {
 
