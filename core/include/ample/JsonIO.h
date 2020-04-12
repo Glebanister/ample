@@ -26,6 +26,9 @@ std::string mergeStrings(std::vector<std::string> &strings);
 
 std::string giveStringDocument(rapidjson::Value &doc);
 
+template<typename T>
+std::string saveArrayObjects(std::string nameField, std::vector<T>& objs);
+
 class JsonIO
 {
 public:

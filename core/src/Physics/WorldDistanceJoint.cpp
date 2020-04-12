@@ -12,7 +12,7 @@ WorldDistanceJoint2d::WorldDistanceJoint2d(WorldObject2d &bodyA,
     : WorldJoint2d(bodyA, bodyB)
 {
     b2DistanceJointDef jointDef;
-    jointDef.Initialize(getB2Body(bodyB), getB2Body(bodyA),
+    jointDef.Initialize(getB2Body(bodyA), getB2Body(bodyB),
                         {anchorOnBodyA.x, anchorOnBodyA.y},
                         {anchorOnBodyB.x, anchorOnBodyB.y});
     jointDef.collideConnected = collideConnected;
@@ -20,38 +20,28 @@ WorldDistanceJoint2d::WorldDistanceJoint2d(WorldObject2d &bodyA,
     {
         jointDef.length = length;
     }
-    jointDef.length = length;
     initB2Joint(bodyA.getWorldLayer(), &jointDef);
 }
 
-/*void WorldDistanceJoint2d::onActive()
+void WorldDistanceJoint2d::onActive()
 {
-    setTranslate({(_bodyA.getPosition().x + _bodyB.getPosition().x) / 2,
-                  (_bodyA.getPosition().y + _bodyB.getPosition().y) / 2, getZ()});
-    float angle = atan(abs((_bodyA.getPosition().x - _bodyB.getPosition().x) / (_bodyA.getPosition().y - _bodyB.getPosition().y)));
-    if (_bodyA.getPosition().y >= _bodyB.getPosition().y)
+    if (_form)
     {
-        if (_bodyA.getPosition().x > _bodyB.getPosition().x)
-        {
-            setRotate({0.0f, 0.0f, 1.0f}, 180 - angle * 180.0f / M_PI);
-        }
-        else
-        {
-            setRotate({0.0f, 0.0f, 1.0f}, angle * 180.0f / M_PI);
-        }
+        _form->setTranslate({(getAnchorA().x + getAnchorB().x) / 2,
+                             (getAnchorA().y + getAnchorB().y) / 2, _bodyA.getZ()});
+        float angle = atan((getAnchorA().x - getAnchorB().x) / (getAnchorA().y - getAnchorB().y));
+        _form->setRotate({0.0f, 0.0f, 1.0f}, 180 - angle * 180.0f / M_PI);
+        float curLength = sqrt(pow(getAnchorA().x - getAnchorB().x, 2) + pow(getAnchorA().y - getAnchorB().y, 2));
+        _form->setScale({1.0f, curLength / _initLength, 1.0f});
     }
-    else
-    {
-        if (_bodyA.getPosition().x > _bodyB.getPosition().x)
-        {
-            setRotate({0.0f, 0.0f, 1.0f}, angle * 180.0f / M_PI);
-        }
-        else
-        {
-            setRotate({0.0f, 0.0f, 1.0f}, 180 - angle * 180.0f / M_PI);
-        }
-    }
-}*/
+}
+
+void WorldDistanceJoint2d::setForm(std::shared_ptr<graphics::GraphicalObject2d> form)
+{
+    _form = form;
+    _initLength = getLength();
+    _bodyA.getWorldLayer().addObject(form);
+}
 
 ample::graphics::Vector2d<float> WorldDistanceJoint2d::getLocalAnchorA() const
 {

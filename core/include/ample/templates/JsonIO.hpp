@@ -98,6 +98,31 @@ std::string giveStringDocument(rapidjson::Value &doc)
     return sb.GetString();
 }
 
+template<typename T>
+inline
+std::string saveArrayObjects(std::string nameField, std::vector<T> &objs)
+{
+    rapidjson::Document doc;
+    doc.SetObject();
+
+    rapidjson::Value array(rapidjson::Type::kArrayType);
+    for (size_t i = 0; i < objs.size(); ++i)
+    {
+        rapidjson::Document temp;
+        temp.SetObject();
+        JsonIO io("");
+
+        temp.Parse(objs[i].dump(io, "name").c_str());
+        array.PushBack(temp, doc.GetAllocator());
+    }
+    rapidjson::Value field;
+    field.SetString(rapidjson::StringRef(nameField.c_str()));
+    doc.AddMember(field, array, doc.GetAllocator());
+
+    return giveStringDocument(doc);
+}
+
+
 inline
 JsonIO::JsonIO(const std::string &jsonStr_)
         : jsonStr(jsonStr_)
