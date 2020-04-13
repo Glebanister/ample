@@ -52,9 +52,8 @@ std::string mergeStrings(std::vector<std::string> &strings);
 std::string giveStringDocument(rapidjson::Value &doc);
 
 std::string dumpObjectsVector(const std::vector<std::string> &objs);
-  
-template<typename T>
-std::vector<T> loadArrayObjects(const std::string &jsonStr);
+
+std::vector<std::string> loadObjectsVector(const std::string &jsonStr);
 
 } //namespace ample::filing
 
