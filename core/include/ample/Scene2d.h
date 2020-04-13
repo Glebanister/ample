@@ -16,8 +16,11 @@ public:
 
     ample::graphics::GraphicalObject &getElementById(const int &id);
 
+    float getDistance() const;
+
 private:
     std::vector<std::shared_ptr<ample::graphics::GraphicalObject>> _objs;
     std::unordered_map<int, std::shared_ptr<ample::graphics::GraphicalObject>> _storage;
+    float _distance;
 };
 } // namespace ample::filing
