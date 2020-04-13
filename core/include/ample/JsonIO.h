@@ -26,6 +26,9 @@ std::string giveStringDocument(rapidjson::Value &doc);
 template<typename T>
 std::string saveArrayObjects(std::string nameField, std::vector<T>& objs);
 
+template<typename T>
+std::vector<T> loadArrayObjects(const std::string &jsonStr);
+
 class JsonIO
 {
 public:

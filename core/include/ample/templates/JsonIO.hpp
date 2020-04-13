@@ -119,6 +119,25 @@ std::string saveArrayObjects(std::string nameField, std::vector<T> &objs)
     return giveStringDocument(doc);
 }
 
+template<typename T>
+inline
+std::vector<T> loadArrayObjects(const std::string &jsonStr)
+{
+    std::vector<T> objects;
+    rapidjson::Document doc;
+    doc.Parse(jsonStr.c_str());
+    for (rapidjson::Value::ConstValueIterator itr = doc.Begin(); itr != doc.End(); ++itr)
+    {
+        const rapidjson::Value &attribute = *itr;
+        rapidjson::StringBuffer sb;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(sb);
+        attribute.Accept(writer);
+        JsonIO input(sb.GetString());
+        objects.push_back(T(input));
+    }
+    return objects;
+}
+
 
 inline
 JsonIO::JsonIO(const std::string &jsonStr_)
