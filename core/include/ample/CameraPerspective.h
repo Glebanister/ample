@@ -10,7 +10,8 @@ namespace ample::graphics
 class CameraPerspective : public Camera
 {
 public:
-    CameraPerspective(const Vector2d<pixel_t> &viewSize,
+    CameraPerspective(const std::string &name,
+                      const Vector2d<pixel_t> &viewSize,
                       const Vector2d<pixel_t> &viewPosition,
                       const Vector3d<float> &eyePos,
                       const Vector3d<float> &direction,
@@ -18,6 +19,9 @@ public:
                       float aspectRatio,
                       float nearClip,
                       float farClip);
+
+    CameraPerspective(const filing::JsonIO &input);
+    std::string dump() override;
 
     void look() override;
     void unlook() override;

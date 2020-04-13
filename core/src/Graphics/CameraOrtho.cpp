@@ -15,7 +15,8 @@
 
 namespace ample::graphics
 {
-CameraOrtho::CameraOrtho(const Vector2d<pixel_t> &viewSize,
+CameraOrtho::CameraOrtho(const std::string &name,
+                         const Vector2d<pixel_t> &viewSize,
                          const Vector2d<pixel_t> &viewPosition,
                          const Vector3d<float> &eyePos,
                          const Vector3d<float> &direction,
@@ -25,7 +26,7 @@ CameraOrtho::CameraOrtho(const Vector2d<pixel_t> &viewSize,
                          float top,
                          float near,
                          float far)
-    : Camera(viewSize, viewPosition, eyePos, direction),
+    : Camera(name, "CameraOrtho", viewSize, viewPosition, eyePos, direction),
       _left(left),
       _right(right),
       _bottom(bottom),
@@ -37,6 +38,33 @@ CameraOrtho::CameraOrtho(const Vector2d<pixel_t> &viewSize,
 {
     DEBUG("Setup ortho camera");
     exception::OpenGLException::handle();
+}
+
+CameraOrtho::CameraOrtho(const filing::JsonIO &input)
+    : CameraOrtho(input.read<std::string>("name"),
+                  input.read<Vector2d<pixel_t>>("view_size"),
+                  input.read<Vector2d<pixel_t>>("view_pos"),
+                  input.read<Vector3d<float>>("eye_pos"),
+                  input.read<Vector3d<float>>("eye_dir"),
+                  input.read<float>("left"),
+                  input.read<float>("right"),
+                  input.read<float>("bottom"),
+                  input.read<float>("top"),
+                  input.read<float>("near"),
+                  input.read<float>("far"))
+{
+}
+
+std::string CameraOrtho::dump()
+{
+    filing::JsonIO output = Camera::dump();
+    output.write<float>("left", _left);
+    output.write<float>("right", _right);
+    output.write<float>("bottom", _bottom);
+    output.write<float>("top", _top);
+    output.write<float>("near", _near);
+    output.write<float>("far", _far);
+    return output;
 }
 
 void CameraOrtho::look()

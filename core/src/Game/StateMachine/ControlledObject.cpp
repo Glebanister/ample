@@ -3,8 +3,8 @@
 
 namespace ample::game
 {
-ControlledObject::ControlledObject(const std::string &name)
-    : NamedObject(name),
+ControlledObject::ControlledObject(const std::string &name, const std::string &className)
+    : NamedStoredObject(name, className),
       _stateMachine(std::make_shared<StateMachine>())
 {
     addBehavior(std::static_pointer_cast<Behavior>(_stateMachine));

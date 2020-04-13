@@ -36,7 +36,7 @@ enum class textureOrigin
 
 class Texture;
 
-class TextureRaw : public game::NamedObject
+class TextureRaw : public filing::NamedObject
 {
 public:
     TextureRaw(const std::string &texturePath,
@@ -62,7 +62,7 @@ public:
     Vector2d<textureOrigin> origin;
 };
 
-class Texture final : public utils::Noncopyable, public game::NamedObject
+class Texture final : public utils::Noncopyable, public filing::NamedObject
 {
 private:
     class PixelMap

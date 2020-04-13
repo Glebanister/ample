@@ -7,7 +7,7 @@
 
 namespace ample::graphics
 {
-class GraphicalPolygon : public GraphicalObject
+class GraphicalPolygon final : public GraphicalObject
 {
 public:
     GraphicalPolygon(const std::string &name,
@@ -20,7 +20,7 @@ public:
 
     GraphicalPolygon(filing::JsonIO input);
 
-    std::string dump(filing::JsonIO output, std::string nameField) override;
+    std::string dump() override;
 
 private:
     std::vector<Vector2d<float>> _shape;

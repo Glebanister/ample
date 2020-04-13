@@ -2,10 +2,6 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 
-#include <fstream>
-#include <sstream>
-#include <glm/glm.hpp>
-
 namespace ample::graphics
 {
 enum class normalsMode
@@ -17,9 +13,7 @@ enum class normalsMode
 
 namespace ample::filing
 {
-
-inline
-std::string openJSONfile(const std::string &nameFile)
+inline std::string openJSONfile(const std::string &nameFile)
 {
     std::ifstream inFile(nameFile);
     if (!inFile)
@@ -40,8 +34,7 @@ std::string openJSONfile(const std::string &nameFile)
     return jsonDocumentBuffer.str();
 }
 
-inline
-void mergeObject(rapidjson::Value &target, rapidjson::Value &source, rapidjson::Value::AllocatorType &allocator)
+inline void mergeObject(rapidjson::Value &target, rapidjson::Value &source, rapidjson::Value::AllocatorType &allocator)
 {
     for (rapidjson::Value::MemberIterator itr = source.MemberBegin(); itr != source.MemberEnd(); ++itr)
     {
@@ -49,8 +42,7 @@ void mergeObject(rapidjson::Value &target, rapidjson::Value &source, rapidjson::
     }
 }
 
-inline
-std::string makeField(std::string nameField, std::string jsonStr)
+inline std::string makeField(std::string nameField, std::string jsonStr)
 {
     rapidjson::Document doc;
     doc.SetObject();
@@ -67,8 +59,7 @@ std::string makeField(std::string nameField, std::string jsonStr)
     return giveStringDocument(doc) + '\n';
 }
 
-inline
-std::string mergeStrings(std::vector<std::string> &strings)
+inline std::string mergeStrings(std::vector<std::string> &strings)
 {
     if (!strings.size())
     {
@@ -89,8 +80,7 @@ std::string mergeStrings(std::vector<std::string> &strings)
     return giveStringDocument(first);
 }
 
-inline
-std::string giveStringDocument(rapidjson::Value &doc)
+inline std::string giveStringDocument(rapidjson::Value &doc)
 {
     rapidjson::StringBuffer sb;
     rapidjson::Writer<rapidjson::StringBuffer> writer(sb);
@@ -98,9 +88,7 @@ std::string giveStringDocument(rapidjson::Value &doc)
     return sb.GetString();
 }
 
-template<typename T>
-inline
-std::string saveArrayObjects(std::string nameField, std::vector<T> &objs)
+inline std::string dumpObjectsVector(const std::vector<std::string> &objs)
 {
     rapidjson::Document doc;
     doc.SetObject();
@@ -110,16 +98,12 @@ std::string saveArrayObjects(std::string nameField, std::vector<T> &objs)
     {
         rapidjson::Document temp;
         temp.SetObject();
-        JsonIO io("");
 
-        temp.Parse(objs[i].dump(io, "name").c_str());
+        temp.Parse(objs[i].c_str());
         array.PushBack(temp, doc.GetAllocator());
     }
-    rapidjson::Value field;
-    field.SetString(rapidjson::StringRef(nameField.c_str()));
-    doc.AddMember(field, array, doc.GetAllocator());
 
-    return giveStringDocument(doc);
+    return giveStringDocument(array);
 }
 
 template<typename T>
@@ -141,20 +125,22 @@ std::vector<T> loadArrayObjects(const std::string &jsonStr)
     return objects;
 }
 
+inline JsonIO::JsonIO(const std::string &jsonStr_)
+    : jsonStr(jsonStr_)
+{
+}
 
-inline
-JsonIO::JsonIO(const std::string &jsonStr_)
-        : jsonStr(jsonStr_)
-{}
-
-inline
-std::string JsonIO::getJSONstring() const
+inline std::string JsonIO::getJSONstring() const
 {
     return jsonStr;
 }
 
-inline
-filing::JsonIO JsonIO::updateJsonIO(std::string nameField)
+JsonIO::operator std::string() const noexcept
+{
+    return jsonStr;
+}
+
+inline filing::JsonIO JsonIO::updateJsonIO(std::string nameField)
 {
     rapidjson::Document doc;
     doc.SetObject();
@@ -164,13 +150,11 @@ filing::JsonIO JsonIO::updateJsonIO(std::string nameField)
     field.SetString(rapidjson::StringRef(nameField.c_str()));
     rapidjson::Value &value = doc[field];
 
-    return JsonIO {giveStringDocument(value)};
+    return JsonIO{giveStringDocument(value)};
 }
 
-
-template<>
-inline
-int JsonIO::read<int>(const std::string &nameField)
+template <>
+inline int JsonIO::read<int>(const std::string &nameField) const
 {
     rapidjson::Document doc;
     doc.SetObject();
@@ -180,9 +164,8 @@ int JsonIO::read<int>(const std::string &nameField)
     return itr->value.GetInt();
 }
 
-template<>
-inline
-float JsonIO::read<float>(const std::string &nameField)
+template <>
+inline float JsonIO::read<float>(const std::string &nameField) const
 {
     rapidjson::Document doc;
     doc.SetObject();
@@ -192,9 +175,8 @@ float JsonIO::read<float>(const std::string &nameField)
     return itr->value.GetFloat();
 }
 
-template<>
-inline
-std::string JsonIO::read<std::string>(const std::string &nameField)
+template <>
+inline std::string JsonIO::read<std::string>(const std::string &nameField) const
 {
     rapidjson::Document doc;
     doc.SetObject();
@@ -204,9 +186,8 @@ std::string JsonIO::read<std::string>(const std::string &nameField)
     return itr->value.GetString();
 }
 
-template<>
-inline
-ample::graphics::Vector2d<float> JsonIO::read<ample::graphics::Vector2d<float>>(const std::string &nameField)
+template <>
+inline ample::graphics::Vector2d<float> JsonIO::read<ample::graphics::Vector2d<float>>(const std::string &nameField) const
 {
     rapidjson::Document doc;
     doc.SetObject();
@@ -220,10 +201,9 @@ ample::graphics::Vector2d<float> JsonIO::read<ample::graphics::Vector2d<float>>(
     return obj;
 }
 
-template<>
-inline
-std::vector<ample::graphics::Vector2d<float>>
-JsonIO::read<std::vector<ample::graphics::Vector2d<float>>>(const std::string &nameField)
+template <>
+inline std::vector<ample::graphics::Vector2d<float>>
+JsonIO::read<std::vector<ample::graphics::Vector2d<float>>>(const std::string &nameField) const
 {
     rapidjson::Document doc;
     doc.SetObject();
@@ -238,9 +218,8 @@ JsonIO::read<std::vector<ample::graphics::Vector2d<float>>>(const std::string &n
     return obj;
 }
 
-template<>
-inline
-ample::graphics::Vector2d<int> JsonIO::read<ample::graphics::Vector2d<int>>(const std::string &nameField)
+template <>
+inline ample::graphics::Vector2d<int> JsonIO::read<ample::graphics::Vector2d<int>>(const std::string &nameField) const
 {
     rapidjson::Document doc;
     doc.SetObject();
@@ -253,11 +232,10 @@ ample::graphics::Vector2d<int> JsonIO::read<ample::graphics::Vector2d<int>>(cons
     return obj;
 }
 
-template<>
-inline
-ample::graphics::channelMode JsonIO::read<ample::graphics::channelMode>(const std::string &nameField)
+template <>
+inline ample::graphics::channelMode JsonIO::read<ample::graphics::channelMode>(const std::string &nameField) const
 {
-    std::string value = read < std::string > (nameField);
+    std::string value = read<std::string>(nameField);
 
     ample::graphics::channelMode obj;
     if (value == "RGB")
@@ -271,11 +249,10 @@ ample::graphics::channelMode JsonIO::read<ample::graphics::channelMode>(const st
     return obj;
 }
 
-template<>
-inline
-ample::graphics::normalsMode JsonIO::read<ample::graphics::normalsMode>(const std::string &nameField)
+template <>
+inline ample::graphics::normalsMode JsonIO::read<ample::graphics::normalsMode>(const std::string &nameField) const
 {
-    std::string value = read < std::string > (nameField);
+    std::string value = read<std::string>(nameField);
 
     ample::graphics::normalsMode obj = graphics::normalsMode::VERTEX;
     if (value == "FACE")
@@ -285,9 +262,8 @@ ample::graphics::normalsMode JsonIO::read<ample::graphics::normalsMode>(const st
     return obj;
 }
 
-template<>
-inline
-glm::mat4 JsonIO::read<glm::mat4>(const std::string &nameField)
+template <>
+inline glm::mat4 JsonIO::read<glm::mat4>(const std::string &nameField) const
 {
     rapidjson::Document doc;
     doc.SetObject();
@@ -305,9 +281,8 @@ glm::mat4 JsonIO::read<glm::mat4>(const std::string &nameField)
     return obj;
 }
 
-template<>
-inline
-void JsonIO::write<int>(const std::string &nameField, const int &obj)
+template <>
+inline void JsonIO::write<int>(const std::string &nameField, const int &obj)
 {
     rapidjson::Document doc;
     doc.SetObject();
@@ -320,9 +295,8 @@ void JsonIO::write<int>(const std::string &nameField, const int &obj)
     jsonStr = giveStringDocument(doc);
 }
 
-template<>
-inline
-void JsonIO::write<float>(const std::string &nameField, const float &obj)
+template <>
+inline void JsonIO::write<float>(const std::string &nameField, const float &obj)
 {
     rapidjson::Document doc;
     doc.SetObject();
@@ -335,9 +309,8 @@ void JsonIO::write<float>(const std::string &nameField, const float &obj)
     jsonStr = giveStringDocument(doc);
 }
 
-template<>
-inline
-void JsonIO::write<std::string>(const std::string &nameField, const std::string &obj)
+template <>
+inline void JsonIO::write<std::string>(const std::string &nameField, const std::string &obj)
 {
     rapidjson::Document doc;
     doc.SetObject();
@@ -353,10 +326,9 @@ void JsonIO::write<std::string>(const std::string &nameField, const std::string 
     jsonStr = giveStringDocument(doc);
 }
 
-template<>
-inline
-void JsonIO::write<ample::graphics::Vector2d<float>>(
-        const std::string &nameField, const ample::graphics::Vector2d<float> &obj)
+template <>
+inline void JsonIO::write<ample::graphics::Vector2d<float>>(
+    const std::string &nameField, const ample::graphics::Vector2d<float> &obj)
 {
     rapidjson::Document doc;
     doc.SetObject();
@@ -376,10 +348,9 @@ void JsonIO::write<ample::graphics::Vector2d<float>>(
     jsonStr = giveStringDocument(doc);
 }
 
-template<>
-inline
-void JsonIO::write<std::vector<ample::graphics::Vector2d<float>>>(
-        const std::string &nameField, const std::vector<ample::graphics::Vector2d<float>> &obj)
+template <>
+inline void JsonIO::write<std::vector<ample::graphics::Vector2d<float>>>(
+    const std::string &nameField, const std::vector<ample::graphics::Vector2d<float>> &obj)
 {
     rapidjson::Document doc;
     doc.SetObject();
@@ -404,10 +375,9 @@ void JsonIO::write<std::vector<ample::graphics::Vector2d<float>>>(
     jsonStr = giveStringDocument(doc);
 }
 
-template<>
-inline
-void JsonIO::write<std::vector<std::string>>(
-        const std::string &nameField, const std::vector<std::string> &obj)
+template <>
+inline void JsonIO::write<std::vector<std::string>>(
+    const std::string &nameField, const std::vector<std::string> &obj)
 {
     rapidjson::Document doc;
     doc.SetObject();
@@ -430,9 +400,8 @@ void JsonIO::write<std::vector<std::string>>(
     jsonStr = giveStringDocument(doc);
 }
 
-template<>
-inline
-void
+template <>
+inline void
 JsonIO::write<ample::graphics::Vector2d<int>>(const std::string &nameField, const ample::graphics::Vector2d<int> &obj)
 {
     rapidjson::Document doc;
@@ -453,9 +422,8 @@ JsonIO::write<ample::graphics::Vector2d<int>>(const std::string &nameField, cons
     jsonStr = giveStringDocument(doc);
 }
 
-template<>
-inline
-void JsonIO::write<ample::graphics::channelMode>(const std::string &nameField, const ample::graphics::channelMode &obj)
+template <>
+inline void JsonIO::write<ample::graphics::channelMode>(const std::string &nameField, const ample::graphics::channelMode &obj)
 {
     rapidjson::Document doc;
     doc.SetObject();
@@ -476,9 +444,8 @@ void JsonIO::write<ample::graphics::channelMode>(const std::string &nameField, c
     jsonStr = giveStringDocument(doc);
 }
 
-template<>
-inline
-void JsonIO::write<ample::graphics::normalsMode>(const std::string &nameField, const ample::graphics::normalsMode &obj)
+template <>
+inline void JsonIO::write<ample::graphics::normalsMode>(const std::string &nameField, const ample::graphics::normalsMode &obj)
 {
     rapidjson::Document doc;
     doc.SetObject();
@@ -499,9 +466,8 @@ void JsonIO::write<ample::graphics::normalsMode>(const std::string &nameField, c
     jsonStr = giveStringDocument(doc);
 }
 
-template<>
-inline
-void JsonIO::write<glm::mat4>(const std::string &nameField, const glm::mat4 &obj)
+template <>
+inline void JsonIO::write<glm::mat4>(const std::string &nameField, const glm::mat4 &obj)
 {
     rapidjson::Document doc;
     doc.SetObject();

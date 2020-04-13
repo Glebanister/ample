@@ -26,7 +26,7 @@ Level structure:
 namespace ample::game::game2d
 {
 
-class Level : public ControlledObject::ObjectState<GameController>, public filing::StoredObject
+class Level : public ControlledObject::ObjectState<GameController>
 {
 public:
     Level(const std::string &name, std::shared_ptr<GameController> controller);

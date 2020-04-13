@@ -2,16 +2,18 @@
 
 #include <vector>
 #include <memory>
+#include <unordered_map>
 
 #include "Behaviour.h"
 #include "EventListener.h"
 #include "NamedObject.h"
 #include "StoredObject.h"
 #include "Action.h"
+#include "NamedStoredObject.h"
 
 namespace ample::game
 {
-class StateMachine : public activity::Behavior, public filing::StoredObject, public NamedObject
+class StateMachine : public activity::Behavior, public filing::NamedStoredObject
 {
 public:
     class State;
@@ -30,7 +32,7 @@ public:
         bool _activated = false;
     };
 
-    class State : public activity::Behavior, public NamedObject, public filing::StoredObject
+    class State : public activity::Behavior, public filing::NamedStoredObject
     {
     public:
         State(std::shared_ptr<StateMachine> machine, const std::string &name);
@@ -45,9 +47,13 @@ public:
         void addTransition(std::shared_ptr<Transition>) noexcept;
 
         // TODO : apply function using dfs
-        void dumpTransitions(std::vector<std::string> &strings, filing::JsonIO);
+        void dumpRecursive(std::vector<std::string> &strings,
+                           std::unordered_map<std::string, bool> &used);
+
+        State(const filing::JsonIO &input); // TODO
 
     private:
+        std::string dump() override;
         std::shared_ptr<StateMachine> _machine;
         std::vector<std::shared_ptr<Transition>> _transitions;
         std::vector<std::shared_ptr<Action>> _onStartActions;
@@ -58,13 +64,14 @@ public:
     };
 
 public:
-    StateMachine(const std::string &name);
+    StateMachine(const std::string &name, const std::string &className = ""); // TODO: remove ""
     void setStartState(std::shared_ptr<State> state);
     void setCurrentState(std::shared_ptr<State> state);
     std::shared_ptr<State> getCurrentState() noexcept;
     void onActive() override;
 
-    std::string dump(filing::JsonIO input, const std::string &) override;
+    StateMachine(const filing::JsonIO &input);
+    std::string dump() override;
 
     virtual ~StateMachine();
 
