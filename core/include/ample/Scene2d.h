@@ -11,7 +11,8 @@ namespace ample::filing
 class Scene2d : public ample::physics::WorldLayer2d, public NamedStoredObject
 {
 public:
-    Scene2d(const ample::graphics::Vector2d<float> &gravity,
+    Scene2d(const std::string &name,
+            const ample::graphics::Vector2d<float> &gravity,
             float z,
             float thickness,
             float relativePositionInSlice);
