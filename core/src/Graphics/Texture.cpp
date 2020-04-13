@@ -332,6 +332,11 @@ void Texture::nextFrame() noexcept
     }
 }
 
+const Texture::GLSingleTexture &Texture::getCurrentTexture() const
+{
+    return _frames[_currentFrame];
+}
+
 std::string Texture::path() const noexcept
 {
     return _raw.path;
