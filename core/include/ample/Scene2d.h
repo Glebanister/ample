@@ -1,26 +1,31 @@
 #pragma once
 
-#include "WorldLayer2d.h"
-
 #include <string>
 #include <unordered_map>
 
+#include "WorldLayer2d.h"
+#include "NamedStoredObject.h"
+
 namespace ample::filing
 {
-class Scene2d : public ample::physics::WorldLayer2d
+class Scene2d : public ample::physics::WorldLayer2d, public NamedStoredObject
 {
 public:
-    Scene2d(const std::string &nameFile);
+    Scene2d(const ample::graphics::Vector2d<float> &gravity,
+            float z,
+            float thickness,
+            float relativePositionInSlice);
 
-    void saveScene(const std::string &nameFile);
-
-    ample::graphics::GraphicalObject &getElementById(const int &id);
-
+    Scene2d(const JsonIO &input);
+    std::string dump() override;
     float getDistance() const;
 
 private:
     std::vector<std::shared_ptr<ample::graphics::GraphicalObject>> _objs;
     std::unordered_map<int, std::shared_ptr<ample::graphics::GraphicalObject>> _storage;
-    float _distance;
+    const graphics::Vector2d<float> _gravity;
+    const float _zPosition;
+    const float _sceneThickness;
+    const float _relativeSlicePosition;
 };
 } // namespace ample::filing
