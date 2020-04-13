@@ -23,7 +23,7 @@ namespace ample::filing
 class JsonIO
 {
 public:
-    JsonIO(const std::string &jsonStr_);
+    JsonIO(const std::string &jsonStr_ = "");
 
     std::string getJSONstring() const;
 
@@ -34,6 +34,8 @@ public:
 
     template <typename T>
     void write(const std::string &nameField, const T &obj);
+
+    operator std::string() const noexcept;
 
 private:
     std::string jsonStr;
