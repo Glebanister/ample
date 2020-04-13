@@ -22,8 +22,13 @@ NamedObject::NamedObject(const std::string &name, const std::string &className)
     }
 }
 
-std::string &NamedObject::name() noexcept
+std::string NamedObject::name() const noexcept
 {
     return _name;
+}
+
+std::string NamedObject::className() const noexcept
+{
+    return _className;
 }
 } // namespace ample::filing

@@ -9,8 +9,8 @@ class NamedObject
 public:
     NamedObject(const std::string &name = "", const std::string &className = "");
 
-    std::string &name() noexcept;
-    std::string &className() noexcept;
+    std::string name() const noexcept;
+    std::string className() const noexcept;
 
 private:
     std::string _name;

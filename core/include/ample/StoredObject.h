@@ -1,12 +1,12 @@
 #pragma once
 
-#include "JsonIO.h"
+#include <string>
 
 namespace ample::filing
 {
 class StoredObject
 {
 public:
-    virtual std::string dump(JsonIO output) = 0;
+    virtual std::string dump() = 0;
 };
 } // namespace ample::filing

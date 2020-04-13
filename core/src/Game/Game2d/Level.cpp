@@ -5,6 +5,7 @@
 #include "Exception.h"
 #include "Utils.h"
 #include "GameEnvironment.h"
+#include "GameException.h"
 
 namespace ample::game::game2d
 {
@@ -27,7 +28,7 @@ Level::Level(const std::string &name, std::shared_ptr<GameController> controller
         auto newScene = std::make_shared<filing::Scene2d>(entry.path());
         _sliceByDistance[newScene->getDistance()] = newScene;
     }
-    addTransition()
+    // addTransition()
     // TODO: addTransition(); from behavior.json
 }
 

@@ -89,7 +89,7 @@ inline std::string giveStringDocument(rapidjson::Value &doc)
 }
 
 template <typename T>
-inline std::string saveArrayObjects(std::string nameField, std::vector<T> &objs)
+inline std::string dumpObjectsVector(std::string nameField, std::vector<T> &objs)
 {
     rapidjson::Document doc;
     doc.SetObject();
@@ -99,9 +99,8 @@ inline std::string saveArrayObjects(std::string nameField, std::vector<T> &objs)
     {
         rapidjson::Document temp;
         temp.SetObject();
-        JsonIO io("");
 
-        temp.Parse(objs[i].dump(io, "name").c_str());
+        temp.Parse(objs[i].dump().c_str());
         array.PushBack(temp, doc.GetAllocator());
     }
     rapidjson::Value field;
@@ -121,7 +120,7 @@ inline std::string JsonIO::getJSONstring() const
     return jsonStr;
 }
 
-JsonIO::operator std::string() const noecept
+JsonIO::operator std::string() const noexcept
 {
     return jsonStr;
 }
