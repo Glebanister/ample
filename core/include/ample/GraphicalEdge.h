@@ -13,7 +13,7 @@ enum class normalsMode
 
 namespace ample::graphics
 {
-class GraphicalEdge : public GraphicalObject
+class GraphicalEdge final : public GraphicalObject
 {
 public:
     GraphicalEdge(const std::string &name,
@@ -28,7 +28,7 @@ public:
 
     explicit GraphicalEdge(filing::JsonIO input);
 
-    std::string dump(filing::JsonIO output, std::string nameField) override;
+    std::string dump() override;
 
 private:
     std::vector<Vector2d<float>> _shape;
