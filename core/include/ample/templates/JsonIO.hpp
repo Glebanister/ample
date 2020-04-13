@@ -132,7 +132,7 @@ inline std::string JsonIO::getJSONstring() const
     return jsonStr;
 }
 
-JsonIO::operator std::string() const noexcept
+inline JsonIO::operator std::string() const noexcept
 {
     return jsonStr;
 }

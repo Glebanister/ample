@@ -19,17 +19,10 @@ Level::Level(const std::string &name, std::shared_ptr<GameController> controller
     _defaultGravity = settings.read<graphics::Vector2d<float>>("gravity");
     for (const auto &entry : std::filesystem::directory_iterator(GameEnvironment::instance().projectAbsolutePath() / name / "scenes"))
     {
-        if (entry.path().extension() == "json")
-        {
-            throw exception::Exception{exception::exId::UNSPECIFIED,
-                                       exception::exType::CASUAL,
-                                       "non-json file found " + entry.path().string()};
-        }
-        auto newScene = std::make_shared<filing::Scene2d>(entry.path());
+        // TODO: use std::unordered_map::emplace
+        auto newScene = std::make_shared<filing::Scene2d>(filing::openJSONfile(entry.path()));
         _sliceByDistance[newScene->getDistance()] = newScene;
     }
-    // addTransition()
-    // TODO: addTransition(); from behavior.json
 }
 
 Level::Level(const std::string &name,
@@ -41,7 +34,8 @@ Level::Level(const std::string &name,
       _sliceThikness(sliceThikness),
       _physicsLayerPosition(physicsLayerPosition),
       _defaultGravity(gravity),
-      _perspectiveCamera(std::make_shared<graphics::CameraPerspective>(graphics::Vector2d<graphics::pixel_t>{1920, 1080},
+      _perspectiveCamera(std::make_shared<graphics::CameraPerspective>("perspective_level_camera",
+                                                                       graphics::Vector2d<graphics::pixel_t>{1920, 1080},
                                                                        graphics::Vector2d<graphics::pixel_t>{0, 0},
                                                                        graphics::Vector3d<float>{0.0, 0.0, 0.0},
                                                                        graphics::Vector3d<float>{0.0, 0.0, 1.0},
@@ -50,30 +44,31 @@ Level::Level(const std::string &name,
                                                                        0.1,
                                                                        1000.0))
 {
-    createSlice(0);
+    createSlice(0, "front_slice");
 }
 
-std::shared_ptr<physics::WorldLayer2d> Level::createSlice(const size_t num)
+std::shared_ptr<filing::Scene2d> Level::createSlice(const size_t num, const std::string &name)
 {
     if (_sliceByDistance[num])
     {
         throw GameException{"layer already exists: " + std::to_string(num)};
     }
-    _sliceByDistance[num] = std::make_shared<physics::WorldLayer2d>(_defaultGravity,
-                                                                    num * _sliceThikness,
-                                                                    _sliceThikness,
-                                                                    _physicsLayerPosition);
+    _sliceByDistance[num] = std::make_shared<filing::Scene2d>(name,
+                                                              _defaultGravity,
+                                                              num * _sliceThikness,
+                                                              _sliceThikness,
+                                                              _physicsLayerPosition);
     auto &slice = *_sliceByDistance[num].get();
     slice.addCamera(std::static_pointer_cast<graphics::Camera>(_perspectiveCamera));
     return _sliceByDistance[num];
 }
 
-std::shared_ptr<physics::WorldLayer2d> Level::frontSlice() noexcept
+std::shared_ptr<filing::Scene2d> Level::frontSlice() noexcept
 {
     return _sliceByDistance[0];
 }
 
-std::shared_ptr<physics::WorldLayer2d> Level::numberedSlice(const size_t num)
+std::shared_ptr<filing::Scene2d> Level::numberedSlice(const size_t num)
 {
     if (!_sliceByDistance[num])
     {
@@ -87,7 +82,7 @@ std::shared_ptr<graphics::CameraPerspective> Level::camera()
     return _perspectiveCamera;
 }
 
-std::unordered_map<size_t, std::shared_ptr<physics::WorldLayer2d>> &Level::layers() noexcept
+std::unordered_map<size_t, std::shared_ptr<filing::Scene2d>> &Level::layers() noexcept
 {
     return _sliceByDistance;
 }

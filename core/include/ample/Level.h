@@ -37,16 +37,16 @@ public:
           float physicsLayerPosition,
           const graphics::Vector2d<float> &gravity);
 
-    std::shared_ptr<physics::WorldLayer2d> createSlice(const size_t num);
-    std::shared_ptr<physics::WorldLayer2d> frontSlice() noexcept;
-    std::shared_ptr<physics::WorldLayer2d> numberedSlice(const size_t num);
+    std::shared_ptr<filing::Scene2d> createSlice(const size_t num, const std::string &name);
+    std::shared_ptr<filing::Scene2d> frontSlice() noexcept;
+    std::shared_ptr<filing::Scene2d> numberedSlice(const size_t num);
 
     void addGlobalObject(std::shared_ptr<graphics::GraphicalObject>);
     void removeGlobalObject(std::shared_ptr<graphics::GraphicalObject>);
 
     std::shared_ptr<graphics::CameraPerspective> camera();
 
-    std::unordered_map<size_t, std::shared_ptr<physics::WorldLayer2d>> &layers() noexcept;
+    std::unordered_map<size_t, std::shared_ptr<filing::Scene2d>> &layers() noexcept;
 
 private:
     float _sliceThikness;

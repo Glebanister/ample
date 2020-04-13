@@ -68,7 +68,7 @@ public:
     };
 
 public:
-    StateMachine(const std::string &name, const std::string &className = ""); // TODO: remove ""
+    StateMachine(const std::string &name);
     void setStartState(std::shared_ptr<State> state);
     void setCurrentState(std::shared_ptr<State> state);
     std::shared_ptr<State> getCurrentState() noexcept;

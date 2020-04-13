@@ -1,12 +1,13 @@
 #pragma once
 
+#include "ControlledObject.h"
+
 namespace ample::game
 {
-class GameController
+class GameController : public ControlledObject
 {
 public:
-
-private:
-
+    GameController(const std::string &name, const std::string &className);
+    GameController(const filing::JsonIO &input);
 };
 } // namespace ample::game

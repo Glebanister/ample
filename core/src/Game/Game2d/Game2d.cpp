@@ -7,7 +7,10 @@
 namespace ample::game::game2d
 {
 Game2d::Game2d(window::Window &window)
-    : graphics::LayeredWindowActivity(window) {}
+    : graphics::LayeredWindowActivity(window),
+      _gameController("game_controller", "GameController")
+{
+}
 
 GameController &Game2d::controller() noexcept
 {

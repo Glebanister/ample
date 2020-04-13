@@ -34,7 +34,7 @@ StateMachine::State::State(std::shared_ptr<StateMachine> machine, const std::str
     : NamedStoredObject(name, "State"), _machine(machine) {}
 
 StateMachine::State::State(const std::string &name)
-    : NamedStoredObject(name, "State"), _machine(std::make_shared<StateMachine>()) {}
+    : NamedStoredObject(name, "State"), _machine(nullptr) {} // TODO: may be mistake
 
 void StateMachine::State::setMachine(std::shared_ptr<StateMachine> machine) noexcept
 {
@@ -200,8 +200,8 @@ std::shared_ptr<StateMachine::State> StateMachine::getCurrentState() noexcept
     return _currentState;
 }
 
-StateMachine::StateMachine(const std::string &name, const std::string &className)
-    : NamedStoredObject(name, className) {}
+StateMachine::StateMachine(const std::string &name)
+    : NamedStoredObject(name, "StateMachine") {}
 
 StateMachine::StateMachine(const filing::JsonIO &input)
     : NamedStoredObject(input)

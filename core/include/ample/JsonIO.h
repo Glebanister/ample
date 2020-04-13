@@ -35,7 +35,7 @@ public:
     template <typename T>
     void write(const std::string &nameField, const T &obj);
 
-    operator std::string() const noexcept;
+    inline operator std::string() const noexcept;
 
 private:
     std::string jsonStr;
