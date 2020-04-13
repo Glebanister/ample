@@ -102,7 +102,7 @@ void StateMachine::State::dumpRecursive(std::vector<std::string> &strings,
     {
         dumpedTransitions.emplace_back(transition->dump());
     }
-    output.write<std::string>("transitions", filing::dumpObjectsVector("", dumpedTransitions));
+    output.write<std::string>("transitions", filing::dumpObjectsVector(dumpedTransitions));
     strings.emplace_back(std::move(output));
     for (const auto &transition : _transitions)
     {
@@ -127,9 +127,9 @@ std::string StateMachine::State::dump()
     {
         stopActions.emplace_back(act->name());
     }
-    output.write<std::string>("onStart", filing::dumpObjectsVector("", startActions)); // TODO: nameFiled?
-    output.write<std::string>("onActive", filing::dumpObjectsVector("", activeActions));
-    output.write<std::string>("onStop", filing::dumpObjectsVector("", stopActions));
+    output.write<std::string>("onStart", filing::dumpObjectsVector(startActions));
+    output.write<std::string>("onActive", filing::dumpObjectsVector(activeActions));
+    output.write<std::string>("onStop", filing::dumpObjectsVector(stopActions));
     return output;
 }
 
@@ -185,7 +185,7 @@ std::string StateMachine::dump()
     std::vector<std::string> statesStrings;
     std::unordered_map<std::string, bool> used;
     _startState->dumpRecursive(statesStrings, used);
-    output.write<std::string>("states", filing::dumpObjectsVector("", statesStrings));
+    output.write<std::string>("states", filing::dumpObjectsVector(statesStrings));
     return output;
 }
 

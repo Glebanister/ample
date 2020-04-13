@@ -88,8 +88,7 @@ inline std::string giveStringDocument(rapidjson::Value &doc)
     return sb.GetString();
 }
 
-template <typename T>
-inline std::string dumpObjectsVector(std::string nameField, std::vector<T> &objs)
+inline std::string dumpObjectsVector(const std::vector<std::string> &objs)
 {
     rapidjson::Document doc;
     doc.SetObject();
@@ -100,14 +99,11 @@ inline std::string dumpObjectsVector(std::string nameField, std::vector<T> &objs
         rapidjson::Document temp;
         temp.SetObject();
 
-        temp.Parse(objs[i].dump().c_str());
+        temp.Parse(objs[i].c_str());
         array.PushBack(temp, doc.GetAllocator());
     }
-    rapidjson::Value field;
-    field.SetString(rapidjson::StringRef(nameField.c_str()));
-    doc.AddMember(field, array, doc.GetAllocator());
 
-    return giveStringDocument(doc);
+    return giveStringDocument(array);
 }
 
 inline JsonIO::JsonIO(const std::string &jsonStr_)

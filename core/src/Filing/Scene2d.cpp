@@ -82,8 +82,8 @@ std::string Scene2d::dump()
     // {
     //     objectStrings.push_back(camera->dump());
     // }
-    output.write<std::string>("objects", filing::dumpObjectsVector("", objectStrings));
-    output.write<std::string>("cameras", filing::dumpObjectsVector("", cameraStrings));
+    output.write<std::string>("objects", filing::dumpObjectsVector(objectStrings));
+    output.write<std::string>("cameras", filing::dumpObjectsVector(cameraStrings));
     return output;
 }
 

@@ -71,7 +71,7 @@ public:
     void onActive() override;
 
     StateMachine(const filing::JsonIO &input);
-    std::string dump() override; // TODO
+    std::string dump() override;
 
     virtual ~StateMachine();
 
