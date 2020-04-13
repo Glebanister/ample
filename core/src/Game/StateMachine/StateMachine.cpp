@@ -30,10 +30,10 @@ void StateMachine::Transition::reset() noexcept
 }
 
 StateMachine::State::State(std::shared_ptr<StateMachine> machine, const std::string &name)
-    : NamedObject(name), _machine(machine) {}
+    : NamedStoredObject(name, "State"), _machine(machine) {}
 
 StateMachine::State::State(const std::string &name)
-    : NamedObject(name), _machine(std::make_shared<StateMachine>()) {}
+    : NamedStoredObject(name, "State"), _machine(std::make_shared<StateMachine>()) {}
 
 void StateMachine::State::setMachine(std::shared_ptr<StateMachine> machine) noexcept
 {
@@ -88,15 +88,49 @@ void StateMachine::State::onActive()
     }
 }
 
-void StateMachine::State::dumpTransitions(std::vector<std::string> &strings, filing::JsonIO output)
+void StateMachine::State::dumpRecursive(std::vector<std::string> &strings,
+                                        std::unordered_map<std::string, bool> &used)
 {
-    filing::JsonIO writer("");
-    std::vector<std::string> transitions;
+    if (used[name()])
+    {
+        return;
+    }
+    used[name()] = true;
+    filing::JsonIO output = dump();
+    std::vector<std::string> dumpedTransitions;
     for (const auto &transition : _transitions)
     {
-        transitions.push_back(transition -)
-            writer.write<std::string>("")
+        dumpedTransitions.emplace_back(transition->dump());
     }
+    output.write<std::string>("transitions", filing::dumpObjectsVector("", dumpedTransitions));
+    strings.emplace_back(std::move(output));
+    for (const auto &transition : _transitions)
+    {
+        transition->getNextState()->dumpRecursive(strings, used);
+    }
+}
+
+std::string StateMachine::State::dump()
+{
+    filing::JsonIO output = NamedStoredObject::dump();
+    std::vector<std::string> startActions, activeActions, stopActions;
+    // TODO: it's c++2a, use iterators?
+    for (const auto &act : _onStartActions)
+    {
+        startActions.emplace_back(act->name());
+    }
+    for (const auto &act : _onActiveActions)
+    {
+        activeActions.emplace_back(act->name());
+    }
+    for (const auto &act : _onStopActions)
+    {
+        stopActions.emplace_back(act->name());
+    }
+    output.write<std::string>("onStart", filing::dumpObjectsVector("", startActions)); // TODO: nameFiled?
+    output.write<std::string>("onActive", filing::dumpObjectsVector("", activeActions));
+    output.write<std::string>("onStop", filing::dumpObjectsVector("", stopActions));
+    return output;
 }
 
 void StateMachine::onActive()
@@ -130,20 +164,29 @@ std::shared_ptr<StateMachine::State> StateMachine::getCurrentState() noexcept
     return _currentState;
 }
 
-StateMachine::StateMachine(const std::string &name)
-    : NamedObject(name) {}
+StateMachine::StateMachine(const std::string &name, const std::string &className)
+    : NamedStoredObject(name, className) {}
 
-std::string StateMachine::dump(filing::JsonIO input, const std::string &fieldName)
+StateMachine::StateMachine(const filing::JsonIO &input)
+    : NamedStoredObject(input),
+      _startState(std::make_shared<State>(input))
+{
+    _currentState = _startState;
+}
+
+std::string StateMachine::dump()
 {
     if (!_startState)
     {
         throw GameException{"state machine start state has not been recorded, dump can not be handled"};
     }
+    filing::JsonIO output = NamedStoredObject::dump();
+    output.write<std::string>("start_state", _startState->name());
     std::vector<std::string> statesStrings;
-    input.write<std::string>("name", name());
-    input.write<std::string>("start_state", _startState->name());
-    _startState->dumpTransitions(statesStrings);
-    return filing::makeField(fieldName, filing::mergeStrings(statesStrings));
+    std::unordered_map<std::string, bool> used;
+    _startState->dumpRecursive(statesStrings, used);
+    output.write<std::string>("states", filing::dumpObjectsVector("", statesStrings));
+    return output;
 }
 
 StateMachine::~StateMachine()
