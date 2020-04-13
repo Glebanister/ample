@@ -19,12 +19,13 @@ class GraphicalObject : public game::ControlledObject
 {
 public:
     GraphicalObject(const std::string &name,
+                    const std::string &className,
                     const glm::mat4 &translated = glm::mat4{1.0f},
                     const glm::mat4 &scaled = glm::mat4{1.0f},
                     const glm::mat4 &rotated = glm::mat4{1.0f});
 
     explicit GraphicalObject(filing::JsonIO input);
-    virtual std::string dump(filing::JsonIO output, std::string nameField);
+    std::string dump() override;
 
     void draw(glm::mat4 scaled = glm::mat4{1.0f},
               glm::mat4 rotated = glm::mat4{1.0f},

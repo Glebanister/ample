@@ -47,7 +47,7 @@ public:
     };
 
 public:
-    ControlledObject(const std::string &name);
+    ControlledObject(const std::string &name, const std::string &className);
     std::shared_ptr<StateMachine> stateMachine() noexcept;
 
 private:
