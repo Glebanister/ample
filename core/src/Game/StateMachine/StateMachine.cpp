@@ -3,6 +3,7 @@
 #include "StateMachine.h"
 #include "GameException.h"
 #include "Debug.h"
+#include "Factory.h"
 
 namespace ample::game
 {
@@ -110,6 +111,41 @@ void StateMachine::State::dumpRecursive(std::vector<std::string> &strings,
     }
 }
 
+StateMachine::State::State(const filing::JsonIO &input, std::unordered_map<std::string, std::shared_ptr<State>> &states)
+    : NamedStoredObject(input)
+{
+    auto onStartActionStrings = filing::loadObjectsVector(input.read<std::string>("onStart"));
+    auto onActiveActionStrings = filing::loadObjectsVector(input.read<std::string>("onActive"));
+    auto onStopActionStrings = filing::loadObjectsVector(input.read<std::string>("onStop"));
+    for (const auto &actionString : onStartActionStrings)
+    {
+        // addOnStartAction(utils::Factory<Action>())
+    }
+    for (const auto &actionString : onActiveActionStrings)
+    {
+        // addOnStartAction(utils::Factory<Action>())
+    }
+    for (const auto &actionString : onStopActionStrings)
+    {
+        // addOnStartAction(utils::Factory<Action>()) // TODO
+    }
+}
+
+void StateMachine::State::addOnStartAction(std::shared_ptr<Action> action) noexcept
+{
+    _onStartActions.emplace_back(action);
+}
+
+void StateMachine::State::addOnActiveAction(std::shared_ptr<Action> action) noexcept
+{
+    _onActiveActions.emplace_back(action);
+}
+
+void StateMachine::State::addOnStopAction(std::shared_ptr<Action> action) noexcept
+{
+    _onStopActions.emplace_back(action);
+}
+
 std::string StateMachine::State::dump()
 {
     filing::JsonIO output = NamedStoredObject::dump();
@@ -168,9 +204,25 @@ StateMachine::StateMachine(const std::string &name, const std::string &className
     : NamedStoredObject(name, className) {}
 
 StateMachine::StateMachine(const filing::JsonIO &input)
-    : NamedStoredObject(input),
-      _startState(std::make_shared<State>(input))
+    : NamedStoredObject(input)
 {
+    auto stateStrings = filing::loadObjectsVector(input.read<std::string>("states"));
+    std::string startStateName = input.read<std::string>("start_state");
+    for (const auto &string : stateStrings)
+    {
+        std::shared_ptr<State> newState = std::make_shared<State>(string);
+        newState->setMachine(shared_from_this());
+        auto transitionStrings = filing::loadObjectsVector(input.read<std::string>("transitions"));
+        for (const auto &transitionString : transitionStrings)
+        {
+            // newState->addTransition() // TODO
+        }
+        if (newState->name() == startStateName)
+        {
+            setStartState(newState);
+        }
+    }
+
     _currentState = _startState;
 }
 

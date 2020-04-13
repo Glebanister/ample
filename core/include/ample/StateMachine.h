@@ -13,7 +13,7 @@
 
 namespace ample::game
 {
-class StateMachine : public activity::Behavior, public filing::NamedStoredObject
+class StateMachine : public activity::Behavior, public filing::NamedStoredObject, public std::enable_shared_from_this<StateMachine>
 {
 public:
     class State;
@@ -50,7 +50,11 @@ public:
         void dumpRecursive(std::vector<std::string> &strings,
                            std::unordered_map<std::string, bool> &used);
 
-        State(const filing::JsonIO &input); // TODO
+        State(const filing::JsonIO &input);
+
+        void addOnStartAction(std::shared_ptr<Action>) noexcept;
+        void addOnActiveAction(std::shared_ptr<Action>) noexcept;
+        void addOnStopAction(std::shared_ptr<Action>) noexcept;
 
     private:
         std::string dump() override;
