@@ -14,8 +14,8 @@ public:
 
     static std::unique_ptr<T> produce(const std::string &name)
     {
-        auto it = ShapeFactory::registry().find(name);
-        return it == ShapeFactory::registry().end() ? nullptr : (it->second)();
+        auto it = Factory<T>::registry().find(name);
+        return it == Factory<T>::registry().end() ? nullptr : (it->second)();
     }
 
     static registryMap &registry()
@@ -30,7 +30,7 @@ public:
     {
         Register(std::string name, Args... args)
         {
-            Factory::registry()[name] = []() { return std::make_unique<Derived>(args); };
+            // Factory::registry()[name] = []() { return std::make_unique<Derived>((args)...); };
         }
     };
 };

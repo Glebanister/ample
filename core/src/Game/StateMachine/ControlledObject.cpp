@@ -14,4 +14,19 @@ std::shared_ptr<StateMachine> ControlledObject::stateMachine() noexcept
 {
     return _stateMachine;
 }
+
+ControlledObject::ControlledObject(const filing::JsonIO &input)
+    : NamedStoredObject(input),
+      _stateMachine(std::make_shared<StateMachine>(input.read<std::string>("state_machine")))
+{
+}
+
+std::string ControlledObject::dump()
+{
+    return filing::mergeStrings(
+        {
+            NamedStoredObject::dump(),
+            filing::makeField("state_machine", _stateMachine->dump()),
+        });
+}
 } // namespace ample::game

@@ -39,7 +39,9 @@ public:
         class ObjectAction : public Action, public ObjectOwner<ObjectT>
         {
         public:
-            ObjectAction(const std::string &name, std::shared_ptr<ObjectT> object);
+            ObjectAction(const std::string &name,
+                         const std::string &className,
+                         std::shared_ptr<ObjectT> object);
 
         private:
             friend class ControlledObject;
@@ -48,6 +50,8 @@ public:
 
 public:
     ControlledObject(const std::string &name, const std::string &className);
+    ControlledObject(const filing::JsonIO &input);
+    std::string dump() override;
     std::shared_ptr<StateMachine> stateMachine() noexcept;
 
 private:

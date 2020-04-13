@@ -24,4 +24,13 @@ ControlledObject::ObjectState<ObjectT>::ObjectState(const std::string &name, std
 {
     setMachine(object->stateMachine());
 }
+
+template <class ObjectT>
+ControlledObject::ObjectState<ObjectT>::ObjectAction::ObjectAction(const std::string &name,
+                                                                   const std::string &className,
+                                                                   std::shared_ptr<ObjectT> object)
+    : Action(name, className), ObjectOwner<ObjectT>(object)
+{
+}
+
 } // namespace ample::game

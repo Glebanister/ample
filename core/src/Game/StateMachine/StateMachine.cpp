@@ -111,8 +111,8 @@ void StateMachine::State::dumpRecursive(std::vector<std::string> &strings,
     }
 }
 
-StateMachine::State::State(const filing::JsonIO &input, std::unordered_map<std::string, std::shared_ptr<State>> &states)
-    : NamedStoredObject(input)
+StateMachine::State::State(const filing::JsonIO &input)
+    : NamedStoredObject(input, "State")
 {
     auto onStartActionStrings = filing::loadObjectsVector(input.read<std::string>("onStart"));
     auto onActiveActionStrings = filing::loadObjectsVector(input.read<std::string>("onActive"));
