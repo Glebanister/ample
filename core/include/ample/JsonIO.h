@@ -47,7 +47,7 @@ void mergeObject(rapidjson::Value &target, rapidjson::Value &source, rapidjson::
 
 std::string makeField(std::string nameField, std::string jsonStr);
 
-std::string mergeStrings(std::vector<std::string> &strings);
+std::string mergeStrings(const std::vector<std::string> &strings);
 
 std::string giveStringDocument(rapidjson::Value &doc);
 

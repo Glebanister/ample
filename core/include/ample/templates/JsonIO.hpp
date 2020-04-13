@@ -59,7 +59,7 @@ inline std::string makeField(std::string nameField, std::string jsonStr)
     return giveStringDocument(doc) + '\n';
 }
 
-inline std::string mergeStrings(std::vector<std::string> &strings)
+inline std::string mergeStrings(const std::vector<std::string> &strings)
 {
     if (!strings.size())
     {
