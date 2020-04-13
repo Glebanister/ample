@@ -154,6 +154,7 @@ public:
 
     void pin() const noexcept;
     void unpin() const noexcept;
+    const GLSingleTexture &getCurrentTexture() const;
 
     std::string path() const noexcept;
 

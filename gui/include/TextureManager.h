@@ -2,6 +2,9 @@
 
 #include <memory>
 
+#include <imgui.h>
+#include <imfilebrowser.h>
+
 #include "ample/Texture.h"
 #include "ample/Singleton.h"
 
@@ -12,10 +15,16 @@ namespace ample::gui
 class TextureManager : public InterfaceUnit, public utils::Singleton<TextureManager>
 {
 public:
+    TextureManager();
+    void TexturesList();
+    void TextureLoader();
+
     struct RawTexture
     {
-        char buffer[255];
+        std::string pathBuffer;
         char name[255];
+
+        ImGui::FileBrowser fileDialog;
 
         graphics::Vector2d<size_t> eachSize = {128, 128};
         size_t eachSizeStep = 1;
