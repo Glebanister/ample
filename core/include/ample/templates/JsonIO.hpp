@@ -94,20 +94,26 @@ inline std::string giveStringDocument(rapidjson::Value &doc)
 
 inline std::string dumpObjectsVector(const std::vector<std::string> &objs)
 {
-    rapidjson::Document doc;
-    doc.SetObject();
+    // rapidjson::Document doc;
+    // doc.SetObject();
 
-    rapidjson::Value array(rapidjson::Type::kArrayType);
-    for (size_t i = 0; i < objs.size(); ++i)
+    // rapidjson::Value array(rapidjson::Type::kArrayType);
+    // for (size_t i = 0; i < objs.size(); ++i)
+    // {
+    //     rapidjson::Document temp;
+    //     temp.SetObject();
+
+    //     temp.Parse(objs[i].c_str());
+    //     array.PushBack(temp, doc.GetAllocator());
+    // }
+
+    // return giveStringDocument(array);
+    std::string res;
+    for (const auto &str : objs)
     {
-        rapidjson::Document temp;
-        temp.SetObject();
-
-        temp.Parse(objs[i].c_str());
-        array.PushBack(temp, doc.GetAllocator());
+        res += str;
     }
-
-    return giveStringDocument(array);
+    return res;
 }
 
 inline std::vector<std::string> loadObjectsVector(const std::string &jsonStr)

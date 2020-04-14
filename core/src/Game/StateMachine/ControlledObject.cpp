@@ -8,6 +8,7 @@ ControlledObject::ControlledObject(const std::string &name, const std::string &c
       _stateMachine(std::make_shared<StateMachine>(name + ".state_machine"))
 {
     addBehavior(std::static_pointer_cast<Behavior>(_stateMachine));
+    _stateMachine->setStartState(std::make_shared<StateMachine::State>(_stateMachine->shared_from_this(), "idle"));
 }
 
 std::shared_ptr<StateMachine> ControlledObject::stateMachine() noexcept

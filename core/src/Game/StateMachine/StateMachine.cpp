@@ -1,4 +1,5 @@
 #include <memory>
+#include <iostream>
 
 #include "StateMachine.h"
 #include "GameException.h"
@@ -103,8 +104,8 @@ void StateMachine::State::dumpRecursive(std::vector<std::string> &strings,
     {
         dumpedTransitions.emplace_back(transition->dump());
     }
-    output.write<std::string>("transitions", filing::dumpObjectsVector(dumpedTransitions));
-    strings.emplace_back(std::move(output));
+    output = filing::mergeStrings({output, filing::makeField("transitions", filing::dumpObjectsVector(dumpedTransitions))});
+    strings.push_back(output);
     for (const auto &transition : _transitions)
     {
         transition->getNextState()->dumpRecursive(strings, used);
@@ -163,10 +164,12 @@ std::string StateMachine::State::dump()
     {
         stopActions.emplace_back(act->name());
     }
-    output.write<std::string>("onStart", filing::dumpObjectsVector(startActions));
-    output.write<std::string>("onActive", filing::dumpObjectsVector(activeActions));
-    output.write<std::string>("onStop", filing::dumpObjectsVector(stopActions));
-    return output;
+    return filing::mergeStrings({
+        output.getJSONstring(),
+        filing::makeField("onActive", filing::dumpObjectsVector(activeActions)),
+        filing::makeField("onStart", filing::dumpObjectsVector(startActions)),
+        filing::makeField("onStop", filing::dumpObjectsVector(stopActions)),
+    });
 }
 
 void StateMachine::onActive()
@@ -237,8 +240,7 @@ std::string StateMachine::dump()
     std::vector<std::string> statesStrings;
     std::unordered_map<std::string, bool> used;
     _startState->dumpRecursive(statesStrings, used);
-    output.write<std::string>("states", filing::dumpObjectsVector(statesStrings));
-    return output;
+    return filing::mergeStrings({output, filing::makeField("states", filing::dumpObjectsVector(statesStrings))});
 }
 
 StateMachine::~StateMachine()

@@ -84,9 +84,8 @@ GraphicalObject2d::GraphicalObject2d(filing::JsonIO input)
 
 std::string GraphicalObject2d::dump()
 {
-    filing::JsonIO output = GraphicalObject::dump();
-    output.write<std::string>("face", _face->dump());
-    output.write<std::string>("side", _side->dump());
-    return output;
+    return filing::mergeStrings({GraphicalObject::dump(),
+                                 filing::makeField("face", _face->dump()),
+                                 filing::makeField("side", _side->dump())});
 }
 } // namespace ample::graphics

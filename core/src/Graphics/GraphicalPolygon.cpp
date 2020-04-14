@@ -82,7 +82,6 @@ GraphicalPolygon::GraphicalPolygon(filing::JsonIO input)
 std::string GraphicalPolygon::dump()
 {
     filing::JsonIO output = GraphicalObject::dump();
-    output.write<std::string>("name", name());
     output.write<std::vector<Vector2d<float>>>("shape", _shape);
     output.write<float>("z", getZ());
     output.write<Vector2d<float>>("textureRepeats", _textureRepeats);
