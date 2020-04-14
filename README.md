@@ -1,4 +1,4 @@
-![travis](https://travis-ci.com/Glebanister/ample.svg?branch=master)
+![travis](https://travis-ci.com/Glebanister/ample.svg?branch=master) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/bfb66781f2fc499ca6bbad09ed5d43c6)](https://app.codacy.com/manual/Glebanister/ample?utm_source=github.com&utm_medium=referral&utm_content=Glebanister/ample&utm_campaign=Badge_Grade_Dashboard)
 
 ### Ample - Game engine
 2D, physics-friendly
@@ -8,21 +8,18 @@ You can create ample directories anywhere, using ample script.
 
 ### Install (Linux)
 
-`$ ./ci/travis/install-linux.sh` \
+`$ ./ci/travis/install-linux.sh`  - installs dependencies \
 `$ mkdir build && cd build` \
 `$ cmake .. && cmake --build`
 
 
-### Run (your project)
-`$ cd script` \
-`$ mkdir [your-project-name] && cd [your-project-name]` \
-`$ ../ample.py init [your-project-name]` \
-`$ ../ample.py build [your-project-name]` \
-`$ ../ample.py run [your-project-name]`
+### Create your project (in developing)
+
+`$ cd build/gui` \
+`$ ./ample-gui`
 
 
 ### Run (demo)
-`$ cd demo` \
-`$ mkdir build && cd build` \
-`$ cmake .. && cmake --build .` \
-`$ ./DemoGame`
+
+`$ cd build/demo` \
+`$ ./demo`
