@@ -10,6 +10,11 @@ enum class texturePlayback;
 enum class textureOrigin;
 } // namespace ample::graphics
 
+namespace ample::physics
+{
+enum class BodyType;
+} // namespace ample::physics
+
 namespace ample::filing
 {
 inline std::string openJSONfile(const std::string &nameFile)
@@ -161,6 +166,28 @@ inline int JsonIO::read<int>(const std::string &nameField) const
 }
 
 template <>
+inline size_t JsonIO::read<size_t>(const std::string &nameField) const
+{
+    rapidjson::Document doc;
+    doc.SetObject();
+    doc.Parse(jsonStr.c_str());
+    rapidjson::Value::ConstMemberIterator itr = doc.FindMember(nameField.c_str());
+
+    return itr->value.GetUint();
+}
+
+template <>
+inline physics::BodyType JsonIO::read<physics::BodyType>(const std::string &nameField) const
+{
+    rapidjson::Document doc;
+    doc.SetObject();
+    doc.Parse(jsonStr.c_str());
+    rapidjson::Value::ConstMemberIterator itr = doc.FindMember(nameField.c_str());
+
+    return static_cast<physics::BodyType>(itr->value.GetInt());
+}
+
+template <>
 inline float JsonIO::read<float>(const std::string &nameField) const
 {
     rapidjson::Document doc;
@@ -193,6 +220,37 @@ inline ample::graphics::Vector2d<float> JsonIO::read<ample::graphics::Vector2d<f
     ample::graphics::Vector2d<float> obj;
     obj.x = itr->value[0].GetFloat();
     obj.y = itr->value[1].GetFloat();
+
+    return obj;
+}
+
+template <>
+inline ample::graphics::Vector3d<float> JsonIO::read<ample::graphics::Vector3d<float>>(const std::string &nameField) const
+{
+    rapidjson::Document doc;
+    doc.SetObject();
+    doc.Parse(jsonStr.c_str());
+    rapidjson::Value::ConstMemberIterator itr = doc.FindMember(nameField.c_str());
+
+    ample::graphics::Vector3d<float> obj;
+    obj.x = itr->value[0].GetFloat();
+    obj.y = itr->value[1].GetFloat();
+    obj.z = itr->value[2].GetFloat();
+
+    return obj;
+}
+
+template <>
+inline ample::graphics::Vector2d<size_t> JsonIO::read<ample::graphics::Vector2d<size_t>>(const std::string &nameField) const
+{
+    rapidjson::Document doc;
+    doc.SetObject();
+    doc.Parse(jsonStr.c_str());
+    rapidjson::Value::ConstMemberIterator itr = doc.FindMember(nameField.c_str());
+
+    ample::graphics::Vector2d<size_t> obj;
+    obj.x = itr->value[0].GetUint();
+    obj.y = itr->value[1].GetUint();
 
     return obj;
 }
@@ -231,7 +289,7 @@ inline ample::graphics::Vector2d<int> JsonIO::read<ample::graphics::Vector2d<int
 template <>
 inline ample::graphics::channelMode JsonIO::read<ample::graphics::channelMode>(const std::string &nameField) const
 {
-    return  static_cast<graphics::channelMode>(read<int>(nameField));
+    return static_cast<graphics::channelMode>(read<int>(nameField));
 }
 
 template <>
@@ -269,6 +327,34 @@ inline void JsonIO::write<int>(const std::string &nameField, const int &obj)
     rapidjson::Value str;
     str.SetString(rapidjson::StringRef(nameField.c_str()));
     doc.AddMember(str, obj, doc.GetAllocator());
+
+    jsonStr = giveStringDocument(doc);
+}
+
+template <>
+inline void JsonIO::write<size_t>(const std::string &nameField, const size_t &obj)
+{
+    rapidjson::Document doc;
+    doc.SetObject();
+    doc.Parse(jsonStr.c_str());
+
+    rapidjson::Value str;
+    str.SetString(rapidjson::StringRef(nameField.c_str()));
+    doc.AddMember(str, obj, doc.GetAllocator());
+
+    jsonStr = giveStringDocument(doc);
+}
+
+template <>
+inline void JsonIO::write<physics::BodyType>(const std::string &nameField, const physics::BodyType &obj)
+{
+    rapidjson::Document doc;
+    doc.SetObject();
+    doc.Parse(jsonStr.c_str());
+
+    rapidjson::Value str;
+    str.SetString(rapidjson::StringRef(nameField.c_str()));
+    doc.AddMember(str, static_cast<int>(obj), doc.GetAllocator());
 
     jsonStr = giveStringDocument(doc);
 }
@@ -325,6 +411,54 @@ inline void JsonIO::write<ample::graphics::Vector2d<float>>(
 
     jsonStr = giveStringDocument(doc);
 }
+
+template <>
+inline void JsonIO::write<ample::graphics::Vector3d<float>>(
+    const std::string &nameField, const ample::graphics::Vector3d<float> &obj)
+{
+    rapidjson::Document doc;
+    doc.SetObject();
+    doc.Parse(jsonStr.c_str());
+
+    rapidjson::Value str;
+    str.SetString(rapidjson::StringRef(nameField.c_str()));
+
+    rapidjson::Value val(rapidjson::Type::kArrayType);
+    rapidjson::Value temp;
+    temp.SetFloat(obj.x);
+    val.PushBack(temp, doc.GetAllocator());
+    temp.SetFloat(obj.y);
+    val.PushBack(temp, doc.GetAllocator());
+    temp.SetFloat(obj.z);
+    val.PushBack(temp, doc.GetAllocator());
+    doc.AddMember(str, val, doc.GetAllocator());
+
+    jsonStr = giveStringDocument(doc);
+}
+
+template <>
+inline void JsonIO::write<ample::graphics::Vector2d<size_t>>(
+    const std::string &nameField, const ample::graphics::Vector2d<size_t> &obj)
+{
+    rapidjson::Document doc;
+    doc.SetObject();
+    doc.Parse(jsonStr.c_str());
+
+    rapidjson::Value str;
+    str.SetString(rapidjson::StringRef(nameField.c_str()));
+
+    rapidjson::Value val(rapidjson::Type::kArrayType);
+    rapidjson::Value temp;
+    temp.SetUint(obj.x);
+    val.PushBack(temp, doc.GetAllocator());
+    temp.SetUint(obj.y);
+    val.PushBack(temp, doc.GetAllocator());
+    doc.AddMember(str, val, doc.GetAllocator());
+
+    jsonStr = giveStringDocument(doc);
+}
+
+
 
 template <>
 inline void JsonIO::write<std::vector<ample::graphics::Vector2d<float>>>(
