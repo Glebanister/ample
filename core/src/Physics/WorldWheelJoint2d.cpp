@@ -89,23 +89,23 @@ float WorldWheelJoint2d::getMotorTorque(float inv_dt) const
     return static_cast<b2WheelJoint *>(_joint)->GetMotorTorque(inv_dt);
 }
 
-void WorldWheelJoint2d::setSpringFrequencyHz(float hz)
-{
-    static_cast<b2WheelJoint *>(_joint)->SetSpringFrequencyHz(hz);
-}
+// void WorldWheelJoint2d::setSpringFrequencyHz(float hz)
+// {
+//     static_cast<b2WheelJoint *>(_joint)->SetSpringFrequencyHz(hz);
+// }
 
-float WorldWheelJoint2d::getSpringFrequencyHz() const
-{
-    return static_cast<b2WheelJoint *>(_joint)->GetSpringFrequencyHz();
-}
+// float WorldWheelJoint2d::getSpringFrequencyHz() const
+// {
+//     return static_cast<b2WheelJoint *>(_joint)->GetSpringFrequencyHz();
+// }
 
-void WorldWheelJoint2d::setSpringDampingRatio(float ratio)
-{
-    static_cast<b2WheelJoint *>(_joint)->SetSpringDampingRatio(ratio);
-}
+// void WorldWheelJoint2d::setSpringDampingRatio(float ratio)
+// {
+//     static_cast<b2WheelJoint *>(_joint)->SetSpringDampingRatio(ratio);
+// }
 
-float WorldWheelJoint2d::getSpringDampingRatio() const
-{
-    return static_cast<b2WheelJoint *>(_joint)->GetSpringDampingRatio();
-}
+// float WorldWheelJoint2d::getSpringDampingRatio() const
+// {
+//     return static_cast<b2WheelJoint *>(_joint)->GetSpringDampingRatio();
+// }
 } // namespace ample::physics
