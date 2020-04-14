@@ -68,14 +68,16 @@ std::string Scene2d::dump()
     {
         objectStrings.push_back(camera->dump());
     }
-    JsonIO output;
+    JsonIO output{NamedStoredObject::dump()};
     output.write<graphics::Vector2d<float>>("gravity", _gravity);
     output.write<float>("z", _zPosition);
     output.write<float>("thickness", _sceneThickness);
     output.write<float>("relative_position_in_slice", _relativeSlicePosition);
-    output.write<std::string>("objects", filing::dumpObjectsVector(objectStrings));
-    output.write<std::string>("cameras", filing::dumpObjectsVector(cameraStrings));
-    return output;
+    return filing::mergeStrings({
+        output,
+        filing::makeField("objects", filing::dumpObjectsVector(objectStrings)),
+        filing::makeField("cameras", filing::dumpObjectsVector(cameraStrings)),
+    });
 }
 
 float Scene2d::getDistance() const
