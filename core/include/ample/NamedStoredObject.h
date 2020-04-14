@@ -13,4 +13,4 @@ public:
     NamedStoredObject(const JsonIO &input);
     std::string dump();
 };
-}
+} // namespace ample::filing

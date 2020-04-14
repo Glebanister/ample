@@ -16,7 +16,6 @@
 #include "Debug.h"
 #include "Vector2d.h"
 #include "Vector3d.h"
-#include "Texture.h"
 
 namespace ample::filing
 {

@@ -4,12 +4,11 @@
 
 namespace ample::graphics
 {
-enum class normalsMode
-{
-    FACE,
-    VERTEX,
-};
-}
+enum class normalsMode;
+enum class channelMode;
+enum class texturePlayback;
+enum class textureOrigin;
+} // namespace ample::graphics
 
 namespace ample::filing
 {
@@ -232,31 +231,13 @@ inline ample::graphics::Vector2d<int> JsonIO::read<ample::graphics::Vector2d<int
 template <>
 inline ample::graphics::channelMode JsonIO::read<ample::graphics::channelMode>(const std::string &nameField) const
 {
-    std::string value = read<std::string>(nameField);
-
-    ample::graphics::channelMode obj;
-    if (value == "RGB")
-    {
-        obj = ample::graphics::channelMode::RGB;
-    }
-    else if (value == "RGBA")
-    {
-        obj = ample::graphics::channelMode::RGBA;
-    }
-    return obj;
+    return  static_cast<graphics::channelMode>(read<int>(nameField));
 }
 
 template <>
 inline ample::graphics::normalsMode JsonIO::read<ample::graphics::normalsMode>(const std::string &nameField) const
 {
-    std::string value = read<std::string>(nameField);
-
-    ample::graphics::normalsMode obj = graphics::normalsMode::VERTEX;
-    if (value == "FACE")
-    {
-        obj = ample::graphics::normalsMode::FACE;
-    }
-    return obj;
+    return static_cast<graphics::normalsMode>(read<int>(nameField));
 }
 
 template <>
@@ -425,19 +406,9 @@ inline void JsonIO::write<ample::graphics::channelMode>(const std::string &nameF
     rapidjson::Document doc;
     doc.SetObject();
     doc.Parse(jsonStr.c_str());
-
     rapidjson::Value str;
     str.SetString(rapidjson::StringRef(nameField.c_str()));
-
-    if (obj == ample::graphics::channelMode::RGB)
-    {
-        doc.AddMember(str, "RGB", doc.GetAllocator());
-    }
-    else if (obj == ample::graphics::channelMode::RGBA)
-    {
-        doc.AddMember(str, "RGBA", doc.GetAllocator());
-    }
-
+    doc.AddMember(str, static_cast<int>(obj), doc.GetAllocator());
     jsonStr = giveStringDocument(doc);
 }
 
@@ -447,19 +418,9 @@ inline void JsonIO::write<ample::graphics::normalsMode>(const std::string &nameF
     rapidjson::Document doc;
     doc.SetObject();
     doc.Parse(jsonStr.c_str());
-
     rapidjson::Value str;
     str.SetString(rapidjson::StringRef(nameField.c_str()));
-
-    if (obj == ample::graphics::normalsMode::FACE)
-    {
-        doc.AddMember(str, "FACE", doc.GetAllocator());
-    }
-    else if (obj == ample::graphics::normalsMode::VERTEX)
-    {
-        doc.AddMember(str, "VERTEX", doc.GetAllocator());
-    }
-
+    doc.AddMember(str, static_cast<int>(obj), doc.GetAllocator());
     jsonStr = giveStringDocument(doc);
 }
 

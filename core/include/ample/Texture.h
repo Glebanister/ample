@@ -11,7 +11,7 @@
 
 #include "Vector2d.h"
 #include "Noncopyable.h"
-#include "NamedObject.h"
+#include "NamedStoredObject.h"
 
 namespace ample::graphics
 {
@@ -62,7 +62,7 @@ public:
     Vector2d<textureOrigin> origin;
 };
 
-class Texture final : public utils::Noncopyable, public filing::NamedObject
+class Texture final : public utils::Noncopyable, public filing::NamedStoredObject
 {
 private:
     class PixelMap
@@ -143,6 +143,8 @@ private:
 
 public:
     Texture(const TextureRaw &rawTexture);
+    Texture(const filing::JsonIO &input);
+    std::string dump() override;
 
     GLint getWidth() const noexcept;
     GLint getHeight() const noexcept;
