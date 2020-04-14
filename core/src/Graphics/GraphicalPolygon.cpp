@@ -59,6 +59,7 @@ GraphicalPolygon::GraphicalPolygon(const std::string &name,
                                    const glm::mat4 &scaled,
                                    const glm::mat4 &rotated)
     : GraphicalObject(name, "GraphicalPolygon", translated, scaled, rotated),
+      _shape(shape),
       _textureRepeats(textureRepeats)
 {
     bindVertexArray(std::make_shared<VertexArray>(
@@ -71,7 +72,7 @@ GraphicalPolygon::GraphicalPolygon(filing::JsonIO input)
     : GraphicalPolygon(input.read<std::string>("name"),
                        input.read<std::vector<Vector2d<float>>>("shape"),
                        input.read<float>("z"),
-                       input.read<Vector2d<float>>("faceTextureRepeats"),
+                       input.read<Vector2d<float>>("textureRepeats"),
                        input.read<glm::mat4>("translated"),
                        input.read<glm::mat4>("scaled"),
                        input.read<glm::mat4>("rotated"))

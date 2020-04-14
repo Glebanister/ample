@@ -24,8 +24,8 @@ GraphicalObject2d::GraphicalObject2d(const std::string &name,
                                      const glm::mat4 &scaled,
                                      const glm::mat4 &rotated)
     : GraphicalObject(name, className, translated, scaled, rotated),
-      _face(std::make_shared<GraphicalPolygon>(name + "face", graphicalShape, z, faceTextureRepeats)),
-      _side(std::make_shared<GraphicalEdge>(name + "side", graphicalShape, z, thickness, sideTextureRepeats, sideNormalsMode))
+      _face(std::make_shared<GraphicalPolygon>(name + ".face", graphicalShape, z, faceTextureRepeats)),
+      _side(std::make_shared<GraphicalEdge>(name + ".side", graphicalShape, z, thickness, sideTextureRepeats, sideNormalsMode))
 {
     addSubObject(std::static_pointer_cast<GraphicalObject>(_face));
     addSubObject(std::static_pointer_cast<GraphicalObject>(_side));
@@ -76,7 +76,7 @@ std::shared_ptr<GraphicalPolygon> GraphicalObject2d::facePointer() noexcept
 }
 
 GraphicalObject2d::GraphicalObject2d(filing::JsonIO input)
-    : GraphicalObject(input.updateJsonIO("Graphical object")),
+    : GraphicalObject(input),
       _face(std::make_shared<GraphicalPolygon>(input.updateJsonIO("face"))),
       _side(std::make_shared<GraphicalEdge>(input.updateJsonIO("side")))
 {

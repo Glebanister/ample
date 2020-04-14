@@ -18,14 +18,17 @@ class StateMachine : public activity::Behavior, public filing::NamedStoredObject
 public:
     class State;
 
-    class Transition : public events::EventListener, public filing::StoredObject
+    class Transition : public events::EventListener, public filing::NamedStoredObject
     {
     public:
-        Transition(std::shared_ptr<State> nextState);
+        Transition(const std::string &name,
+                   const std::string &className,
+                   std::shared_ptr<State> nextState);
         void handleEvent() final;
         std::shared_ptr<State> getNextState() const noexcept;
         bool isActivated() const noexcept;
         void reset() noexcept;
+        std::string dump() override;
 
     private:
         std::shared_ptr<State> _nextState;

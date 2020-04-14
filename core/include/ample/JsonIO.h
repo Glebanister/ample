@@ -44,7 +44,7 @@ std::string openJSONfile(const std::string &nameFile);
 
 void mergeObject(rapidjson::Value &target, rapidjson::Value &source, rapidjson::Value::AllocatorType &allocator);
 
-std::string makeField(std::string nameField, std::string jsonStr);
+std::string makeField(std::string nameField, const std::string &jsonStr);
 
 std::string mergeStrings(const std::vector<std::string> &strings);
 

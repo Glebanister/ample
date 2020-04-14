@@ -28,19 +28,22 @@ public:
     };
 
 public:
-    MouseTransition(std::shared_ptr<ample::game::StateMachine::State> state,
+    MouseTransition(const std::string &name,
+                    std::shared_ptr<ample::game::StateMachine::State> state,
                     control::EventManager &manager,
                     type eventType,
                     control::mouseButton button,
                     const geometry::Point &area);
 
-    MouseTransition(std::shared_ptr<ample::game::StateMachine::State> state,
+    MouseTransition(const std::string &name,
+                    std::shared_ptr<ample::game::StateMachine::State> state,
                     control::EventManager &manager,
                     type eventType,
                     control::mouseButton button,
                     const geometry::Rectangle &area);
 
-    MouseTransition(std::shared_ptr<ample::game::StateMachine::State> state,
+    MouseTransition(const std::string &name,
+                    std::shared_ptr<ample::game::StateMachine::State> state,
                     control::EventManager &manager,
                     type eventType,
                     control::mouseButton button,
@@ -49,7 +52,8 @@ public:
     bool listen() override;
 
 private:
-    MouseTransition(std::shared_ptr<ample::game::StateMachine::State> state,
+    MouseTransition(const std::string &name,
+                    std::shared_ptr<ample::game::StateMachine::State> state,
                     control::EventManager &manager,
                     type eventType,
                     control::mouseButton button,

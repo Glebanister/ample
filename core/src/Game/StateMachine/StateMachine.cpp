@@ -1,5 +1,6 @@
 #include <memory>
 #include <iostream>
+#include <numeric>
 
 #include "StateMachine.h"
 #include "GameException.h"
@@ -8,8 +9,10 @@
 
 namespace ample::game
 {
-StateMachine::Transition::Transition(std::shared_ptr<StateMachine::State> nextState)
-    : _nextState(nextState) {}
+StateMachine::Transition::Transition(const std::string &name,
+                                     const std::string &className,
+                                     std::shared_ptr<StateMachine::State> nextState)
+    : NamedStoredObject(name, className), _nextState(nextState) {}
 
 void StateMachine::Transition::handleEvent()
 {
@@ -29,6 +32,13 @@ bool StateMachine::Transition::isActivated() const noexcept
 void StateMachine::Transition::reset() noexcept
 {
     _activated = false;
+}
+
+std::string StateMachine::Transition::dump()
+{
+    filing::JsonIO output{NamedStoredObject::dump()};
+    output.write<std::string>("to", _nextState->name());
+    return output;
 }
 
 StateMachine::State::State(std::shared_ptr<StateMachine> machine, const std::string &name)
@@ -102,14 +112,14 @@ void StateMachine::State::dumpRecursive(std::vector<std::string> &strings,
     std::vector<std::string> dumpedTransitions;
     for (const auto &transition : _transitions)
     {
-        dumpedTransitions.emplace_back(transition->dump());
+        dumpedTransitions.push_back(transition->dump());
     }
     output = filing::mergeStrings({output, filing::makeField("transitions", filing::dumpObjectsVector(dumpedTransitions))});
-    strings.push_back(output);
     for (const auto &transition : _transitions)
     {
         transition->getNextState()->dumpRecursive(strings, used);
     }
+    strings.push_back(output);
 }
 
 StateMachine::State::State(const filing::JsonIO &input)

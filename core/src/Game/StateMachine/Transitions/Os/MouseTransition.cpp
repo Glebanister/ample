@@ -3,36 +3,39 @@
 
 namespace ample::game
 {
-MouseTransition::MouseTransition(std::shared_ptr<ample::game::StateMachine::State> state,
+MouseTransition::MouseTransition(const std::string &name, std::shared_ptr<ample::game::StateMachine::State> state,
                                  control::EventManager &manager,
                                  type eventType,
                                  control::mouseButton button,
                                  std::shared_ptr<geometry::Shape> area)
-    : EnvironmentTransition(state, manager),
+    : EnvironmentTransition(name, "MouseTransition", state, manager),
       _eventType(eventType),
       _button(button),
       _area(area) {}
 
-MouseTransition::MouseTransition(std::shared_ptr<ample::game::StateMachine::State> state,
+MouseTransition::MouseTransition(const std::string &name,
+                                 std::shared_ptr<ample::game::StateMachine::State> state,
                                  control::EventManager &manager,
                                  type eventType,
                                  control::mouseButton button,
                                  const geometry::Point &area)
-    : MouseTransition(state, manager, eventType, button, std::make_shared<geometry::Point>(area)) {}
+    : MouseTransition(name, state, manager, eventType, button, std::make_shared<geometry::Point>(area)) {}
 
-MouseTransition::MouseTransition(std::shared_ptr<ample::game::StateMachine::State> state,
+MouseTransition::MouseTransition(const std::string &name,
+                                 std::shared_ptr<ample::game::StateMachine::State> state,
                                  control::EventManager &manager,
                                  type eventType,
                                  control::mouseButton button,
                                  const geometry::Circle &area)
-    : MouseTransition(state, manager, eventType, button, std::make_shared<geometry::Circle>(area)) {}
+    : MouseTransition(name, state, manager, eventType, button, std::make_shared<geometry::Circle>(area)) {}
 
-MouseTransition::MouseTransition(std::shared_ptr<ample::game::StateMachine::State> state,
+MouseTransition::MouseTransition(const std::string &name,
+                                 std::shared_ptr<ample::game::StateMachine::State> state,
                                  control::EventManager &manager,
                                  type eventType,
                                  control::mouseButton button,
                                  const geometry::Rectangle &area)
-    : MouseTransition(state, manager, eventType, button, std::make_shared<geometry::Rectangle>(area)) {}
+    : MouseTransition(name, state, manager, eventType, button, std::make_shared<geometry::Rectangle>(area)) {}
 
 bool MouseTransition::listen()
 {

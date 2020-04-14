@@ -125,6 +125,7 @@ GraphicalEdge::GraphicalEdge(const std::string &name,
                              const glm::mat4 &scaled,
                              const glm::mat4 &rotated)
     : GraphicalObject(name, "GraphicalEdge", translated, scaled, rotated),
+      _shape(shape),
       _thickness(thickness),
       _textureRepeats(textureRepeats),
       _normMode(normMode)
@@ -139,7 +140,7 @@ GraphicalEdge::GraphicalEdge(filing::JsonIO input)
                     input.read<std::vector<Vector2d<float>>>("shape"),
                     input.read<float>("z"),
                     input.read<float>("thickness"),
-                    input.read<Vector2d<float>>("sideTextureRepeats"),
+                    input.read<Vector2d<float>>("textureRepeats"),
                     input.read<normalsMode>("sideNormalsMode"),
                     input.read<glm::mat4>("translated"),
                     input.read<glm::mat4>("scaled"),

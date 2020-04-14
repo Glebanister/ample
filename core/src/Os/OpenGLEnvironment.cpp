@@ -15,9 +15,9 @@ OpenGLEnvironment::OpenGLEnvironment()
     DEBUG("Setting up opengl environment");
     SDLEnvironment::instance();
     graphics::shaders::ShaderProcessor::instance().addShader(ample::graphics::shaders::shaderType::VERTEX,
-                                                             "../../core/src/Graphics/Shaders/Shaders/BasicVertexShader.vert");
+                                                             "core/src/Graphics/Shaders/Shaders/BasicVertexShader.vert");
     graphics::shaders::ShaderProcessor::instance().addShader(ample::graphics::shaders::shaderType::FRAGMENT,
-                                                             "../../core/src/Graphics/Shaders/Shaders/BasicFragmentShader.frag");
+                                                             "core/src/Graphics/Shaders/Shaders/BasicFragmentShader.frag");
     graphics::shaders::ShaderProcessor::instance().link();
     graphics::shaders::ShaderProcessor::instance().use();
 
