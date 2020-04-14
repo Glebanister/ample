@@ -15,14 +15,18 @@ AmpleGui::AmpleGui(ample::window::Window &window)
     : ImguiActivity(window),
       _observer(std::make_shared<Observer>(eventManager()))
 {
-    auto level = createLevel(1, 10.0f, 0.5f);
-    setCurrentLevel(1);
+    firstLevel = std::make_shared<ample::game::game2d::Level>("first level",
+                                                                   controllerPointer(),
+                                                                   10.0f,
+                                                                   0.5f,
+                                                                   ample::graphics::Vector2d<float>{0.0f, -10.0f});
+    controller().stateMachine()->setStartState(firstLevel);
     addBehavior(std::static_pointer_cast<Behavior>(_observer));
-    level->camera()->setVisibility(false);
-    level->frontSlice()->addCamera(std::static_pointer_cast<graphics::Camera>(_observer->getCamera()));
-    level->addGlobalObject(_observer->getLamp());
-    Editor::instance().setCurrentLayer(level->frontSlice());
-    SliceManager::instance().setLevel(level);
+    firstLevel->camera()->setVisibility(false);
+    firstLevel->frontSlice()->addCamera(std::static_pointer_cast<graphics::Camera>(_observer->getCamera()));
+    firstLevel->addGlobalObject(_observer->getLamp());
+    Editor::instance().setCurrentLayer(firstLevel->frontSlice());
+    SliceManager::instance().setLevel(firstLevel);
 }
 
 void AmpleGui::onResize()
@@ -37,5 +41,10 @@ void AmpleGui::drawInterface()
     Editor::instance().drawInterface();
     SliceManager::instance().drawInterface();
     TextureManager::instance().drawInterface();
+}
+
+AmpleGui::~AmpleGui()
+{
+    std::cout << firstLevel->frontSlice()->dump() << std::endl;
 }
 } // namespace ample::gui

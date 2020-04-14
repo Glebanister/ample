@@ -311,6 +311,7 @@ template <>
 inline glm::mat4 JsonIO::read<glm::mat4>(const std::string &nameField) const
 {
     DEBUG(nameField);
+    DEBUG(jsonStr);
     rapidjson::Document doc;
     doc.SetObject();
     doc.Parse(jsonStr.c_str());

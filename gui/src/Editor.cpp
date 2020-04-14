@@ -48,7 +48,7 @@ void Editor::drawInterface()
             graphics::normalsMode normalsMode = worldObject2d.currentNormalMode == 0 ? graphics::normalsMode::FACE : graphics::normalsMode::VERTEX;
             currentLayer->addWorldObject(std::make_shared<physics::WorldObject2d>(
                 name,
-                *currentLayer,
+                currentLayer,
                 bodyType,
                 geometry::VectorRectangle<float>({worldObject2d.size.x * cellSize, worldObject2d.size.y * cellSize}),
                 worldObject2d.relativeThickness,

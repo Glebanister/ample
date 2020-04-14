@@ -66,7 +66,7 @@ std::string Scene2d::dump()
     }
     for (const auto &camera : _cameras)
     {
-        objectStrings.push_back(camera->dump());
+        cameraStrings.push_back(camera->dump());
     }
     JsonIO output{NamedStoredObject::dump()};
     output.write<graphics::Vector2d<float>>("gravity", _gravity);

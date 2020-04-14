@@ -20,8 +20,9 @@ class Game2d : public graphics::LayeredWindowActivity
 public:
     Game2d(window::Window &window);
     GameController &controller() noexcept;
+    std::shared_ptr<GameController> controllerPointer() const noexcept;
 
 private:
-    GameController _gameController;
+    std::shared_ptr<GameController> _gameController;
 };
 } // namespace ample::game::game2d

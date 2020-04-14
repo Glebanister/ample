@@ -8,11 +8,16 @@ namespace ample::game::game2d
 {
 Game2d::Game2d(window::Window &window)
     : graphics::LayeredWindowActivity(window),
-      _gameController("game_controller", "GameController")
+      _gameController(std::make_shared<GameController>("game_controller", "GameController"))
 {
 }
 
 GameController &Game2d::controller() noexcept
+{
+    return *_gameController;
+}
+
+std::shared_ptr<GameController> Game2d::controllerPointer() const noexcept
 {
     return _gameController;
 }

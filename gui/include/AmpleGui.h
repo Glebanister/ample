@@ -17,9 +17,12 @@ public:
     AmpleGui(ample::window::Window &window);
     void onResize() override;
 
+    ~AmpleGui();
+
 private:
     void drawInterface() override;
 
     std::shared_ptr<gui::Observer> _observer;
+    std::shared_ptr<ample::game::game2d::Level> firstLevel;
 };
 } // namespace ample::gui
