@@ -53,9 +53,11 @@ public:
     ControlledObject(const filing::JsonIO &input);
     std::string dump() override;
     std::shared_ptr<StateMachine> stateMachine() noexcept;
+    std::shared_ptr<StateMachine::State> idleState() const noexcept;
 
 private:
     std::shared_ptr<StateMachine> _stateMachine;
+    std::shared_ptr<StateMachine::State> _idle;
 };
 } // namespace ample::game
 
