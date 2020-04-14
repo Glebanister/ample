@@ -15,6 +15,7 @@ class Scene2d;
 namespace ample::physics
 {
 class WorldObject2d;
+class WorldContact2d;
 class WorldJoint2d;
 class ContactListener;
 } // namespace ample::physics
@@ -35,6 +36,57 @@ public:
     float getThickness() const noexcept;
     float getRelativePositionInSlice() const noexcept;
 
+    WorldContact2d getContactList();
+
+    void clearForces();
+
+    WorldObject2d &getBodyList();
+    const WorldObject2d &getBodyList() const;
+
+    WorldJoint2d &getJointList();
+    const WorldJoint2d &getJointList() const;
+
+    void setAllowSleeping(bool flag);
+    bool getAllowSleeping() const;
+
+    void setGravity(const b2Vec2& gravity);
+	
+    b2Vec2 getGravity() const;
+
+    bool isLocked() const;
+
+    void setAutoClearForces(bool flag);
+
+    bool getAutoClearForces() const;
+
+    void shiftOrigin(const b2Vec2& newOrigin);
+
+    /*
+    void SetDestructionListener(b2DestructionListener* listener);
+	void SetContactFilter(b2ContactFilter* filter);
+    */
+	/*
+	void DestroyBody(b2Body* body);
+	void DestroyJoint(b2Joint* joint);*/
+	/*void QueryAABB(b2QueryCallback* callback, const b2AABB& aabb) const;
+	void RayCast(b2RayCastCallback* callback, const b2Vec2& point1, const b2Vec2& point2) const;
+	void SetWarmStarting(bool flag) { m_warmStarting = flag; }
+	bool GetWarmStarting() const { return m_warmStarting; }
+	void SetContinuousPhysics(bool flag) { m_continuousPhysics = flag; }
+	bool GetContinuousPhysics() const { return m_continuousPhysics; }
+	void SetSubStepping(bool flag) { m_subStepping = flag; }
+	bool GetSubStepping() const { return m_subStepping; }
+	int32 GetProxyCount() const;
+	int32 GetBodyCount() const;
+	int32 GetJointCount() const;
+	int32 GetContactCount() const;
+	int32 GetTreeHeight() const;
+	int32 GetTreeBalance() const;
+	float getTreeQuality() const;
+	const b2ContactManager& GetContactManager() const;
+	const b2Profile& GetProfile() const;
+	void Dump();
+    */
 protected:
     friend WorldObject2d;
     friend WorldJoint2d;

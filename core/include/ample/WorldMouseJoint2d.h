@@ -9,6 +9,10 @@ class WorldObject2d;
 class WorldMouseJoint2d : public WorldJoint2d
 {
 public:
+    void onActive() override;
+
+    void setForm(std::shared_ptr<graphics::GraphicalObject2d> form, float standardLength);
+
     void setTarget(const ample::graphics::Vector2d<float> &target);
     ample::graphics::Vector2d<float> getTarget() const;
 
@@ -24,5 +28,9 @@ public:
     WorldMouseJoint2d(WorldObject2d &bodyA,
                       WorldObject2d &bodyB,
                       bool collideConnected = false);
+
+private:
+    std::shared_ptr<graphics::GraphicalObject2d> _form;
+    float _initLength;
 };
 } // namespace ample::physics
