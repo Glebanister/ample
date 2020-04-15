@@ -50,7 +50,9 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Utils/Noncopyable.cpp
 
     src/Filing/Scene2d.cpp
-    src/Filing/UniqueObject.cpp
+    src/Filing/NamedObject.cpp
+    src/Filing/StoredObject.cpp
+    src/Filing/NamedStoredObject.cpp
 
     src/Graphics/GraphicalObject.cpp
     src/Graphics/GraphicalObject2d.cpp
@@ -95,6 +97,8 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Game/Game2d/Game2d.cpp
     src/Game/Game2d/Level.cpp
     src/Game/GameException.cpp
+    src/Game/GameEnvironment.cpp
+    src/Game/GameController.cpp
     src/Game/StateMachine/StateMachine.cpp
     src/Game/StateMachine/Transitions/Os/EnvironmentTransition.cpp
     src/Game/StateMachine/Transitions/Os/KeyboardTransition.cpp
@@ -106,8 +110,8 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Game/StateMachine/Transitions/Physics/PositionTransition.cpp
     src/Game/StateMachine/Transitions/Physics/CollisionTransition.cpp
     src/Game/StateMachine/ControlledObject.cpp
+    src/Game/StateMachine/Action.cpp
     src/Game/Events/EventListener.cpp
-    src/Game/NamedObject.cpp
    )
 
 include_directories(${SDL2_INCLUDE_DIRS})

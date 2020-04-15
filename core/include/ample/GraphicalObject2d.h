@@ -9,6 +9,7 @@ class GraphicalObject2d : public GraphicalObject
 {
 public:
     GraphicalObject2d(const std::string &name,
+                      const std::string &className,
                       const std::vector<Vector2d<float>> &graphicalShape,
                       const float thickness,
                       const float z,
@@ -20,6 +21,7 @@ public:
                       const glm::mat4 &rotated = glm::mat4{1.0f});
 
     GraphicalObject2d(const std::string &name,
+                      const std::string &className,
                       const std::vector<Vector2d<float>> &graphicalShape,
                       const float thickness,
                       const float z,
@@ -36,7 +38,7 @@ public:
     std::shared_ptr<GraphicalPolygon> facePointer() noexcept;
 
     explicit GraphicalObject2d(filing::JsonIO input);
-    std::string dump(filing::JsonIO output, std::string nameField) override;
+    std::string dump() override;
 
 protected:
     std::shared_ptr<GraphicalPolygon> _face;

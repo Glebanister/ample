@@ -16,7 +16,8 @@
 
 namespace ample::graphics
 {
-CameraPerspective::CameraPerspective(const Vector2d<pixel_t> &viewSize,
+CameraPerspective::CameraPerspective(const std::string &name,
+                                     const Vector2d<pixel_t> &viewSize,
                                      const Vector2d<pixel_t> &viewPosition,
                                      const Vector3d<float> &eyePos,
                                      const Vector3d<float> &direction,
@@ -24,7 +25,7 @@ CameraPerspective::CameraPerspective(const Vector2d<pixel_t> &viewSize,
                                      float aspectRatio,
                                      float nearClip,
                                      float farClip)
-    : Camera(viewSize, viewPosition, eyePos, direction),
+    : Camera(name, "CameraPerspective", viewSize, viewPosition, eyePos, direction),
       _fov(fov),
       _aspectRatio(aspectRatio),
       _nearClip(nearClip),
@@ -69,4 +70,28 @@ float CameraPerspective::getFov() const { return _fov; }
 float CameraPerspective::getNearClip() const { return _nearClip; }
 float CameraPerspective::getFarClip() const { return _farClip; }
 float CameraPerspective::getAspectRatio() const { return _aspectRatio; }
+
+CameraPerspective::CameraPerspective(const filing::JsonIO &input)
+    : CameraPerspective(input.read<std::string>("name"),
+                        input.read<Vector2d<pixel_t>>("view_size"),
+                        input.read<Vector2d<pixel_t>>("view_position"),
+                        input.read<Vector3d<float>>("eye_pos"),
+                        input.read<Vector3d<float>>("direction"),
+                        input.read<float>("fov"),
+                        input.read<float>("aspect_ratio"),
+                        input.read<float>("near_clip"),
+                        input.read<float>("far_clip"))
+{
+    input.read<std::string>("className");
+}
+
+std::string CameraPerspective::dump()
+{
+    filing::JsonIO output = Camera::dump();
+    output.write<float>("fov", _fov);
+    output.write<float>("aspect_ratio", _aspectRatio);
+    output.write<float>("near_clip", _nearClip);
+    output.write<float>("far_clip", _farClip);
+    return output;
+}
 } // namespace ample::graphics

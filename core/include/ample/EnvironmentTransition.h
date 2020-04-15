@@ -10,7 +10,9 @@ namespace ample::game
 class EnvironmentTransition : public StateMachine::Transition
 {
 public:
-    EnvironmentTransition(std::shared_ptr<StateMachine::State> nextState,
+    EnvironmentTransition(const std::string &name,
+                          const std::string &className,
+                          std::shared_ptr<StateMachine::State> nextState,
                           control::EventManager &manager);
 
 protected:
