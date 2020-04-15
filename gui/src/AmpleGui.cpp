@@ -5,6 +5,7 @@
 #include "ample/RegularPolygon.h"
 #include "ample/WorldObject2d.h"
 #include "ample/TimerTransition.h"
+#include "ample/KeyboardTransition.h"
 
 #include "Editor.h"
 #include "SliceManager.h"
@@ -22,8 +23,18 @@ AmpleGui::AmpleGui(ample::window::Window &window)
     Editor::instance().setCurrentLayer(firstLevel->frontSlice());
     SliceManager::instance().setLevel(firstLevel);
     auto secondLevel = Game2d::createLevel("second", 10.0f, 0.5f, {0.0f, 10.0f});
-    secondLevel->addTransition(std::make_shared<ample::game::TimerTransition>("transition_name1", firstLevel, 3000));
-    firstLevel->addTransition(std::make_shared<ample::game::TimerTransition>("transition_name2", secondLevel, 3000));
+
+    // second level transitions to first after 2000 ms
+    secondLevel->addTransition(std::make_shared<ample::game::TimerTransition>("transition_name1",
+                                                                              firstLevel,
+                                                                              2000));
+
+    // first level transitions to second by pressing space
+    firstLevel->addTransition(std::make_shared<ample::game::KeyboardTransition>("transition_name2",
+                                                                                secondLevel,
+                                                                                eventManager(),
+                                                                                game::KeyboardTransition::type::PRESSED,
+                                                                                control::keysym::SPACE));
 }
 
 std::shared_ptr<gui::Observer> AmpleGui::getObserver() const noexcept
