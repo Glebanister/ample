@@ -10,7 +10,7 @@
 namespace ample::game::game2d
 {
 Level::Level(const std::string &name, std::shared_ptr<GameController> controller)
-    : ObjectState(name, controller)
+    : ObjectState(name, controller), _controller(controller)
 {
     filing::JsonIO settings{filing::openJSONfile(GameEnvironment::instance().projectAbsolutePath() / name / "settings.json")};
     _sliceThikness = settings.read<float>("slice_thickness");
@@ -42,9 +42,38 @@ Level::Level(const std::string &name,
                                                                        60.0,
                                                                        1920.0 / 1080.0,
                                                                        0.1,
-                                                                       1000.0))
+                                                                       1000.0)),
+      _controller(controller),
+      _editingMode(true)
 {
-    createSlice(0, "front_slice");
+    createSlice(0, "front");
+}
+
+void Level::onStart()
+{
+    ControlledObject::ObjectState<GameController>::onStart();
+}
+
+void Level::onActive()
+{
+    ControlledObject::ObjectState<GameController>::onActive();
+    if (_editingMode)
+    {
+        return;
+    }
+    _perspectiveCamera->look();
+    for (auto &[_, slice] : _sliceByDistance)
+    {
+        for (const auto &obj : slice->objects())
+        {
+            obj->draw();
+        }
+    }
+}
+
+void Level::onStop()
+{
+    ControlledObject::ObjectState<GameController>::onStop();
 }
 
 std::shared_ptr<filing::Scene2d> Level::createSlice(const size_t num, const std::string &name)
@@ -60,6 +89,8 @@ std::shared_ptr<filing::Scene2d> Level::createSlice(const size_t num, const std:
                                                               _physicsLayerPosition);
     auto &slice = *_sliceByDistance[num].get();
     slice.addCamera(std::static_pointer_cast<graphics::Camera>(_perspectiveCamera));
+    slice.setVisibility(false);
+    addBehavior(_sliceByDistance[num]);
     return _sliceByDistance[num];
 }
 

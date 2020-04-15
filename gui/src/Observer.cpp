@@ -1,11 +1,13 @@
 #include "ample/Debug.h"
 #include "Observer.h"
 #include "ample/Vector2d.h"
+#include "ample/Utils.h"
 
 namespace ample::gui
 {
-Observer::Observer(ample::control::EventManager &manager, const graphics::Vector2d<int> &size)
-    : _manager(manager),
+Observer::Observer(gui::AmpleGui &gui, const graphics::Vector2d<int> &size)
+    : _manager(gui.eventManager()),
+      _game(gui),
       _lamp(std::make_shared<graphics::light::LightSource>("observer_lamp")),
       _camera(std::make_shared<graphics::CameraPerspective>("observer_camera",
                                                             graphics::Vector2d<graphics::pixel_t>{size.x, size.y},
@@ -50,6 +52,18 @@ void Observer::onActive()
     _camera->translate({0.0f, 0.0f, 2.0f * _manager.mouse().getWheelY()});
 
     _lamp->setTranslate({_camera->getX(), _camera->getY(), _camera->getZ()});
+
+    _camera->look();
+    _lamp->draw();
+    for (const auto &[_, slice] : _game.currentLevel()->layers())
+    {
+        utils::ignore(_);
+        for (const auto &obj : slice->objects())
+        {
+            obj->draw();
+        }
+    }
+    _camera->unlook();
 }
 
 std::shared_ptr<ample::graphics::light::LightSource> Observer::getLamp()

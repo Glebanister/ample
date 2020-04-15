@@ -21,6 +21,8 @@ public:
     std::string dump() override;
     float getDistance() const;
 
+    void onActive() override;
+
 private:
     std::vector<std::shared_ptr<ample::graphics::GraphicalObject>> _objs;
     std::unordered_map<int, std::shared_ptr<ample::graphics::GraphicalObject>> _storage;

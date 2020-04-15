@@ -60,6 +60,7 @@ void StateMachine::State::addTransition(std::shared_ptr<StateMachine::Transition
 
 void StateMachine::State::onStart()
 {
+    activity::Behavior::onStart();
     for (const auto &action : _onStartActions)
     {
         action->onActive();
@@ -68,6 +69,7 @@ void StateMachine::State::onStart()
 
 void StateMachine::State::onStop()
 {
+    activity::Behavior::onStop();
     for (const auto &action : _onStartActions)
     {
         action->onActive();

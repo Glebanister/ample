@@ -4,6 +4,7 @@
 #include "AmpleGui.h"
 #include "ample/RegularPolygon.h"
 #include "ample/WorldObject2d.h"
+#include "ample/TimerTransition.h"
 
 #include "Editor.h"
 #include "SliceManager.h"
@@ -13,20 +14,21 @@ namespace ample::gui
 {
 AmpleGui::AmpleGui(ample::window::Window &window)
     : ImguiActivity(window),
-      _observer(std::make_shared<Observer>(eventManager()))
+      _observer(std::make_shared<Observer>(*this))
 {
-    firstLevel = std::make_shared<ample::game::game2d::Level>("first level",
-                                                                   controllerPointer(),
-                                                                   10.0f,
-                                                                   0.5f,
-                                                                   ample::graphics::Vector2d<float>{0.0f, -10.0f});
-    controller().stateMachine()->setStartState(firstLevel);
     addBehavior(std::static_pointer_cast<Behavior>(_observer));
-    firstLevel->camera()->setVisibility(false);
-    firstLevel->frontSlice()->addCamera(std::static_pointer_cast<graphics::Camera>(_observer->getCamera()));
-    firstLevel->addGlobalObject(_observer->getLamp());
+    firstLevel = Game2d::createLevel("first", 10.0f, 0.5f, {0.0f, -10.0f});
+    setCurrentLevel(firstLevel);
     Editor::instance().setCurrentLayer(firstLevel->frontSlice());
     SliceManager::instance().setLevel(firstLevel);
+    auto secondLevel = Game2d::createLevel("second", 10.0f, 0.5f, {0.0f, 10.0f});
+    secondLevel->addTransition(std::make_shared<ample::game::TimerTransition>("transition_name1", firstLevel, 3000));
+    firstLevel->addTransition(std::make_shared<ample::game::TimerTransition>("transition_name2", secondLevel, 3000));
+}
+
+std::shared_ptr<gui::Observer> AmpleGui::getObserver() const noexcept
+{
+    return _observer;
 }
 
 void AmpleGui::onResize()

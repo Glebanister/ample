@@ -69,6 +69,7 @@ void WorldObject2d::setSpeedY(float desiredVelY)
 
 void WorldObject2d::onActive()
 {
+    GraphicalObject2d::onActive();
     setTranslate({_body->GetPosition().x, _body->GetPosition().y, getZ()});
     setRotate({0.0f, 0.0f, 1.0f}, _body->GetAngle() * 180.0f / M_PI);
 }
