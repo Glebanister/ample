@@ -3,37 +3,26 @@
 #include <memory>
 #include <unordered_map>
 #include <functional>
+#include <string>
 
-namespace ample::utits
+namespace ample::utils
 {
-template <typename T>
+template <class Base>
 class Factory
 {
 public:
-    typedef std::unordered_map<std::string, std::function<std::unique_ptr<T>()>> registryMap;
+    using registryMap = std::unordered_map<std::string, std::function<std::unique_ptr<Base>(std::string)>>;
 
-    static std::unique_ptr<T> produce(const std::string &name)
-    {
-        auto it = Factory<T>::registry().find(name);
-        return it == Factory<T>::registry().end() ? nullptr : (it->second)();
-    }
-
-    static registryMap &registry()
-    {
-        static registryMap impl;
-        return impl;
-    }
+    static std::unique_ptr<Base> produce(const std::string &className, const std::string &objectData);
+    static registryMap &registry();
 
 public:
-    template <typename Derived, typename... Args>
+    template <class Derived>
     struct Register
     {
-        Register(std::string name, Args... args)
-        {
-            // Factory::registry()[name] = []() { return std::make_unique<Derived>((args)...); };
-        }
+        Register(std::string className);
     };
 };
-} // namespace ample::utits
+} // namespace ample::utils
 
 #include <templates/Factory.hpp>

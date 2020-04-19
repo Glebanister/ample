@@ -2,23 +2,24 @@
 
 namespace ample::utils
 {
-// template <typename T>
-// static std::unique_ptr<T> Factory<T>::produce(const std::string &name)
-// {
-//     auto it = ShapeFactory::registry().find(name);
-//     return it == ShapeFactory::registry().end() ? nullptr : (it->second)();
-// }
+template <class Base>
+std::unique_ptr<Base> Factory<Base>::produce(const std::string &className, const std::string &data)
+{
+    auto it = Factory<Base>::registry().find(className);
+    return it == Factory<Base>::registry().end() ? nullptr : (it->second)(data);
+}
 
-// template <typename T>
-// static Factory<T>::registryMap &Factory<T>::registry()
-// {
-//     static registryMap impl;
-//     return impl;
-// }
+template <class Base>
+typename Factory<Base>::registryMap &Factory<Base>::registry()
+{
+    static registryMap impl;
+    return impl;
+}
 
-// template <typename T, typename Derived, typename... Args>
-// Factory<T>::Register<Derived, Args>::Register(std::string name, Args... args)
-// {
-//     Factory<T>::registry()[name] = []() { return std::make_unique<Derived>(args); };
-// }
+template <class Base>
+template <class Derived>
+Factory<Base>::Register<Derived>::Register(std::string className)
+{
+    Factory::registry()[className] = [=](const std::string &data) { return std::make_unique<Derived>(data); };
+}
 } // namespace ample::utils
