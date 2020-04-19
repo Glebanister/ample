@@ -6,32 +6,58 @@
 
 #include "StateMachine.h"
 #include "Behaviour.h"
-#include "NamedObject.h"
+#include "NamedStoredObject.h"
+#include "Action.h"
 
 namespace ample::game
 {
-class ControlledObject : public activity::Behavior, public NamedObject
+template <typename ObjectT>
+class ObjectOwner
+{
+public:
+    ObjectOwner(std::shared_ptr<ObjectT> object);
+    ObjectT &object() noexcept;
+    std::shared_ptr<ObjectT> objectPtr() const noexcept;
+
+private:
+    std::shared_ptr<ObjectT> _object;
+};
+
+class ControlledObject : public activity::Behavior, public filing::NamedStoredObject
 {
 public:
     template <typename ObjectT>
-    class ObjectState : public StateMachine::State
+    class ObjectState : public StateMachine::State, public ObjectOwner<ObjectT>
     {
     public:
         ObjectState(const std::string &name, std::shared_ptr<ObjectT> object);
-        std::shared_ptr<ObjectT> object() const noexcept;
 
     private:
-        std::shared_ptr<ObjectT> _object;
-
         friend class ControlledObject;
+
+    public:
+        class ObjectAction : public Action, public ObjectOwner<ObjectT>
+        {
+        public:
+            ObjectAction(const std::string &name,
+                         const std::string &className,
+                         std::shared_ptr<ObjectT> object);
+
+        private:
+            friend class ControlledObject;
+        };
     };
 
 public:
-    ControlledObject(const std::string &name = "object_name");
+    ControlledObject(const std::string &name, const std::string &className);
+    ControlledObject(const filing::JsonIO &input);
+    std::string dump() override;
     std::shared_ptr<StateMachine> stateMachine() noexcept;
+    std::shared_ptr<StateMachine::State> idleState() const noexcept;
 
 private:
     std::shared_ptr<StateMachine> _stateMachine;
+    std::shared_ptr<StateMachine::State> _idle;
 };
 } // namespace ample::game
 

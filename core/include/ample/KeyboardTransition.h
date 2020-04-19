@@ -17,7 +17,8 @@ public:
     };
 
 public:
-    KeyboardTransition(std::shared_ptr<ample::game::StateMachine::State> state,
+    KeyboardTransition(const std::string &name,
+                       std::shared_ptr<ample::game::StateMachine::State> state,
                        control::EventManager &manager,
                        type pressType,
                        control::keysym key);

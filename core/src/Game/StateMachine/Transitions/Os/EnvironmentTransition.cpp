@@ -2,7 +2,9 @@
 
 namespace ample::game
 {
-EnvironmentTransition::EnvironmentTransition(std::shared_ptr<StateMachine::State> state,
+EnvironmentTransition::EnvironmentTransition(const std::string &name,
+                                             const std::string &className,
+                                             std::shared_ptr<StateMachine::State> state,
                                              control::EventManager &manager)
-    : Transition(state), _manager(manager) {}
+    : Transition(name, className, state), _manager(manager) {}
 } // namespace ample::game

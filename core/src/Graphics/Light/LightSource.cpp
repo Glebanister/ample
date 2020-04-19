@@ -13,7 +13,7 @@
 namespace ample::graphics::light
 {
 LightSource::LightSource(const std::string &name)
-    : GraphicalObject(name),
+    : GraphicalObject(name, "LightSource"),
       _lightPositionUnirom(_position, "light.position"),
       _lightIntensitiesUniform(_intensities, "light.intensities")
 {

@@ -11,6 +11,17 @@
 #include "CameraOrtho.h"
 #include "Debug.h"
 #include "Level.h"
+#include "GameController.h"
+
+namespace ample::game
+{
+class GameController;
+}
+
+namespace ample::game::game2d
+{
+class Level;
+}
 
 namespace ample::game::game2d
 {
@@ -18,25 +29,16 @@ class Game2d : public graphics::LayeredWindowActivity
 {
 public:
     Game2d(window::Window &window);
-
-    std::shared_ptr<graphics::CameraPerspective> camera() noexcept;
-    std::shared_ptr<graphics::CameraOrtho> view() noexcept;
-
-    std::shared_ptr<graphics::Layer> layout() noexcept;
-
-    template <typename... Args>
-    std::shared_ptr<Level> createLevel(size_t num, Args... args);
-    std::shared_ptr<Level> numberedLevel(size_t num);
-    std::shared_ptr<Level> currentLevel();
-
-    void setCurrentLevel(size_t levelNum);
+    GameController &controller() noexcept;
+    std::shared_ptr<GameController> controllerPointer() const noexcept;
+    std::shared_ptr<game2d::Level> createLevel(const std::string &name,
+                                               const float sliceThickness,
+                                               const float physicsLayerPosition,
+                                               const graphics::Vector2d<float> &gravity);
+    void setCurrentLevel(std::shared_ptr<Level>);
+    std::shared_ptr<Level> currentLevel() const noexcept;
 
 private:
-    std::unordered_map<size_t, std::shared_ptr<Level>> _levels;
-    size_t _currentLevel = 0;
-    std::shared_ptr<graphics::Layer> _layout;
-    std::shared_ptr<graphics::CameraOrtho> _orthoCamera;
+    std::shared_ptr<GameController> _gameController;
 };
 } // namespace ample::game::game2d
-
-#include "templates/Game2d.hpp"

@@ -186,7 +186,8 @@ Texture::ILimage::~ILimage()
 }
 
 Texture::Texture(const TextureRaw &rawTexture)
-    : _raw(rawTexture)
+    : NamedStoredObject(rawTexture.name(), "Texture"),
+      _raw(rawTexture)
 {
     name() = _raw.name();
     DEBUG("Loading texture " + _raw.path);
@@ -242,6 +243,36 @@ Texture::Texture(const TextureRaw &rawTexture)
     DEBUG("OpenGL texture is ready");
 
     exception::DevILException::handle();
+}
+
+Texture::Texture(const filing::JsonIO &input)
+    : Texture({input.read<std::string>("texture_path"),
+               input.read<std::string>("name"),
+               input.read<Vector2d<size_t>>("each_size"),
+               input.read<Vector2d<int>>("start_position"),
+               input.read<Vector2d<size_t>>("frames_count"),
+               static_cast<channelMode>(input.read<int>("format")),
+               static_cast<texturePlayback>(input.read<int>("playback")),
+               input.read<size_t>("total"),
+               Vector2d<textureOrigin>{
+                   static_cast<textureOrigin>(input.read<Vector2d<int>>("origin").x),
+                   static_cast<textureOrigin>(input.read<Vector2d<int>>("origin").y)}})
+{
+}
+
+std::string Texture::dump()
+{
+    filing::JsonIO output{NamedStoredObject::dump()};
+    output.write<std::string>("texture_path", _raw.path);
+    output.write<graphics::Vector2d<size_t>>("each_size", _raw.eachSize);
+    output.write<graphics::Vector2d<int>>("start_position", _raw.startPosition);
+    output.write<graphics::Vector2d<size_t>>("frames_count", _raw.framesCount);
+    output.write<int>("format", static_cast<int>(_raw.format));
+    output.write<int>("playback", static_cast<int>(_raw.playback));
+    output.write<size_t>("total", _raw.total);
+    output.write<Vector2d<int>>("origin", {static_cast<int>(_raw.origin.x),
+                                           static_cast<int>(_raw.origin.y)});
+    return output;
 }
 
 GLint Texture::getWidth() const noexcept

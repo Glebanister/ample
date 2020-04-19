@@ -69,6 +69,7 @@ void WorldObject2d::setSpeedY(float desiredVelY)
 
 void WorldObject2d::onActive()
 {
+    GraphicalObject2d::onActive();
     setTranslate({_body->GetPosition().x, _body->GetPosition().y, getZ()});
     setRotate({0.0f, 0.0f, 1.0f}, _body->GetAngle() * 180.0f / M_PI);
 }
@@ -268,11 +269,6 @@ bool WorldObject2d::isFixedRotation() const
     return _body->IsFixedRotation();
 }
 
-void WorldObject2d::dump()
-{
-    _body->Dump();
-}
-
 MassData WorldObject2d::getMassData() const
 {
     b2MassData massData;
@@ -307,7 +303,7 @@ const WorldObject2d &WorldObject2d::getNext() const
 }
 
 WorldObject2d::WorldObject2d(const std::string &name,
-                             WorldLayer2d &layer,
+                             std::shared_ptr<WorldLayer2d> layer,
                              BodyType type,
                              const std::vector<ample::graphics::Vector2d<float>> &shape,
                              const float relativeThickness,
@@ -317,15 +313,19 @@ WorldObject2d::WorldObject2d(const std::string &name,
                              const graphics::Vector2d<float> &translated,
                              float rotated)
     : GraphicalObject2d(name,
+                        "WorldObject2d",
                         shape,
-                        layer.getThickness() * relativeThickness,
-                        layer.getThickness() * layer.getRelativePositionInSlice() - layer.getThickness() * relativeThickness / 2.0f,
+                        layer->getThickness() * relativeThickness,
+                        layer->getThickness() * layer->getRelativePositionInSlice() - layer->getThickness() * relativeThickness / 2.0f,
                         faceTextureRepeats,
                         sideTextureRepeats,
                         sideNormalsMode,
                         translated,
                         rotated),
-      _layer(layer)
+      _layer(layer),
+      _bodyType(type),
+      _startAngle(rotated),
+      _startPos(translated)
 {
     _bodyDef.position.Set(translated.x, translated.y);
     _bodyDef.angle = rotated;
@@ -343,9 +343,38 @@ WorldObject2d::WorldObject2d(const std::string &name,
     }
 }
 
-WorldLayer2d &WorldObject2d::getWorldLayer() const
+WorldLayer2d &WorldObject2d::getWorldLayer() noexcept
+{
+    return *_layer;
+}
+
+std::shared_ptr<WorldLayer2d> WorldObject2d::getWorldLayerPointer() const noexcept
 {
     return _layer;
+}
+
+WorldObject2d::WorldObject2d(const filing::JsonIO &input,
+                             std::shared_ptr<WorldLayer2d> layer)
+    : WorldObject2d(input.read<std::string>("name"),
+                    layer,
+                    input.read<physics::BodyType>("body_type"),
+                    input.read<std::vector<graphics::Vector2d<float>>>("shape"),
+                    input.read<float>("relative_thickness"),
+                    input.read<graphics::Vector2d<float>>("face_texture_repeats"),
+                    input.read<graphics::Vector2d<float>>("side_texture_repeats"),
+                    input.read<graphics::normalsMode>("normals_mode"),
+                    input.read<graphics::Vector2d<float>>("world_pos"),
+                    input.read<float>("world_rotated"))
+{
+}
+
+std::string WorldObject2d::dump()
+{
+    filing::JsonIO output = GraphicalObject2d::dump();
+    output.write<physics::BodyType>("body_type", _bodyType);
+    output.write<float>("world_rotated", _startAngle);
+    output.write<graphics::Vector2d<float>>("world_pos", _startPos);
+    return output;
 }
 
 void WorldObject2d::onAwake()

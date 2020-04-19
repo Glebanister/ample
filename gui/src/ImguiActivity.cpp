@@ -13,7 +13,7 @@
 namespace ample::gui
 {
 ImguiActivity::ImguiActivity(ample::window::Window &window)
-    : Game2d(window)
+        : Game2d(window)
 {
     const char *glsl_version = "#version 330";
     glewInit();

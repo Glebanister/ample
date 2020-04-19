@@ -1,18 +1,19 @@
 #pragma once
 
-namespace ample::game
+#include <string>
+
+namespace ample::filing
 {
 class NamedObject
 {
 public:
-    NamedObject(const std::string &name = "noname");
+    NamedObject(const std::string &name = "", const std::string &className = "");
 
-    void setClassName(const std::string &className) noexcept;
-    std::string &name() noexcept;
-    std::string &className() noexcept;
+    std::string name() const noexcept;
+    std::string className() const noexcept;
 
 private:
     std::string _name;
-    std::string _className = "";
+    std::string _className;
 };
 } // namespace ample::game

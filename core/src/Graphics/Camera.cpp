@@ -19,14 +19,27 @@ void Camera::Viewport::set()
     glViewport(position.x, position.y, size.x, size.y);
 }
 
-Camera::Camera(Vector2d<pixel_t> viewSize,
+Camera::Camera(const std::string &name,
+               const std::string &className,
+               Vector2d<pixel_t> viewSize,
                Vector2d<pixel_t> viewPosition,
                Vector3d<float> eyePos,
                Vector3d<float> direction)
-    : _viewport(viewSize, viewPosition),
+    : NamedStoredObject(name, className),
+      _viewport(viewSize, viewPosition),
       _position(eyePos.x, eyePos.y, eyePos.z),
       _direction(direction.x, direction.y, direction.z)
 {
+}
+
+std::string Camera::dump()
+{
+    filing::JsonIO output = NamedStoredObject::dump();
+    output.write<Vector2d<pixel_t>>("view_size", _viewport.size);
+    output.write<Vector2d<pixel_t>>("view_position", _viewport.position);
+    output.write<Vector3d<float>>("eye_pos", {_position.x, _position.y, _position.z});
+    output.write<Vector3d<float>>("eye_dir", {_direction.x, _direction.y, _direction.z});
+    return output;
 }
 
 void Camera::setViewport(Vector2d<pixel_t> &&size, Vector2d<pixel_t> &&pos)

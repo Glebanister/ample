@@ -3,11 +3,12 @@
 namespace ample::game
 {
 
-KeyboardTransition::KeyboardTransition(std::shared_ptr<StateMachine::State> state,
+KeyboardTransition::KeyboardTransition(const std::string &name,
+                                       std::shared_ptr<StateMachine::State> state,
                                        control::EventManager &manager,
                                        type pressType,
                                        ample::control::keysym key)
-    : EnvironmentTransition(state, manager), _pressType(pressType), _key(key) {}
+    : EnvironmentTransition(name, "KeyboardTransition", state, manager), _pressType(pressType), _key(key) {}
 
 bool KeyboardTransition::listen()
 {

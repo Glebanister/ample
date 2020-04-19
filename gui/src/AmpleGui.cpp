@@ -4,6 +4,8 @@
 #include "AmpleGui.h"
 #include "ample/RegularPolygon.h"
 #include "ample/WorldObject2d.h"
+#include "ample/TimerTransition.h"
+#include "ample/KeyboardTransition.h"
 
 #include "Editor.h"
 #include "SliceManager.h"
@@ -13,16 +15,31 @@ namespace ample::gui
 {
 AmpleGui::AmpleGui(ample::window::Window &window)
     : ImguiActivity(window),
-      _observer(std::make_shared<Observer>(eventManager()))
+      _observer(std::make_shared<Observer>(*this))
 {
-    auto level = createLevel(1, 10.0f, 0.5f);
-    setCurrentLevel(1);
     addBehavior(std::static_pointer_cast<Behavior>(_observer));
-    level->camera()->setVisibility(false);
-    level->frontSlice()->addCamera(std::static_pointer_cast<graphics::Camera>(_observer->getCamera()));
-    level->addGlobalObject(_observer->getLamp());
-    Editor::instance().setCurrentLayer(level->frontSlice());
-    SliceManager::instance().setLevel(level);
+    firstLevel = Game2d::createLevel("first", 10.0f, 0.5f, {0.0f, -10.0f});
+    setCurrentLevel(firstLevel);
+    Editor::instance().setCurrentLayer(firstLevel->frontSlice());
+    SliceManager::instance().setLevel(firstLevel);
+    auto secondLevel = Game2d::createLevel("second", 10.0f, 0.5f, {0.0f, 10.0f});
+
+    // second level transitions to first after 2000 ms
+    secondLevel->addTransition(std::make_shared<ample::game::TimerTransition>("transition_name1",
+                                                                              firstLevel,
+                                                                              2000));
+
+    // first level transitions to second by pressing space
+    firstLevel->addTransition(std::make_shared<ample::game::KeyboardTransition>("transition_name2",
+                                                                                secondLevel,
+                                                                                eventManager(),
+                                                                                game::KeyboardTransition::type::PRESSED,
+                                                                                control::keysym::SPACE));
+}
+
+std::shared_ptr<gui::Observer> AmpleGui::getObserver() const noexcept
+{
+    return _observer;
 }
 
 void AmpleGui::onResize()
@@ -37,5 +54,10 @@ void AmpleGui::drawInterface()
     Editor::instance().drawInterface();
     SliceManager::instance().drawInterface();
     TextureManager::instance().drawInterface();
+}
+
+AmpleGui::~AmpleGui()
+{
+    std::cout << firstLevel->frontSlice()->dump() << std::endl;
 }
 } // namespace ample::gui
