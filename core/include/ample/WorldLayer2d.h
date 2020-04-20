@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "box2d/b2_world.h"
 
 #include "Layer.h"
@@ -22,7 +24,7 @@ class ContactListener;
 
 namespace ample::physics
 {
-class WorldLayer2d : public ample::graphics::Layer
+class WorldLayer2d : public ample::graphics::Layer, public std::enable_shared_from_this<WorldLayer2d>
 {
 public:
     explicit WorldLayer2d(const ample::graphics::Vector2d<float> &gravity,

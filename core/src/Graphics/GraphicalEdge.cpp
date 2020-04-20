@@ -141,7 +141,7 @@ GraphicalEdge::GraphicalEdge(filing::JsonIO input)
                     input.read<float>("z"),
                     input.read<float>("thickness"),
                     input.read<Vector2d<float>>("textureRepeats"),
-                    input.read<normalsMode>("sideNormalsMode"),
+                    input.read<normalsMode>("normalsMode"),
                     input.read<glm::mat4>("translated"),
                     input.read<glm::mat4>("scaled"),
                     input.read<glm::mat4>("rotated"))
@@ -155,7 +155,7 @@ std::string GraphicalEdge::dump()
     output.write<float>("z", getZ()); // TODO: check out if it is true
     output.write<float>("thickness", _thickness);
     output.write<Vector2d<float>>("textureRepeats", _textureRepeats);
-    output.write<normalsMode>("normMode", _normMode);
+    output.write<normalsMode>("normalsMode", _normMode);
     return output;
 }
 } // namespace ample::graphics

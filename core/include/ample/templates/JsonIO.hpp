@@ -155,6 +155,7 @@ template <>
 inline int JsonIO::read<int>(const std::string &nameField) const
 {
     DEBUG(nameField);
+    DEBUG(jsonStr);
     rapidjson::Document doc;
     doc.SetObject();
     doc.Parse(jsonStr.c_str());
