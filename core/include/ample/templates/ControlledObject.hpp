@@ -20,7 +20,7 @@ std::shared_ptr<ObjectT> ObjectOwner<ObjectT>::objectPtr() const noexcept
 
 template <class ObjectT>
 ControlledObject::ObjectState<ObjectT>::ObjectState(const std::string &name, std::shared_ptr<ObjectT> object)
-    : State(name, *object->stateMachine()), ObjectOwner<ObjectT>(object)
+    : State(object->stateMachine(), name), ObjectOwner<ObjectT>(object)
 {
 }
 
