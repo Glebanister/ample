@@ -26,7 +26,7 @@ public:
 
     std::string getJSONstring() const;
 
-    JsonIO updateJsonIO(std::string nameField);
+    JsonIO updateJsonIO(std::string nameField) const;
 
     template <typename T>
     T read(const std::string &name) const;

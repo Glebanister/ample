@@ -1,6 +1,9 @@
 #include "gtest/gtest.h"
 #include "ample/GraphicalObject2d.h"
 #include "ample/RegularPolygon.h"
+#include "ample/JsonIO.h"
+#include "ample/StateMachine.h"
+#include "ample/Action.h"
 
 TEST(ObjectIO, GraphicalEdge)
 {
@@ -44,4 +47,15 @@ TEST(ObjectIO, GraphicalObject2d)
     auto obj2 = ample::graphics::GraphicalObject2d(data1);
     auto data2 = obj2.dump();
     ASSERT_EQ(data1, data2);
+}
+
+TEST(StateMachineIO, Empty)
+{
+    auto sm = ample::game::StateMachine("Name");
+    auto run = std::make_shared<ample::game::StateMachine::State>(sm, "run");
+    sm.setStartState(run);
+    auto smData = sm.dump();
+    auto sameStateMachine = ample::game::StateMachine(ample::filing::JsonIO{smData});
+    auto sameData = sameStateMachine.dump();
+    ASSERT_EQ(smData, sameData);
 }

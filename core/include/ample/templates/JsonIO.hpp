@@ -138,7 +138,7 @@ inline JsonIO::operator std::string() const noexcept
     return jsonStr;
 }
 
-inline filing::JsonIO JsonIO::updateJsonIO(std::string nameField)
+inline filing::JsonIO JsonIO::updateJsonIO(std::string nameField) const
 {
     rapidjson::Document doc;
     doc.SetObject();
@@ -154,8 +154,6 @@ inline filing::JsonIO JsonIO::updateJsonIO(std::string nameField)
 template <>
 inline int JsonIO::read<int>(const std::string &nameField) const
 {
-    DEBUG(nameField);
-    DEBUG(jsonStr);
     rapidjson::Document doc;
     doc.SetObject();
     doc.Parse(jsonStr.c_str());
@@ -167,7 +165,6 @@ inline int JsonIO::read<int>(const std::string &nameField) const
 template <>
 inline size_t JsonIO::read<size_t>(const std::string &nameField) const
 {
-    DEBUG(nameField);
     rapidjson::Document doc;
     doc.SetObject();
     doc.Parse(jsonStr.c_str());
@@ -179,7 +176,6 @@ inline size_t JsonIO::read<size_t>(const std::string &nameField) const
 template <>
 inline physics::BodyType JsonIO::read<physics::BodyType>(const std::string &nameField) const
 {
-    DEBUG(nameField);
     rapidjson::Document doc;
     doc.SetObject();
     doc.Parse(jsonStr.c_str());
@@ -191,7 +187,6 @@ inline physics::BodyType JsonIO::read<physics::BodyType>(const std::string &name
 template <>
 inline float JsonIO::read<float>(const std::string &nameField) const
 {
-    DEBUG(nameField);
     rapidjson::Document doc;
     doc.SetObject();
     doc.Parse(jsonStr.c_str());
@@ -203,7 +198,6 @@ inline float JsonIO::read<float>(const std::string &nameField) const
 template <>
 inline std::string JsonIO::read<std::string>(const std::string &nameField) const
 {
-    DEBUG(nameField);
     rapidjson::Document doc;
     doc.SetObject();
     doc.Parse(jsonStr.c_str());
@@ -215,7 +209,6 @@ inline std::string JsonIO::read<std::string>(const std::string &nameField) const
 template <>
 inline ample::graphics::Vector2d<float> JsonIO::read<ample::graphics::Vector2d<float>>(const std::string &nameField) const
 {
-    DEBUG(nameField);
     rapidjson::Document doc;
     doc.SetObject();
     doc.Parse(jsonStr.c_str());
@@ -231,7 +224,6 @@ inline ample::graphics::Vector2d<float> JsonIO::read<ample::graphics::Vector2d<f
 template <>
 inline ample::graphics::Vector3d<float> JsonIO::read<ample::graphics::Vector3d<float>>(const std::string &nameField) const
 {
-    DEBUG(nameField);
     rapidjson::Document doc;
     doc.SetObject();
     doc.Parse(jsonStr.c_str());
@@ -248,7 +240,6 @@ inline ample::graphics::Vector3d<float> JsonIO::read<ample::graphics::Vector3d<f
 template <>
 inline ample::graphics::Vector2d<size_t> JsonIO::read<ample::graphics::Vector2d<size_t>>(const std::string &nameField) const
 {
-    DEBUG(nameField);
     rapidjson::Document doc;
     doc.SetObject();
     doc.Parse(jsonStr.c_str());
@@ -265,7 +256,6 @@ template <>
 inline std::vector<ample::graphics::Vector2d<float>>
 JsonIO::read<std::vector<ample::graphics::Vector2d<float>>>(const std::string &nameField) const
 {
-    DEBUG(nameField);
     rapidjson::Document doc;
     doc.SetObject();
     doc.Parse(jsonStr.c_str());
@@ -282,7 +272,6 @@ JsonIO::read<std::vector<ample::graphics::Vector2d<float>>>(const std::string &n
 template <>
 inline ample::graphics::Vector2d<int> JsonIO::read<ample::graphics::Vector2d<int>>(const std::string &nameField) const
 {
-    DEBUG(nameField);
     rapidjson::Document doc;
     doc.SetObject();
     doc.Parse(jsonStr.c_str());
@@ -297,22 +286,18 @@ inline ample::graphics::Vector2d<int> JsonIO::read<ample::graphics::Vector2d<int
 template <>
 inline ample::graphics::channelMode JsonIO::read<ample::graphics::channelMode>(const std::string &nameField) const
 {
-    DEBUG(nameField);
     return static_cast<graphics::channelMode>(read<int>(nameField));
 }
 
 template <>
 inline ample::graphics::normalsMode JsonIO::read<ample::graphics::normalsMode>(const std::string &nameField) const
 {
-    DEBUG(nameField);
     return static_cast<graphics::normalsMode>(read<int>(nameField));
 }
 
 template <>
 inline glm::mat4 JsonIO::read<glm::mat4>(const std::string &nameField) const
 {
-    DEBUG(nameField);
-    DEBUG(jsonStr);
     rapidjson::Document doc;
     doc.SetObject();
     doc.Parse(jsonStr.c_str());
