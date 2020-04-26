@@ -37,7 +37,7 @@ public:
     inline operator std::string() const noexcept;
 
 private:
-    std::string jsonStr;
+    std::string jsonStr = "";
 };
 
 std::string openJSONfile(const std::string &nameFile);

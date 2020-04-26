@@ -6,6 +6,7 @@
 #include "GameException.h"
 #include "Debug.h"
 #include "Factory.h"
+#include "TransitionsFactory.h"
 
 namespace ample::game
 {
@@ -211,6 +212,7 @@ StateMachine::StateMachine(const filing::JsonIO &input)
 {
     auto stateStrings = filing::loadObjectsVector(input.updateJsonIO("states"));
     std::string startStateName = input.read<std::string>("start_state");
+    std::unordered_map<std::string, std::shared_ptr<State>> statesMap;
     for (const filing::JsonIO &string : stateStrings)
     {
         std::shared_ptr<State> newState = std::make_shared<State>(string, *this);
@@ -218,14 +220,21 @@ StateMachine::StateMachine(const filing::JsonIO &input)
         {
             setStartState(newState);
         }
-        auto transitionStrings = filing::loadObjectsVector(input.read<std::string>("transitions"));
-        for (const auto &transitionString : transitionStrings)
+        statesMap[newState->name()] = newState;
+    }
+    for (const filing::JsonIO &stateData : stateStrings)
+    {
+        auto transitionStrings = filing::loadObjectsVector(stateData.updateJsonIO("transitions"));
+        auto currentState = statesMap[stateData.read<std::string>("name")];
+        for (const filing::JsonIO &transitionData : transitionStrings)
         {
-            // newState->addTransition() // TODO
-        }
-        if (newState->name() == startStateName)
-        {
-            setStartState(newState);
+            std::string transitionClass = transitionData.read<std::string>("className");
+            auto nextState = statesMap[transitionData.read<std::string>("to")];
+            currentState->addTransition(
+                game::factory::TransitionsFactory.produce(
+                    transitionClass,
+                    transitionData.getJSONstring(),
+                    nextState));
         }
     }
 

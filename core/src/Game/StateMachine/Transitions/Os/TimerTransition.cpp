@@ -6,7 +6,10 @@ namespace ample::game
 TimerTransition::TimerTransition(const std::string &name,
                                  std::shared_ptr<StateMachine::State> nextState,
                                  int timeDelta)
-    : Transition(name, "TimerTransition", nextState), _timeDelta(timeDelta) {}
+    : Transition(name, "TimerTransition", nextState),
+      _timeDelta(timeDelta)
+{
+}
 
 void TimerTransition::onStart()
 {
@@ -17,6 +20,13 @@ void TimerTransition::onStart()
 bool TimerTransition::listen()
 {
     return time::Clock::globalTimeMs() - _startTime > _timeDelta;
+}
+
+TimerTransition::TimerTransition(const filing::JsonIO &input, std::shared_ptr<StateMachine::State> nextState)
+    : TimerTransition(input.read<std::string>("name"),
+                      nextState,
+                      input.read<int>("time"))
+{
 }
 
 std::string TimerTransition::dump()

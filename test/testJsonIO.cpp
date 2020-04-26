@@ -4,6 +4,7 @@
 #include "ample/JsonIO.h"
 #include "ample/StateMachine.h"
 #include "ample/Action.h"
+#include "ample/TimerTransition.h"
 
 TEST(ObjectIO, GraphicalEdge)
 {
@@ -57,5 +58,77 @@ TEST(StateMachineIO, Empty)
     auto smData = sm.dump();
     auto sameStateMachine = ample::game::StateMachine(ample::filing::JsonIO{smData});
     auto sameData = sameStateMachine.dump();
+    ASSERT_EQ(smData, sameData);
+}
+
+TEST(StateMachineIO, WithOneTransition)
+{
+    auto sm = ample::game::StateMachine("Name");
+    auto run = std::make_shared<ample::game::StateMachine::State>(sm, "run");
+    auto idle = std::make_shared<ample::game::StateMachine::State>(sm, "idle");
+    sm.setStartState(run);
+    run->addTransition(std::make_shared<ample::game::TimerTransition>(
+        "transition",
+        idle,
+        1000));
+    auto smData = sm.dump();
+    auto sameStateMachine = ample::game::StateMachine(ample::filing::JsonIO{smData});
+    auto sameData = sameStateMachine.dump();
+    ASSERT_EQ(smData, sameData);
+}
+
+TEST(StateMachineIO, MultipleTransitions)
+{
+    auto sm = ample::game::StateMachine("Name");
+    auto s1 = std::make_shared<ample::game::StateMachine::State>(sm, "s1");
+    auto s2 = std::make_shared<ample::game::StateMachine::State>(sm, "s2");
+    auto s3 = std::make_shared<ample::game::StateMachine::State>(sm, "s3");
+    auto s4 = std::make_shared<ample::game::StateMachine::State>(sm, "s4");
+    auto s5 = std::make_shared<ample::game::StateMachine::State>(sm, "s5");
+    sm.setStartState(s1);
+    s1->addTransition(std::make_shared<ample::game::TimerTransition>(
+        "t1",
+        s2,
+        1000));
+    s1->addTransition(std::make_shared<ample::game::TimerTransition>(
+        "t2",
+        s2,
+        2000));
+    s2->addTransition(std::make_shared<ample::game::TimerTransition>(
+        "t3",
+        s1,
+        3000));
+    s2->addTransition(std::make_shared<ample::game::TimerTransition>(
+        "t4",
+        s2,
+        4000));
+    s1->addTransition(std::make_shared<ample::game::TimerTransition>(
+        "t5",
+        s3,
+        5000));
+    s1->addTransition(std::make_shared<ample::game::TimerTransition>(
+        "t6",
+        s4,
+        6000));
+    s4->addTransition(std::make_shared<ample::game::TimerTransition>(
+        "t7",
+        s2,
+        7000));
+    s4->addTransition(std::make_shared<ample::game::TimerTransition>(
+        "t8",
+        s1,
+        8000));
+    s2->addTransition(std::make_shared<ample::game::TimerTransition>(
+        "t9",
+        s4,
+        9000));
+    s1->addTransition(std::make_shared<ample::game::TimerTransition>(
+        "t10",
+        s5,
+        10000));
+    auto smData = sm.dump();
+    auto sameStateMachine = ample::game::StateMachine(ample::filing::JsonIO{smData});
+    auto sameData = sameStateMachine.dump();
+
     ASSERT_EQ(smData, sameData);
 }

@@ -10,6 +10,14 @@ KeyboardTransition::KeyboardTransition(const std::string &name,
                                        ample::control::keysym key)
     : EnvironmentTransition(name, "KeyboardTransition", state, manager), _pressType(pressType), _key(key) {}
 
+// KeyboardTransition::KeyboardTransition(const filing::JsonIO &input,
+//                    std::shared_ptr<ample::game::StateMachine::State> state) {}
+
+// std::string KeyboardTransition::dump()
+// {
+//     JsonIO result = EnvironmentTransition::dump();
+// }
+
 bool KeyboardTransition::listen()
 {
     bool result = false;
