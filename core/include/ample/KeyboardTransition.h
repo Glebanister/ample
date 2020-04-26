@@ -20,15 +20,13 @@ public:
 public:
     KeyboardTransition(const std::string &name,
                        std::shared_ptr<ample::game::StateMachine::State> state,
-                       control::EventManager &manager,
                        type pressType,
                        control::keysym key);
 
-    // KeyboardTransition(const filing::JsonIO &input,
-    //                    std::shared_ptr<ample::game::StateMachine::State> state,
-    //                    control::EventManager &manager);
+    KeyboardTransition(const filing::JsonIO &input,
+                       std::shared_ptr<ample::game::StateMachine::State> state);
 
-    // std::string dump() override;
+    std::string dump() override;
 
     bool listen() override;
 

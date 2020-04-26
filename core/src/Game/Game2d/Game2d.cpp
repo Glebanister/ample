@@ -37,11 +37,11 @@ std::shared_ptr<game2d::Level> Game2d::createLevel(const std::string &name,
 
 void Game2d::setCurrentLevel(std::shared_ptr<Level> level)
 {
-    _gameController->stateMachine()->setStartState(level);
+    _gameController->stateMachine().setStartState(level);
 }
 
 std::shared_ptr<Level> Game2d::currentLevel() const noexcept
 {
-    return std::static_pointer_cast<Level>(_gameController->stateMachine()->getCurrentState());
+    return std::static_pointer_cast<Level>(_gameController->stateMachine().getCurrentState());
 }
 } // namespace ample::game::game2d

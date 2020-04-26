@@ -32,7 +32,6 @@ AmpleGui::AmpleGui(ample::window::Window &window)
     // first level transitions to second by pressing space
     firstLevel->addTransition(std::make_shared<ample::game::KeyboardTransition>("transition_name2",
                                                                                 secondLevel,
-                                                                                eventManager(),
                                                                                 game::KeyboardTransition::type::PRESSED,
                                                                                 control::keysym::SPACE));
 }

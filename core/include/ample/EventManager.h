@@ -10,6 +10,8 @@
 #include "EventManager.h"
 #include "Vector2d.h"
 #include "Window.h"
+#include "Singleton.h"
+#include "Noncopyable.h"
 
 namespace ample::control
 {
@@ -91,13 +93,9 @@ private:
 
 };
 
-class EventManager final
+class EventManager : public utils::Singleton<EventManager>, public utils::Noncopyable
 {
 public:
-    EventManager(window::Window &window);
-    EventManager(const EventManager &other) = delete;
-
-    EventManager &operator=(const EventManager &other) = delete;
 
     void update();
 
@@ -105,19 +103,17 @@ public:
     void addEventHandler(const int eventType, EventHandler &handler);
     void clearType(const int &eventType);
 
-    ~EventManager() = default;
-
     KeyboardManager &keyboard();
     MouseHandler &mouse();
 
     std::vector<SDL_Event> &events() noexcept;
 
-private:
+protected:
+    EventManager();
     std::shared_ptr<KeyboardManager> _keyboard;
     std::shared_ptr<MouseHandler> _mouse;
     std::vector<SDL_Event> _events;
 
     std::unordered_map<int, std::vector<EventHandler *>> _handlerByType;
-    window::Window &_window;
 };
 } // namespace ample::control

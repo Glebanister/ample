@@ -4,45 +4,41 @@
 namespace ample::game
 {
 MouseTransition::MouseTransition(const std::string &name, std::shared_ptr<ample::game::StateMachine::State> state,
-                                 control::EventManager &manager,
                                  type eventType,
                                  control::mouseButton button,
                                  std::shared_ptr<geometry::Shape> area)
-    : EnvironmentTransition(name, "MouseTransition", state, manager),
+    : EnvironmentTransition(name, "MouseTransition", state),
       _eventType(eventType),
       _button(button),
       _area(area) {}
 
 MouseTransition::MouseTransition(const std::string &name,
                                  std::shared_ptr<ample::game::StateMachine::State> state,
-                                 control::EventManager &manager,
                                  type eventType,
                                  control::mouseButton button,
                                  const geometry::Point &area)
-    : MouseTransition(name, state, manager, eventType, button, std::make_shared<geometry::Point>(area)) {}
+    : MouseTransition(name, state, eventType, button, std::make_shared<geometry::Point>(area)) {}
 
 MouseTransition::MouseTransition(const std::string &name,
                                  std::shared_ptr<ample::game::StateMachine::State> state,
-                                 control::EventManager &manager,
                                  type eventType,
                                  control::mouseButton button,
                                  const geometry::Circle &area)
-    : MouseTransition(name, state, manager, eventType, button, std::make_shared<geometry::Circle>(area)) {}
+    : MouseTransition(name, state, eventType, button, std::make_shared<geometry::Circle>(area)) {}
 
 MouseTransition::MouseTransition(const std::string &name,
                                  std::shared_ptr<ample::game::StateMachine::State> state,
-                                 control::EventManager &manager,
                                  type eventType,
                                  control::mouseButton button,
                                  const geometry::Rectangle &area)
-    : MouseTransition(name, state, manager, eventType, button, std::make_shared<geometry::Rectangle>(area)) {}
+    : MouseTransition(name, state, eventType, button, std::make_shared<geometry::Rectangle>(area)) {}
 
 bool MouseTransition::listen()
 {
     bool result = false;
 
-    if (_area->inside({static_cast<float>(_manager.mouse().getMouseX()),
-                       static_cast<float>(_manager.mouse().getMouseY())}))
+    if (_area->inside({static_cast<float>(control::EventManager::instance().mouse().getMouseX()),
+                       static_cast<float>(control::EventManager::instance().mouse().getMouseY())}))
     {
         switch (_eventType)
         {
@@ -50,15 +46,15 @@ bool MouseTransition::listen()
             switch (_button)
             {
             case control::mouseButton::BUTTON_LEFT:
-                result = _manager.mouse().isLeftPressed();
+                result = control::EventManager::instance().mouse().isLeftPressed();
                 break;
 
             case control::mouseButton::BUTTON_MIDDLE:
-                result = _manager.mouse().isMiddlePressed();
+                result = control::EventManager::instance().mouse().isMiddlePressed();
                 break;
 
             case control::mouseButton::BUTTON_RIGHT:
-                result = _manager.mouse().isRightPressed();
+                result = control::EventManager::instance().mouse().isRightPressed();
                 break;
             }
             break;
@@ -67,15 +63,15 @@ bool MouseTransition::listen()
             switch (_button)
             {
             case control::mouseButton::BUTTON_LEFT:
-                result = _manager.mouse().isLeftReleased();
+                result = control::EventManager::instance().mouse().isLeftReleased();
                 break;
 
             case control::mouseButton::BUTTON_MIDDLE:
-                result = _manager.mouse().isMiddleReleased();
+                result = control::EventManager::instance().mouse().isMiddleReleased();
                 break;
 
             case control::mouseButton::BUTTON_RIGHT:
-                result = _manager.mouse().isRightReleased();
+                result = control::EventManager::instance().mouse().isRightReleased();
                 break;
             }
             break;
@@ -84,15 +80,15 @@ bool MouseTransition::listen()
             switch (_button)
             {
             case control::mouseButton::BUTTON_LEFT:
-                result = _manager.mouse().isLeftDown();
+                result = control::EventManager::instance().mouse().isLeftDown();
                 break;
 
             case control::mouseButton::BUTTON_MIDDLE:
-                result = _manager.mouse().isMiddleDown();
+                result = control::EventManager::instance().mouse().isMiddleDown();
                 break;
 
             case control::mouseButton::BUTTON_RIGHT:
-                result = _manager.mouse().isRightDown();
+                result = control::EventManager::instance().mouse().isRightDown();
                 break;
             }
             break;
@@ -101,29 +97,29 @@ bool MouseTransition::listen()
             switch (_button)
             {
             case control::mouseButton::BUTTON_LEFT:
-                result = !_manager.mouse().isLeftDown();
+                result = !control::EventManager::instance().mouse().isLeftDown();
                 break;
 
             case control::mouseButton::BUTTON_MIDDLE:
-                result = !_manager.mouse().isMiddleDown();
+                result = !control::EventManager::instance().mouse().isMiddleDown();
                 break;
 
             case control::mouseButton::BUTTON_RIGHT:
-                result = !_manager.mouse().isRightDown();
+                result = !control::EventManager::instance().mouse().isRightDown();
                 break;
             }
             break;
 
         case type::MOVE:
-            result = _manager.mouse().getMouseXRel() || _manager.mouse().getMouseYRel();
+            result = control::EventManager::instance().mouse().getMouseXRel() || control::EventManager::instance().mouse().getMouseYRel();
             break;
 
         case type::SCROLL_UP:
-            result = _manager.mouse().getWheelY() > 0; // TODO: is it true?
+            result = control::EventManager::instance().mouse().getWheelY() > 0; // TODO: is it true?
             break;
 
         case type::SCROLL_DOWN:
-            result = _manager.mouse().getWheelY() < 0; // TODO: is it true?
+            result = control::EventManager::instance().mouse().getWheelY() < 0; // TODO: is it true?
             break;
         }
     }
