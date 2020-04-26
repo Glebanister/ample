@@ -7,20 +7,21 @@
 
 namespace ample::utils
 {
-template <class Base>
+template <class Base, typename... Args>
 class Factory
 {
 public:
-    using registryMap = std::unordered_map<std::string, std::function<std::unique_ptr<Base>(std::string)>>;
+    using registerFucntion = std::function<std::unique_ptr<Base>(Args...)>;
+    using registryMap = std::unordered_map<std::string, registerFucntion>;
 
-    static std::unique_ptr<Base> produce(const std::string &className, const std::string &objectData);
+    static std::unique_ptr<Base> produce(const std::string &className, Args... args);
     static registryMap &registry();
 
 public:
     template <class Derived>
     struct Register
     {
-        Register(std::string className);
+        Register(const std::string &className);
     };
 };
 } // namespace ample::utils

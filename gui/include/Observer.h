@@ -26,12 +26,11 @@ public:
     void onWindowResized(const graphics::Vector2d<int> &size);
 
 protected:
-    ample::control::EventManager &_manager;
+    float _cfX = 1.0f;
+    float _cfY = 1.0f;
     ample::game::game2d::Game2d &_game;
     std::shared_ptr<ample::graphics::light::LightSource> _lamp;
     std::shared_ptr<ample::graphics::CameraPerspective> _camera;
-    const float _cfX = 1.0f;
-    const float _cfY = 1.0f;
 };
 
 } // namespace ample::gui

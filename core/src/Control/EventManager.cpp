@@ -5,14 +5,15 @@
 #include "EventHandler.h"
 #include "EventManager.h"
 #include "Debug.h"
+#include "SDLEnvironment.h"
 
 namespace ample::control
 {
-EventManager::EventManager(window::Window &window)
+EventManager::EventManager()
     : _keyboard(std::make_shared<KeyboardManager>()),
-      _mouse(std::make_shared<MouseHandler>()),
-      _window(window)
+      _mouse(std::make_shared<MouseHandler>())
 {
+    os::environment::SDLEnvironment::instance();
     _handlerByType[SDL_KEYDOWN].push_back(_keyboard.get());
     _handlerByType[SDL_KEYUP].push_back(_keyboard.get());
     _handlerByType[SDL_MOUSEBUTTONDOWN].push_back(_mouse.get());

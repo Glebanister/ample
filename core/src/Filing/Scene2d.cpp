@@ -7,6 +7,10 @@
 #include "JsonIO.h"
 #include "CameraOrtho.h"
 #include "CameraPerspective.h"
+#include "CamerasFactory.h"
+#include "GraphicalObjectsFactory.h"
+#include "JointsFactory.h"
+#include "WorldObjectsFactory.h"
 
 namespace ample::filing
 {
@@ -36,22 +40,21 @@ Scene2d::Scene2d(const JsonIO &input)
     auto cameraStrings = filing::loadObjectsVector(input.read<std::string>("cameras"));
     for (const auto &objString : objectStrings)
     {
-        // addObject();
-        // addWorldJoint();
-        // addWorldObject(); // TODO
+        std::string objectClass = JsonIO(objString).read<std::string>("className");
+        if (objString == "WorldObject2d")
+        {
+            addWorldObject(game::factory::WorldObjecsFactory.produce(objectClass, objString, shared_from_this()));
+        }
+        else
+        {
+            addObject(game::factory::GraphicalObjecsFactory.produce(objectClass, objString));
+        }
+        // addWorldJoint(); // TODO
     }
     for (const auto &cameraString : cameraStrings)
     {
         std::string cameraType = JsonIO(cameraString).read<std::string>("className");
-        // TODO: use Factory<Camera> !!!
-        if (cameraType == "CameraOrtho")
-        {
-            addCamera(std::make_shared<graphics::CameraOrtho>(cameraString));
-        }
-        else if (cameraType == "CameraPerspective")
-        {
-            addCamera(std::make_shared<graphics::CameraPerspective>(cameraString));
-        }
+        addCamera(game::factory::CamerasFactory.produce(cameraType, cameraString));
     }
 }
 

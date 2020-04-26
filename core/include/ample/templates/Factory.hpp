@@ -2,24 +2,23 @@
 
 namespace ample::utils
 {
-template <class Base>
-std::unique_ptr<Base> Factory<Base>::produce(const std::string &className, const std::string &data)
+template <class Base, typename... Args>
+std::unique_ptr<Base> Factory<Base, Args...>::produce(const std::string &className, Args... args)
 {
-    auto it = Factory<Base>::registry().find(className);
-    return it == Factory<Base>::registry().end() ? nullptr : (it->second)(data);
+    return std::move(std::unique_ptr<Base>(registry().at(className)(std::forward<Args>(args)...)));
 }
 
-template <class Base>
-typename Factory<Base>::registryMap &Factory<Base>::registry()
+template <class Base, typename... Args>
+typename Factory<Base, Args...>::registryMap &Factory<Base, Args...>::registry()
 {
     static registryMap impl;
     return impl;
 }
 
-template <class Base>
+template <class Base, typename... Args>
 template <class Derived>
-Factory<Base>::Register<Derived>::Register(std::string className)
+Factory<Base, Args...>::Register<Derived>::Register(const std::string &className)
 {
-    Factory::registry()[className] = [=](const std::string &data) { return std::make_unique<Derived>(data); };
+    Factory::registry()[className] = [=](Args... args) { return std::make_unique<Derived>(args...); };
 }
 } // namespace ample::utils

@@ -6,7 +6,6 @@ namespace ample::filing
 NamedStoredObject::NamedStoredObject(const std::string &name, const std::string &className)
     : NamedObject(name, className)
 {
-    DEBUG("Creation of " + name + ' ' + className);
 }
 
 NamedStoredObject::NamedStoredObject(const JsonIO &input)

@@ -7,7 +7,7 @@
 #include <iostream>
 #include <glm/glm.hpp>
 
-#include <rapidjson/writer.h>
+#include "rapidjson/writer.h"
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/prettywriter.h>
 #include <rapidjson/document.h>
@@ -26,7 +26,7 @@ public:
 
     std::string getJSONstring() const;
 
-    JsonIO updateJsonIO(std::string nameField);
+    JsonIO updateJsonIO(std::string nameField) const;
 
     template <typename T>
     T read(const std::string &name) const;
@@ -37,7 +37,7 @@ public:
     inline operator std::string() const noexcept;
 
 private:
-    std::string jsonStr;
+    std::string jsonStr = "";
 };
 
 std::string openJSONfile(const std::string &nameFile);
