@@ -9,8 +9,6 @@
 /*
 Project structre:
 .
-├── layouts                                 -- main menu, settings, user interface, etc.
-│   └── <...>.json
 ├── levels                                  -- levels list
 │   └── level_1
 │       ├── behavior.json                   -- current level behavior

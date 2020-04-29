@@ -13,6 +13,27 @@ Game2d::Game2d(window::Window &window)
     addBehavior(_gameController);
 }
 
+Game2d::Game2d(window::Window &window, const std::filesystem::path &directory)
+    : graphics::LayeredWindowActivity(window),
+      _gameController(std::make_shared<GameController>(filing::openJSONfile("game_controller.json"), *this))
+{
+    addBehavior(_gameController);
+    // setCurrentLevel();
+    // TODO
+}
+
+void Game2d::saveAs(const std::filesystem::path &path)
+{
+    std::ofstream gameControllerFile(_path / "game_controller.json");
+    gameControllerFile << _gameController->dump();
+    // TODO
+}
+
+void Game2d::save()
+{
+    saveAs(_path);
+}
+
 GameController &Game2d::controller() noexcept
 {
     return *_gameController;
@@ -26,13 +47,15 @@ std::shared_ptr<GameController> Game2d::controllerPointer() const noexcept
 std::shared_ptr<game2d::Level> Game2d::createLevel(const std::string &name,
                                                    const float sliceThickness,
                                                    const float physicsLayerPosition,
-                                                   const graphics::Vector2d<float> &gravity)
+                                                   const graphics::Vector2d<float> &gravity,
+                                                   const std::filesystem::path &destination)
 {
     return std::make_shared<game2d::Level>(name,
                                            _gameController,
                                            sliceThickness,
                                            physicsLayerPosition,
-                                           gravity);
+                                           gravity,
+                                           destination);
 }
 
 void Game2d::setCurrentLevel(std::shared_ptr<Level> level)

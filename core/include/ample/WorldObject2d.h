@@ -148,5 +148,6 @@ private:
     const BodyType _bodyType;
     const float _startAngle;
     const graphics::Vector2d<float> _startPos;
+    std::vector<std::vector<graphics::Vector2d<float>>> _fixtures;
 };
 } // namespace ample::physics

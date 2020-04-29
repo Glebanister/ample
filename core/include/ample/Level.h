@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <memory>
 #include <string>
+#include <filesystem>
 
 #include "WorldLayer2d.h"
 #include "Vector2d.h"
@@ -15,7 +16,6 @@
 /*
 Level structure:
 .
-├── transitions                   -- transitions to other levels
 ├── settings.json                   -- current level settings
 ├── scenes                          -- all 'slices' of level: foreground, backgrounds
 │   └── <...>.json
@@ -34,13 +34,15 @@ namespace ample::game::game2d
 class Level : public ControlledObject::ObjectState<GameController>
 {
 public:
-    Level(const std::string &name, std::shared_ptr<GameController> controller);
+    Level(const std::filesystem::path &path, std::shared_ptr<GameController> controller);
+    void save();
 
     Level(const std::string &name,
           std::shared_ptr<GameController> controller,
           float sliceThikness,
           float physicsLayerPosition,
-          const graphics::Vector2d<float> &gravity);
+          const graphics::Vector2d<float> &gravity,
+          const std::filesystem::path &destinationPath);
 
     void onStart() override;
     void onActive() override;
@@ -65,5 +67,6 @@ private:
     std::shared_ptr<graphics::CameraPerspective> _perspectiveCamera;
     std::shared_ptr<GameController> _controller;
     bool _editingMode = false;
+    std::filesystem::path _path;
 };
 } // namespace ample::game::game2d

@@ -9,15 +9,17 @@
 
 namespace ample::game::game2d
 {
-Level::Level(const std::string &name, std::shared_ptr<GameController> controller)
-    : ObjectState(name, controller), _controller(controller)
+Level::Level(const std::filesystem::path &path, std::shared_ptr<GameController> controller)
+    : ObjectState(filing::JsonIO(filing::openJSONfile(path / "settings.json")).read<std::string>("name"), controller),
+      _controller(controller),
+      _path(path)
 {
-    filing::JsonIO settings{filing::openJSONfile(GameEnvironment::instance().projectAbsolutePath() / name / "settings.json")};
+    filing::JsonIO settings{filing::openJSONfile(path / "settings.json")};
     _sliceThikness = settings.read<float>("slice_thickness");
     _physicsLayerPosition = settings.read<float>("physics_layer_poistion");
     ASSERT(0.0f <= _physicsLayerPosition && _physicsLayerPosition <= 1.0f);
     _defaultGravity = settings.read<graphics::Vector2d<float>>("gravity");
-    for (const auto &entry : std::filesystem::directory_iterator(GameEnvironment::instance().projectAbsolutePath() / name / "scenes"))
+    for (const auto &entry : std::filesystem::directory_iterator(path / "scenes"))
     {
         // TODO: use std::unordered_map::emplace
         auto newScene = std::make_shared<filing::Scene2d>(filing::openJSONfile(entry.path()));
@@ -25,11 +27,43 @@ Level::Level(const std::string &name, std::shared_ptr<GameController> controller
     }
 }
 
+void tryCreateDirectory(const std::filesystem::path &path)
+{
+    if (!(std::filesystem::exists(path) && std::filesystem::is_directory(path)))
+    {
+        if (!std::filesystem::create_directory(path))
+        {
+            throw exception::Exception(exception::exId::UNSPECIFIED,
+                                       exception::exType::CASUAL,
+                                       "can not create directory: " + std::string(path));
+        }
+    }
+}
+
+void Level::save()
+{
+    tryCreateDirectory(_path);
+    tryCreateDirectory(_path / "scenes");
+
+    std::ofstream settingsFile(_path / "settings.json");
+    filing::JsonIO settingsJson;
+    settingsJson.write<float>("slice_thickness", _sliceThikness);
+    settingsJson.write<float>("physics_layer_position", _physicsLayerPosition);
+    settingsJson.write<graphics::Vector2d<float>>("gravity", _defaultGravity);
+    settingsFile << settingsJson.getJSONstring();
+    for (const auto &[dist, slice] : _sliceByDistance)
+    {
+        std::ofstream sliceFile(_path / "scenes" / (slice->name() + ".json"));
+        sliceFile << slice->dump();
+    }
+}
+
 Level::Level(const std::string &name,
              std::shared_ptr<GameController> controller,
              float sliceThikness,
              float physicsLayerPosition,
-             const graphics::Vector2d<float> &gravity)
+             const graphics::Vector2d<float> &gravity,
+             const std::filesystem::path &destPath)
     : ObjectState(name, controller),
       _sliceThikness(sliceThikness),
       _physicsLayerPosition(physicsLayerPosition),
@@ -44,7 +78,8 @@ Level::Level(const std::string &name,
                                                                        0.1,
                                                                        1000.0)),
       _controller(controller),
-      _editingMode(true)
+      _editingMode(true),
+      _path(destPath)
 {
     createSlice(0, "front");
 }

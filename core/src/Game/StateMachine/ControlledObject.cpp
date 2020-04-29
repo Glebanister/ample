@@ -14,8 +14,6 @@ ControlledObject::ControlledObject(const std::string &name, const std::string &c
 
 StateMachine &ControlledObject::stateMachine() noexcept
 {
-    DEBUG("Get state machine");
-    DEBUG(_stateMachine);
     return *_stateMachine;
 }
 

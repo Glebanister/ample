@@ -14,5 +14,6 @@ class DemoGame : public ample::game::game2d::Game2d
 {
 public:
     DemoGame(ample::window::Window &window);
-    ~DemoGame();
+
+    std::shared_ptr<ample::game::game2d::Level> firstLevel;
 };
