@@ -13,7 +13,7 @@
 
 namespace ample::game
 {
-class StateMachine : public activity::Behavior, public filing::NamedStoredObject, public std::enable_shared_from_this<StateMachine>
+class StateMachine : public activity::Behavior, public filing::NamedStoredObject
 {
 public:
     class State;
@@ -28,7 +28,7 @@ public:
         std::shared_ptr<State> getNextState() const noexcept;
         bool isActivated() const noexcept;
         void reset() noexcept;
-        std::string dump() override;
+        filing::JsonIO dump() override;
 
     private:
         std::shared_ptr<State> _nextState;
@@ -56,7 +56,7 @@ public:
         void addOnStopAction(std::shared_ptr<Action>) noexcept;
 
     private:
-        std::string dump() override;
+        filing::JsonIO dump() override;
         StateMachine &_machine;
         std::vector<std::shared_ptr<Transition>> _transitions;
         std::vector<std::shared_ptr<Action>> _onStartActions;
@@ -74,7 +74,7 @@ public:
     void onActive() override;
 
     StateMachine(const filing::JsonIO &input);
-    std::string dump() override;
+    filing::JsonIO dump() override;
 
     virtual ~StateMachine();
 

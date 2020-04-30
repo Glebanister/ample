@@ -5,8 +5,12 @@
 
 namespace ample::filing
 {
-NamedObject::NamedObject(const std::string &name, const std::string &className)
-    : _name(name), _className(className)
+NamedObject::NamedObject(const std::string &name,
+                         const std::string &className,
+                         std::shared_ptr<game::Namespace> parentalNamespace)
+    : _name(name),
+      _className(className),
+      _namespace(std::make_shared<game::Namespace>(parentalNamespace))
 {
     if (name.length() == 0)
     {
@@ -27,7 +31,7 @@ std::string NamedObject::name() const noexcept
 
 game::Namespace &NamedObject::getNamespace() noexcept
 {
-    return _namespace;
+    return *_namespace;
 }
 
 std::string NamedObject::className() const noexcept

@@ -5,6 +5,9 @@
 
 namespace ample::game
 {
+Namespace::Namespace(std::shared_ptr<Namespace> parent)
+    : _parentalNamespace(std::move(parent)) {}
+
 bool Namespace::hasName(const std::string &name)
 {
     return static_cast<bool>(_names[name]);
@@ -22,18 +25,26 @@ bool Namespace::addObject(std::shared_ptr<filing::NamedObject> namedObject)
         return false;
     }
     _names.emplace(namedObject->name(), namedObject);
-    _classes[namedObject->className()].emplace_back(namedObject);
     return true;
 }
 
-std::shared_ptr<filing::NamedObject> Namespace::getObject(const std::string &name)
+std::shared_ptr<filing::NamedObject> Namespace::getObject(const std::string &name) const
 {
-    return _names[name];
+    const Namespace *currentNamespace = this;
+    while (currentNamespace && !currentNamespace->_names[name])
+    {
+        currentNamespace = currentNamespace->_parentalNamespace.get();
+    }
+    if (!currentNamespace)
+    {
+        return nullptr;
+    }
+    return currentNamespace->_names[name];
 }
 
-std::vector<std::shared_ptr<filing::NamedObject>> &Namespace::getClass(const std::string &className)
+std::unordered_map<std::string, std::shared_ptr<filing::NamedObject>> &Namespace::getAllNames() noexcept
 {
-    return _classes[className];
+    return _names;
 }
 
 void Namespace::removeName(const std::string &name)
@@ -43,11 +54,6 @@ void Namespace::removeName(const std::string &name)
         throw exception::Exception(exception::exId::UNSPECIFIED, exception::exType::CASUAL,
                                    "namespace does not contain name " + name);
     }
-    auto it = _classes[name].begin();
-    for (; it < _classes[name].end(), (*it)->name() != name; ++it)
-    {
-    }
-    _classes[name].erase(it, it + 1);
     _names.erase(name);
 }
 void Namespace::removeObject(std::shared_ptr<filing::NamedObject> namedObject)

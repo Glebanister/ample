@@ -9,8 +9,8 @@ namespace ample::filing
 class NamedStoredObject : public NamedObject, public StoredObject
 {
 public:
-    NamedStoredObject(const std::string &name, const std::string &className);
-    NamedStoredObject(const JsonIO &input);
-    std::string dump();
+    NamedStoredObject(const std::string &name, const std::string &className); // TODO: add std::shared_ptr<Namespace> parentalNamespace
+    NamedStoredObject(const JsonIO &input, const game::Namespace &globalNames);
+    filing::JsonIO dump();
 };
 } // namespace ample::filing
