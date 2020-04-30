@@ -9,9 +9,9 @@
 #include "Vector2d.h"
 #include "Camera.h"
 #include "CameraPerspective.h"
-#include "GameController.h"
 #include "StoredObject.h"
 #include "Scene2d.h"
+#include "StateMachine.h"
 
 /*
 Level structure:

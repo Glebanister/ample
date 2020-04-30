@@ -228,7 +228,7 @@ StateMachine::StateMachine(const filing::JsonIO &input)
         auto currentState = statesMap[stateData.read<std::string>("name")];
         for (const filing::JsonIO &transitionData : transitionStrings)
         {
-            std::string transitionClass = transitionData.read<std::string>("className");
+            std::string transitionClass = transitionData.read<std::string>("class_name");
             auto nextState = statesMap[transitionData.read<std::string>("to")];
             currentState->addTransition(
                 game::factory::TransitionsFactory.produce(

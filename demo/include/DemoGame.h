@@ -6,7 +6,6 @@
 #include "KeyboardControlCamera.h"
 #include "Texture.h"
 #include "StateMachine.h"
-#include "ControlledObject.h"
 #include "Debug.h"
 #include "RegularPolygon.h"
 

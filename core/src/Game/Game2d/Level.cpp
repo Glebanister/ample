@@ -1,7 +1,6 @@
 #include <filesystem>
 
 #include "Exception.h"
-#include "GameEnvironment.h"
 #include "GameException.h"
 #include "JsonIO.h"
 #include "Level.h"
@@ -54,7 +53,7 @@ void Level::save()
     for (const auto &[dist, slice] : _sliceByDistance)
     {
         std::ofstream sliceFile(_path / "scenes" / (slice->name() + ".json"));
-        sliceFile << slice->dump().getJSONstring();
+        sliceFile << slice->dump();
     }
 }
 

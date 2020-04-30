@@ -12,7 +12,7 @@ NamedStoredObject::NamedStoredObject(const std::string &name, const std::string 
 
 NamedStoredObject::NamedStoredObject(const JsonIO &input)
     : NamedObject(input.read<std::string>("name"),
-                  input.read<std::string>("className"),
+                  input.read<std::string>("class_name"),
                   filing::loadObjectsVector(input.updateJsonIO("namespace").getJSONstring()))
 {
 }
@@ -21,7 +21,7 @@ std::string NamedStoredObject::dump()
 {
     JsonIO output;
     output.write<std::string>("name", name());
-    output.write<std::string>("className", className());
+    output.write<std::string>("class_name", className());
     std::vector<std::string> subNames;
     for (const auto &[name, object] : getNamespace().getAllNames())
     {

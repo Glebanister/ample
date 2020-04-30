@@ -40,7 +40,7 @@ Scene2d::Scene2d(const JsonIO &input)
     auto cameraStrings = filing::loadObjectsVector(input.read<std::string>("cameras"));
     for (const auto &objString : objectStrings)
     {
-        std::string objectClass = JsonIO(objString).read<std::string>("className");
+        std::string objectClass = JsonIO(objString).read<std::string>("class_name");
         if (objString == "WorldObject2d")
         {
             addWorldObject(game::factory::WorldObjecsFactory.produce(objectClass, objString, shared_from_this()));
@@ -53,7 +53,7 @@ Scene2d::Scene2d(const JsonIO &input)
     }
     for (const auto &cameraString : cameraStrings)
     {
-        std::string cameraType = JsonIO(cameraString).read<std::string>("className");
+        std::string cameraType = JsonIO(cameraString).read<std::string>("class_name");
         addCamera(game::factory::CamerasFactory.produce(cameraType, cameraString));
     }
 }
