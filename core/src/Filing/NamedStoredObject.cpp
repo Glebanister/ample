@@ -10,23 +10,11 @@ NamedStoredObject::NamedStoredObject(const std::string &name, const std::string 
 {
 }
 
-NamedStoredObject::NamedStoredObject(const JsonIO &input,
-                                     const game::Namespace &globalNames)
+NamedStoredObject::NamedStoredObject(const JsonIO &input)
     : NamedObject(input.read<std::string>("name"),
-                  input.read<std::string>("className"))
+                  input.read<std::string>("className"),
+                  filing::loadObjectsVector(input.updateJsonIO("namespace").getJSONstring()))
 {
-    auto knownNames = filing::loadObjectsVector(input.updateJsonIO("namespace").getJSONstring());
-    for (const auto &name : knownNames)
-    {
-        if (!getNamespace().hasName(name))
-        {
-            throw exception::Exception(exception::exId::UNSPECIFIED,
-                                       exception::exType::CASUAL,
-                                       "given namespace does not contain name " +
-                                           name);
-        }
-        getNamespace().addObject(globalNames.getObject(name));
-    }
 }
 
 std::string NamedStoredObject::dump()
@@ -40,9 +28,7 @@ std::string NamedStoredObject::dump()
         utils::ignore(object);
         subNames.emplace_back(name);
     }
-    return filing::mergeStrings({
-        output.getJSONstring(),
-        filing::makeField("namespace", filing::dumpObjectsVector(subNames).getJSONstring()),
-    });
+    return filing::mergeStrings({output.getJSONstring(),
+                                 filing::makeField("namespace", filing::dumpObjectsVector(subNames))});
 }
 } // namespace ample::filing
