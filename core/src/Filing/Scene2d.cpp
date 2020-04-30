@@ -58,11 +58,6 @@ Scene2d::Scene2d(const JsonIO &input)
     }
 }
 
-void Scene2d::onActive()
-{
-    WorldLayer2d::onActive();
-}
-
 std::string Scene2d::dump()
 {
     std::vector<std::string> objectStrings;
