@@ -1,10 +1,15 @@
 #pragma once
 
-#include <vector>
-#include <unordered_map>
 #include <memory>
+#include <unordered_map>
+#include <vector>
 
 #include "NamedObject.h"
+
+namespace ample::filing
+{
+class NamedObject;
+}
 
 namespace ample::game
 {

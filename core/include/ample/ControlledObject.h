@@ -1,13 +1,13 @@
 #pragma once
 
 #include <memory>
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 
-#include "StateMachine.h"
+#include "Action.h"
 #include "Behaviour.h"
 #include "NamedStoredObject.h"
-#include "Action.h"
+#include "StateMachine.h"
 
 namespace ample::game
 {

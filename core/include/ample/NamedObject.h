@@ -16,4 +16,4 @@ private:
     std::string _name;
     std::string _className;
 };
-} // namespace ample::game
+} // namespace ample::filing

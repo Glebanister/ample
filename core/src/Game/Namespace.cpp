@@ -1,7 +1,7 @@
 #include <algorithm>
 
-#include "Namespace.h"
 #include "Exception.h"
+#include "Namespace.h"
 
 namespace ample::game
 {
@@ -40,13 +40,14 @@ void Namespace::removeName(const std::string &name)
 {
     if (!static_cast<bool>(_names[name]))
     {
-        throw exception::Exception(exception::exId::UNSPECIFIED,
-                                   exception::exType::CASUAL,
+        throw exception::Exception(exception::exId::UNSPECIFIED, exception::exType::CASUAL,
                                    "namespace does not contain name " + name);
     }
-    _classes[name].erase(std::remove(_classes[name].begin(),
-                                     _classes[name].end(), 8),
-                         _classes[name].end());
+    auto it = _classes[name].begin();
+    for (; it < _classes[name].end(), (*it)->name() != name; ++it)
+    {
+    }
+    _classes[name].erase(it, it + 1);
     _names.erase(name);
 }
 void Namespace::removeObject(std::shared_ptr<filing::NamedObject> namedObject)

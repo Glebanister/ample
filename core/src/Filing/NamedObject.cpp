@@ -1,7 +1,7 @@
 #include <string>
 
-#include "NamedObject.h"
 #include "Exception.h"
+#include "NamedObject.h"
 
 namespace ample::filing
 {
@@ -10,14 +10,12 @@ NamedObject::NamedObject(const std::string &name, const std::string &className)
 {
     if (name.length() == 0)
     {
-        throw exception::Exception{exception::exId::UNSPECIFIED,
-                                   exception::exType::CASUAL,
+        throw exception::Exception{exception::exId::UNSPECIFIED, exception::exType::CASUAL,
                                    "object name can not empty"};
     }
     if (className.length() == 0)
     {
-        throw exception::Exception{exception::exId::UNSPECIFIED,
-                                   exception::exType::CASUAL,
+        throw exception::Exception{exception::exId::UNSPECIFIED, exception::exType::CASUAL,
                                    "object class name can not empty"};
     }
 }
@@ -25,6 +23,11 @@ NamedObject::NamedObject(const std::string &name, const std::string &className)
 std::string NamedObject::name() const noexcept
 {
     return _name;
+}
+
+game::Namespace &NamedObject::getNamespace() noexcept
+{
+    return _namespace;
 }
 
 std::string NamedObject::className() const noexcept

@@ -30,10 +30,9 @@ std::shared_ptr<StateMachine::State> ControlledObject::idleState() const noexcep
 
 std::string ControlledObject::dump()
 {
-    return filing::mergeStrings(
-        {
-            NamedStoredObject::dump(),
-            filing::makeField("state_machine", _stateMachine->dump()),
-        });
+    return filing::mergeStrings({
+        NamedStoredObject::dump(),
+        filing::makeField("state_machine", _stateMachine->dump()),
+    });
 }
 } // namespace ample::game

@@ -1,15 +1,15 @@
 #include <iostream>
 #include <memory>
 
-#include "Scene2d.h"
-#include "Exception.h"
-#include "Debug.h"
-#include "JsonIO.h"
 #include "CameraOrtho.h"
 #include "CameraPerspective.h"
 #include "CamerasFactory.h"
+#include "Debug.h"
+#include "Exception.h"
 #include "GraphicalObjectsFactory.h"
 #include "JointsFactory.h"
+#include "JsonIO.h"
+#include "Scene2d.h"
 #include "WorldObjectsFactory.h"
 
 namespace ample::filing
