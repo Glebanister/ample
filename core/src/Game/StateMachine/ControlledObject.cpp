@@ -7,19 +7,21 @@ ControlledObject::ControlledObject(const std::string &name, const std::string &c
     : NamedStoredObject(name, className),
       _stateMachine(std::make_shared<StateMachine>(name + ".state_machine"))
 {
-    addBehavior(std::static_pointer_cast<Behavior>(_stateMachine));
-    _idle = std::make_shared<StateMachine::State>(_stateMachine->shared_from_this(), "idle");
+    addBehavior(_stateMachine);
+    _idle = std::make_shared<StateMachine::State>(*_stateMachine, "idle");
     _stateMachine->setStartState(_idle);
 }
 
-std::shared_ptr<StateMachine> ControlledObject::stateMachine() noexcept
+StateMachine &ControlledObject::stateMachine() noexcept
 {
-    return _stateMachine;
+    DEBUG("Get state machine");
+    DEBUG(_stateMachine);
+    return *_stateMachine;
 }
 
 ControlledObject::ControlledObject(const filing::JsonIO &input)
     : NamedStoredObject(input),
-      _stateMachine(std::make_shared<StateMachine>(input.read<std::string>("state_machine")))
+      _stateMachine(std::make_shared<StateMachine>(input.updateJsonIO("state_machine")))
 {
 }
 

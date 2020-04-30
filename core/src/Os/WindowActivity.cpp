@@ -31,26 +31,25 @@ void WindowEventHandler::handleEvent(const SDL_Event &event)
 }
 
 WindowActivity::WindowActivity(Window &window)
-    : _eventManager(std::make_shared<control::EventManager>(window)),
-      _window(window),
+    : _window(window),
       _quitHandler(std::make_shared<QuitHandler>(*this)),
       _windowEventHandler(std::make_shared<WindowEventHandler>(*this, _window))
 {
-    _eventManager->addEventHandler(SDL_QUIT, *_quitHandler);
-    _eventManager->addEventHandler(SDL_WINDOWEVENT, *_windowEventHandler);
+    control::EventManager::instance().addEventHandler(SDL_QUIT, *_quitHandler);
+    control::EventManager::instance().addEventHandler(SDL_WINDOWEVENT, *_windowEventHandler);
     time::Clock::init();
 
     os::environment::OpenGLEnvironment::instance();
     time::Clock::update();
     this->_window.swapBuffer();
-    _eventManager->update();
+    control::EventManager::instance().update();
 }
 
 void WindowActivity::onActive()
 {
     activity::Activity::onActive();
     time::Clock::update();
-    _eventManager->update();
+    control::EventManager::instance().update();
 }
 
 pixel_t WindowActivity::getWidth() const
@@ -64,11 +63,6 @@ pixel_t WindowActivity::getHeight() const
 }
 
 void WindowActivity::onResize() {}
-
-control::EventManager &WindowActivity::eventManager() noexcept
-{
-    return *_eventManager;
-}
 
 Window &WindowActivity::osWindow()
 {

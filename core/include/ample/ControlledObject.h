@@ -52,7 +52,7 @@ public:
     ControlledObject(const std::string &name, const std::string &className);
     ControlledObject(const filing::JsonIO &input);
     std::string dump() override;
-    std::shared_ptr<StateMachine> stateMachine() noexcept;
+    StateMachine &stateMachine() noexcept;
     std::shared_ptr<StateMachine::State> idleState() const noexcept;
 
 private:

@@ -119,7 +119,6 @@ GraphicalObject::GraphicalObject(filing::JsonIO input)
                       input.read<glm::mat4>("scaled"),
                       input.read<glm::mat4>("rotated"))
 {
-    DEBUG("load GO");
 }
 
 std::string GraphicalObject::dump()

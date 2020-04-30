@@ -38,10 +38,8 @@ public:
     class State : public activity::Behavior, public filing::NamedStoredObject
     {
     public:
-        State(std::shared_ptr<StateMachine> machine, const std::string &name);
-        State(const std::string &name);
-
-        void setMachine(std::shared_ptr<StateMachine> machine) noexcept;
+        State(StateMachine &machine, const std::string &name);
+        State(const filing::JsonIO &input, StateMachine &machine);
 
         void onStart() override;
         void onActive() override;
@@ -49,11 +47,9 @@ public:
 
         void addTransition(std::shared_ptr<Transition>) noexcept;
 
-        // TODO : apply function using dfs
         void dumpRecursive(std::vector<std::string> &strings,
                            std::unordered_map<std::string, bool> &used);
 
-        State(const filing::JsonIO &input);
 
         void addOnStartAction(std::shared_ptr<Action>) noexcept;
         void addOnActiveAction(std::shared_ptr<Action>) noexcept;
@@ -61,7 +57,7 @@ public:
 
     private:
         std::string dump() override;
-        std::shared_ptr<StateMachine> _machine;
+        StateMachine &_machine;
         std::vector<std::shared_ptr<Transition>> _transitions;
         std::vector<std::shared_ptr<Action>> _onStartActions;
         std::vector<std::shared_ptr<Action>> _onActiveActions;
