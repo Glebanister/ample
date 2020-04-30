@@ -49,5 +49,6 @@ std::shared_ptr<physics::WorldObject2d> PhysicalTransition::getPhysicalObjectPoi
     {
         throw GameException("can not handle physical transition: namespace does not contain object: " + _firstBodyName);
     }
+    return result;
 }
 } // namespace ample::game::stateMachine::transitions

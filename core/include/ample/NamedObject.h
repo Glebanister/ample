@@ -27,6 +27,8 @@ public:
 
     game::Namespace &getNamespace() noexcept;
 
+    virtual ~NamedObject() = default;
+
 protected:
     std::string _name;
     std::string _className;

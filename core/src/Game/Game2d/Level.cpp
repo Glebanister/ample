@@ -92,6 +92,7 @@ void Level::onActive()
     _perspectiveCamera->look();
     for (auto &[_, slice] : _sliceByDistance)
     {
+        utils::ignore(_);
         for (const auto &obj : slice->objects())
         {
             obj->draw();

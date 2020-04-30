@@ -56,5 +56,6 @@ bool DistanceTransition::listen()
     case type::FURTHER_THAN:
         return currentDistance > _distance;
     }
+    return false;
 }
 } // namespace ample::game::stateMachine::transitions
