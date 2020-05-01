@@ -156,15 +156,15 @@ std::string StateMachine::State::dump()
     // TODO: use iterators?
     for (const auto &act : _onStartActions)
     {
-        startActions.emplace_back(act->name());
+        startActions.emplace_back(act->dump());
     }
     for (const auto &act : _onActiveActions)
     {
-        activeActions.emplace_back(act->name());
+        activeActions.emplace_back(act->dump());
     }
     for (const auto &act : _onStopActions)
     {
-        stopActions.emplace_back(act->name());
+        stopActions.emplace_back(act->dump());
     }
     return filing::mergeStrings({
         output.getJSONstring(),
