@@ -45,13 +45,16 @@ bool DistanceTransition::listen()
                             .len();
     float maxDistance = minDistance;
 
-    for (size_t i = 2; i < _bodyPointers.size(); ++i)
+    for (size_t i = 0; i < _bodyPointers.size(); ++i)
     {
-        float curDistance = graphics::Vector2d<float>({_bodyPointers[i - 1]->getX(), _bodyPointers[i - 1]->getY()},
-                                                      {_bodyPointers[i]->getX(), _bodyPointers[i]->getY()})
-                                .len();
-        minDistance = std::min(minDistance, curDistance);
-        maxDistance = std::min(maxDistance, curDistance);
+        for (size_t j = i + 1; j < _bodyPointers.size(); ++j)
+        {
+            float curDistance = graphics::Vector2d<float>({_bodyPointers[i]->getX(), _bodyPointers[i]->getY()},
+                                                          {_bodyPointers[j]->getX(), _bodyPointers[j]->getY()})
+                                    .len();
+            minDistance = std::min(minDistance, curDistance);
+            maxDistance = std::min(maxDistance, curDistance);
+        }
     }
 
     switch (_type)
