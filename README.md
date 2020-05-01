@@ -8,7 +8,7 @@ This is a first year group project of a Saint Petersburg Higher School of Econom
 
 `$ ./ci/travis/install-linux.sh`  - installs dependencies \
 `$ mkdir build && cd build` \
-`$ cmake .. -DCMAKE_CXX_COMPILER=g++-9`
+`$ cmake .. -DCMAKE_CXX_COMPILER=g++-9` \
 `$ make -j4` or just make, if you have some time and don't want this process to disturb you
 
 
