@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Factory.h"
-#include "GraphicalAction.h"
-#include "PhysicalAction.h"
+#include "GraphicalRotateAction.h"
+#include "GraphicalTranslateAction.h"
 
 namespace ample::game::factory
 {
@@ -10,6 +10,7 @@ static ample::utils::Factory<Action, const std::string &> ActionsFactory;
 
 namespace registers
 {
-// static ample::utils::Factory<graphics::GraphicalObject, const std::string &>::Register<graphics::GraphicalObject> GraphicalObjectRegister("GraphicalObject");
+static ample::utils::Factory<Action, const std::string &>::Register<ample::game::stateMachine::actions::GraphicalTranslateAction> GraphicalTranslateActionRegister("GraphicalTranslateAction");
+static ample::utils::Factory<Action, const std::string &>::Register<ample::game::stateMachine::actions::GraphicalRotateAction> GraphicalRotateActionRegister("GraphicalRotateAction");
 } // namespace registers
 } // namespace ample::game::factory

@@ -10,7 +10,8 @@ GraphicalTranslateAction::GraphicalTranslateAction(const std::string &name,
                       bodyNames,
                       [direction](std::shared_ptr<graphics::GraphicalObject> obj) {
                           obj->translate({direction.x, direction.y, direction.z});
-                      })
+                      }),
+      _direction(direction)
 {
 }
 
