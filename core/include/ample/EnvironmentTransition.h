@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "StateMachine.h"
 #include "EventManager.h"
+#include "StateMachine.h"
 
 namespace ample::game
 {

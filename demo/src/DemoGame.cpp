@@ -26,8 +26,5 @@ DemoGame::DemoGame(ample::window::Window &window)
                                                                                                 {1.0f, 10.0f},
                                                                                                 ample::graphics::normalsMode::FACE,
                                                                                                 {-50, -50}));
-    obj->stateMachine().shared_from_this();
-    // auto state = std::make_shared<ample::game::ControlledObject::ObjectState
-    // firstLevel->frontSlice()->addWorldObject(obj);
     firstLevel->save();
 }

@@ -1,17 +1,16 @@
 #include <filesystem>
 
-#include "Level.h"
-#include "JsonIO.h"
 #include "Exception.h"
-#include "Utils.h"
-#include "GameEnvironment.h"
 #include "GameException.h"
+#include "JsonIO.h"
+#include "Level.h"
+#include "Utils.h"
 
 namespace ample::game::game2d
 {
-Level::Level(const std::filesystem::path &path, std::shared_ptr<GameController> controller)
-    : ObjectState(filing::JsonIO(filing::openJSONfile(path / "settings.json")).read<std::string>("name"), controller),
-      _controller(controller),
+Level::Level(const std::filesystem::path &path,
+             StateMachine &controller)
+    : State(filing::JsonIO(filing::openJSONfile(path / "settings.json")).read<std::string>("name"), controller),
       _path(path)
 {
     filing::JsonIO settings{filing::openJSONfile(path / "settings.json")};
@@ -59,12 +58,12 @@ void Level::save()
 }
 
 Level::Level(const std::string &name,
-             std::shared_ptr<GameController> controller,
+             StateMachine &controller,
              float sliceThikness,
              float physicsLayerPosition,
              const graphics::Vector2d<float> &gravity,
              const std::filesystem::path &destPath)
-    : ObjectState(name, controller),
+    : State(controller, name),
       _sliceThikness(sliceThikness),
       _physicsLayerPosition(physicsLayerPosition),
       _defaultGravity(gravity),
@@ -77,21 +76,15 @@ Level::Level(const std::string &name,
                                                                        1920.0 / 1080.0,
                                                                        0.1,
                                                                        1000.0)),
-      _controller(controller),
       _editingMode(true),
       _path(destPath)
 {
-    createSlice(0, "front");
-}
-
-void Level::onStart()
-{
-    ControlledObject::ObjectState<GameController>::onStart();
+    createSlice(0, "front_slice");
 }
 
 void Level::onActive()
 {
-    ControlledObject::ObjectState<GameController>::onActive();
+    State::onActive();
     if (_editingMode)
     {
         return;
@@ -99,16 +92,12 @@ void Level::onActive()
     _perspectiveCamera->look();
     for (auto &[_, slice] : _sliceByDistance)
     {
+        utils::ignore(_);
         for (const auto &obj : slice->objects())
         {
             obj->draw();
         }
     }
-}
-
-void Level::onStop()
-{
-    ControlledObject::ObjectState<GameController>::onStop();
 }
 
 std::shared_ptr<filing::Scene2d> Level::createSlice(const size_t num, const std::string &name)
@@ -151,23 +140,5 @@ std::shared_ptr<graphics::CameraPerspective> Level::camera()
 std::unordered_map<size_t, std::shared_ptr<filing::Scene2d>> &Level::layers() noexcept
 {
     return _sliceByDistance;
-}
-
-void Level::addGlobalObject(std::shared_ptr<graphics::GraphicalObject> obj)
-{
-    for (auto &[_, slice] : _sliceByDistance)
-    {
-        utils::ignore(_);
-        slice->addObject(obj);
-    }
-}
-
-void Level::removeGlobalObject(std::shared_ptr<graphics::GraphicalObject> obj)
-{
-    for (auto &[_, slice] : _sliceByDistance)
-    {
-        utils::ignore(_);
-        slice->removeObject(obj);
-    }
 }
 } // namespace ample::game::game2d
