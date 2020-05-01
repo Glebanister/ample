@@ -2,22 +2,25 @@
 
 namespace ample::game::stateMachine::actions
 {
-ObjectGroupAction::ObjectGroupAction(const std::string &name,
-                                     const std::string &className,
-                                     const std::vector<std::string> &bodyNames)
+template <typename T>
+ObjectGroupAction<T>::ObjectGroupAction(const std::string &name,
+                                        const std::string &className,
+                                        const std::vector<std::string> &bodyNames)
     : Action(name, className),
       _bodyNames(std::move(bodyNames))
 {
 }
 
-ObjectGroupAction::ObjectGroupAction(const filing::JsonIO &input)
+template <typename T>
+ObjectGroupAction<T>::ObjectGroupAction(const filing::JsonIO &input)
     : ObjectGroupAction(input.read<std::string>("name"),
-                        input.read<std::string>("class_name")
+                        input.read<std::string>("class_name"),
                         input.read<std::vector<std::string>>("body_names"))
 {
 }
 
-void ObjectGroupAction::updateObjectPointers()
+template <typename T>
+void ObjectGroupAction<T>::updateObjectPointers()
 {
     _bodyPointers.resize(_bodyNames.size());
     for (size_t i = 0; i < _bodyNames.size(); ++i)
@@ -26,20 +29,23 @@ void ObjectGroupAction::updateObjectPointers()
     }
 }
 
-void ObjectGroupAction::onAwake()
+template <typename T>
+void ObjectGroupAction<T>::onAwake()
 {
     updateObjectPointers();
     _pointersInitialized = true;
 }
 
-std::string ObjectGroupAction::dump()
+template <typename T>
+std::string ObjectGroupAction<T>::dump()
 {
-    filing::JsonIO result = Transition::dump();
+    filing::JsonIO result = Action::dump();
     result.write<std::vector<std::string>>("body_names", _bodyNames);
     return result;
 }
 
-std::shared_ptr<T> ObjectGroupAction::getObjectPointer(const std::string &name)
+template <typename T>
+std::shared_ptr<T> ObjectGroupAction<T>::getObjectPointer(const std::string &name)
 {
     std::shared_ptr<T> result;
     try

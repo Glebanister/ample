@@ -7,6 +7,7 @@
 #include "Debug.h"
 #include "Factory.h"
 #include "TransitionsFactory.h"
+#include "ActionsFactory.h"
 
 namespace ample::game
 {
