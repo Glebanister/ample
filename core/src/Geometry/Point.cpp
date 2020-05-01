@@ -20,5 +20,6 @@ std::string Point::dump()
 {
     filing::JsonIO result = Shape::dump();
     result.write<graphics::Vector2d<float>>("position", _crd);
+    return result;
 }
 } // namespace ample::geometry

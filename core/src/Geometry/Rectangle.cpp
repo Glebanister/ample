@@ -23,5 +23,6 @@ std::string Rectangle::dump()
     filing::JsonIO result = Shape::dump();
     result.write<graphics::Vector2d<float>>("left_bottom", _r.first);
     result.write<graphics::Vector2d<float>>("right_top", _r.second);
+    return result;
 }
 } // namespace ample::geometry
