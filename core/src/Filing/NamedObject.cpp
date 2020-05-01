@@ -10,6 +10,7 @@ NamedObject::NamedObject(const std::string &name,
                          const std::vector<std::string> &knownNames)
     : _name(name),
       _className(className),
+      _namespace(std::make_shared<game::Namespace>(nullptr)),
       _knownNames(knownNames)
 {
     if (name.empty())

@@ -31,7 +31,7 @@ bool Namespace::addObject(std::shared_ptr<filing::NamedObject> namedObject)
 std::shared_ptr<filing::NamedObject> Namespace::getObject(const std::string &name) const
 {
     const Namespace *currentNamespace = this;
-    while (currentNamespace && !currentNamespace->_names[name])
+    while (currentNamespace && !currentNamespace->_names.find(name)->second)
     {
         currentNamespace = currentNamespace->_parentalNamespace.get();
     }
@@ -39,7 +39,7 @@ std::shared_ptr<filing::NamedObject> Namespace::getObject(const std::string &nam
     {
         return nullptr;
     }
-    return currentNamespace->_names[name];
+    return currentNamespace->_names.find(name)->second;
 }
 
 std::unordered_map<std::string, std::shared_ptr<filing::NamedObject>> &Namespace::getAllNames() noexcept
