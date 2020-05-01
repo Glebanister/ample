@@ -58,7 +58,8 @@ GraphicalPolygon::GraphicalPolygon(const std::string &name,
                                    const glm::mat4 &translated,
                                    const glm::mat4 &scaled,
                                    const glm::mat4 &rotated)
-    : GraphicalObject(name, translated, scaled, rotated),
+    : GraphicalObject(name, "GraphicalPolygon", translated, scaled, rotated),
+      _shape(shape),
       _textureRepeats(textureRepeats)
 {
     bindVertexArray(std::make_shared<VertexArray>(
@@ -71,39 +72,19 @@ GraphicalPolygon::GraphicalPolygon(filing::JsonIO input)
     : GraphicalPolygon(input.read<std::string>("name"),
                        input.read<std::vector<Vector2d<float>>>("shape"),
                        input.read<float>("z"),
-                       input.read<Vector2d<float>>("faceTextureRepeats"),
+                       input.read<Vector2d<float>>("textureRepeats"),
                        input.read<glm::mat4>("translated"),
                        input.read<glm::mat4>("scaled"),
                        input.read<glm::mat4>("rotated"))
 {
-    DEBUG("Loading GraphicalPolygon");
 }
 
-std::string GraphicalPolygon::dump(filing::JsonIO output, std::string nameField)
+std::string GraphicalPolygon::dump()
 {
-    rapidjson::Document doc;
-    doc.SetObject();
-
-    rapidjson::Document data;
-    data.SetObject();
-
-    output.write<std::string>("name", name());
+    filing::JsonIO output = GraphicalObject::dump();
     output.write<std::vector<Vector2d<float>>>("shape", _shape);
     output.write<float>("z", getZ());
     output.write<Vector2d<float>>("textureRepeats", _textureRepeats);
-
-    data.Parse(output.getJSONstring().c_str());
-
-    rapidjson::Value name;
-    name.SetString(rapidjson::StringRef(nameField.c_str()));
-    doc.AddMember(name, data, doc.GetAllocator());
-
-    rapidjson::StringBuffer buffer;
-    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
-    doc.Accept(writer);
-
-    std::string str(buffer.GetString(), buffer.GetSize());
-
-    return str + '\n';
+    return output;
 }
 } // namespace ample::graphics

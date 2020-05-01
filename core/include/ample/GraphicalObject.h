@@ -1,31 +1,31 @@
 #pragma once
 
+#include <GL/gl.h>
+#include <glm/glm.hpp>
 #include <vector>
 #include <memory>
-#include <glm/glm.hpp>
-#include <GL/gl.h>
+#include <string>
 
 #include "Vector3d.h"
 #include "ShaderProcessor.h"
-#include "Behaviour.h"
 #include "Texture.h"
 #include "VertexArray.h"
-#include "ControlledObject.h"
 #include "JsonIO.h"
-#include "UniqueObject.h"
+#include "Behaviour.h"
 
 namespace ample::graphics
 {
-class GraphicalObject : public game::ControlledObject, public filing::UniqueObject
+class GraphicalObject : public filing::NamedStoredObject, public activity::Behavior
 {
 public:
     GraphicalObject(const std::string &name,
+                    const std::string &className,
                     const glm::mat4 &translated = glm::mat4{1.0f},
                     const glm::mat4 &scaled = glm::mat4{1.0f},
                     const glm::mat4 &rotated = glm::mat4{1.0f});
 
     explicit GraphicalObject(filing::JsonIO input);
-    virtual std::string dump(filing::JsonIO output, std::string nameField);
+    std::string dump() override;
 
     void draw(glm::mat4 scaled = glm::mat4{1.0f},
               glm::mat4 rotated = glm::mat4{1.0f},

@@ -2,6 +2,7 @@
 
 #include "EventManager.h"
 #include "EnvironmentTransition.h"
+#include "JsonIO.h"
 
 namespace ample::game
 {
@@ -17,10 +18,15 @@ public:
     };
 
 public:
-    KeyboardTransition(std::shared_ptr<ample::game::StateMachine::State> state,
-                       control::EventManager &manager,
+    KeyboardTransition(const std::string &name,
+                       std::shared_ptr<ample::game::StateMachine::State> state,
                        type pressType,
                        control::keysym key);
+
+    KeyboardTransition(const filing::JsonIO &input,
+                       std::shared_ptr<ample::game::StateMachine::State> state);
+
+    std::string dump() override;
 
     bool listen() override;
 

@@ -124,7 +124,8 @@ GraphicalEdge::GraphicalEdge(const std::string &name,
                              const glm::mat4 &translated,
                              const glm::mat4 &scaled,
                              const glm::mat4 &rotated)
-    : GraphicalObject(name, translated, scaled, rotated),
+    : GraphicalObject(name, "GraphicalEdge", translated, scaled, rotated),
+      _shape(shape),
       _thickness(thickness),
       _textureRepeats(textureRepeats),
       _normMode(normMode)
@@ -139,23 +140,22 @@ GraphicalEdge::GraphicalEdge(filing::JsonIO input)
                     input.read<std::vector<Vector2d<float>>>("shape"),
                     input.read<float>("z"),
                     input.read<float>("thickness"),
-                    input.read<Vector2d<float>>("sideTextureRepeats"),
-                    input.read<normalsMode>("sideNormalsMode"),
+                    input.read<Vector2d<float>>("textureRepeats"),
+                    input.read<normalsMode>("normalsMode"),
                     input.read<glm::mat4>("translated"),
                     input.read<glm::mat4>("scaled"),
                     input.read<glm::mat4>("rotated"))
 {
 }
 
-std::string GraphicalEdge::dump(filing::JsonIO output, std::string nameField)
+std::string GraphicalEdge::dump()
 {
-    output.write<std::string>("name", name());
+    filing::JsonIO output = GraphicalObject::dump();
     output.write<std::vector<Vector2d<float>>>("shape", _shape);
     output.write<float>("z", getZ()); // TODO: check out if it is true
     output.write<float>("thickness", _thickness);
     output.write<Vector2d<float>>("textureRepeats", _textureRepeats);
-    output.write<normalsMode>("normMode", _normMode);
-
-    return filing::makeField(nameField, output.getJSONstring());
+    output.write<normalsMode>("normalsMode", _normMode);
+    return output;
 }
 } // namespace ample::graphics

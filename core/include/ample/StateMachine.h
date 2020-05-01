@@ -2,61 +2,84 @@
 
 #include <vector>
 #include <memory>
+#include <unordered_map>
 
 #include "Behaviour.h"
 #include "EventListener.h"
+#include "NamedObject.h"
+#include "StoredObject.h"
+#include "Action.h"
+#include "NamedStoredObject.h"
 
 namespace ample::game
 {
-class StateMachine : public activity::Behavior
+class StateMachine : public activity::Behavior, public filing::NamedStoredObject
 {
 public:
     class State;
 
-    class Transition : public events::EventListener
+    class Transition : public events::EventListener, public filing::NamedStoredObject
     {
     public:
-        Transition(std::shared_ptr<State> nextState);
+        Transition(const std::string &name,
+                   const std::string &className,
+                   std::shared_ptr<State> nextState);
         void handleEvent() final;
         std::shared_ptr<State> getNextState() const noexcept;
         bool isActivated() const noexcept;
         void reset() noexcept;
+        std::string dump() override;
 
     private:
         std::shared_ptr<State> _nextState;
         bool _activated = false;
     };
 
-    class State : public activity::Behavior
+    class State : public activity::Behavior, public filing::NamedStoredObject
     {
     public:
-        State(std::shared_ptr<StateMachine> machine, const std::string &name = "state_name");
-        State(const std::string &name = "state_name");
+        State(StateMachine &machine, const std::string &name);
+        State(const filing::JsonIO &input, StateMachine &machine);
 
-        void setMachine(std::shared_ptr<StateMachine> machine) noexcept;
-
+        void onStart() override;
         void onActive() override;
+        void onStop() override;
+
         void addTransition(std::shared_ptr<Transition>) noexcept;
 
-        std::string getName() const noexcept;
+        void dumpRecursive(std::vector<std::string> &strings,
+                           std::unordered_map<std::string, bool> &used);
+
+
+        void addOnStartAction(std::shared_ptr<Action>) noexcept;
+        void addOnActiveAction(std::shared_ptr<Action>) noexcept;
+        void addOnStopAction(std::shared_ptr<Action>) noexcept;
 
     private:
-        std::shared_ptr<StateMachine> _machine;
+        std::string dump() override;
+        StateMachine &_machine;
         std::vector<std::shared_ptr<Transition>> _transitions;
-        std::string _name;
+        std::vector<std::shared_ptr<Action>> _onStartActions;
+        std::vector<std::shared_ptr<Action>> _onActiveActions;
+        std::vector<std::shared_ptr<Action>> _onStopActions;
 
         friend class StateMachine;
     };
 
 public:
-    StateMachine() = default;
+    StateMachine(const std::string &name);
     void setStartState(std::shared_ptr<State> state);
     void setCurrentState(std::shared_ptr<State> state);
+    std::shared_ptr<State> getCurrentState() noexcept;
     void onActive() override;
+
+    StateMachine(const filing::JsonIO &input);
+    std::string dump() override;
 
     virtual ~StateMachine();
 
 private:
     std::shared_ptr<State> _currentState{nullptr};
+    std::shared_ptr<State> _startState{nullptr};
 };
 } // namespace ample::game

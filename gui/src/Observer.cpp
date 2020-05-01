@@ -1,13 +1,15 @@
 #include "ample/Debug.h"
 #include "Observer.h"
 #include "ample/Vector2d.h"
+#include "ample/Utils.h"
 
 namespace ample::gui
 {
-Observer::Observer(ample::control::EventManager &manager, const graphics::Vector2d<int> &size)
-    : _manager(manager),
+Observer::Observer(gui::AmpleGui &gui, const graphics::Vector2d<int> &size)
+    : _game(gui),
       _lamp(std::make_shared<graphics::light::LightSource>("observer_lamp")),
-      _camera(std::make_shared<graphics::CameraPerspective>(graphics::Vector2d<graphics::pixel_t>{size.x, size.y},
+      _camera(std::make_shared<graphics::CameraPerspective>("observer_camera",
+                                                            graphics::Vector2d<graphics::pixel_t>{size.x, size.y},
                                                             graphics::Vector2d<graphics::pixel_t>{0, 0},
                                                             graphics::Vector3d<float>{0.0, 0.0, 0.0},
                                                             graphics::Vector3d<float>{0.0, 0.0, 1.0},
@@ -30,25 +32,37 @@ void Observer::onWindowResized(const graphics::Vector2d<int> &size)
 void Observer::onActive()
 {
     Behavior::onActive();
-    if (_manager.keyboard().isKeyDown(control::keysym::ARROW_LEFT))
+    if (control::EventManager::instance().keyboard().isKeyDown(control::keysym::ARROW_LEFT))
     {
         _camera->translate({1.0f, 0.0f, 0.0f});
     }
-    if (_manager.keyboard().isKeyDown(control::keysym::ARROW_RIGHT))
+    if (control::EventManager::instance().keyboard().isKeyDown(control::keysym::ARROW_RIGHT))
     {
         _camera->translate({-1.0f, 0.0f, 0.0f});
     }
-    if (_manager.keyboard().isKeyDown(control::keysym::ARROW_UP))
+    if (control::EventManager::instance().keyboard().isKeyDown(control::keysym::ARROW_UP))
     {
         _camera->translate({0.0f, 1.0f, 0.0f});
     }
-    if (_manager.keyboard().isKeyDown(control::keysym::ARROW_DOWN))
+    if (control::EventManager::instance().keyboard().isKeyDown(control::keysym::ARROW_DOWN))
     {
         _camera->translate({0.0f, -1.0f, 0.0f});
     }
-    _camera->translate({0.0f, 0.0f, 2.0f * _manager.mouse().getWheelY()});
+    _camera->translate({0.0f, 0.0f, 2.0f * control::EventManager::instance().mouse().getWheelY()});
 
     _lamp->setTranslate({_camera->getX(), _camera->getY(), _camera->getZ()});
+
+    _camera->look();
+    _lamp->draw();
+    for (const auto &[_, slice] : _game.currentLevel()->layers())
+    {
+        utils::ignore(_);
+        for (const auto &obj : slice->objects())
+        {
+            obj->draw();
+        }
+    }
+    _camera->unlook();
 }
 
 std::shared_ptr<ample::graphics::light::LightSource> Observer::getLamp()

@@ -8,7 +8,12 @@ namespace ample::game
 class TimerTransition : public StateMachine::Transition
 {
 public:
-    TimerTransition(std::shared_ptr<StateMachine::State> nextState, int timeDelta);
+    TimerTransition(const std::string &name,
+                    std::shared_ptr<StateMachine::State> nextState,
+                    int timeDelta);
+    TimerTransition(const filing::JsonIO &input, std::shared_ptr<StateMachine::State> nextState);
+
+    std::string dump() override;
 
     void onStart() override;
     bool listen() override;

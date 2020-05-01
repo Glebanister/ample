@@ -1,92 +1,90 @@
 #include <iostream>
 #include <memory>
 
-#include "Scene2d.h"
-#include "Exception.h"
+#include "CameraOrtho.h"
+#include "CameraPerspective.h"
+#include "CamerasFactory.h"
 #include "Debug.h"
+#include "Exception.h"
+#include "GraphicalObjectsFactory.h"
+#include "JointsFactory.h"
 #include "JsonIO.h"
+#include "Scene2d.h"
+#include "WorldObjectsFactory.h"
 
 namespace ample::filing
 {
 
-Scene2d::Scene2d(const std::string &nameFile)
-        : ample::physics::WorldLayer2d {{0.0, 0.0}, 0.0, 0.0, 0.5}
+Scene2d::Scene2d(const std::string &name,
+                 const ample::graphics::Vector2d<float> &gravity,
+                 float z,
+                 float thickness,
+                 float relativePositionInSlice)
+    : WorldLayer2d(gravity, z, thickness, relativePositionInSlice),
+      NamedStoredObject(name, "Scene2d"),
+      _gravity(gravity),
+      _zPosition(z),
+      _sceneThickness(thickness),
+      _relativeSlicePosition(relativePositionInSlice)
 {
-    DEBUG("load from json file");
-    std::string fileStr = openJSONfile(nameFile);
+}
 
-    rapidjson::Document config;
-    config.Parse(fileStr.c_str());
-
-    const rapidjson::Value &data = config["data"];
-
-    size_t cnt = 0;
-    _objs.resize(data.Size());
-    for (rapidjson::Value::ConstValueIterator itr = data.Begin(); itr != data.End(); ++itr)
+Scene2d::Scene2d(const JsonIO &input)
+    : Scene2d(input.read<std::string>("name"),
+              input.read<graphics::Vector2d<float>>("gravity"),
+              input.read<float>("z"),
+              input.read<float>("thickness"),
+              input.read<float>("relative_position_in_slice"))
+{
+    auto objectStrings = filing::loadObjectsVector(input.read<std::string>("objects"));
+    auto cameraStrings = filing::loadObjectsVector(input.read<std::string>("cameras"));
+    for (const auto &objString : objectStrings)
     {
-        const rapidjson::Value &attribute = *itr;
-        rapidjson::StringBuffer sb;
-        rapidjson::Writer<rapidjson::StringBuffer> writer(sb);
-        attribute.Accept(writer);
-        std::string str = sb.GetString();
-
-        rapidjson::Document doc;
-        doc.Parse(str.c_str());
-
-        JsonIO input(str);
-        std::string name = input.read<std::string>("name");
-
-        if (name == "GraphicalObject2d")
+        std::string objectClass = JsonIO(objString).read<std::string>("class_name");
+        if (objString == "WorldObject2d")
         {
-            ample::graphics::GraphicalObject2d obj(input.updateJsonIO("GraphicalObject2d"));
-            _objs[cnt] = std::make_shared<ample::graphics::GraphicalObject2d>(obj);
-            addObject(std::static_pointer_cast<graphics::GraphicalObject>(_objs[cnt]));
-            DEBUG("add GraphicalObject2d");
+            addWorldObject(game::factory::WorldObjecsFactory.produce(objectClass, objString, shared_from_this()));
         }
-        int id = input.read<int>("id");
-        _storage[id] = _objs[cnt];
-        cnt++;
+        else
+        {
+            addObject(game::factory::GraphicalObjecsFactory.produce(objectClass, objString));
+        }
+        // addWorldJoint(); // TODO
+    }
+    for (const auto &cameraString : cameraStrings)
+    {
+        std::string cameraType = JsonIO(cameraString).read<std::string>("class_name");
+        addCamera(game::factory::CamerasFactory.produce(cameraType, cameraString));
     }
 }
 
-void Scene2d::saveScene(const std::string &nameFile)
+std::string Scene2d::dump()
 {
-    DEBUG("save json file");
-    std::ofstream outFile(nameFile);
-
-    rapidjson::Document doc;
-    doc.SetObject();
-
-    rapidjson::Value array(rapidjson::Type::kArrayType);
-    for (size_t i = 0; i < _objects.size(); i++)
+    std::vector<std::string> objectStrings;
+    std::vector<std::string> cameraStrings;
+    // TODO: iterators
+    for (const auto &object : objects())
     {
-        rapidjson::Document docObj(&doc.GetAllocator());
-        docObj.SetObject();
-
-        ample::filing::JsonIO out("");
-        if (typeid(*_objects[i]) == typeid(ample::graphics::GraphicalObject2d))
-        {
-            DEBUG("save GraphicalObject2d");
-            std::string str = _objects[i]->dump(out, "GraphicalObject2d");
-            docObj.Parse(str.c_str());
-            docObj.AddMember("name", "GraphicalObject2d", docObj.GetAllocator());
-        }
-        docObj.AddMember("id", i, docObj.GetAllocator());
-        array.PushBack(docObj, doc.GetAllocator());
+        objectStrings.push_back(object->dump());
     }
-    doc.AddMember("array", array, doc.GetAllocator());
-
-    rapidjson::StringBuffer buffer;
-    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
-    doc.Accept(writer);
-
-    std::string str(buffer.GetString(), buffer.GetSize());
-    outFile << str << '\n';
-    outFile.close();
+    for (const auto &camera : _cameras)
+    {
+        cameraStrings.push_back(camera->dump());
+    }
+    JsonIO output{NamedStoredObject::dump()};
+    output.write<graphics::Vector2d<float>>("gravity", _gravity);
+    output.write<float>("z", _zPosition);
+    output.write<float>("thickness", _sceneThickness);
+    output.write<float>("relative_position_in_slice", _relativeSlicePosition);
+    return filing::mergeStrings({
+        output,
+        filing::makeField("objects", filing::dumpObjectsVector(objectStrings)),
+        filing::makeField("cameras", filing::dumpObjectsVector(cameraStrings)),
+    });
 }
 
-ample::graphics::GraphicalObject &Scene2d::getElementById(const int &id)
+float Scene2d::getDistance() const
 {
-    return *_storage[id];
+    return _zPosition;
 }
 } // namespace ample::filing

@@ -13,7 +13,7 @@
 namespace ample::gui
 {
 ImguiActivity::ImguiActivity(ample::window::Window &window)
-    : Game2d(window)
+        : Game2d(window)
 {
     const char *glsl_version = "#version 330";
     glewInit();
@@ -31,7 +31,7 @@ void ImguiActivity::drawInterface()
 
 void ImguiActivity::onActive()
 {
-    for (auto &ev : eventManager().events())
+    for (auto &ev : control::EventManager::instance().events())
     {
         ImGui_ImplSDL2_ProcessEvent(&ev);
     }

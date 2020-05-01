@@ -22,8 +22,7 @@ void Layer::addObject(std::shared_ptr<GraphicalObject> object)
 void Layer::removeObject(std::shared_ptr<GraphicalObject> object)
 {
     activity::Behavior::removeBehavior(std::static_pointer_cast<Behavior>(object));
-    _objects.push_back(object);
-    std::remove(_objects.begin(), _objects.end(), object);
+    _objects.erase(std::remove(_objects.begin(), _objects.end(), object), _objects.end());
 }
 
 void Layer::setVisibility(bool value) noexcept

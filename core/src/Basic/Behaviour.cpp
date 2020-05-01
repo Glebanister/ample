@@ -12,7 +12,7 @@ void Behavior::addBehavior(std::shared_ptr<Behavior> beh)
 
 void Behavior::removeBehavior(std::shared_ptr<Behavior> beh)
 {
-    std::remove(_behaviours.begin(), _behaviours.end(), beh);
+    _behaviours.erase(std::remove(_behaviours.begin(), _behaviours.end(), beh), _behaviours.end());
 }
 
 void Behavior::onAwake()

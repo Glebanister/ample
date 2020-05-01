@@ -90,9 +90,7 @@ ShaderProcessor::Uniform::Uniform(float *data, const std::string &name)
                                    exception::exType::CRITICAL,
                                    "could not find uniform '" + name + "'");
     }
-    DEBUG(name + " found in " + std::to_string(location));
     ASSERT(pointer);
-    DEBUG("Uniform is ready: " + _name);
 }
 
 ShaderProcessor::Uniform::Uniform(glm::mat4 &data, const std::string &name)

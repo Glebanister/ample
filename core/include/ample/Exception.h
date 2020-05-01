@@ -1,10 +1,10 @@
 #pragma once
 
-#include <string>
+#include <GL/gl.h>
 #include <exception>
 #include <iostream>
+#include <string>
 #include <unordered_map>
-#include <GL/gl.h>
 
 namespace ample::exception
 {

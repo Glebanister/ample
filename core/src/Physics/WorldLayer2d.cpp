@@ -97,13 +97,6 @@ void WorldLayer2d::shiftOrigin(const b2Vec2 &newOrigin)
     world.ShiftOrigin(newOrigin);
 }
 
-// b2Body *WorldLayer2d::addWorldObject(std::shared_ptr<WorldObject2d> obj, b2BodyDef *bodyDef)
-// {
-//     graphics::Layer::addObject(std::static_pointer_cast<graphics::GraphicalObject>(obj));
-//     _bodies.push_back(obj);
-//     return world.CreateBody(bodyDef);
-// }
-
 void ample::physics::WorldLayer2d::addWorldObject(std::shared_ptr<ample::physics::WorldObject2d> obj)
 {
     graphics::Layer::addObject(std::static_pointer_cast<graphics::GraphicalObject>(obj));

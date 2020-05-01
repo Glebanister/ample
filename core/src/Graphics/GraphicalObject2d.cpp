@@ -13,6 +13,7 @@
 namespace ample::graphics
 {
 GraphicalObject2d::GraphicalObject2d(const std::string &name,
+                                     const std::string &className,
                                      const std::vector<Vector2d<float>> &graphicalShape,
                                      const float thickness,
                                      const float z,
@@ -22,15 +23,16 @@ GraphicalObject2d::GraphicalObject2d(const std::string &name,
                                      const glm::mat4 &translated,
                                      const glm::mat4 &scaled,
                                      const glm::mat4 &rotated)
-    : GraphicalObject(name, translated, scaled, rotated),
-      _face(std::make_shared<GraphicalPolygon>("face", graphicalShape, z, faceTextureRepeats)),
-      _side(std::make_shared<GraphicalEdge>("face", graphicalShape, z, thickness, sideTextureRepeats, sideNormalsMode))
+    : GraphicalObject(name, className, translated, scaled, rotated),
+      _face(std::make_shared<GraphicalPolygon>(name + ".face", graphicalShape, z, faceTextureRepeats)),
+      _side(std::make_shared<GraphicalEdge>(name + ".side", graphicalShape, z, thickness, sideTextureRepeats, sideNormalsMode))
 {
     addSubObject(std::static_pointer_cast<GraphicalObject>(_face));
     addSubObject(std::static_pointer_cast<GraphicalObject>(_side));
 }
 
 GraphicalObject2d::GraphicalObject2d(const std::string &name,
+                                     const std::string &className,
                                      const std::vector<Vector2d<float>> &graphicalShape,
                                      const float thickness,
                                      const float z,
@@ -40,6 +42,7 @@ GraphicalObject2d::GraphicalObject2d(const std::string &name,
                                      const Vector2d<float> &translated,
                                      const float &rotated)
     : GraphicalObject2d(name,
+                        className,
                         graphicalShape,
                         thickness,
                         z,
@@ -73,21 +76,16 @@ std::shared_ptr<GraphicalPolygon> GraphicalObject2d::facePointer() noexcept
 }
 
 GraphicalObject2d::GraphicalObject2d(filing::JsonIO input)
-    : GraphicalObject(input.updateJsonIO("Graphical object")),
+    : GraphicalObject(input),
       _face(std::make_shared<GraphicalPolygon>(input.updateJsonIO("face"))),
       _side(std::make_shared<GraphicalEdge>(input.updateJsonIO("side")))
 {
 }
 
-std::string GraphicalObject2d::dump(filing::JsonIO output, std::string nameField)
+std::string GraphicalObject2d::dump()
 {
-    // work with subobjects
-    std::vector<std::string> strings;
-    strings.push_back(GraphicalObject::dump(output, "GraphicalObject"));
-    strings.push_back(_face->dump(output, "face"));
-    strings.push_back(_side->dump(output, "side"));
-
-    return filing::makeField(nameField, filing::mergeStrings(strings));
+    return filing::mergeStrings({GraphicalObject::dump(),
+                                 filing::makeField("face", _face->dump()),
+                                 filing::makeField("side", _side->dump())});
 }
-
 } // namespace ample::graphics

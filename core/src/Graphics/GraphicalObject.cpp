@@ -15,10 +15,11 @@
 namespace ample::graphics
 {
 GraphicalObject::GraphicalObject(const std::string &name,
+                                 const std::string &className,
                                  const glm::mat4 &translated,
                                  const glm::mat4 &scaled,
                                  const glm::mat4 &rotated)
-    : ControlledObject(name),
+    : NamedStoredObject(name, className),
       _translated(translated),
       _scaled(scaled),
       _rotated(rotated),
@@ -113,21 +114,21 @@ void GraphicalObject::draw(glm::mat4 scaled,
 
 GraphicalObject::GraphicalObject(filing::JsonIO input)
     : GraphicalObject(input.read<std::string>("name"),
+                      input.read<std::string>("class_name"),
                       input.read<glm::mat4>("translated"),
                       input.read<glm::mat4>("scaled"),
                       input.read<glm::mat4>("rotated"))
 {
-    DEBUG("load GO");
 }
 
-std::string GraphicalObject::dump(filing::JsonIO output, std::string nameField)
+std::string GraphicalObject::dump()
 {
-    output.write<std::string>("name", name());
+    filing::JsonIO output = NamedStoredObject::dump();
     output.write<glm::mat4>("translated", _translated);
     output.write<glm::mat4>("scaled", _scaled);
     output.write<glm::mat4>("rotated", _rotated);
 
-    return filing::makeField(nameField, output.getJSONstring());
+    return output;
 }
 
 std::shared_ptr<Texture> GraphicalObject::texture() const noexcept

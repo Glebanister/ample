@@ -1,16 +1,27 @@
 #pragma once
 
-#include <unordered_map>
+#include <filesystem>
 #include <memory>
+#include <unordered_map>
 
-#include "LayeredWindowActivity.h"
-#include "WorldLayer2d.h"
-#include "Vector2d.h"
-#include "GameException.h"
-#include "CameraPerspective.h"
 #include "CameraOrtho.h"
+#include "CameraPerspective.h"
 #include "Debug.h"
+#include "StateMachine.h"
+#include "GameException.h"
+#include "LayeredWindowActivity.h"
 #include "Level.h"
+#include "Vector2d.h"
+#include "WorldLayer2d.h"
+
+namespace ample::game::game2d
+{
+class Level;
+}
+
+/*
+
+*/
 
 namespace ample::game::game2d
 {
@@ -18,25 +29,20 @@ class Game2d : public graphics::LayeredWindowActivity
 {
 public:
     Game2d(window::Window &window);
+    Game2d(window::Window &window, const std::filesystem::path &path);
+    void save();
+    void saveAs(const std::filesystem::path &path);
 
-    std::shared_ptr<graphics::CameraPerspective> camera() noexcept;
-    std::shared_ptr<graphics::CameraOrtho> view() noexcept;
-
-    std::shared_ptr<graphics::Layer> layout() noexcept;
-
-    template <typename... Args>
-    std::shared_ptr<Level> createLevel(size_t num, Args... args);
-    std::shared_ptr<Level> numberedLevel(size_t num);
-    std::shared_ptr<Level> currentLevel();
-
-    void setCurrentLevel(size_t levelNum);
+    std::shared_ptr<game2d::Level> createLevel(const std::string &name,
+                                               const float sliceThickness,
+                                               const float physicsLayerPosition,
+                                               const graphics::Vector2d<float> &gravity,
+                                               const std::filesystem::path &destination);
+    void setCurrentLevel(std::shared_ptr<Level>);
+    std::shared_ptr<Level> currentLevel() const noexcept;
 
 private:
-    std::unordered_map<size_t, std::shared_ptr<Level>> _levels;
-    size_t _currentLevel = 0;
-    std::shared_ptr<graphics::Layer> _layout;
-    std::shared_ptr<graphics::CameraOrtho> _orthoCamera;
+    std::shared_ptr<StateMachine> _levelSwitchingController;
+    const std::filesystem::path _path;
 };
 } // namespace ample::game::game2d
-
-#include "templates/Game2d.hpp"

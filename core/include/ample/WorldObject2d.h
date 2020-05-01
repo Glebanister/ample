@@ -56,7 +56,7 @@ class WorldObject2d final : public ample::graphics::GraphicalObject2d
 public:
     void onActive() override;
     WorldObject2d(const std::string &name,
-                  WorldLayer2d &layer,
+                  std::shared_ptr<WorldLayer2d> layer,
                   BodyType type,
                   const std::vector<ample::graphics::Vector2d<float>> &shape,
                   const float relativeThickness,
@@ -66,11 +66,16 @@ public:
                   const graphics::Vector2d<float> &translated = {0.0f, 0.0f},
                   float rotated = 0.0f);
 
+    WorldObject2d(const filing::JsonIO &input,
+                  std::shared_ptr<WorldLayer2d>);
+    std::string dump() override;
+
     void onAwake() override;
     //void onPause() override;//TODO
 
     Fixture addFixture(const std::vector<ample::graphics::Vector2d<float>> &shape);
-    WorldLayer2d &getWorldLayer() const;
+    WorldLayer2d &getWorldLayer() noexcept;
+    std::shared_ptr<WorldLayer2d> getWorldLayerPointer() const noexcept;
 
     void setSpeedX(float desiredVelX);
     void setSpeedY(float desiredVelY);
@@ -133,14 +138,16 @@ public:
     WorldObject2d &getNext();
     const WorldObject2d &getNext() const;
 
-    void dump();
-
 private:
     friend WorldJoint2d;
     friend WorldLayer2d;
 
-    WorldLayer2d &_layer;
+    std::shared_ptr<WorldLayer2d> _layer;
     b2Body *_body = nullptr;
     b2BodyDef _bodyDef;
+    const BodyType _bodyType;
+    const float _startAngle;
+    const graphics::Vector2d<float> _startPos;
+    std::vector<std::vector<graphics::Vector2d<float>>> _fixtures;
 };
 } // namespace ample::physics

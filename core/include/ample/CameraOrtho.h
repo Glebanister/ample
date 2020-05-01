@@ -8,7 +8,8 @@ namespace ample::graphics
 class CameraOrtho : public Camera
 {
 public:
-    CameraOrtho(const Vector2d<pixel_t> &viewSize,
+    CameraOrtho(const std::string &name,
+                const Vector2d<pixel_t> &viewSize,
                 const Vector2d<pixel_t> &viewPosition,
                 const Vector3d<float> &eyePos,
                 const Vector3d<float> &direction,
@@ -18,6 +19,9 @@ public:
                 float top,
                 float near,
                 float far);
+
+    CameraOrtho(const filing::JsonIO &input);
+    std::string dump() override;
 
     void look() override;
     void unlook() override;

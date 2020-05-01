@@ -6,11 +6,12 @@
 #include "Vector2d.h"
 #include "Vector3d.h"
 #include "Behaviour.h"
+#include "NamedStoredObject.h"
 
 namespace ample::graphics
 {
 using pixel_t = std::int32_t;
-class Camera : public activity::Behavior
+class Camera : public activity::Behavior, public filing::NamedStoredObject
 {
 protected:
     struct Viewport final
@@ -24,10 +25,14 @@ protected:
     };
 
 public:
-    Camera(Vector2d<pixel_t> viewSize,
+    Camera(const std::string &name,
+           const std::string &className,
+           Vector2d<pixel_t> viewSize,
            Vector2d<pixel_t> viewPosition,
            Vector3d<float> eyePos,
            Vector3d<float> targetPos);
+
+    std::string dump() override;
 
     virtual void look() = 0;
     virtual void unlook() = 0;
