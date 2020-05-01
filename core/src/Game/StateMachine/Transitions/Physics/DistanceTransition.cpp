@@ -5,18 +5,20 @@ namespace ample::game::stateMachine::transitions
 {
 DistanceTransition::DistanceTransition(const std::string &name,
                                        std::shared_ptr<StateMachine::State> nextState,
-                                       const std::string &firstBodyName,
-                                       const std::string &secondBodyName,
+                                       const std::vector<std::string> &bodyNames,
                                        const DistanceTransition::type &type,
                                        float distance)
     : PhysicalTransition(name,
                          "DistanceTransition",
                          nextState,
-                         firstBodyName,
-                         secondBodyName),
+                         bodyNames),
       _type(type),
       _distance(distance)
 {
+    if (_bodyNames.size() < 2)
+    {
+        throw GameException("can't calculate distance: only one object given");
+    }
 }
 
 DistanceTransition::DistanceTransition(const filing::JsonIO &input,
@@ -35,26 +37,30 @@ std::string DistanceTransition::dump()
     return result;
 }
 
-void DistanceTransition::onAwake()
-{
-    PhysicalTransition::onAwake();
-    updateObjectPointers();
-    _pointersInitialized = true;
-}
-
 bool DistanceTransition::listen()
 {
     ASSERT(_pointersInitialized);
-    float currentDistance = graphics::Vector2d<float>({_firstBodyPointer->getX(), _firstBodyPointer->getY()},
-                                                      {_secondBodyPointer->getX(), _secondBodyPointer->getY()})
+    float minDistance = graphics::Vector2d<float>({_bodyPointers[0]->getX(), _bodyPointers[0]->getY()},
+                                                  {_bodyPointers[1]->getX(), _bodyPointers[1]->getY()})
+                            .len();
+    float maxDistance = minDistance;
+
+    for (size_t i = 2; i < _bodyPointers.size(); ++i)
+    {
+        float curDistance = graphics::Vector2d<float>({_bodyPointers[i - 1]->getX(), _bodyPointers[i - 1]->getY()},
+                                                      {_bodyPointers[i]->getX(), _bodyPointers[i]->getY()})
                                 .len();
+        minDistance = std::min(minDistance, curDistance);
+        maxDistance = std::min(maxDistance, curDistance);
+    }
+
     switch (_type)
     {
     case type::CLOSER_THAN:
-        return currentDistance < _distance;
+        return maxDistance < _distance;
 
     case type::FURTHER_THAN:
-        return currentDistance > _distance;
+        return minDistance > _distance;
     }
     return false;
 }
