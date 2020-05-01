@@ -27,7 +27,8 @@ If you want to add some class you should find out what is it
 about and add it to the one of `src/` folders.
 
 ### Style
-Engine is written in `C++`, here is our preffered style
+Engine is written in `C++`, our preffered style listed in `.clang-format`
+in the root.
 ```cpp
 // CamelCase.h
 
