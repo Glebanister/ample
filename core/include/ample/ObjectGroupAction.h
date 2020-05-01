@@ -1,6 +1,9 @@
 #pragma once
 
+#include <string>
+
 #include "Action.h"
+#include "GameException.h"
 
 namespace ample::game::stateMachine::actions
 {

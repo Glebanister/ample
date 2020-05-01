@@ -1,5 +1,4 @@
-#include "ObjectGroupAction.h"
-#include "GameException.h"
+#pragma once
 
 namespace ample::game::stateMachine::actions
 {
