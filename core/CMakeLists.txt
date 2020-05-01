@@ -107,6 +107,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Game/StateMachine/Transitions/Physics/SpeedTransition.cpp
     src/Game/StateMachine/Transitions/Physics/PositionTransition.cpp
     src/Game/StateMachine/Transitions/Physics/CollisionTransition.cpp
+    src/Game/StateMachine/Actions/Graphical/GraphicalAction.cpp
     src/Game/StateMachine/Actions/Graphical/GraphicalRotateAction.cpp
     src/Game/StateMachine/Actions/Graphical/GraphicalTranslateAction.cpp
     src/Game/StateMachine/Action.cpp
