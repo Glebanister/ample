@@ -55,7 +55,7 @@ std::shared_ptr<physics::WorldObject2d> PhysicalTransition::getPhysicalObjectPoi
     }
     if (!result)
     {
-        throw GameException("can not handle physical transition: namespace does not contain object: " + _firstBodyName);
+        throw GameException("can not handle physical transition: namespace does not contain object: " + name);
     }
     return result;
 }
