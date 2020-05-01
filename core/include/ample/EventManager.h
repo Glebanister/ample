@@ -1,17 +1,17 @@
 #pragma once
 
 #include <SDL2/SDL.h>
-#include <unordered_map>
-#include <vector>
 #include <algorithm>
 #include <memory>
+#include <unordered_map>
+#include <vector>
 
 #include "EventHandler.h"
 #include "EventManager.h"
+#include "Noncopyable.h"
+#include "Singleton.h"
 #include "Vector2d.h"
 #include "Window.h"
-#include "Singleton.h"
-#include "Noncopyable.h"
 
 namespace ample::control
 {
@@ -90,13 +90,11 @@ private:
 
     char _char;
     uint32_t _scancode;
-
 };
 
 class EventManager : public utils::Singleton<EventManager>, public utils::Noncopyable
 {
 public:
-
     void update();
 
     void addKeyHandler(const keysym key, KeyHandler &handler);

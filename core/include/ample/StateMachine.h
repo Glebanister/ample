@@ -13,7 +13,7 @@
 
 namespace ample::game
 {
-class StateMachine : public activity::Behavior, public filing::NamedStoredObject, public std::enable_shared_from_this<StateMachine>
+class StateMachine : public activity::Behavior, public filing::NamedStoredObject
 {
 public:
     class State;

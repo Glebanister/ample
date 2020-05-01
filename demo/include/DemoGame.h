@@ -6,7 +6,6 @@
 #include "KeyboardControlCamera.h"
 #include "Texture.h"
 #include "StateMachine.h"
-#include "ControlledObject.h"
 #include "Debug.h"
 #include "RegularPolygon.h"
 
@@ -14,5 +13,6 @@ class DemoGame : public ample::game::game2d::Game2d
 {
 public:
     DemoGame(ample::window::Window &window);
-    ~DemoGame();
+
+    std::shared_ptr<ample::game::game2d::Level> firstLevel;
 };

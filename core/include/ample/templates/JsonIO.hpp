@@ -270,6 +270,23 @@ JsonIO::read<std::vector<ample::graphics::Vector2d<float>>>(const std::string &n
 }
 
 template <>
+inline std::vector<std::string>
+JsonIO::read<std::vector<std::string>>(const std::string &nameField) const
+{
+    rapidjson::Document doc;
+    doc.SetObject();
+    doc.Parse(jsonStr.c_str());
+    rapidjson::Value::ConstMemberIterator itr = doc.FindMember(nameField.c_str());
+
+    std::vector<std::string> obj;
+    for (size_t i = 0; i < itr->value.Size(); ++i)
+    {
+        obj.push_back(itr->value[i].GetString());
+    }
+    return obj;
+}
+
+template <>
 inline ample::graphics::Vector2d<int> JsonIO::read<ample::graphics::Vector2d<int>>(const std::string &nameField) const
 {
     rapidjson::Document doc;

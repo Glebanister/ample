@@ -37,6 +37,7 @@ void Fixture::setSensor(bool sensor)
 Fixture WorldObject2d::addFixture(
     const std::vector<ample::graphics::Vector2d<float>> &shape)
 {
+    _fixtures.push_back(shape);
     b2FixtureDef fixtureDef;
     std::vector<b2Vec2> vertices(shape.size());
     for (size_t i = 0; i < shape.size(); i++)
@@ -366,6 +367,11 @@ WorldObject2d::WorldObject2d(const filing::JsonIO &input,
                     input.read<graphics::Vector2d<float>>("world_pos"),
                     input.read<float>("world_rotated"))
 {
+    // _fixtures = input.read<std::vector<std::vector<graphics::Vector2d<float>>>>("fixtures"); // TODO
+    for (const auto &fixture : _fixtures)
+    {
+        addFixture(fixture);
+    }
 }
 
 std::string WorldObject2d::dump()
@@ -374,6 +380,7 @@ std::string WorldObject2d::dump()
     output.write<physics::BodyType>("body_type", _bodyType);
     output.write<float>("world_rotated", _startAngle);
     output.write<graphics::Vector2d<float>>("world_pos", _startPos);
+    // output.write<std::vector<std::vector<graphics::Vector2d<float>>>>("fixtures", _fixtures); // TODO
     return output;
 }
 

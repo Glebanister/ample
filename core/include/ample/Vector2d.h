@@ -1,6 +1,8 @@
 #pragma once
 
 #include <utility>
+#include <cmath>
+
 #include "box2d/b2_math.h"
 
 namespace ample::graphics
@@ -13,6 +15,9 @@ struct Vector2d
 
     Vector2d()
         : Vector2d(0, 0) {}
+
+    Vector2d(const Vector2d &first, const Vector2d second)
+        : Vector2d(second.x - first.x, second.y - first.y) {}
 
     Vector2d &operator+=(const Vector2d &other)
     {
@@ -54,12 +59,20 @@ struct Vector2d<float>
     Vector2d()
         : Vector2d(0, 0) {}
 
+    Vector2d(const Vector2d &first, const Vector2d second)
+        : Vector2d(second.x - first.x, second.y - first.y) {}
+
     Vector2d(const b2Vec2 &src)
         : Vector2d(src.x, src.y) {}
 
     operator b2Vec2()
     {
         return {x, y};
+    }
+
+    float len() const noexcept
+    {
+        return sqrt(x * x + y * y);
     }
 
     Vector2d &operator+=(const Vector2d &other)

@@ -3,19 +3,19 @@
 #include <unordered_map>
 #include <memory>
 #include <string>
+#include <filesystem>
 
 #include "WorldLayer2d.h"
 #include "Vector2d.h"
 #include "Camera.h"
 #include "CameraPerspective.h"
-#include "GameController.h"
 #include "StoredObject.h"
 #include "Scene2d.h"
+#include "StateMachine.h"
 
 /*
 Level structure:
 .
-├── transitions                   -- transitions to other levels
 ├── settings.json                   -- current level settings
 ├── scenes                          -- all 'slices' of level: foreground, backgrounds
 │   └── <...>.json
@@ -23,35 +23,28 @@ Level structure:
     └── <...>.[png, jpg, jpeg, bmp]
 */
 
-namespace ample::game
-{
-class GameController;
-} // namespace ample::game
-
 namespace ample::game::game2d
 {
 
-class Level : public ControlledObject::ObjectState<GameController>
+class Level : public StateMachine::State
 {
 public:
-    Level(const std::string &name, std::shared_ptr<GameController> controller);
+    Level(const std::filesystem::path &path,
+          StateMachine &controller);
+    void save();
 
     Level(const std::string &name,
-          std::shared_ptr<GameController> controller,
+          StateMachine &controller,
           float sliceThikness,
           float physicsLayerPosition,
-          const graphics::Vector2d<float> &gravity);
+          const graphics::Vector2d<float> &gravity,
+          const std::filesystem::path &destinationPath);
 
-    void onStart() override;
     void onActive() override;
-    void onStop() override;
 
     std::shared_ptr<filing::Scene2d> createSlice(const size_t num, const std::string &name);
     std::shared_ptr<filing::Scene2d> frontSlice() noexcept;
     std::shared_ptr<filing::Scene2d> numberedSlice(const size_t num);
-
-    void addGlobalObject(std::shared_ptr<graphics::GraphicalObject>);
-    void removeGlobalObject(std::shared_ptr<graphics::GraphicalObject>);
 
     std::shared_ptr<graphics::CameraPerspective> camera();
 
@@ -63,7 +56,7 @@ private:
     graphics::Vector2d<float> _defaultGravity;
     std::unordered_map<size_t, std::shared_ptr<filing::Scene2d>> _sliceByDistance;
     std::shared_ptr<graphics::CameraPerspective> _perspectiveCamera;
-    std::shared_ptr<GameController> _controller;
     bool _editingMode = false;
+    std::filesystem::path _path;
 };
 } // namespace ample::game::game2d

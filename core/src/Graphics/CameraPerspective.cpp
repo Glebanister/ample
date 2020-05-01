@@ -81,7 +81,7 @@ CameraPerspective::CameraPerspective(const filing::JsonIO &input)
                         input.read<float>("near_clip"),
                         input.read<float>("far_clip"))
 {
-    input.read<std::string>("className");
+    input.read<std::string>("class_name");
 }
 
 std::string CameraPerspective::dump()

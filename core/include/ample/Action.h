@@ -9,6 +9,6 @@ class Action : protected activity::Behavior, public filing::NamedStoredObject
 {
 public:
     Action(const std::string &name, const std::string &className);
-    void onActive() override;
+    using Behavior::onActive;
 };
 } // namespace ample::game
