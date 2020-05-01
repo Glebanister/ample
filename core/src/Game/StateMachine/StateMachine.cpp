@@ -1,13 +1,13 @@
-#include <memory>
 #include <iostream>
+#include <memory>
 #include <numeric>
 
-#include "StateMachine.h"
-#include "GameException.h"
+#include "ActionsFactory.h"
 #include "Debug.h"
 #include "Factory.h"
+#include "GameException.h"
+#include "StateMachine.h"
 #include "TransitionsFactory.h"
-#include "ActionsFactory.h"
 
 namespace ample::game
 {
@@ -122,15 +122,15 @@ StateMachine::State::State(const filing::JsonIO &input, StateMachine &machine)
     auto onStopActionStrings = filing::loadObjectsVector(input.updateJsonIO("onStop"));
     for (const auto &actionString : onStartActionStrings)
     {
-        // addOnStartAction(utils::Factory<Action>())
+        addOnStartAction(factory::ActionsFactory.produce(filing::JsonIO(actionString).read<std::string>("class_name"), actionString));
     }
     for (const auto &actionString : onActiveActionStrings)
     {
-        // addOnStartAction(utils::Factory<Action>())
+        addOnActiveAction(factory::ActionsFactory.produce(filing::JsonIO(actionString).read<std::string>("class_name"), actionString));
     }
     for (const auto &actionString : onStopActionStrings)
     {
-        // addOnStartAction(utils::Factory<Action>()) // TODO
+        addOnStopAction(factory::ActionsFactory.produce(filing::JsonIO(actionString).read<std::string>("class_name"), actionString));
     }
 }
 
