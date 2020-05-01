@@ -503,6 +503,7 @@ template <>
 inline void JsonIO::write<std::vector<std::string>>(
     const std::string &nameField, const std::vector<std::string> &obj)
 {
+    // jsonStr = mergeStrings({jsonStr, makeField(nameField, dumpObjectsVector(obj))});
     rapidjson::Document doc;
     doc.SetObject();
     doc.Parse(jsonStr.c_str());
@@ -510,13 +511,11 @@ inline void JsonIO::write<std::vector<std::string>>(
     rapidjson::Value str;
     str.SetString(rapidjson::StringRef(nameField.c_str()));
 
-    rapidjson::Value array(rapidjson::Type::kStringType);
+    rapidjson::Value array(rapidjson::Type::kArrayType);
     for (size_t i = 0; i < obj.size(); ++i)
     {
-        rapidjson::Value val(rapidjson::Type::kArrayType);
-        rapidjson::Value temp;
-        temp.SetString(rapidjson::StringRef(obj[i].c_str()));
-        val.PushBack(temp, doc.GetAllocator());
+        rapidjson::Value val;
+        val.SetString(rapidjson::StringRef(obj[i].c_str()));
         array.PushBack(val, doc.GetAllocator());
     }
     doc.AddMember(str, array, doc.GetAllocator());

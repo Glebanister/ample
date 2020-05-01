@@ -30,7 +30,7 @@ public:
     void removeObject(std::shared_ptr<filing::NamedObject> namedObject);
 
 private:
-    mutable std::unordered_map<std::string, std::shared_ptr<filing::NamedObject>> _names;
+    std::unordered_map<std::string, std::shared_ptr<filing::NamedObject>> _names = {};
     
     std::shared_ptr<Namespace> _parentalNamespace;
 };
