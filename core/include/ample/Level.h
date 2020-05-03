@@ -28,17 +28,20 @@ Directory structure
 └── level_state.json                -- level camera setup
 */
 
+namespace ample::game
+{
+class LevelSwitcher;
+}
+
 namespace ample::game::game2d
 {
-
 class Level : public activity::Behavior, public filing::NamedStoredObject
 {
 public:
-    Level(const std::filesystem::path &path, LevelSwitcher &switcher);
+    Level(const std::filesystem::path &path);
     void save();
 
     Level(const std::string &name,
-          LevelSwitcher &switcher,
           float sliceThikness,
           float physicsLayerPosition,
           const graphics::Vector2d<float> &gravity,
@@ -64,9 +67,6 @@ private:
     std::vector<std::shared_ptr<StateMachine>> _stateMachines;
     bool _editingMode = false;
     std::filesystem::path _path;
-    std::shared_ptr<LevelSwitcher::State> _levelState;
-    LevelSwitcher &_switcher;
-
     Namespace _levelNamespace;
 };
 } // namespace ample::game::game2d

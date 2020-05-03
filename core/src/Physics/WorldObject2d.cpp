@@ -1,8 +1,8 @@
 #include <cmath>
 
+#include "Debug.h"
 #include "WorldObject2d.h"
 #include "box2d/b2_polygon_shape.h"
-#include "Debug.h"
 
 namespace ample::physics
 {
@@ -325,7 +325,8 @@ WorldObject2d::WorldObject2d(const std::string &name,
                         rotated),
       _bodyType(type),
       _startAngle(rotated),
-      _startPos(translated)
+      _startPos(translated),
+      _layer(layer)
 {
     _bodyDef.position.Set(translated.x, translated.y);
     _bodyDef.angle = rotated;
@@ -361,6 +362,11 @@ WorldObject2d::WorldObject2d(const filing::JsonIO &input,
     {
         addFixture(fixture);
     }
+}
+
+WorldLayer2d &WorldObject2d::getWorldLayer() noexcept
+{
+    return _layer;
 }
 
 std::string WorldObject2d::dump()

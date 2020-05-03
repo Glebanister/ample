@@ -1,10 +1,17 @@
 #pragma once
 
 #include "LevelSwitcher.h"
+#include "StateMachine.h"
+#include "Level.h"
 
 namespace ample::game
 {
 class LevelSwitcher;
+}
+
+namespace ample::game::game2d
+{
+class Level;
 }
 
 namespace ample::game

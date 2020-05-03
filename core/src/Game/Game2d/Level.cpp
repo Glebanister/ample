@@ -9,7 +9,6 @@
 namespace ample::game::game2d
 {
 Level::Level(const std::string &name,
-             LevelSwitcher &switcher,
              float sliceThikness,
              float physicsLayerPosition,
              const graphics::Vector2d<float> &gravity,
@@ -28,19 +27,14 @@ Level::Level(const std::string &name,
                                                                        0.1,
                                                                        1000.0)),
       _editingMode(true),
-      _path(destPath),
-      _levelState(std::make_shared<StateMachine::State>(switcher,
-                                                        name + ".level_switcher")),
-      _switcher(switcher)
+      _path(destPath)
 {
     createSlice(0, "front_slice");
 }
 
-Level::Level(const std::filesystem::path &path,
-             LevelSwitcher &swithcer)
+Level::Level(const std::filesystem::path &path)
     : NamedStoredObject(filing::openJSONfile(path / "settings.json")),
-      _path(path),
-      _switcher(swithcer)
+      _path(path)
 {
     filing::JsonIO cameraSettings(filing::openJSONfile(path / "camera_settings.json"));
     _perspectiveCamera = std::make_shared<graphics::CameraPerspective>(cameraSettings);
@@ -51,8 +45,6 @@ Level::Level(const std::filesystem::path &path,
     _physicsLayerPosition = settings.read<float>("physics_layer_poistion");
     ASSERT(0.0f <= _physicsLayerPosition && _physicsLayerPosition <= 1.0f);
     _defaultGravity = settings.read<graphics::Vector2d<float>>("gravity");
-
-    _levelState = std::make_shared<StateMachine::State>(filing::openJSONfile(path / "level_state.json"));
 
     for (const auto &entry : std::filesystem::directory_iterator(path / "scenes"))
     {
@@ -89,11 +81,6 @@ void Level::save()
     settingsJson.write<graphics::Vector2d<float>>("gravity", _defaultGravity);
     settingsFile << settingsJson.getJSONstring();
     settingsFile.close();
-
-    std::ofstream levelStateFile(_path / "level_state.json");
-    ASSERT(_levelState);
-    levelStateFile << _levelState->dump();
-    levelStateFile.close();
 
     utils::tryCreateDirectory(_path / "scenes");
     for (const auto &[dist, slice] : _sliceByDistance)

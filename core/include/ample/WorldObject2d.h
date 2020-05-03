@@ -137,6 +137,8 @@ public:
     WorldObject2d &getNext();
     const WorldObject2d &getNext() const;
 
+    WorldLayer2d &getWorldLayer() noexcept;
+
 private:
     friend WorldJoint2d;
     friend WorldLayer2d;
@@ -147,5 +149,6 @@ private:
     const float _startAngle;
     const graphics::Vector2d<float> _startPos;
     std::vector<std::vector<graphics::Vector2d<float>>> _fixtures;
+    WorldLayer2d &_layer;
 };
 } // namespace ample::physics
