@@ -21,7 +21,8 @@ public:
 
     //b2LimitState getLimitState() const;
 
-    WorldRopeJoint2d(WorldObject2d &bodyA,
+    WorldRopeJoint2d(const std::string &name,
+                     WorldObject2d &bodyA,
                      WorldObject2d &bodyB,
                      const ample::graphics::Vector2d<float> &localAnchorA,
                      const ample::graphics::Vector2d<float> &localAnchorB,

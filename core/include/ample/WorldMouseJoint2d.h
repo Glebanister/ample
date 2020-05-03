@@ -25,7 +25,8 @@ public:
     void setDampingRatio(float ratio);
     float getDampingRatio() const;
 
-    WorldMouseJoint2d(WorldObject2d &bodyA,
+    WorldMouseJoint2d(const std::string &name,
+                      WorldObject2d &bodyA,
                       WorldObject2d &bodyB,
                       bool collideConnected = false);
 

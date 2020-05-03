@@ -1,7 +1,7 @@
 #pragma once
 
-#include "box2d/b2_gear_joint.h"
 #include "WorldJoint2d.h"
+#include "box2d/b2_gear_joint.h"
 
 namespace ample::physics
 {
@@ -15,7 +15,8 @@ public:
     void setRatio(float ratio);
     float getRatio() const;
 
-    WorldGearJoint2d(WorldObject2d &bodyA,
+    WorldGearJoint2d(const std::string &name,
+                     WorldObject2d &bodyA,
                      WorldObject2d &bodyB,
                      WorldJoint2d &jointA,
                      WorldJoint2d &jointB,

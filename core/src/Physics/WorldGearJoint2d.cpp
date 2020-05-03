@@ -2,13 +2,15 @@
 
 namespace ample::physics
 {
-WorldGearJoint2d::WorldGearJoint2d(WorldObject2d &bodyA,
+WorldGearJoint2d::WorldGearJoint2d(const std::string &name,
+                                   WorldObject2d &bodyA,
                                    WorldObject2d &bodyB,
                                    WorldJoint2d &jointA,
                                    WorldJoint2d &jointB,
                                    float ratio,
                                    bool collideConnected)
-    : WorldJoint2d(bodyA, bodyB), _jointA(jointA), _jointB(jointB)
+    : WorldJoint2d(name, "WorldGearJoint2d", bodyA, bodyB),
+      _jointA(jointA), _jointB(jointB)
 {
     b2GearJointDef jointDef;
     jointDef.bodyA = getB2Body(bodyA);

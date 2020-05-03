@@ -2,8 +2,23 @@
 
 namespace ample::physics
 {
-WorldJoint2d::WorldJoint2d(WorldObject2d &bodyA, WorldObject2d &bodyB, b2Joint *joint)
-    : _joint(joint), _bodyA(bodyA), _bodyB(bodyB)
+WorldJoint2d::WorldJoint2d(const std::string &name,
+                           const std::string &className,
+                           WorldObject2d &bodyA,
+                           WorldObject2d &bodyB,
+                           b2Joint *joint)
+    : filing::NamedStoredObject(name, className),
+      _joint(joint), _bodyA(bodyA), _bodyB(bodyB)
+{
+    _joint->SetUserData(this);
+}
+
+WorldJoint2d::WorldJoint2d(const filing::JsonIO &input,
+                           WorldObject2d &bodyA,
+                           WorldObject2d &bodyB,
+                           b2Joint *joint)
+    : filing::NamedStoredObject(input),
+      _joint(joint), _bodyA(bodyA), _bodyB(bodyB)
 {
     _joint->SetUserData(this);
 }
@@ -64,5 +79,23 @@ WorldObject2d &WorldJoint2d::getBodyA()
 WorldObject2d &WorldJoint2d::getBodyB()
 {
     return _bodyB;
+}
+
+bool WorldJoint2d::isEnabled() const
+{
+    return _joint->IsEnabled();
+}
+
+bool WorldJoint2d::getCollideConnected() const
+{
+    return _joint->GetCollideConnected();
+}
+
+std::string WorldJoint2d::dump()
+{
+    filing::JsonIO output = NamedStoredObject::dump();
+    output.write<std::string>("bodyA_name", _bodyA.name());
+    output.write<std::string>("bodyB_name", _bodyB.name());
+    return output;
 }
 } // namespace ample::physics
