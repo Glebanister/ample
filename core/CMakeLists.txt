@@ -113,6 +113,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Game/StateMachine/Action.cpp
     src/Game/Events/EventListener.cpp
     src/Game/Namespace.cpp
+    src/Game/LevelSwitcher.cpp
    )
 
 include_directories(${SDL2_INCLUDE_DIRS})

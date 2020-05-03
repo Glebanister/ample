@@ -10,6 +10,7 @@
 #include "StoredObject.h"
 #include "Action.h"
 #include "NamedStoredObject.h"
+#include "Namespace.h"
 
 namespace ample::game
 {
@@ -38,8 +39,8 @@ public:
     class State : public activity::Behavior, public filing::NamedStoredObject
     {
     public:
-        State(StateMachine &machine, const std::string &name);
-        State(const filing::JsonIO &input, StateMachine &machine);
+        State(StateMachine &machine, const std::string &name, const std::string &className = "State");
+        State(const filing::JsonIO &input, StateMachine &machine, const game::Namespace &globalNamespace);
 
         void onStart() override;
         void onActive() override;
@@ -47,6 +48,7 @@ public:
 
         void addTransition(std::shared_ptr<Transition>) noexcept;
 
+        std::string dump() override;
         void dumpRecursive(std::vector<std::string> &strings,
                            std::unordered_map<std::string, bool> &used);
 
@@ -56,7 +58,6 @@ public:
         void addOnStopAction(std::shared_ptr<Action>) noexcept;
 
     private:
-        std::string dump() override;
         StateMachine &_machine;
         std::vector<std::shared_ptr<Transition>> _transitions;
         std::vector<std::shared_ptr<Action>> _onStartActions;
@@ -67,13 +68,13 @@ public:
     };
 
 public:
-    StateMachine(const std::string &name);
+    StateMachine(const std::string &name, const std::string &className = "StateMachine");
+    StateMachine(const filing::JsonIO &input, const game::Namespace &globalNamespace);
     void setStartState(std::shared_ptr<State> state);
     void setCurrentState(std::shared_ptr<State> state);
     std::shared_ptr<State> getCurrentState() noexcept;
     void onActive() override;
 
-    StateMachine(const filing::JsonIO &input);
     std::string dump() override;
 
     virtual ~StateMachine();

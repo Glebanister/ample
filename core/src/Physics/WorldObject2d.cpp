@@ -304,7 +304,7 @@ const WorldObject2d &WorldObject2d::getNext() const
 }
 
 WorldObject2d::WorldObject2d(const std::string &name,
-                             std::shared_ptr<WorldLayer2d> layer,
+                             WorldLayer2d &layer,
                              BodyType type,
                              const std::vector<ample::graphics::Vector2d<float>> &shape,
                              const float relativeThickness,
@@ -316,14 +316,13 @@ WorldObject2d::WorldObject2d(const std::string &name,
     : GraphicalObject2d(name,
                         "WorldObject2d",
                         shape,
-                        layer->getThickness() * relativeThickness,
-                        layer->getThickness() * layer->getRelativePositionInSlice() - layer->getThickness() * relativeThickness / 2.0f,
+                        layer.getThickness() * relativeThickness,
+                        layer.getThickness() * layer.getRelativePositionInSlice() - layer.getThickness() * relativeThickness / 2.0f,
                         faceTextureRepeats,
                         sideTextureRepeats,
                         sideNormalsMode,
                         translated,
                         rotated),
-      _layer(layer),
       _bodyType(type),
       _startAngle(rotated),
       _startPos(translated)
@@ -344,18 +343,8 @@ WorldObject2d::WorldObject2d(const std::string &name,
     }
 }
 
-WorldLayer2d &WorldObject2d::getWorldLayer() noexcept
-{
-    return *_layer;
-}
-
-std::shared_ptr<WorldLayer2d> WorldObject2d::getWorldLayerPointer() const noexcept
-{
-    return _layer;
-}
-
 WorldObject2d::WorldObject2d(const filing::JsonIO &input,
-                             std::shared_ptr<WorldLayer2d> layer)
+                             WorldLayer2d &layer)
     : WorldObject2d(input.read<std::string>("name"),
                     layer,
                     input.read<physics::BodyType>("body_type"),
