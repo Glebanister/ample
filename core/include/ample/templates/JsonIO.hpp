@@ -196,6 +196,17 @@ inline float JsonIO::read<float>(const std::string &nameField) const
 }
 
 template <>
+inline bool JsonIO::read<bool>(const std::string &nameField) const
+{
+    rapidjson::Document doc;
+    doc.SetObject();
+    doc.Parse(jsonStr.c_str());
+    rapidjson::Value::ConstMemberIterator itr = doc.FindMember(nameField.c_str());
+
+    return itr->value.GetBool();
+}
+
+template <>
 inline std::string JsonIO::read<std::string>(const std::string &nameField) const
 {
     rapidjson::Document doc;
@@ -358,6 +369,20 @@ inline void JsonIO::write<physics::BodyType>(const std::string &nameField, const
 
 template <>
 inline void JsonIO::write<float>(const std::string &nameField, const float &obj)
+{
+    rapidjson::Document doc;
+    doc.SetObject();
+    doc.Parse(jsonStr.c_str());
+
+    rapidjson::Value str;
+    str.SetString(rapidjson::StringRef(nameField.c_str()));
+    doc.AddMember(str, obj, doc.GetAllocator());
+
+    jsonStr = giveStringDocument(doc);
+}
+
+template <>
+inline void JsonIO::write<bool>(const std::string &nameField, const bool &obj)
 {
     rapidjson::Document doc;
     doc.SetObject();
