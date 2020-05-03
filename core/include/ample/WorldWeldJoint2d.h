@@ -23,7 +23,8 @@ public:
 
     float getDampingRatio() const;
 
-    WorldWeldJoint2d(WorldObject2d &bodyA,
+    WorldWeldJoint2d(const std::string &name,
+                     WorldObject2d &bodyA,
                      WorldObject2d &bodyB,
                      const ample::graphics::Vector2d<float> &anchor,
                      float referenceAngle = 0,
