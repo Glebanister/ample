@@ -29,9 +29,10 @@ public:
     void removeName(const std::string &name);
     void removeObject(std::shared_ptr<filing::NamedObject> namedObject);
 
+    void clear() noexcept;
+
 private:
     std::unordered_map<std::string, std::shared_ptr<filing::NamedObject>> _names = {};
-    
     std::shared_ptr<Namespace> _parentalNamespace;
 };
 } // namespace ample::game

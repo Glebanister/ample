@@ -1,16 +1,16 @@
 #pragma once
 
-#include <vector>
 #include <memory>
 #include <unordered_map>
+#include <vector>
 
+#include "Action.h"
 #include "Behaviour.h"
 #include "EventListener.h"
 #include "NamedObject.h"
-#include "StoredObject.h"
-#include "Action.h"
 #include "NamedStoredObject.h"
 #include "Namespace.h"
+#include "StoredObject.h"
 
 namespace ample::game
 {
@@ -40,7 +40,14 @@ public:
     {
     public:
         State(StateMachine &machine, const std::string &name, const std::string &className = "State");
-        State(const filing::JsonIO &input, StateMachine &machine, const game::Namespace &globalNamespace);
+        State(const filing::JsonIO &input,
+              StateMachine &machine,
+              const game::Namespace &globalNamespace);
+        State(const filing::JsonIO &input,
+              StateMachine &machine);
+
+        void fillActionsNamespace(const game::Namespace &globalNamespace);
+        void fillTransitionsNamespace(const game::Namespace &globalNamespace);
 
         void onStart() override;
         void onActive() override;
@@ -52,10 +59,13 @@ public:
         void dumpRecursive(std::vector<std::string> &strings,
                            std::unordered_map<std::string, bool> &used);
 
-
         void addOnStartAction(std::shared_ptr<Action>) noexcept;
         void addOnActiveAction(std::shared_ptr<Action>) noexcept;
         void addOnStopAction(std::shared_ptr<Action>) noexcept;
+
+        std::vector<std::shared_ptr<Action>> &getOnStartActions() noexcept;
+        std::vector<std::shared_ptr<Action>> &getOnActiveActions() noexcept;
+        std::vector<std::shared_ptr<Action>> &getOnStopActions() noexcept;
 
         std::vector<std::shared_ptr<Transition>> &transitions() noexcept;
 

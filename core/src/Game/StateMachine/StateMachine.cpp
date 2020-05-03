@@ -123,7 +123,15 @@ void StateMachine::State::dumpRecursive(std::vector<std::string> &strings,
 StateMachine::State::State(const filing::JsonIO &input,
                            StateMachine &machine,
                            const game::Namespace &globalNamespace)
-    : NamedStoredObject(input), _machine(machine)
+    : State(input, machine)
+{
+    fillActionsNamespace(globalNamespace);
+}
+
+StateMachine::State::State(const filing::JsonIO &input,
+                           StateMachine &machine)
+    : NamedStoredObject(input),
+      _machine(machine)
 {
     auto onStartActionStrings = filing::loadObjectsVector(input.updateJsonIO("on_start"));
     auto onActiveActionStrings = filing::loadObjectsVector(input.updateJsonIO("on_active"));
@@ -132,19 +140,40 @@ StateMachine::State::State(const filing::JsonIO &input,
     {
         addOnStartAction(factory::ActionsFactory.produce(filing::JsonIO(actionString).read<std::string>("class_name"),
                                                          actionString));
-        _onStartActions.back()->fillNamespace(_namespace, globalNamespace);
     }
     for (const auto &actionString : onActiveActionStrings)
     {
         addOnActiveAction(factory::ActionsFactory.produce(filing::JsonIO(actionString).read<std::string>("class_name"),
                                                           actionString));
-        _onActiveActions.back()->fillNamespace(_namespace, globalNamespace);
     }
     for (const auto &actionString : onStopActionStrings)
     {
         addOnStopAction(factory::ActionsFactory.produce(filing::JsonIO(actionString).read<std::string>("class_name"),
                                                         actionString));
-        _onStopActions.back()->fillNamespace(_namespace, globalNamespace);
+    }
+}
+
+void StateMachine::State::fillActionsNamespace(const game::Namespace &globalNamespace)
+{
+    for (auto &action : _onStartActions)
+    {
+        action->fillNamespace(_namespace, globalNamespace);
+    }
+    for (auto &action : _onActiveActions)
+    {
+        action->fillNamespace(_namespace, globalNamespace);
+    }
+    for (auto &action : _onStopActions)
+    {
+        action->fillNamespace(_namespace, globalNamespace);
+    }
+}
+
+void StateMachine::State::fillTransitionsNamespace(const game::Namespace &globalNamespace)
+{
+    for (auto &transition : _transitions)
+    {
+        transition->fillNamespace(_namespace, globalNamespace);
     }
 }
 
@@ -161,6 +190,21 @@ void StateMachine::State::addOnActiveAction(std::shared_ptr<Action> action) noex
 void StateMachine::State::addOnStopAction(std::shared_ptr<Action> action) noexcept
 {
     _onStopActions.emplace_back(action);
+}
+
+std::vector<std::shared_ptr<Action>> &StateMachine::State::getOnStartActions() noexcept
+{
+    return _onStartActions;
+}
+
+std::vector<std::shared_ptr<Action>> &StateMachine::State::getOnActiveActions() noexcept
+{
+    return _onActiveActions;
+}
+
+std::vector<std::shared_ptr<Action>> &StateMachine::State::getOnStopActions() noexcept
+{
+    return _onStopActions;
 }
 
 std::string StateMachine::State::dump()
