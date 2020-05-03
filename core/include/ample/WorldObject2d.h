@@ -74,7 +74,10 @@ public:
                     bool fixedRotation = false,
                     bool bullet = false,
                     bool enabled = true,
-                    float gravityScale = 1.0f);
+                    float gravityScale = 1.0f,
+                    const graphics::Vector2d<float> &center = {0.0f, 0.0f},
+                    float mass = 0.0f,
+                    float inertia = 0.0f);
 
     WorldObject2d(const filing::JsonIO &input,
                     std::shared_ptr<WorldLayer2d>);
@@ -158,5 +161,8 @@ private:
     const BodyType _bodyType;
     const float _startAngle;
     const graphics::Vector2d<float> _startPos;
+    const float _startMass;
+    const float _startInertia;
+    const graphics::Vector2d<float> _startCenter;
 };
 } // namespace ample::physics

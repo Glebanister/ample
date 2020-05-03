@@ -302,25 +302,28 @@ const WorldObject2d &WorldObject2d::getNext() const
 }
 
 WorldObject2d::WorldObject2d(const std::string &name,
-                                std::shared_ptr<WorldLayer2d> layer,
-                                BodyType type,
-                                const std::vector<ample::graphics::Vector2d<float>> &shape,
-                                const float relativeThickness,
-                                const graphics::Vector2d<float> &faceTextureRepeats,
-                                const graphics::Vector2d<float> &sideTextureRepeats,
-                                const graphics::normalsMode sideNormalsMode,
-                                const graphics::Vector2d<float> &translated,
-                                float rotated,
-                                const graphics::Vector2d<float> &linearVelocity,
-                                float angularVelocity,
-                                float linearDamping,
-                                float angularDamping,
-                                bool allowSleep,
-                                bool awake,
-                                bool fixedRotation,
-                                bool bullet,
-                                bool enabled,
-                                float gravityScale)
+                             std::shared_ptr<WorldLayer2d> layer,
+                             BodyType type,
+                             const std::vector<ample::graphics::Vector2d<float>> &shape,
+                             const float relativeThickness,
+                             const graphics::Vector2d<float> &faceTextureRepeats,
+                             const graphics::Vector2d<float> &sideTextureRepeats,
+                             const graphics::normalsMode sideNormalsMode,
+                             const graphics::Vector2d<float> &translated,
+                             float rotated,
+                             const graphics::Vector2d<float> &linearVelocity,
+                             float angularVelocity,
+                             float linearDamping,
+                             float angularDamping,
+                             bool allowSleep,
+                             bool awake,
+                             bool fixedRotation,
+                             bool bullet,
+                             bool enabled,
+                             float gravityScale,
+                             const graphics::Vector2d<float> &center,
+                             float mass,
+                             float inertia)
     : GraphicalObject2d(name,
                         "WorldObject2d",
                         shape,
@@ -334,7 +337,10 @@ WorldObject2d::WorldObject2d(const std::string &name,
         _layer(layer),
         _bodyType(type),
         _startAngle(rotated),
-        _startPos(translated)
+        _startPos(translated),
+        _startMass(mass),
+        _startInertia(inertia),
+        _startCenter(center)
 {
     _bodyDef.position.Set(translated.x, translated.y);
     _bodyDef.angle = rotated;
@@ -393,7 +399,10 @@ WorldObject2d::WorldObject2d(const filing::JsonIO &input,
                     input.read<bool>("fixed_rotation"),
                     input.read<bool>("bullet"),
                     input.read<bool>("enabled"),
-                    input.read<float>("gravity_scale"))
+                    input.read<float>("gravity_scale"),
+                    input.read<graphics::Vector2d<float>>("body_center"),
+                    input.read<float>("body_mass"),
+                    input.read<float>("body_inertia"))
 {
 }
 
@@ -413,6 +422,9 @@ std::string WorldObject2d::dump()
     output.write<bool>("bullet", _bodyDef.bullet);
     output.write<bool>("enabled", _bodyDef.enabled);
     output.write<float>("gravity_scale", _bodyDef.gravityScale);
+    output.write<graphics::Vector2d<float>>("body_center", _startCenter);
+    output.write<float>("body_mass", _startMass);
+    output.write<float>("body_inertia", _startInertia);
     return output;
 }
 
