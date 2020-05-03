@@ -6,9 +6,11 @@
 
 namespace ample::game
 {
+LevelSwitcher::LevelSwitcher()
+    : StateMachine("level_swithcer") {}
+
 LevelSwitcher::LevelSwitcher(const std::filesystem::path &projectPath)
-    : StateMachine("level_switcher"),
-      _projectPath(projectPath)
+    : LevelSwitcher()
 {
     std::vector<std::string> stateStrings;
     std::vector<std::filesystem::path> statePaths;
@@ -85,14 +87,7 @@ void dumpLevelsRecursive(std::shared_ptr<StateMachine::State> level,
     levelStateFile << result.getJSONstring();
 }
 
-void LevelSwitcher::save()
-{
-    utils::tryCreateFile(_projectPath / "level_switcher.json");
-    std::ofstream levelSwitcherFile(_projectPath / "level_switcher.json");
-    levelSwitcherFile << dump();
-}
-
-std::string LevelSwitcher::dump()
+void LevelSwitcher::save(const std::filesystem::path &path)
 {
     if (!_startState)
     {
@@ -101,7 +96,10 @@ std::string LevelSwitcher::dump()
     filing::JsonIO output = NamedStoredObject::dump();
     output.write<std::string>("start_level", _startState->name());
     std::unordered_map<std::string, bool> used;
-    dumpLevelsRecursive(_startState, used, _projectPath);
-    return output;
+    dumpLevelsRecursive(_startState, used, path);
+
+    utils::tryCreateFile(path / "level_switcher.json");
+    std::ofstream levelSwitcherFile(path / "level_switcher.json");
+    levelSwitcherFile << output.getJSONstring();
 }
 } // namespace ample::game

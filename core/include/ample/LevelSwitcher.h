@@ -23,10 +23,7 @@ class LevelSwitcher : public StateMachine
 {
 public:
     LevelSwitcher(const std::filesystem::path &projectPath);
-    void save();
-
-private:
-    std::string dump() override;
-    std::filesystem::path _projectPath;
+    LevelSwitcher();
+    void save(const std::filesystem::path &path);
 };
 } // namespace ample::game

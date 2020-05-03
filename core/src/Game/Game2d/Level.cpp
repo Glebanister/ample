@@ -11,8 +11,7 @@ namespace ample::game::game2d
 Level::Level(const std::string &name,
              float sliceThikness,
              float physicsLayerPosition,
-             const graphics::Vector2d<float> &gravity,
-             const std::filesystem::path &destPath)
+             const graphics::Vector2d<float> &gravity)
     : NamedStoredObject(name, "Level"),
       _sliceThikness(sliceThikness),
       _physicsLayerPosition(physicsLayerPosition),
@@ -26,8 +25,7 @@ Level::Level(const std::string &name,
                                                                        1920.0 / 1080.0,
                                                                        0.1,
                                                                        1000.0)),
-      _editingMode(true),
-      _path(destPath)
+      _editingMode(true)
 {
     createSlice(0, "front_slice");
 }
@@ -67,14 +65,14 @@ Namespace &Level::globalNamespace()
     return _levelNamespace;
 }
 
-void Level::save()
+void Level::saveAs(const std::filesystem::path &path)
 {
-    utils::tryCreateDirectory(_path);
-    std::ofstream cameraFile(_path / "camera_settings.json");
+    utils::tryCreateDirectory(path);
+    std::ofstream cameraFile(path / "camera_settings.json");
     cameraFile << camera()->dump();
     cameraFile.close();
 
-    std::ofstream settingsFile(_path / "settings.json");
+    std::ofstream settingsFile(path / "settings.json");
     filing::JsonIO settingsJson = NamedStoredObject::dump();
     settingsJson.write<float>("slice_thickness", _sliceThikness);
     settingsJson.write<float>("physics_layer_position", _physicsLayerPosition);
@@ -82,17 +80,17 @@ void Level::save()
     settingsFile << settingsJson.getJSONstring();
     settingsFile.close();
 
-    utils::tryCreateDirectory(_path / "scenes");
+    utils::tryCreateDirectory(path / "scenes");
     for (const auto &[dist, slice] : _sliceByDistance)
     {
-        std::ofstream sliceFile(_path / "scenes" / (slice->name() + ".json"));
+        std::ofstream sliceFile(path / "scenes" / (slice->name() + ".json"));
         sliceFile << slice->dump();
     }
 
-    utils::tryCreateDirectory(_path / "state_machines");
+    utils::tryCreateDirectory(path / "state_machines");
     for (const auto &machine : _stateMachines)
     {
-        std::ofstream machineFile(_path / "state_machines" / (machine->name() + ".json"));
+        std::ofstream machineFile(path / "state_machines" / (machine->name() + ".json"));
         machineFile << machine->dump();
     }
 }

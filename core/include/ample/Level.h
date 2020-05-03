@@ -39,13 +39,12 @@ class Level : public activity::Behavior, public filing::NamedStoredObject
 {
 public:
     Level(const std::filesystem::path &path);
-    void save();
+    void saveAs(const std::filesystem::path &path);
 
     Level(const std::string &name,
           float sliceThikness,
           float physicsLayerPosition,
-          const graphics::Vector2d<float> &gravity,
-          const std::filesystem::path &destinationPath);
+          const graphics::Vector2d<float> &gravity);
 
     void onActive() override;
 
@@ -66,7 +65,6 @@ private:
     std::shared_ptr<graphics::CameraPerspective> _perspectiveCamera;
     std::vector<std::shared_ptr<StateMachine>> _stateMachines;
     bool _editingMode = false;
-    std::filesystem::path _path;
     Namespace _levelNamespace;
 };
 } // namespace ample::game::game2d

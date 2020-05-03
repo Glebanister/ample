@@ -95,6 +95,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Geometry/Point.cpp
 
     src/Game/Game2d/Game2d.cpp
+    src/Game/Game2d/Game2dEditor.cpp
     src/Game/Game2d/Level.cpp
     src/Game/GameException.cpp
     src/Game/StateMachine/StateMachine.cpp
