@@ -3,13 +3,14 @@
 #include <iostream>
 namespace ample::physics
 {
-WorldDistanceJoint2d::WorldDistanceJoint2d(WorldObject2d &bodyA,
+WorldDistanceJoint2d::WorldDistanceJoint2d(const std::name &name,
+                                           WorldObject2d &bodyA,
                                            WorldObject2d &bodyB,
                                            const ample::graphics::Vector2d<float> &anchorOnBodyA,
                                            const ample::graphics::Vector2d<float> &anchorOnBodyB,
                                            float length,
                                            bool collideConnected)
-    : WorldJoint2d(bodyA, bodyB)
+    : WorldJoint2d(name, "WorldDistanceJoint2d", bodyA, bodyB)
 {
     b2DistanceJointDef jointDef;
     jointDef.Initialize(getB2Body(bodyA), getB2Body(bodyB),

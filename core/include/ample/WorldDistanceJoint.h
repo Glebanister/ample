@@ -1,6 +1,6 @@
 #pragma once
-#include <memory>
 #include "box2d/b2_distance_joint.h"
+#include <memory>
 
 #include "WorldJoint2d.h"
 
@@ -26,7 +26,8 @@ public:
     void setDampingRatio(float ratio);
     float getDampingRatio() const;
 
-    WorldDistanceJoint2d(WorldObject2d &bodyA,
+    WorldDistanceJoint2d(const std::name &name,
+                         WorldObject2d &bodyA,
                          WorldObject2d &bodyB,
                          const ample::graphics::Vector2d<float> &anchorOnBodyA,
                          const ample::graphics::Vector2d<float> &anchorOnBodyB,
