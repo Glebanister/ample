@@ -18,11 +18,11 @@ AmpleGui::AmpleGui(ample::window::Window &window)
       _observer(std::make_shared<Observer>(*this))
 {
     addBehavior(std::static_pointer_cast<Behavior>(_observer));
-    firstLevel = Game2d::createLevel("first", 10.0f, 0.5f, {0.0f, -10.0f});
+    firstLevel = Game2d::createLevel("first", 10.0f, 0.5f, {0.0f, -10.0f}, ".");
     setCurrentLevel(firstLevel);
     Editor::instance().setCurrentLayer(firstLevel->frontSlice());
     SliceManager::instance().setLevel(firstLevel);
-    auto secondLevel = Game2d::createLevel("second", 10.0f, 0.5f, {0.0f, 10.0f});
+    auto secondLevel = Game2d::createLevel("second", 10.0f, 0.5f, {0.0f, 10.0f}, ".");
 
     // second level transitions to first after 2000 ms
     secondLevel->addTransition(std::make_shared<ample::game::TimerTransition>("transition_name1",

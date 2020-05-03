@@ -164,5 +164,6 @@ private:
     const float _startMass;
     const float _startInertia;
     const graphics::Vector2d<float> _startCenter;
+    std::vector<std::vector<graphics::Vector2d<float>>> _fixtures;
 };
 } // namespace ample::physics

@@ -1,11 +1,12 @@
-#include <memory>
 #include <iostream>
+#include <memory>
 #include <numeric>
 
-#include "StateMachine.h"
-#include "GameException.h"
+#include "ActionsFactory.h"
 #include "Debug.h"
 #include "Factory.h"
+#include "GameException.h"
+#include "StateMachine.h"
 #include "TransitionsFactory.h"
 
 namespace ample::game
@@ -121,15 +122,15 @@ StateMachine::State::State(const filing::JsonIO &input, StateMachine &machine)
     auto onStopActionStrings = filing::loadObjectsVector(input.updateJsonIO("onStop"));
     for (const auto &actionString : onStartActionStrings)
     {
-        // addOnStartAction(utils::Factory<Action>())
+        addOnStartAction(factory::ActionsFactory.produce(filing::JsonIO(actionString).read<std::string>("class_name"), actionString));
     }
     for (const auto &actionString : onActiveActionStrings)
     {
-        // addOnStartAction(utils::Factory<Action>())
+        addOnActiveAction(factory::ActionsFactory.produce(filing::JsonIO(actionString).read<std::string>("class_name"), actionString));
     }
     for (const auto &actionString : onStopActionStrings)
     {
-        // addOnStartAction(utils::Factory<Action>()) // TODO
+        addOnStopAction(factory::ActionsFactory.produce(filing::JsonIO(actionString).read<std::string>("class_name"), actionString));
     }
 }
 
@@ -155,15 +156,15 @@ std::string StateMachine::State::dump()
     // TODO: use iterators?
     for (const auto &act : _onStartActions)
     {
-        startActions.emplace_back(act->name());
+        startActions.emplace_back(act->dump());
     }
     for (const auto &act : _onActiveActions)
     {
-        activeActions.emplace_back(act->name());
+        activeActions.emplace_back(act->dump());
     }
     for (const auto &act : _onStopActions)
     {
-        stopActions.emplace_back(act->name());
+        stopActions.emplace_back(act->dump());
     }
     return filing::mergeStrings({
         output.getJSONstring(),
@@ -228,7 +229,7 @@ StateMachine::StateMachine(const filing::JsonIO &input)
         auto currentState = statesMap[stateData.read<std::string>("name")];
         for (const filing::JsonIO &transitionData : transitionStrings)
         {
-            std::string transitionClass = transitionData.read<std::string>("className");
+            std::string transitionClass = transitionData.read<std::string>("class_name");
             auto nextState = statesMap[transitionData.read<std::string>("to")];
             currentState->addTransition(
                 game::factory::TransitionsFactory.produce(
