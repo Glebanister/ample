@@ -72,22 +72,9 @@ Level::Level(const std::filesystem::path &path,
     }
 }
 
-void tryCreateDirectory(const std::filesystem::path &path)
-{
-    if (!(std::filesystem::exists(path) && std::filesystem::is_directory(path)))
-    {
-        if (!std::filesystem::create_directory(path))
-        {
-            throw exception::Exception(exception::exId::UNSPECIFIED,
-                                       exception::exType::CASUAL,
-                                       "can not create directory: " + std::string(path));
-        }
-    }
-}
-
 void Level::save()
 {
-    tryCreateDirectory(_path);
+    utils::tryCreateDirectory(_path);
     std::ofstream cameraFile(_path / "camera_settings.json");
     cameraFile << camera()->dump();
     cameraFile.close();
@@ -105,14 +92,14 @@ void Level::save()
     levelStateFile << _levelState->dump();
     levelStateFile.close();
 
-    tryCreateDirectory(_path / "scenes");
+    utils::tryCreateDirectory(_path / "scenes");
     for (const auto &[dist, slice] : _sliceByDistance)
     {
         std::ofstream sliceFile(_path / "scenes" / (slice->name() + ".json"));
         sliceFile << slice->dump();
     }
 
-    tryCreateDirectory(_path / "state_machines");
+    utils::tryCreateDirectory(_path / "state_machines");
     for (const auto &machine : _stateMachines)
     {
         std::ofstream machineFile(_path / "state_machines" / (machine->name() + ".json"));

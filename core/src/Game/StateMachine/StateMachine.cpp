@@ -53,6 +53,11 @@ void StateMachine::State::addTransition(std::shared_ptr<StateMachine::Transition
     _transitions.push_back(transition);
 }
 
+std::vector<std::shared_ptr<StateMachine::Transition>> &StateMachine::State::transitions() noexcept
+{
+    return _transitions;
+}
+
 void StateMachine::State::onStart()
 {
     activity::Behavior::onStart();
@@ -82,9 +87,9 @@ void StateMachine::State::onActive()
     {
         if (!transition)
         {
-            throw GameException{"invalid transition"};
+            throw GameException{"empty transition"};
         }
-        transition->onActive();
+        // transition->onActive();
         if (transition->isActivated())
         {
             transition->reset();

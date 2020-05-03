@@ -57,6 +57,8 @@ public:
         void addOnActiveAction(std::shared_ptr<Action>) noexcept;
         void addOnStopAction(std::shared_ptr<Action>) noexcept;
 
+        std::vector<std::shared_ptr<Transition>> &transitions() noexcept;
+
     private:
         StateMachine &_machine;
         std::vector<std::shared_ptr<Transition>> _transitions;
@@ -79,8 +81,10 @@ public:
 
     virtual ~StateMachine();
 
+protected:
+    std::shared_ptr<State> _startState{nullptr};
+
 private:
     std::shared_ptr<State> _currentState{nullptr};
-    std::shared_ptr<State> _startState{nullptr};
 };
 } // namespace ample::game
