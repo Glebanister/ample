@@ -3,7 +3,7 @@
 #include <iostream>
 namespace ample::physics
 {
-WorldDistanceJoint2d::WorldDistanceJoint2d(const std::name &name,
+WorldDistanceJoint2d::WorldDistanceJoint2d(const std::string &name,
                                            WorldObject2d &bodyA,
                                            WorldObject2d &bodyB,
                                            const ample::graphics::Vector2d<float> &anchorOnBodyA,

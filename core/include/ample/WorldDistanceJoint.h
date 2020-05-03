@@ -26,7 +26,7 @@ public:
     void setDampingRatio(float ratio);
     float getDampingRatio() const;
 
-    WorldDistanceJoint2d(const std::name &name,
+    WorldDistanceJoint2d(const std::string &name,
                          WorldObject2d &bodyA,
                          WorldObject2d &bodyB,
                          const ample::graphics::Vector2d<float> &anchorOnBodyA,
