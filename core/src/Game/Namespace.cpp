@@ -5,8 +5,10 @@
 
 namespace ample::game
 {
-Namespace::Namespace(std::shared_ptr<Namespace> parent)
-    : _parentalNamespace(std::move(parent)) {}
+void Namespace::setParentalNamespace(std::shared_ptr<Namespace> parent)
+{
+    _parentalNamespace = std::move(parent);
+}
 
 bool Namespace::hasName(const std::string &name)
 {

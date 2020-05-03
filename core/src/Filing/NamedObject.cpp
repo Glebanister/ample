@@ -25,8 +25,10 @@ NamedObject::NamedObject(const std::string &name,
     }
 }
 
-void NamedObject::fillNamespace(const game::Namespace &globalNamespace)
+void NamedObject::fillNamespace(std::shared_ptr<game::Namespace> parentalNamespace,
+                                const game::Namespace &globalNamespace)
 {
+    getNamespace().setParentalNamespace(parentalNamespace);
     for (const auto &name : _knownNames)
     {
         if (!getNamespace().hasName(name))

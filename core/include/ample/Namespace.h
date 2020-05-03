@@ -16,7 +16,7 @@ namespace ample::game
 class Namespace
 {
 public:
-    Namespace(std::shared_ptr<Namespace> parent);
+    void setParentalNamespace(std::shared_ptr<Namespace> parent);
 
     bool hasName(const std::string &name);
     bool hasObject(std::shared_ptr<filing::NamedObject> namedObject);
