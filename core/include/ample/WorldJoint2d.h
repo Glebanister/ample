@@ -25,7 +25,7 @@ public:
 
     bool isEnabled() const;
 
-	bool getCollideConnected() const;
+    bool getCollideConnected() const;
 
     WorldJoint2d &getNext();
     const WorldJoint2d &getNext() const;
@@ -34,13 +34,14 @@ public:
 
 protected:
     WorldJoint2d(const std::string &name,
-                 const std::string &className, 
-                 WorldObject2d &bodyA, 
-                 WorldObject2d &bodyB, 
+                 const std::string &className,
+                 WorldObject2d &bodyA,
+                 WorldObject2d &bodyB,
                  b2Joint *joint = nullptr);
-    WorldJoint2d(const filing::JsonIO &input, 
-                 WorldObject2d &bodyA, 
-                 WorldObject2d &bodyB);
+    WorldJoint2d(const filing::JsonIO &input,
+                 WorldObject2d &bodyA,
+                 WorldObject2d &bodyB,
+                 b2Joint *joint = nullptr);
     b2Body *getB2Body(WorldObject2d &obj) const;
     b2Joint *getB2Joint(WorldJoint2d &joint) const;
     void initB2Joint(WorldLayer2d &layer, b2JointDef *jointDef);
