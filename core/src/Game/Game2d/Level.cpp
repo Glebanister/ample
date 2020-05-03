@@ -42,11 +42,9 @@ Level::Level(const std::filesystem::path &path,
       _path(path),
       _switcher(swithcer)
 {
-    Namespace levelNamespace;
-
     filing::JsonIO cameraSettings(filing::openJSONfile(path / "camera_settings.json"));
     _perspectiveCamera = std::make_shared<graphics::CameraPerspective>(cameraSettings);
-    levelNamespace.addObject(_perspectiveCamera);
+    _levelNamespace.addObject(_perspectiveCamera);
 
     filing::JsonIO settings{filing::openJSONfile(path / "settings.json")};
     _sliceThikness = settings.read<float>("slice_thickness");
@@ -58,7 +56,7 @@ Level::Level(const std::filesystem::path &path,
 
     for (const auto &entry : std::filesystem::directory_iterator(path / "scenes"))
     {
-        auto newScene = std::make_shared<filing::Scene2d>(filing::openJSONfile(entry.path()), levelNamespace); // fill level namespace
+        auto newScene = std::make_shared<filing::Scene2d>(filing::openJSONfile(entry.path()), _levelNamespace); // fill level namespace
         _sliceByDistance[newScene->getDistance()] = newScene;
         newScene->setVisibility(false);
         addBehavior(newScene);
@@ -66,10 +64,15 @@ Level::Level(const std::filesystem::path &path,
 
     for (const auto &entry : std::filesystem::directory_iterator(path / "state_machines"))
     {
-        auto newMachine = std::make_shared<StateMachine>(filing::openJSONfile(entry.path()), levelNamespace); // use level namespace
+        auto newMachine = std::make_shared<StateMachine>(filing::openJSONfile(entry.path()), _levelNamespace); // use level namespace
         _stateMachines.push_back(newMachine);
         addBehavior(newMachine);
     }
+}
+
+Namespace &Level::globalNamespace()
+{
+    return _levelNamespace;
 }
 
 void Level::save()

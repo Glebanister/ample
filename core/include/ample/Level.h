@@ -51,8 +51,9 @@ public:
     std::shared_ptr<filing::Scene2d> numberedSlice(const size_t num);
 
     std::shared_ptr<graphics::CameraPerspective> camera();
-
     std::unordered_map<size_t, std::shared_ptr<filing::Scene2d>> &layers() noexcept;
+
+    Namespace &globalNamespace();
 
 private:
     float _sliceThikness;
@@ -65,5 +66,7 @@ private:
     std::filesystem::path _path;
     std::shared_ptr<LevelSwitcher::State> _levelState;
     LevelSwitcher &_switcher;
+
+    Namespace _levelNamespace;
 };
 } // namespace ample::game::game2d

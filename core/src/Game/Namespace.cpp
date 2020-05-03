@@ -62,4 +62,10 @@ void Namespace::removeObject(std::shared_ptr<filing::NamedObject> namedObject)
 {
     removeName(namedObject->name());
 }
+
+void Namespace::clear() noexcept
+{
+    _names.clear();
+    _parentalNamespace.reset();
+}
 } // namespace ample::game

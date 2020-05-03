@@ -1,24 +1,56 @@
 #include <iostream>
 
 #include "LevelSwitcher.h"
+#include "TransitionsFactory.h"
 #include "Utils.h"
 
 namespace ample::game
 {
-
-
 LevelSwitcher::LevelSwitcher(const std::filesystem::path &projectPath)
     : StateMachine("level_switcher"),
       _projectPath(projectPath)
 {
-    filing::JsonIO switcherFile = filing::openJSONfile(projectPath / "level_switcher.json");
-    std::string startLevelName = switcherFile.read<std::string>("start_level");
+    std::vector<std::string> stateStrings;
+    std::vector<std::filesystem::path> statePaths;
     for (const auto &entry : std::filesystem::directory_iterator(projectPath / "levels"))
     {
-        auto newScene = std::make_shared<filing::Scene2d>(filing::openJSONfile(entry.path()), levelNamespace); // fill level namespace
-        _sliceByDistance[newScene->getDistance()] = newScene;
-        newScene->setVisibility(false);
-        addBehavior(newScene);
+        if (entry.is_directory())
+        {
+            std::filesystem::path levelPath = entry.path() / "level_state.json";
+            utils::tryOpenFile(levelPath);
+            stateStrings.push_back(filing::openJSONfile(levelPath));
+            statePaths.push_back(levelPath);
+        }
+    }
+
+    std::string startStateName = filing::JsonIO(
+                                     filing::openJSONfile(projectPath / "level_switcher.json"))
+                                     .read<std::string>("start_level");
+
+    std::unordered_map<std::string, std::shared_ptr<LevelLoader>> statesMap;
+    for (size_t i = 0; i < stateStrings.size(); ++i)
+    {
+        auto loader = std::make_shared<LevelLoader>(statePaths[i], *this);
+        if (loader->level().name() == startStateName)
+        {
+            setStartState(loader);
+        }
+        statesMap[loader->level().name()] = loader;
+    }
+    for (const filing::JsonIO &stateData : stateStrings)
+    {
+        auto transitionStrings = filing::loadObjectsVector(stateData.updateJsonIO("transitions"));
+        auto currentState = statesMap[stateData.read<std::string>("name")];
+        for (const filing::JsonIO &transitionData : transitionStrings)
+        {
+            std::string transitionClass = transitionData.read<std::string>("class_name");
+            auto nextState = statesMap[transitionData.read<std::string>("to")];
+            currentState->addTransition(
+                game::factory::TransitionsFactory.produce(
+                    transitionClass,
+                    transitionData.getJSONstring(),
+                    nextState));
+        }
     }
 }
 
@@ -32,7 +64,7 @@ void dumpLevelsRecursive(std::shared_ptr<StateMachine::State> level,
         return;
     }
     used[level->name()] = true;
-    std::filesystem::path filename = path / "levels" / level->name();
+    std::filesystem::path filename = path / "levels" / level->name() / "level_state.json";
     utils::tryCreateFile(filename);
     filing::JsonIO result = level->dump();
     std::vector<std::string> dumpedTransitions;

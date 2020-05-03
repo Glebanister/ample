@@ -34,4 +34,15 @@ void tryCreateFile(const std::filesystem::path &path)
                                    "can not create file: " + std::string(path));
     }
 }
+
+void tryOpenFile(const std::filesystem::path &path)
+{
+    std::ofstream file(path);
+    if (!file.good())
+    {
+        throw exception::Exception(exception::exId::UNSPECIFIED,
+                                   exception::exType::CASUAL,
+                                   "can not open file: " + std::string(path));
+    }
+}
 } // namespace ample::utils
