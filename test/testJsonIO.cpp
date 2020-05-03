@@ -151,16 +151,16 @@ TEST(StateMachineIO, Actions)
         1000.0f));
     run->addOnActiveAction(std::make_shared<ample::game::stateMachine::actions::GraphicalRotateAction>(
         "action1",
-        std::vector<std::string>{"name1, name2"},
+        std::vector<std::string>{"name1", "name2"},
         ample::graphics::Vector3d<float>{1.0f, 0.0f, 0.0f},
         1.0f));
     idle->addOnStartAction(std::make_shared<ample::game::stateMachine::actions::GraphicalTranslateAction>(
         "action3",
-        std::vector<std::string>{"hello, world"},
+        std::vector<std::string>{"hello", "world"},
         ample::graphics::Vector3d<float>{1.0f, 0.0f, 0.0f}));
     run->addOnStopAction(std::make_shared<ample::game::stateMachine::actions::GraphicalRotateAction>(
         "action300",
-        std::vector<std::string>{"name4, fff"},
+        std::vector<std::string>{"name4", "fff"},
         ample::graphics::Vector3d<float>{1.0f, 0.0f, 0.0f},
         100.0f));
     auto smData = sm.dump();
