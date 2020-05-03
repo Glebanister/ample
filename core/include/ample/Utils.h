@@ -19,4 +19,5 @@ void limit(T &value, const T &min, const T &max)
 
 void tryCreateDirectory(const std::filesystem::path &path);
 void tryCreateFile(const std::filesystem::path &path);
+void tryOpenFile(const std::filesystem::path &path);
 } // namespace ample::utils

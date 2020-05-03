@@ -13,12 +13,12 @@ class LevelLoader : public StateMachine::State
 {
 public:
     LevelLoader(const std::filesystem::path &levelPath,
-                LevelSwitcher &machine,
-                const game::Namespace &globalNamespace);
+                LevelSwitcher &machine);
 
     void onStart();
     void onActive();
     void onStop();
+    game2d::Level &level() noexcept;
 
 private:
     const std::filesystem::path _levelPath;
