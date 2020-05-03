@@ -32,10 +32,19 @@ public:
                          const ample::graphics::Vector2d<float> &anchorOnBodyA,
                          const ample::graphics::Vector2d<float> &anchorOnBodyB,
                          float length = -1,
-                         bool collideConnected = false);
+                         bool collideConnected = false,
+                         float frequencyHz = 0.0f,
+                         float dampingRatio = 0.0f);
+
+    WorldDistanceJoint2d(const filing::JsonIO &input,
+                         std::shared_ptr<WorldObject2d> bodyA,
+                         std::shared_ptr<WorldObject2d> bodyB);
+
+    std::string dump() override;
 
 private:
     std::shared_ptr<graphics::GraphicalObject2d> _form;
     float _initLength;
+    b2DistanceJointDef jointDef;
 };
 } // namespace ample::physics

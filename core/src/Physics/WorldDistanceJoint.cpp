@@ -9,14 +9,17 @@ WorldDistanceJoint2d::WorldDistanceJoint2d(const std::string &name,
                                            const ample::graphics::Vector2d<float> &anchorOnBodyA,
                                            const ample::graphics::Vector2d<float> &anchorOnBodyB,
                                            float length,
-                                           bool collideConnected)
+                                           bool collideConnected,
+                                           float frequencyHz,
+                                           float dampingRatio)
     : WorldJoint2d(name, "WorldDistanceJoint2d", bodyA, bodyB)
 {
-    b2DistanceJointDef jointDef;
     jointDef.Initialize(getB2Body(bodyA), getB2Body(bodyB),
                         {anchorOnBodyA.x, anchorOnBodyA.y},
                         {anchorOnBodyB.x, anchorOnBodyB.y});
     jointDef.collideConnected = collideConnected;
+    jointDef.frequencyHz = frequencyHz;
+    jointDef.dampingRatio = dampingRatio;
     if (length > 0)
     {
         jointDef.length = length;
@@ -84,5 +87,31 @@ void WorldDistanceJoint2d::setDampingRatio(float ratio)
 float WorldDistanceJoint2d::getDampingRatio() const
 {
     return static_cast<b2DistanceJoint *>(_joint)->GetDampingRatio();
+}
+
+WorldDistanceJoint2d::WorldDistanceJoint2d(const filing::JsonIO &input,
+                                           std::shared_ptr<WorldObject2d> bodyA,
+                                           std::shared_ptr<WorldObject2d> bodyB)
+    : WorldJoint2d(input, *bodyA, *bodyB)
+{
+    jointDef.localAnchorA = input.read<graphics::Vector2d<float>>("local_anchorA");
+    jointDef.localAnchorB = input.read<graphics::Vector2d<float>>("local_anchorB");
+    jointDef.length = input.read<float>("length");
+    jointDef.frequencyHz = input.read<float>("frequency_hz");
+    jointDef.dampingRatio = input.read<float>("damping_ratio");
+    jointDef.collideConnected = input.read<bool>("collide_connected");
+    initB2Joint(bodyA->getWorldLayer(), &jointDef);
+}
+
+std::string WorldDistanceJoint2d::dump()
+{
+    filing::JsonIO output = WorldJoint2d::dump();
+    output.write<graphics::Vector2d<float>>("local_anchorA", jointDef.localAnchorA);
+    output.write<graphics::Vector2d<float>>("local_anchorB", jointDef.localAnchorB);
+    output.write<float>("length", jointDef.length);
+    output.write<float>("frequency_hz", jointDef.frequencyHz);
+    output.write<float>("damping_ratio", jointDef.dampingRatio);
+    output.write<bool>("collide_connected", jointDef.collideConnected);
+    return output;
 }
 } // namespace ample::physics

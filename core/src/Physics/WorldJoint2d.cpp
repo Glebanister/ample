@@ -96,7 +96,6 @@ std::string WorldJoint2d::dump()
     filing::JsonIO output = NamedStoredObject::dump();
     output.write<std::string>("bodyA_name", _bodyA.name());
     output.write<std::string>("bodyB_name", _bodyB.name());
-    output.write<bool>("collide_connected", getCollideConnected());
     return output;
 }
 } // namespace ample::physics
