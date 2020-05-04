@@ -27,7 +27,8 @@ public:
 
     float getCorrectionFactor() const;
 
-    WorldMotorJoint2d(WorldObject2d &bodyA,
+    WorldMotorJoint2d(const std::string &name,
+                      WorldObject2d &bodyA,
                       WorldObject2d &bodyB,
                       bool collideConnected = false);
 };

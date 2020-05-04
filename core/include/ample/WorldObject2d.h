@@ -1,15 +1,15 @@
 #pragma once
 
 #include "GraphicalObject2d.h"
-#include "WorldLayer2d.h"
 #include "Vector2d.h"
 #include "WorldContact2d.h"
+#include "WorldLayer2d.h"
 #include "box2d/b2_body.h"
 #include "box2d/b2_fixture.h"
 
 #include <fstream>
-#include <sstream>
 #include <memory>
+#include <sstream>
 #include <vector>
 
 namespace ample::physics
@@ -64,10 +64,23 @@ public:
                   const graphics::Vector2d<float> &sideTextureRepeats,
                   const graphics::normalsMode sideNormalsMode,
                   const graphics::Vector2d<float> &translated = {0.0f, 0.0f},
-                  float rotated = 0.0f);
+                  float rotated = 0.0f,
+                  const graphics::Vector2d<float> &linearVelocity = {0.0f, 0.0f},
+                  float angularVelocity = 0.0f,
+                  float linearDamping = 0.0f,
+                  float angularDamping = 0.0f,
+                  bool allowSleep = true,
+                  bool awake = true,
+                  bool fixedRotation = false,
+                  bool bullet = false,
+                  bool enabled = true,
+                  float gravityScale = 1.0f,
+                  const graphics::Vector2d<float> &center = {0.0f, 0.0f},
+                  float mass = 0.0f,
+                  float inertia = 0.0f);
 
     WorldObject2d(const filing::JsonIO &input,
-                  WorldLayer2d &);
+                  WorldLayer2d &layer);
     std::string dump() override;
 
     void onAwake() override;
@@ -148,6 +161,9 @@ private:
     const BodyType _bodyType;
     const float _startAngle;
     const graphics::Vector2d<float> _startPos;
+    const float _startMass;
+    const float _startInertia;
+    const graphics::Vector2d<float> _startCenter;
     std::vector<std::vector<graphics::Vector2d<float>>> _fixtures;
     WorldLayer2d &_layer;
 };
