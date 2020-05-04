@@ -2,17 +2,10 @@
 
 #include <memory>
 
-#include "Game2d.h"
-#include "KeyboardControlCamera.h"
-#include "Texture.h"
-#include "StateMachine.h"
-#include "ControlledObject.h"
-#include "Debug.h"
-#include "RegularPolygon.h"
+#include "Game2dEditor.h"
 
-class DemoGame : public ample::game::game2d::Game2d
+class DemoGame : public ample::game::game2d::Game2dEditor
 {
 public:
     DemoGame(ample::window::Window &window);
-    ~DemoGame();
 };

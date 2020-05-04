@@ -1,8 +1,8 @@
 #include <cmath>
 
+#include "Debug.h"
 #include "WorldObject2d.h"
 #include "box2d/b2_polygon_shape.h"
-#include "Debug.h"
 
 namespace ample::physics
 {
@@ -37,6 +37,7 @@ void Fixture::setSensor(bool sensor)
 Fixture WorldObject2d::addFixture(
     const std::vector<ample::graphics::Vector2d<float>> &shape)
 {
+    _fixtures.push_back(shape);
     b2FixtureDef fixtureDef;
     std::vector<b2Vec2> vertices(shape.size());
     for (size_t i = 0; i < shape.size(); i++)
@@ -303,7 +304,7 @@ const WorldObject2d &WorldObject2d::getNext() const
 }
 
 WorldObject2d::WorldObject2d(const std::string &name,
-                             std::shared_ptr<WorldLayer2d> layer,
+                             WorldLayer2d &layer,
                              BodyType type,
                              const std::vector<ample::graphics::Vector2d<float>> &shape,
                              const float relativeThickness,
@@ -315,17 +316,17 @@ WorldObject2d::WorldObject2d(const std::string &name,
     : GraphicalObject2d(name,
                         "WorldObject2d",
                         shape,
-                        layer->getThickness() * relativeThickness,
-                        layer->getThickness() * layer->getRelativePositionInSlice() - layer->getThickness() * relativeThickness / 2.0f,
+                        layer.getThickness() * relativeThickness,
+                        layer.getThickness() * layer.getRelativePositionInSlice() - layer.getThickness() * relativeThickness / 2.0f,
                         faceTextureRepeats,
                         sideTextureRepeats,
                         sideNormalsMode,
                         translated,
                         rotated),
-      _layer(layer),
       _bodyType(type),
       _startAngle(rotated),
-      _startPos(translated)
+      _startPos(translated),
+      _layer(layer)
 {
     _bodyDef.position.Set(translated.x, translated.y);
     _bodyDef.angle = rotated;
@@ -343,18 +344,8 @@ WorldObject2d::WorldObject2d(const std::string &name,
     }
 }
 
-WorldLayer2d &WorldObject2d::getWorldLayer() noexcept
-{
-    return *_layer;
-}
-
-std::shared_ptr<WorldLayer2d> WorldObject2d::getWorldLayerPointer() const noexcept
-{
-    return _layer;
-}
-
 WorldObject2d::WorldObject2d(const filing::JsonIO &input,
-                             std::shared_ptr<WorldLayer2d> layer)
+                             WorldLayer2d &layer)
     : WorldObject2d(input.read<std::string>("name"),
                     layer,
                     input.read<physics::BodyType>("body_type"),
@@ -366,6 +357,16 @@ WorldObject2d::WorldObject2d(const filing::JsonIO &input,
                     input.read<graphics::Vector2d<float>>("world_pos"),
                     input.read<float>("world_rotated"))
 {
+    // _fixtures = input.read<std::vector<std::vector<graphics::Vector2d<float>>>>("fixtures"); // TODO
+    for (const auto &fixture : _fixtures)
+    {
+        addFixture(fixture);
+    }
+}
+
+WorldLayer2d &WorldObject2d::getWorldLayer() noexcept
+{
+    return _layer;
 }
 
 std::string WorldObject2d::dump()
@@ -374,6 +375,7 @@ std::string WorldObject2d::dump()
     output.write<physics::BodyType>("body_type", _bodyType);
     output.write<float>("world_rotated", _startAngle);
     output.write<graphics::Vector2d<float>>("world_pos", _startPos);
+    // output.write<std::vector<std::vector<graphics::Vector2d<float>>>>("fixtures", _fixtures); // TODO
     return output;
 }
 

@@ -1,44 +1,81 @@
 #include "MouseTransition.h"
 #include "Debug.h"
+#include "Rectangle.h"
+#include "ShapesFactory.h"
 
 namespace ample::game
 {
 MouseTransition::MouseTransition(const std::string &name, std::shared_ptr<ample::game::StateMachine::State> state,
                                  type eventType,
+                                 relation relativePosition,
                                  control::mouseButton button,
-                                 std::shared_ptr<geometry::Shape> area)
+                                 std::unique_ptr<geometry::Shape> area)
     : EnvironmentTransition(name, "MouseTransition", state),
       _eventType(eventType),
+      _relation(relativePosition),
       _button(button),
-      _area(area) {}
+      _area(std::move(area))
+{
+}
 
 MouseTransition::MouseTransition(const std::string &name,
                                  std::shared_ptr<ample::game::StateMachine::State> state,
                                  type eventType,
-                                 control::mouseButton button,
-                                 const geometry::Point &area)
-    : MouseTransition(name, state, eventType, button, std::make_shared<geometry::Point>(area)) {}
+                                 relation relativePosition,
+                                 control::mouseButton button)
+    : MouseTransition(name,
+                      state,
+                      eventType,
+                      relativePosition,
+                      button,
+                      nullptr)
+{
+}
 
-MouseTransition::MouseTransition(const std::string &name,
-                                 std::shared_ptr<ample::game::StateMachine::State> state,
-                                 type eventType,
-                                 control::mouseButton button,
-                                 const geometry::Circle &area)
-    : MouseTransition(name, state, eventType, button, std::make_shared<geometry::Circle>(area)) {}
+MouseTransition::MouseTransition(const filing::JsonIO &input,
+                                 std::shared_ptr<ample::game::StateMachine::State> nextState)
+    : MouseTransition(input.read<std::string>("name"),
+                      nextState,
+                      static_cast<type>(input.read<int>("relation")),
+                      static_cast<relation>(input.read<int>("button")),
+                      static_cast<control::mouseButton>(input.read<int>("event_type")))
+{
+    if (input.read<int>("has_area"))
+    {
+        filing::JsonIO shapeString = input.read<std::string>("area");
+        _area = factory::ShapesFactory.produce(shapeString.read<std::string>("class_name"),
+                                               shapeString);
+    }
+}
 
-MouseTransition::MouseTransition(const std::string &name,
-                                 std::shared_ptr<ample::game::StateMachine::State> state,
-                                 type eventType,
-                                 control::mouseButton button,
-                                 const geometry::Rectangle &area)
-    : MouseTransition(name, state, eventType, button, std::make_shared<geometry::Rectangle>(area)) {}
+std::string MouseTransition::dump()
+{
+    filing::JsonIO result = EnvironmentTransition::dump();
+    result.write<int>("event_type", static_cast<int>(_eventType));
+    result.write<int>("relation", static_cast<int>(_relation));
+    result.write<int>("button", static_cast<int>(_button));
+    result.write<int>("has_area", static_cast<bool>(_area));
+    if (_area)
+    {
+        result = filing::mergeStrings({result,
+                                       filing::makeField("area", _area->dump())});
+    }
+    return result;
+}
 
 bool MouseTransition::listen()
 {
     bool result = false;
 
-    if (_area->inside({static_cast<float>(control::EventManager::instance().mouse().getMouseX()),
-                       static_cast<float>(control::EventManager::instance().mouse().getMouseY())}))
+    graphics::Vector2d<float> mousePosition = {static_cast<float>(control::EventManager::instance().mouse().getMouseX()),
+                                               static_cast<float>(control::EventManager::instance().mouse().getMouseY())};
+
+    bool mouseInside = _area ? _area->inside(mousePosition) : true;
+    if (_relation == MouseTransition::relation::OUTSIDE)
+    {
+        mouseInside ^= 1;
+    }
+    if (mouseInside)
     {
         switch (_eventType)
         {

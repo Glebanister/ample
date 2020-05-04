@@ -17,11 +17,9 @@ public:
             float thickness,
             float relativePositionInSlice);
 
-    Scene2d(const JsonIO &input);
+    Scene2d(const JsonIO &input, game::Namespace &globalNamespace);
     std::string dump() override;
     float getDistance() const;
-
-    void onActive() override;
 
 private:
     std::vector<std::shared_ptr<ample::graphics::GraphicalObject>> _objs;

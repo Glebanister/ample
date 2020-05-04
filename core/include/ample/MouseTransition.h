@@ -3,13 +3,13 @@
 #include <functional>
 #include <memory>
 
-#include "EventManager.h"
-#include "EnvironmentTransition.h"
-#include "Vector2d.h"
-#include "Shape.h"
-#include "Rectangle.h"
-#include "Point.h"
 #include "Circle.h"
+#include "EnvironmentTransition.h"
+#include "EventManager.h"
+#include "Point.h"
+#include "Rectangle.h"
+#include "Shape.h"
+#include "Vector2d.h"
 
 namespace ample::game
 {
@@ -27,35 +27,37 @@ public:
         SCROLL_DOWN,
     };
 
+    enum class relation
+    {
+        INSIDE,
+        OUTSIDE
+    };
+
 public:
     MouseTransition(const std::string &name,
-                    std::shared_ptr<ample::game::StateMachine::State> state,
+                    std::shared_ptr<ample::game::StateMachine::State> nextState,
                     type eventType,
+                    relation relativePosition,
                     control::mouseButton button,
-                    const geometry::Point &area);
+                    std::unique_ptr<geometry::Shape> area);
 
     MouseTransition(const std::string &name,
-                    std::shared_ptr<ample::game::StateMachine::State> state,
+                    std::shared_ptr<ample::game::StateMachine::State> nextState,
                     type eventType,
-                    control::mouseButton button,
-                    const geometry::Rectangle &area);
+                    relation relativePosition,
+                    control::mouseButton button);
 
-    MouseTransition(const std::string &name,
-                    std::shared_ptr<ample::game::StateMachine::State> state,
-                    type eventType,
-                    control::mouseButton button,
-                    const geometry::Circle &area);
+    MouseTransition(const filing::JsonIO &input,
+                    std::shared_ptr<ample::game::StateMachine::State> nextState);
+
+    std::string dump() override;
 
     bool listen() override;
 
 private:
-    MouseTransition(const std::string &name,
-                    std::shared_ptr<ample::game::StateMachine::State> state,
-                    type eventType,
-                    control::mouseButton button,
-                    std::shared_ptr<geometry::Shape> area);
     type _eventType;
+    relation _relation;
     control::mouseButton _button;
-    std::shared_ptr<geometry::Shape> _area;
+    std::unique_ptr<geometry::Shape> _area;
 };
 } // namespace ample::game

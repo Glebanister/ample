@@ -10,12 +10,12 @@
 #include "ShaderProcessor.h"
 #include "Texture.h"
 #include "VertexArray.h"
-#include "ControlledObject.h"
 #include "JsonIO.h"
+#include "Behaviour.h"
 
 namespace ample::graphics
 {
-class GraphicalObject : public game::ControlledObject
+class GraphicalObject : public filing::NamedStoredObject, public activity::Behavior
 {
 public:
     GraphicalObject(const std::string &name,
