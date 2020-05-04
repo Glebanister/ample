@@ -23,6 +23,10 @@ Game2dEditor::Game2dEditor(window::Window &window,
         {
             _levels.emplace_back(std::make_shared<Level>(entry));
         }
+        if (_levels.back()->name() == _levelSwitcher.getCurrentState()->name())
+        {
+            showLevel(_levels.back());
+        }
     }
 }
 
@@ -64,17 +68,25 @@ void Game2dEditor::save()
     saveAs(_projectPath);
 }
 
-std::shared_ptr<Level> Game2dEditor::createLevel(const std::string &name,
-                                                 float sliceThikness,
-                                                 float physicsLayerPosition,
-                                                 const graphics::Vector2d<float> &gravity)
+std::pair<std::shared_ptr<Level>, std::shared_ptr<LevelLoader>> Game2dEditor::createLevel(
+    const std::string &name,
+    float sliceThikness,
+    float physicsLayerPosition,
+    const graphics::Vector2d<float> &gravity)
 {
+    if (getProjectPath().empty())
+    {
+        throw GameException("set project path to create levels");
+    }
     auto level = std::make_shared<Level>(name,
                                          sliceThikness,
                                          physicsLayerPosition,
                                          gravity);
     _levels.push_back(level);
-    return level;
+    auto levelLoader = std::make_shared<ample::game::LevelLoader>(getProjectPath(),
+                                                                  level->name(),
+                                                                  levelSwitcher());
+    return {level, levelLoader};
 }
 
 void Game2dEditor::onActive()
@@ -89,6 +101,11 @@ void Game2dEditor::onActive()
 void Game2dEditor::showLevel(std::shared_ptr<Level> level)
 {
     _currentLevel = level;
+}
+
+std::shared_ptr<Level> Game2dEditor::getCurrentLevel() const noexcept
+{
+    return _currentLevel;
 }
 
 LevelSwitcher &Game2dEditor::levelSwitcher() noexcept

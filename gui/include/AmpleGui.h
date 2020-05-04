@@ -22,16 +22,14 @@ class AmpleGui : public ImguiActivity
 {
 public:
     AmpleGui(ample::window::Window &window);
+    AmpleGui(ample::window::Window &window,
+             const std::filesystem::path &existingProjectPath);
     void onResize() override;
+    void drawInterface() override;
 
     std::shared_ptr<gui::Observer> getObserver() const noexcept;
 
-    ~AmpleGui();
-
 private:
-    void drawInterface() override;
-
     std::shared_ptr<gui::Observer> _observer;
-    std::shared_ptr<ample::game::game2d::Level> firstLevel;
 };
 } // namespace ample::gui

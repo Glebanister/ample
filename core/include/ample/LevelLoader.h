@@ -14,9 +14,11 @@ namespace ample::game::game2d
 class Level;
 }
 
+// TODO: immediate mode (without reset)
+
 namespace ample::game
 {
-class LevelLoader : public StateMachine::State // TODO: immediate mode (without reset)
+class LevelLoader : public StateMachine::State
 {
 public:
     LevelLoader(const std::filesystem::path &projectPath,

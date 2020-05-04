@@ -17,11 +17,14 @@ public:
     void save();
     void saveAs(const std::filesystem::path &projectPath);
 
-    std::shared_ptr<Level> createLevel(const std::string &name,
-                                       float sliceThikness,
-                                       float physicsLayerPosition,
-                                       const graphics::Vector2d<float> &gravity);
+    std::pair<std::shared_ptr<Level>, std::shared_ptr<LevelLoader>> createLevel(
+        const std::string &name,
+        float sliceThikness,
+        float physicsLayerPosition,
+        const graphics::Vector2d<float> &gravity);
+
     void showLevel(std::shared_ptr<Level> level);
+    std::shared_ptr<Level> getCurrentLevel() const noexcept;
     LevelSwitcher &levelSwitcher() noexcept;
 
     void setProjectPath(const std::filesystem::path &path);
