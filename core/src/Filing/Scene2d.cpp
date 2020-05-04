@@ -37,8 +37,8 @@ Scene2d::Scene2d(const JsonIO &input,
               input.read<float>("thickness"),
               input.read<float>("relative_position_in_slice"))
 {
-    auto objectStrings = filing::loadObjectsVector(input.read<std::string>("objects"));
-    auto cameraStrings = filing::loadObjectsVector(input.read<std::string>("cameras"));
+    auto objectStrings = filing::loadObjectsVector(input.updateJsonIO("objects"));
+    auto cameraStrings = filing::loadObjectsVector(input.updateJsonIO("cameras"));
     for (const auto &objString : objectStrings)
     {
         std::string objectClass = JsonIO(objString).read<std::string>("class_name");

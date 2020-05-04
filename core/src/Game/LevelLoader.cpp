@@ -3,16 +3,26 @@
 namespace ample::game
 {
 LevelLoader::LevelLoader(const std::filesystem::path &levelPath,
-                         LevelSwitcher &machine) // TODO: immediate mode (without reset)
+                         LevelSwitcher &machine)
     : State(filing::openJSONfile(levelPath / "level_state.json"),
             machine),
-      _levelPath(levelPath)
+      _levelPath(levelPath),
+      _levelName(filing::JsonIO(filing::openJSONfile(levelPath / "level_state.json")).read<std::string>("name"))
 {
 }
 
-game2d::Level &LevelLoader::level() noexcept
+LevelLoader::LevelLoader(const std::filesystem::path &projectPath,
+                         const std::string &name,
+                         LevelSwitcher &machine)
+    : State(machine, name),
+      _levelPath(projectPath / name),
+      _levelName(name)
 {
-    return *_level;
+}
+
+std::string LevelLoader::levelName() const noexcept
+{
+    return _levelName;
 }
 
 void LevelLoader::onStart()

@@ -31,8 +31,7 @@ Level::Level(const std::string &name,
 }
 
 Level::Level(const std::filesystem::path &path)
-    : NamedStoredObject(filing::openJSONfile(path / "settings.json")),
-      _path(path)
+    : NamedStoredObject(filing::openJSONfile(path / "settings.json"))
 {
     filing::JsonIO cameraSettings(filing::openJSONfile(path / "camera_settings.json"));
     _perspectiveCamera = std::make_shared<graphics::CameraPerspective>(cameraSettings);
@@ -40,7 +39,7 @@ Level::Level(const std::filesystem::path &path)
 
     filing::JsonIO settings{filing::openJSONfile(path / "settings.json")};
     _sliceThikness = settings.read<float>("slice_thickness");
-    _physicsLayerPosition = settings.read<float>("physics_layer_poistion");
+    _physicsLayerPosition = settings.read<float>("physics_layer_position");
     ASSERT(0.0f <= _physicsLayerPosition && _physicsLayerPosition <= 1.0f);
     _defaultGravity = settings.read<graphics::Vector2d<float>>("gravity");
 

@@ -20,8 +20,8 @@ LevelSwitcher::LevelSwitcher(const std::filesystem::path &projectPath)
         {
             std::filesystem::path levelPath = entry.path() / "level_state.json";
             utils::tryOpenFile(levelPath);
-            stateStrings.push_back(filing::openJSONfile(levelPath));
-            statePaths.push_back(levelPath);
+            stateStrings.push_back(utils::readAllFile(levelPath));
+            statePaths.push_back(entry.path());
         }
     }
 
@@ -33,11 +33,11 @@ LevelSwitcher::LevelSwitcher(const std::filesystem::path &projectPath)
     for (size_t i = 0; i < stateStrings.size(); ++i)
     {
         auto loader = std::make_shared<LevelLoader>(statePaths[i], *this);
-        if (loader->level().name() == startStateName)
+        if (loader->levelName() == startStateName)
         {
             setStartState(loader);
         }
-        statesMap[loader->level().name()] = loader;
+        statesMap[loader->levelName()] = loader;
     }
     for (const filing::JsonIO &stateData : stateStrings)
     {
@@ -66,6 +66,7 @@ void dumpLevelsRecursive(std::shared_ptr<StateMachine::State> level,
         return;
     }
     used[level->name()] = true;
+    utils::tryCreateDirectory(path / "levels" / level->name());
     std::filesystem::path filename = path / "levels" / level->name() / "level_state.json";
     utils::tryCreateFile(filename);
     filing::JsonIO result = level->dump();

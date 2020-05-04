@@ -245,17 +245,11 @@ void StateMachine::setStartState(std::shared_ptr<State> state)
 {
     _currentState = state;
     _startState = state;
-    _currentState->onStart();
 }
 
 void StateMachine::setCurrentState(std::shared_ptr<State> state)
 {
-    if (_currentState)
-    {
-        _currentState->onStop();
-    }
     _currentState = state;
-    _currentState->onStart();
 }
 
 std::shared_ptr<StateMachine::State> StateMachine::getCurrentState() noexcept

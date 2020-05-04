@@ -5,6 +5,14 @@
 
 namespace ample::utils
 {
+std::string readAllFile(const std::filesystem::path &path)
+{
+    std::ifstream t(path);
+    std::stringstream buffer;
+    buffer << t.rdbuf();
+    return buffer.str();
+}
+
 void tryCreateDirectory(const std::filesystem::path &path)
 {
     if (!(std::filesystem::exists(path) && std::filesystem::is_directory(path)))
@@ -37,8 +45,7 @@ void tryCreateFile(const std::filesystem::path &path)
 
 void tryOpenFile(const std::filesystem::path &path)
 {
-    std::ofstream file(path);
-    if (!file.good())
+    if (!std::filesystem::exists(path) && !std::filesystem::is_directory(path))
     {
         throw exception::Exception(exception::exId::UNSPECIFIED,
                                    exception::exType::CASUAL,

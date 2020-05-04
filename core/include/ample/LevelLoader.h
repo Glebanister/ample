@@ -1,8 +1,8 @@
 #pragma once
 
+#include "Level.h"
 #include "LevelSwitcher.h"
 #include "StateMachine.h"
-#include "Level.h"
 
 namespace ample::game
 {
@@ -16,19 +16,24 @@ class Level;
 
 namespace ample::game
 {
-class LevelLoader : public StateMachine::State
+class LevelLoader : public StateMachine::State // TODO: immediate mode (without reset)
 {
 public:
-    LevelLoader(const std::filesystem::path &levelPath,
+    LevelLoader(const std::filesystem::path &projectPath,
+                const std::string &name,
+                LevelSwitcher &machine);
+    LevelLoader(const std::filesystem::path &existingLevelPath,
                 LevelSwitcher &machine);
 
     void onStart();
     void onActive();
     void onStop();
-    game2d::Level &level() noexcept;
+
+    std::string levelName() const noexcept;
 
 private:
     const std::filesystem::path _levelPath;
     std::unique_ptr<game2d::Level> _level;
+    const std::string _levelName;
 };
 } // namespace ample::game

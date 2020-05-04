@@ -27,10 +27,12 @@ public:
     void setProjectPath(const std::filesystem::path &path);
     std::filesystem::path getProjectPath() const noexcept;
 
+    void onActive() override;
+
 private:
+    LevelSwitcher _levelSwitcher;
     std::filesystem::path _projectPath = "";
     std::vector<std::shared_ptr<Level>> _levels;
-    LevelSwitcher _levelSwitcher;
     std::shared_ptr<Level> _currentLevel = nullptr;
     bool _prepared = false;
 };
