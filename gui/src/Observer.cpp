@@ -1,15 +1,17 @@
-#include "ample/Debug.h"
 #include "Observer.h"
-#include "ample/Vector2d.h"
+#include "ample/Debug.h"
+#include "ample/GraphicalPolygon.h"
 #include "ample/Utils.h"
+#include "ample/Vector2d.h"
+#include "ample/RegularPolygon.h"
 
 namespace ample::gui
 {
-Observer::Observer(gui::AmpleGui &gui, const graphics::Vector2d<int> &size)
-    : _game(gui),
-      _lamp(std::make_shared<graphics::light::LightSource>("observer_lamp")),
+Observer::Observer(const graphics::Vector2d<float> &size)
+    : _lamp(std::make_shared<graphics::light::LightSource>("observer_lamp")),
       _camera(std::make_shared<graphics::CameraPerspective>("observer_camera",
-                                                            graphics::Vector2d<graphics::pixel_t>{size.x, size.y},
+                                                            graphics::Vector2d<graphics::pixel_t>{static_cast<int>(size.x),
+                                                                                                  static_cast<int>(size.y)},
                                                             graphics::Vector2d<graphics::pixel_t>{0, 0},
                                                             graphics::Vector3d<float>{0.0, 0.0, 0.0},
                                                             graphics::Vector3d<float>{0.0, 0.0, 1.0},
@@ -18,20 +20,20 @@ Observer::Observer(gui::AmpleGui &gui, const graphics::Vector2d<int> &size)
                                                             1.0,
                                                             1000.0))
 {
-    onWindowResized(size);
+    setViewport(size, {0.0f, 0.0f});
 }
 
-void Observer::onWindowResized(const graphics::Vector2d<int> &size)
+void Observer::setViewport(const graphics::Vector2d<float> &size,
+                           const graphics::Vector2d<float> &position)
 {
-    int viewportW = size.x * _cfX;
-    int viewportH = size.y * _cfY;
-    _camera->setViewport({viewportW, viewportH}, {(size.x - viewportW) / 2, (size.y - viewportH)});
-    _camera->setAspectRatio((static_cast<float>(size.x)) / (static_cast<float>(size.y)) * (_cfX / _cfY));
+    _camera->setViewport({static_cast<int>(size.x), static_cast<int>(size.y)},
+                         {static_cast<int>(position.x), static_cast<int>(position.y)});
+    _camera->setAspectRatio(size.x / size.y);
 }
 
-void Observer::onActive()
+void Observer::look(std::shared_ptr<game::game2d::Level> level) noexcept
 {
-    Behavior::onActive();
+    ASSERT(level);
     if (control::EventManager::instance().keyboard().isKeyDown(control::keysym::ARROW_LEFT))
     {
         _camera->translate({1.0f, 0.0f, 0.0f});
@@ -52,14 +54,18 @@ void Observer::onActive()
 
     _lamp->setTranslate({_camera->getX(), _camera->getY(), _camera->getZ()});
 
-    if (!_game.getCurrentLevel())
-    {
-        return;
-    }
     _camera->look();
 
     _lamp->draw();
-    for (const auto &[_, slice] : _game.getCurrentLevel()->layers())
+
+    auto obj1 = ample::graphics::GraphicalPolygon("ObjectName",
+                                                  ample::geometry::RegularPolygon<float>(10.0f, 4),
+                                                  10.0f,
+                                                  {1.0f, 2.0f});
+    
+    obj1.draw();
+
+    for (const auto &[_, slice] : level->layers())
     {
         utils::ignore(_);
         for (const auto &obj : slice->objects())
@@ -68,15 +74,5 @@ void Observer::onActive()
         }
     }
     _camera->unlook();
-}
-
-std::shared_ptr<ample::graphics::light::LightSource> Observer::getLamp()
-{
-    return _lamp;
-}
-
-std::shared_ptr<ample::graphics::CameraPerspective> Observer::getCamera()
-{
-    return _camera;
 }
 } // namespace ample::gui

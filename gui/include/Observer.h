@@ -1,10 +1,11 @@
 #pragma once
 
 #include "ample/Behaviour.h"
-#include "ample/EventManager.h"
-#include "ample/LightSource.h"
 #include "ample/CameraPerspective.h"
+#include "ample/EventManager.h"
 #include "ample/Game2dEditor.h"
+#include "ample/LightSource.h"
+#include "ample/Singleton.h"
 
 #include "AmpleGui.h"
 
@@ -15,21 +16,19 @@ class AmpleGui;
 
 namespace ample::gui
 {
-class Observer : public ample::activity::Behavior
+class Observer : public utils::Singleton<Observer>
 {
 public:
-    Observer(gui::AmpleGui &gui, const graphics::Vector2d<int> &size = {1920, 1080});
+    Observer(const graphics::Vector2d<float> &size = {1920, 1080});
 
-    void onActive() override;
+    void look(std::shared_ptr<game::game2d::Level>) noexcept;
 
-    std::shared_ptr<ample::graphics::light::LightSource> getLamp();
-    std::shared_ptr<ample::graphics::CameraPerspective> getCamera();
-    void onWindowResized(const graphics::Vector2d<int> &size);
+    void setViewport(const graphics::Vector2d<float> &size,
+                     const graphics::Vector2d<float> &position);
 
 protected:
     float _cfX = 1.0f;
     float _cfY = 1.0f;
-    ample::game::game2d::Game2dEditor &_game;
     std::shared_ptr<ample::graphics::light::LightSource> _lamp;
     std::shared_ptr<ample::graphics::CameraPerspective> _camera;
 };

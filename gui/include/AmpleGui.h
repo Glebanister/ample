@@ -29,14 +29,12 @@ public:
     AmpleGui(ample::window::Window &window);
     AmpleGui(ample::window::Window &window,
              const std::filesystem::path &existingProjectPath);
-    void onResize() override;
     void drawInterface() override;
 
     std::shared_ptr<gui::Observer> getObserver() const noexcept;
 
 private:
     void MenuBar();
-    std::shared_ptr<gui::Observer> _observer;
     ImGui::FileBrowser _filebrowser{ImGuiFileBrowserFlags_CloseOnEsc |
                                     ImGuiFileBrowserFlags_CreateNewDir |
                                     ImGuiFileBrowserFlags_SelectDirectory |
