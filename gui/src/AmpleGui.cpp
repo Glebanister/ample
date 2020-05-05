@@ -16,33 +16,16 @@ namespace ample::gui
 {
 AmpleGui::AmpleGui(ample::window::Window &window)
     : ImguiActivity(window),
-      _observer(std::make_shared<Observer>()),
       _editor(*this)
 {
-    addBehavior(_observer);
     os::environment::OpenGLEnvironment::instance().setColor({0.17f, 0.213f, 0.248f, 1.00f});
 }
 
 AmpleGui::AmpleGui(ample::window::Window &window,
                    const std::filesystem::path &existingProjectPath)
     : ImguiActivity(window, existingProjectPath),
-      _observer(std::make_shared<Observer>()),
       _editor(*this)
 {
-    addBehavior(_observer);
-    os::environment::OpenGLEnvironment::instance().setColor({0.17f, 0.213f, 0.248f, 1.00f});
-}
-
-std::shared_ptr<gui::Observer> AmpleGui::getObserver() const noexcept
-{
-    return _observer;
-}
-
-void AmpleGui::onResize()
-{
-    ImguiActivity::onResize();
-    _observer->onWindowResized({static_cast<int>(getWidth()),
-                                static_cast<int>(getHeight())});
 }
 
 void AmpleGui::MenuBar()
@@ -104,8 +87,14 @@ void AmpleGui::drawInterface()
     ImGui::SetNextWindowPos({0, 0});
     ImGui::SetNextWindowSize({static_cast<float>(osWindow().getWidth()),
                               static_cast<float>(osWindow().getHeight())});
-    ImGui::SetNextWindowBgAlpha(0);
-    if (ImGui::Begin("Ample", NULL, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar))
+    ImGui::SetNextWindowBgAlpha(0.0f);
+    if (ImGui::Begin("Ample",
+                     NULL,
+                     ImGuiWindowFlags_MenuBar |
+                         ImGuiWindowFlags_NoCollapse |
+                         ImGuiWindowFlags_NoResize |
+                         ImGuiWindowFlags_NoTitleBar |
+                         ImGuiWindowFlags_NoSavedSettings))
     {
         if (ImGui::BeginMenuBar())
         {
@@ -123,13 +112,20 @@ void AmpleGui::drawInterface()
 
         ImGui::Separator();
 
-        ImGui::BeginChild("Browser", {0, 0});
+        ImGui::SetNextWindowBgAlpha(1.0f);
+        ImGui::BeginChild("Browser");
         Browser::instance().drawInterface();
         ImGui::EndChild();
         ImGui::NextColumn();
 
+        ImGui::BeginChild("Editor");
         _editor.drawInterface();
+        ImGui::EndChild();
+        ImGui::GetColumnWidth();
         ImGui::NextColumn();
+
+        Observer::instance().setViewport({ImGui::GetColumnWidth(1), ImGui::GetWindowHeight() - 50},
+                                         {ImGui::GetColumnWidth(0), 0});
     }
     ImGui::End();
 }
