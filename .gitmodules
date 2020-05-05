@@ -16,3 +16,6 @@
 [submodule "extern/imgui-filebrowser"]
 	path = extern/imgui-filebrowser
 	url = https://github.com/AirGuanZ/imgui-filebrowser
+[submodule "extern/imnodes"]
+	path = extern/imnodes
+	url = https://github.com/Nelarius/imnodes

@@ -15,6 +15,7 @@ include_directories(../extern/imgui-filebrowser/)
 include_directories(../extern/rapidjson/include)
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(../core/include)
+include_directories(../extern/imnodes/)
 
 set(IMGUI_SOURCES
     ../extern/imgui/imgui.cpp
@@ -24,6 +25,7 @@ set(IMGUI_SOURCES
     ../extern/imgui_sdl/imgui_sdl.cpp
     ../extern/imgui/examples/imgui_impl_opengl3.cpp
     ../extern/imgui/examples/imgui_impl_sdl.cpp
+    ../extern/imnodes/imnodes.cpp
    )
 
 set(SOURCES
@@ -35,6 +37,7 @@ set(SOURCES
     src/Editor.cpp
     src/SliceManager.cpp
     src/TextureManager.cpp
+    src/StateMachineManager.cpp
     )
 
 add_executable(ample-gui ${SOURCES} ${IMGUI_SOURCES})

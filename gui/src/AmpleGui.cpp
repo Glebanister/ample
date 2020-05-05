@@ -10,6 +10,7 @@
 #include "Editor.h"
 #include "SliceManager.h"
 #include "TextureManager.h"
+#include "StateMachineManager.h"
 
 namespace ample::gui
 {
@@ -53,6 +54,7 @@ void AmpleGui::drawInterface()
     Editor::instance().drawInterface();
     SliceManager::instance().drawInterface();
     TextureManager::instance().drawInterface();
+    StateMachineManager::instance().drawInterface();
 }
 
 AmpleGui::~AmpleGui()

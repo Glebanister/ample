@@ -29,6 +29,7 @@ public:
         bool isActivated() const noexcept;
         void reset() noexcept;
         std::string dump() override;
+        bool listen() override;
 
     private:
         std::shared_ptr<State> _nextState;
