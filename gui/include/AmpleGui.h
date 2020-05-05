@@ -14,6 +14,7 @@
 
 #include "ImguiActivity.h"
 #include "Observer.h"
+#include "Editor.h"
 
 namespace ample::gui
 {
@@ -40,5 +41,6 @@ private:
                                     ImGuiFileBrowserFlags_CreateNewDir |
                                     ImGuiFileBrowserFlags_SelectDirectory |
                                     ImGuiFileBrowserFlags_NoTitleBar};
+    Editor _editor;
 };
 } // namespace ample::gui

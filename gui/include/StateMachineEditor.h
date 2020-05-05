@@ -6,11 +6,10 @@
 
 namespace ample::gui
 {
-class StateMachineEditor : public TabEditor
+class StateMachineEditor : public TabObjectEditor<game::StateMachine>
 {
 public:
-    StateMachineEditor(std::shared_ptr<game::StateMachine>);
-
+    using TabObjectEditor<game::StateMachine>::TabObjectEditor;
     void drawInterface() override;
 };
 } // namespace ample::gui

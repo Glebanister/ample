@@ -16,20 +16,20 @@ namespace ample::gui
 {
 AmpleGui::AmpleGui(ample::window::Window &window)
     : ImguiActivity(window),
-      _observer(std::make_shared<Observer>(*this))
+      _observer(std::make_shared<Observer>(*this)),
+      _editor(*this)
 {
     addBehavior(_observer);
-    Editor::instance().setEditor(*this);
     os::environment::OpenGLEnvironment::instance().setColor({0.17f, 0.213f, 0.248f, 1.00f});
 }
 
 AmpleGui::AmpleGui(ample::window::Window &window,
                    const std::filesystem::path &existingProjectPath)
     : ImguiActivity(window, existingProjectPath),
-      _observer(std::make_shared<Observer>(*this))
+      _observer(std::make_shared<Observer>(*this)),
+      _editor(*this)
 {
     addBehavior(_observer);
-    Editor::instance().setEditor(*this);
     os::environment::OpenGLEnvironment::instance().setColor({0.17f, 0.213f, 0.248f, 1.00f});
 }
 
@@ -62,11 +62,11 @@ void AmpleGui::MenuBar()
         {
             if (ImGui::MenuItem("State Machine"))
             {
-                Editor::instance().openTabCreator(Editor::tabClass::STATE_MACHINE);
+                _editor.openTabCreator(Editor::tabClass::STATE_MACHINE);
             }
             if (ImGui::MenuItem("Level"))
             {
-                Editor::instance().openTabCreator(Editor::tabClass::LEVEL);
+                _editor.openTabCreator(Editor::tabClass::LEVEL);
             }
             ImGui::EndMenu();
         }
@@ -115,7 +115,7 @@ void AmpleGui::drawInterface()
         ImGui::EndChild();
         ImGui::NextColumn();
 
-        Editor::instance().drawInterface();
+        _editor.drawInterface();
         ImGui::NextColumn();
     }
     ImGui::End();
