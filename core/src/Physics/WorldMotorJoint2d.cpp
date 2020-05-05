@@ -2,10 +2,11 @@
 
 namespace ample::physics
 {
-WorldMotorJoint2d::WorldMotorJoint2d(WorldObject2d &bodyA,
+WorldMotorJoint2d::WorldMotorJoint2d(const std::string &name,
+                                     WorldObject2d &bodyA,
                                      WorldObject2d &bodyB,
                                      bool collideConnected)
-    : WorldJoint2d(bodyA, bodyB)
+    : WorldJoint2d(name, "WorldMotorJoint2d", bodyA, bodyB)
 {
     b2MotorJointDef jointDef;
     jointDef.Initialize(getB2Body(bodyA), getB2Body(bodyB));

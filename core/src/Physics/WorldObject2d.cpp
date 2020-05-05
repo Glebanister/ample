@@ -1,12 +1,11 @@
 #include <cmath>
 
+#include "Debug.h"
 #include "WorldObject2d.h"
 #include "box2d/b2_polygon_shape.h"
-#include "Debug.h"
 
 namespace ample::physics
 {
-
 Fixture::Fixture(b2Fixture *fixture) : _fixture(fixture) {}
 
 WorldObject2d &Fixture::getObject()
@@ -37,6 +36,7 @@ void Fixture::setSensor(bool sensor)
 Fixture WorldObject2d::addFixture(
     const std::vector<ample::graphics::Vector2d<float>> &shape)
 {
+    _fixtures.push_back(shape);
     b2FixtureDef fixtureDef;
     std::vector<b2Vec2> vertices(shape.size());
     for (size_t i = 0; i < shape.size(); i++)
@@ -81,8 +81,8 @@ void WorldObject2d::setTransform(const graphics::Vector2d<float> &position, floa
 
 graphics::Vector2d<float> WorldObject2d::getPosition() const
 {
-    auto position = _body->GetPosition();
-    return graphics::Vector2d<float>(position.x, position.y);
+    //auto position = _body->GetPosition();
+    return _body->GetPosition();
 }
 
 float WorldObject2d::getAngle() const
@@ -303,7 +303,7 @@ const WorldObject2d &WorldObject2d::getNext() const
 }
 
 WorldObject2d::WorldObject2d(const std::string &name,
-                             std::shared_ptr<WorldLayer2d> layer,
+                             WorldLayer2d &layer,
                              BodyType type,
                              const std::vector<ample::graphics::Vector2d<float>> &shape,
                              const float relativeThickness,
@@ -311,24 +311,50 @@ WorldObject2d::WorldObject2d(const std::string &name,
                              const graphics::Vector2d<float> &sideTextureRepeats,
                              const graphics::normalsMode sideNormalsMode,
                              const graphics::Vector2d<float> &translated,
-                             float rotated)
+                             float rotated,
+                             const graphics::Vector2d<float> &linearVelocity,
+                             float angularVelocity,
+                             float linearDamping,
+                             float angularDamping,
+                             bool allowSleep,
+                             bool awake,
+                             bool fixedRotation,
+                             bool bullet,
+                             bool enabled,
+                             float gravityScale,
+                             const graphics::Vector2d<float> &center,
+                             float mass,
+                             float inertia)
     : GraphicalObject2d(name,
                         "WorldObject2d",
                         shape,
-                        layer->getThickness() * relativeThickness,
-                        layer->getThickness() * layer->getRelativePositionInSlice() - layer->getThickness() * relativeThickness / 2.0f,
+                        layer.getThickness() * relativeThickness,
+                        layer.getThickness() * layer.getRelativePositionInSlice() - layer.getThickness() * relativeThickness / 2.0f,
                         faceTextureRepeats,
                         sideTextureRepeats,
                         sideNormalsMode,
                         translated,
                         rotated),
-      _layer(layer),
       _bodyType(type),
       _startAngle(rotated),
-      _startPos(translated)
+      _startPos(translated),
+      _startMass(mass),
+      _startInertia(inertia),
+      _startCenter(center),
+      _layer(layer)
 {
     _bodyDef.position.Set(translated.x, translated.y);
     _bodyDef.angle = rotated;
+    _bodyDef.linearVelocity.Set(linearVelocity.x, linearVelocity.y);
+    _bodyDef.angularVelocity = angularVelocity;
+    _bodyDef.linearDamping = linearDamping;
+    _bodyDef.angularDamping = angularDamping;
+    _bodyDef.allowSleep = allowSleep;
+    _bodyDef.awake = awake;
+    _bodyDef.fixedRotation = fixedRotation;
+    _bodyDef.bullet = bullet;
+    _bodyDef.enabled = enabled;
+    _bodyDef.gravityScale = gravityScale;
     switch (type)
     {
     case BodyType::STATIC_BODY:
@@ -343,18 +369,8 @@ WorldObject2d::WorldObject2d(const std::string &name,
     }
 }
 
-WorldLayer2d &WorldObject2d::getWorldLayer() noexcept
-{
-    return *_layer;
-}
-
-std::shared_ptr<WorldLayer2d> WorldObject2d::getWorldLayerPointer() const noexcept
-{
-    return _layer;
-}
-
 WorldObject2d::WorldObject2d(const filing::JsonIO &input,
-                             std::shared_ptr<WorldLayer2d> layer)
+                             WorldLayer2d &layer)
     : WorldObject2d(input.read<std::string>("name"),
                     layer,
                     input.read<physics::BodyType>("body_type"),
@@ -364,8 +380,31 @@ WorldObject2d::WorldObject2d(const filing::JsonIO &input,
                     input.read<graphics::Vector2d<float>>("side_texture_repeats"),
                     input.read<graphics::normalsMode>("normals_mode"),
                     input.read<graphics::Vector2d<float>>("world_pos"),
-                    input.read<float>("world_rotated"))
+                    input.read<float>("world_rotated"),
+                    input.read<graphics::Vector2d<float>>("linear_velocity"),
+                    input.read<float>("angular_velocity"),
+                    input.read<float>("linear_damping"),
+                    input.read<float>("angular_damping"),
+                    input.read<bool>("allow_sleep"),
+                    input.read<bool>("awake"),
+                    input.read<bool>("fixed_rotation"),
+                    input.read<bool>("bullet"),
+                    input.read<bool>("enabled"),
+                    input.read<float>("gravity_scale"),
+                    input.read<graphics::Vector2d<float>>("body_center"),
+                    input.read<float>("body_mass"),
+                    input.read<float>("body_inertia"))
 {
+    // _fixtures = input.read<std::vector<std::vector<graphics::Vector2d<float>>>>("fixtures"); // TODO
+    for (const auto &fixture : _fixtures)
+    {
+        addFixture(fixture);
+    }
+}
+
+WorldLayer2d &WorldObject2d::getWorldLayer() noexcept
+{
+    return _layer;
 }
 
 std::string WorldObject2d::dump()
@@ -374,6 +413,20 @@ std::string WorldObject2d::dump()
     output.write<physics::BodyType>("body_type", _bodyType);
     output.write<float>("world_rotated", _startAngle);
     output.write<graphics::Vector2d<float>>("world_pos", _startPos);
+    output.write<graphics::Vector2d<float>>("linear_velocity", _bodyDef.linearVelocity);
+    output.write<float>("angular_velocity", _bodyDef.angularVelocity);
+    output.write<float>("linear_damping", _bodyDef.linearDamping);
+    output.write<float>("angular_damping", _bodyDef.angularDamping);
+    output.write<bool>("allow_sleep", _bodyDef.allowSleep);
+    output.write<bool>("awake", _bodyDef.awake);
+    output.write<bool>("fixed_rotation", _bodyDef.fixedRotation);
+    output.write<bool>("bullet", _bodyDef.bullet);
+    output.write<bool>("enabled", _bodyDef.enabled);
+    output.write<float>("gravity_scale", _bodyDef.gravityScale);
+    output.write<graphics::Vector2d<float>>("body_center", _startCenter);
+    output.write<float>("body_mass", _startMass);
+    output.write<float>("body_inertia", _startInertia);
+    // output.write<std::vector<std::vector<graphics::Vector2d<float>>>>("fixtures", _fixtures); // TODO
     return output;
 }
 

@@ -2,10 +2,11 @@
 
 namespace ample::physics
 {
-WorldMouseJoint2d::WorldMouseJoint2d(WorldObject2d &bodyA,
+WorldMouseJoint2d::WorldMouseJoint2d(const std::string &name,
+                                     WorldObject2d &bodyA,
                                      WorldObject2d &bodyB,
                                      bool collideConnected)
-    : WorldJoint2d(bodyA, bodyB)
+    : WorldJoint2d(name, "WorldMouseJoint2d", bodyA, bodyB)
 {
     b2MouseJointDef jointDef;
     jointDef.bodyA = getB2Body(bodyA);

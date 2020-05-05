@@ -31,6 +31,8 @@ void LayeredWindowActivity::onAwake()
 void LayeredWindowActivity::onActive()
 {
     this->_window.swapBuffer();
+    auto color = os::environment::OpenGLEnvironment::instance().getColor();
+    glClearColor(color.r, color.g, color.b, color.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     graphics::shaders::ShaderProcessor::instance().use();
     WindowActivity::onActive();

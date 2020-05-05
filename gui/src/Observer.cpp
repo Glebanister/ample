@@ -52,9 +52,14 @@ void Observer::onActive()
 
     _lamp->setTranslate({_camera->getX(), _camera->getY(), _camera->getZ()});
 
+    if (!_game.getCurrentLevel())
+    {
+        return;
+    }
     _camera->look();
+
     _lamp->draw();
-    for (const auto &[_, slice] : _game.currentLevel()->layers())
+    for (const auto &[_, slice] : _game.getCurrentLevel()->layers())
     {
         utils::ignore(_);
         for (const auto &obj : slice->objects())

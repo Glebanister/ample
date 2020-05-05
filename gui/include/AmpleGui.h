@@ -1,14 +1,18 @@
 #pragma once
 
-#include "ImguiActivity.h"
-#include "ample/Window.h"
-#include "ample/Game2d.h"
-#include "ample/EventManager.h"
-#include "ample/Camera.h"
-#include "ample/LightSource.h"
+#include <imgui.h>
+
+#include <imfilebrowser.h>
+
 #include "ample/Behaviour.h"
+#include "ample/Camera.h"
+#include "ample/EventManager.h"
+#include "ample/Game2d.h"
+#include "ample/LightSource.h"
+#include "ample/Window.h"
 #include "ample/WorldObject2d.h"
 
+#include "ImguiActivity.h"
 #include "Observer.h"
 
 namespace ample::gui
@@ -22,16 +26,19 @@ class AmpleGui : public ImguiActivity
 {
 public:
     AmpleGui(ample::window::Window &window);
+    AmpleGui(ample::window::Window &window,
+             const std::filesystem::path &existingProjectPath);
     void onResize() override;
+    void drawInterface() override;
 
     std::shared_ptr<gui::Observer> getObserver() const noexcept;
 
-    ~AmpleGui();
-
 private:
-    void drawInterface() override;
-
+    void MenuBar();
     std::shared_ptr<gui::Observer> _observer;
-    std::shared_ptr<ample::game::game2d::Level> firstLevel;
+    ImGui::FileBrowser _filebrowser{ImGuiFileBrowserFlags_CloseOnEsc |
+                                    ImGuiFileBrowserFlags_CreateNewDir |
+                                    ImGuiFileBrowserFlags_SelectDirectory |
+                                    ImGuiFileBrowserFlags_NoTitleBar};
 };
 } // namespace ample::gui

@@ -9,6 +9,8 @@ class Point : public Shape
 {
 public:
     Point(const graphics::Vector2d<float> &);
+    Point(const std::string &input);
+    std::string dump() override;
     bool inside(const graphics::Vector2d<float> &) override;
 
 private:

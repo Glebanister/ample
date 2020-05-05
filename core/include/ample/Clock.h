@@ -1,7 +1,7 @@
 #pragma once
 
-#include <iostream>
 #include <chrono>
+#include <iostream>
 #include <vector>
 
 namespace ample::time
@@ -59,4 +59,4 @@ private:
 
     bool stopped = false;
 };
-} // namespace os
+} // namespace ample::time

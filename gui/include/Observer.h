@@ -4,7 +4,8 @@
 #include "ample/EventManager.h"
 #include "ample/LightSource.h"
 #include "ample/CameraPerspective.h"
-#include "ample/Game2d.h"
+#include "ample/Game2dEditor.h"
+
 #include "AmpleGui.h"
 
 namespace ample::gui
@@ -28,7 +29,7 @@ public:
 protected:
     float _cfX = 1.0f;
     float _cfY = 1.0f;
-    ample::game::game2d::Game2d &_game;
+    ample::game::game2d::Game2dEditor &_game;
     std::shared_ptr<ample::graphics::light::LightSource> _lamp;
     std::shared_ptr<ample::graphics::CameraPerspective> _camera;
 };

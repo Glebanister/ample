@@ -1,0 +1,10 @@
+UseTab: Never
+IndentWidth: 4
+BreakBeforeBraces: Allman
+AllowShortIfStatementsOnASingleLine: false
+IndentCaseLabels: false
+ColumnLimit: 0
+AlignTrailingComments: true
+AllowShortLoopsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: true
+AccessModifierOffset: -4

@@ -2,11 +2,11 @@
 
 #include <GL/gl.h>
 
-#include "OpenGLEnvironment.h"
-#include "Exception.h"
-#include "ShaderProcessor.h"
 #include "Debug.h"
+#include "Exception.h"
+#include "OpenGLEnvironment.h"
 #include "SDLEnvironment.h"
+#include "ShaderProcessor.h"
 
 namespace ample::os::environment
 {
@@ -21,7 +21,6 @@ OpenGLEnvironment::OpenGLEnvironment()
     graphics::shaders::ShaderProcessor::instance().link();
     graphics::shaders::ShaderProcessor::instance().use();
 
-    glClearColor(50.0 / 256.0, 50.0 / 256.0, 50.0 / 256.0, 0.5);
     glGenVertexArrays(1, &_vertexArrayId);
     glBindVertexArray(_vertexArrayId);
     glEnable(GL_DEPTH_TEST);
@@ -29,6 +28,16 @@ OpenGLEnvironment::OpenGLEnvironment()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     exception::OpenGLException::handle();
     DEBUG("Opengl environment done!");
+}
+
+void OpenGLEnvironment::setColor(const graphics::Color &color)
+{
+    _fillColor = color;
+}
+
+graphics::Color OpenGLEnvironment::getColor() const noexcept
+{
+    return _fillColor;
 }
 
 OpenGLEnvironment::~OpenGLEnvironment()

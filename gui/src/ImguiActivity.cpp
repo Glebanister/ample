@@ -1,10 +1,10 @@
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
-#include <ample/WindowActivity.h>
 #include <ample/Window.h>
-#include <imgui.h>
+#include <ample/WindowActivity.h>
 #include <examples/imgui_impl_opengl3.h>
 #include <examples/imgui_impl_sdl.h>
+#include <imgui.h>
 
 #include "ImguiActivity.h"
 #include "ample/Debug.h"
@@ -12,8 +12,7 @@
 
 namespace ample::gui
 {
-ImguiActivity::ImguiActivity(ample::window::Window &window)
-        : Game2d(window)
+void initImgui(ample::window::Window &window)
 {
     const char *glsl_version = "#version 330";
     glewInit();
@@ -22,6 +21,19 @@ ImguiActivity::ImguiActivity(ample::window::Window &window)
     ImGui::CreateContext();
     ImGui_ImplSDL2_InitForOpenGL(window.pointer(), window.glContext());
     ImGui_ImplOpenGL3_Init(glsl_version);
+}
+
+ImguiActivity::ImguiActivity(ample::window::Window &window,
+                             const std::filesystem::path &existingProjectPath)
+    : Game2dEditor(window, existingProjectPath)
+{
+    initImgui(window);
+}
+
+ImguiActivity::ImguiActivity(ample::window::Window &window)
+    : Game2dEditor(window)
+{
+    initImgui(window);
 }
 
 void ImguiActivity::drawInterface()
@@ -40,7 +52,7 @@ void ImguiActivity::onActive()
     ImGui::NewFrame();
     drawInterface();
     ImGui::Render();
-    Game2d::onActive();
+    Game2dEditor::onActive();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 

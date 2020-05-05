@@ -2,12 +2,13 @@
 
 namespace ample::physics
 {
-WorldWeldJoint2d::WorldWeldJoint2d(WorldObject2d &bodyA,
+WorldWeldJoint2d::WorldWeldJoint2d(const std::string &name,
+                                   WorldObject2d &bodyA,
                                    WorldObject2d &bodyB,
                                    const ample::graphics::Vector2d<float> &anchor,
                                    float referenceAngle,
                                    bool collideConnected)
-    : WorldJoint2d(bodyA, bodyB)
+    : WorldJoint2d(name, "WorldWeldJoint2d", bodyA, bodyB)
 {
     b2WeldJointDef jointDef;
     jointDef.Initialize(getB2Body(bodyA), getB2Body(bodyB), {anchor.x, anchor.y});

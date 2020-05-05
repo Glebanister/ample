@@ -2,9 +2,12 @@
 
 #include <imgui.h>
 
+#include "ample/Singleton.h"
+
 namespace ample::gui
 {
-class InterfaceUnit
+template <class T>
+class InterfaceUnit : public utils::Singleton<T>
 {
 public:
     virtual void drawInterface() = 0;
