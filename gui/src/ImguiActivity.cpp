@@ -23,6 +23,8 @@ void initImgui(ample::window::Window &window)
     ImGui_ImplSDL2_InitForOpenGL(window.pointer(), window.glContext());
     ImGui_ImplOpenGL3_Init(glsl_version);
     imnodes::Initialize();
+    ImGui::GetIO().Fonts->AddFontFromFileTTF("gui/resources/fonts/OpenSans-Regular.ttf", 20.0f);
+    os::environment::OpenGLEnvironment::instance().setColor({0.17f, 0.213f, 0.248f, 1.00f});
 }
 
 ImguiActivity::ImguiActivity(ample::window::Window &window,
