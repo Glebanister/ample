@@ -1,6 +1,7 @@
 #pragma once
 
 #include <imgui.h>
+#include <memory>
 
 namespace ample::gui::gui_utils
 {
@@ -19,6 +20,11 @@ inline void MessagePopup(const std::string &id, const std::string &message)
         }
         ImGui::EndPopup();
     }
+}
+
+inline void TextDisabled(const char *text)
+{
+    ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 0.7f), "%s", text);
 }
 
 inline void CloseCurrentPopupOnSuccessButton(bool &success)
