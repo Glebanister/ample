@@ -12,7 +12,7 @@
 
 namespace ample::gui
 {
-class TextureManager : public InterfaceUnit, public utils::Singleton<TextureManager>
+class TextureManager : public InterfaceUnit<TextureManager>
 {
 public:
     TextureManager();

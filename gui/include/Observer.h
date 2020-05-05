@@ -4,6 +4,8 @@
 #include "ample/EventManager.h"
 #include "ample/LightSource.h"
 #include "ample/CameraPerspective.h"
+#include "ample/Game2dEditor.h"
+
 #include "AmpleGui.h"
 
 namespace ample::gui

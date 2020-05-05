@@ -1,69 +1,138 @@
 #include <algorithm>
 
-#include "ample/Utils.h"
-#include "ample/WorldObject2d.h"
 #include "ample/RegularPolygon.h"
+#include "ample/Utils.h"
 #include "ample/VectorRectangle.h"
+#include "ample/WorldObject2d.h"
 
 #include "Editor.h"
+#include "LevelEditor.h"
+#include "StateMachineEditor.h"
+#include "Utils.h"
 
 namespace ample::gui
 {
-void Editor::drawInterface()
+void Editor::TabCreator()
 {
-    ImGui::Begin("Editor");
-    ImGui::InputText("Name", worldObject2d.nameBuffer, 255);
-    ImGui::Combo("Body type", &worldObject2d.currentBodyType, worldObject2d.bodyTypes, IM_ARRAYSIZE(worldObject2d.bodyTypes));
-    ImGui::InputScalar("Width", ImGuiDataType_U32, &worldObject2d.size.x, &worldObject2d.sizeStep);
-    ImGui::InputScalar("Height", ImGuiDataType_U32, &worldObject2d.size.y, &worldObject2d.sizeStep);
-    utils::limit(worldObject2d.relativeThickness, 0.0f, 1.0f);
-    ImGui::InputScalar("Relative thickness", ImGuiDataType_Float, &worldObject2d.relativeThickness, &worldObject2d.relativeThicknessStep);
-    utils::limit(worldObject2d.textureRepeatsFront.x, 0.0f, 100.0f);
-    utils::limit(worldObject2d.textureRepeatsFront.y, 0.0f, 100.0f);
-    utils::limit(worldObject2d.textureRepeatsSide.x, 0.0f, 100.0f);
-    utils::limit(worldObject2d.textureRepeatsSide.y, 0.0f, 100.0f);
-    ImGui::InputScalar("Texture repeats front x", ImGuiDataType_Float, &worldObject2d.textureRepeatsFront.x, &worldObject2d.textureRepeatsStep);
-    ImGui::InputScalar("Texture repeats front y", ImGuiDataType_Float, &worldObject2d.textureRepeatsFront.y, &worldObject2d.textureRepeatsStep);
-    ImGui::InputScalar("Texture repeats side x", ImGuiDataType_Float, &worldObject2d.textureRepeatsSide.x, &worldObject2d.textureRepeatsStep);
-    ImGui::InputScalar("Texture repeats side y", ImGuiDataType_Float, &worldObject2d.textureRepeatsSide.y, &worldObject2d.textureRepeatsStep);
-    ImGui::Combo("Side normals mode", &worldObject2d.currentNormalMode, worldObject2d.normalsMode, IM_ARRAYSIZE(worldObject2d.normalsMode));
-    ImGui::InputScalar("X", ImGuiDataType_Float, &worldObject2d.position.x, &worldObject2d.positionStep, &worldObject2d.positionStepFast);
-    ImGui::InputScalar("Y", ImGuiDataType_Float, &worldObject2d.position.y, &worldObject2d.positionStep, &worldObject2d.positionStepFast);
-    utils::limit(worldObject2d.angle, -180.0f, 180.0f);
-    ImGui::InputScalar("Angle", ImGuiDataType_Float, &worldObject2d.angle, &worldObject2d.angleStep);
-    if (ImGui::Button("Create"))
+    switch (_tabClass)
     {
-        if (currentLayer)
-        {
-            physics::BodyType bodyType = physics::BodyType::DYNAMIC_BODY;
-            if (worldObject2d.currentBodyType == 1)
-            {
-                bodyType = physics::BodyType::KINEMATIC_BODY;
-            }
-            if (worldObject2d.currentBodyType == 2)
-            {
-                bodyType = physics::BodyType::STATIC_BODY;
-            }
-            std::string name(worldObject2d.nameBuffer);
-            graphics::normalsMode normalsMode = worldObject2d.currentNormalMode == 0 ? graphics::normalsMode::FACE : graphics::normalsMode::VERTEX;
-            currentLayer->addWorldObject(std::make_shared<physics::WorldObject2d>(
-                name,
-                *currentLayer,
-                bodyType,
-                geometry::VectorRectangle<float>({worldObject2d.size.x * cellSize, worldObject2d.size.y * cellSize}),
-                worldObject2d.relativeThickness,
-                worldObject2d.textureRepeatsFront,
-                worldObject2d.textureRepeatsSide,
-                normalsMode,
-                worldObject2d.position,
-                worldObject2d.angle));
-        }
+    case tabClass::LEVEL:
+        LevelCreator();
+        break;
+    case tabClass::STATE_MACHINE:
+        StateMachineCreator();
+        break;
     }
-    ImGui::End();
 }
 
-void Editor::setCurrentLayer(std::shared_ptr<ample::physics::WorldLayer2d> layer)
+void Editor::LevelCreator()
 {
-    currentLayer = layer;
+    ImGui::InputText("Name", _levelRaw.name, 255);
+    ImGui::InputScalar("Slice thickness", ImGuiDataType_Float, &_levelRaw.sliceThickness, &_levelRaw.sliceThicknessStep);
+    utils::limit(_levelRaw.physicsLayerPosition, _levelRaw.physicsLayerPositionMin, _levelRaw.physicsLayerPositionMax);
+    ImGui::InputScalar("Physics layer position", ImGuiDataType_Float, &_levelRaw.physicsLayerPosition, &_levelRaw.physicsLayerPositionStep);
+    ImGui::InputScalar("Gravity X", ImGuiDataType_Float, &_levelRaw.gravity.x, &_levelRaw.gravityStep);
+    ImGui::InputScalar("Gravity Y", ImGuiDataType_Float, &_levelRaw.gravity.y, &_levelRaw.gravityStep);
+
+    if (ImGui::Button("Create"))
+    {
+        try
+        {
+            ASSERT(_editor);
+            auto [level, loader] = _editor->createLevel(std::string(_levelRaw.name),
+                                                        _levelRaw.sliceThickness,
+                                                        _levelRaw.physicsLayerPosition,
+                                                        _levelRaw.gravity);
+            utils::ignore(loader);
+            _openedEditors.emplace_back(std::make_unique<LevelEditor>(level));
+            _levelRaw.success = true;
+            _levelRaw.name[0] = '\0';
+        }
+        catch (const std::exception &e)
+        {
+            ImGui::OpenPopup("Unable to create level");
+            _levelRaw.errorString = e.what();
+        }
+    }
+    gui_utils::MessagePopup("Unable to create level", _levelRaw.errorString);
+    ImGui::SameLine();
+    gui_utils::CloseCurrentPopupOnSuccessButton(_levelRaw.success);
+}
+
+void Editor::StateMachineCreator()
+{
+    ImGui::InputText("Name", _stateMachineRaw.name, 255);
+    if (auto selectedLevel = gui_utils::SelectNamedObjectFromList("Level", _editor->getLevelsList()); selectedLevel)
+    {
+        _stateMachineRaw.selectedLevel = selectedLevel;
+    }
+    ImGui::TextUnformatted(!_stateMachineRaw.selectedLevel ? "" : _stateMachineRaw.selectedLevel->name().c_str());
+
+    if (ImGui::Button("Create"))
+    {
+        try
+        {
+            if (!_stateMachineRaw.selectedLevel)
+            {
+                throw game::GameException("select level");
+            }
+            ASSERT(_editor);
+            auto stateMachine = _editor->createStateMachine(_stateMachineRaw.name, _stateMachineRaw.selectedLevel);
+            _openedEditors.emplace_back(std::make_unique<StateMachineEditor>(stateMachine));
+            _stateMachineRaw.success = true;
+            _stateMachineRaw.name[0] = '\0';
+        }
+        catch (const std::exception &e)
+        {
+            ImGui::OpenPopup("Unable to create state machine");
+            _stateMachineRaw.errorString = e.what();
+        }
+    }
+    gui_utils::MessagePopup("Unable to create state machine", _stateMachineRaw.errorString);
+    ImGui::SameLine();
+    gui_utils::CloseCurrentPopupOnSuccessButton(_stateMachineRaw.success);
+}
+
+void Editor::openTabCreator(tabClass newTabClass)
+{
+    _tabCreatorOpened = true;
+    _tabClass = newTabClass;
+}
+
+void Editor::drawInterface()
+{
+    if (ImGui::BeginTabBar("##Tabs", ImGuiTabBarFlags_NoTooltip))
+    {
+        for (size_t i = 0; i < _openedEditors.size(); ++i)
+        {
+            if (ImGui::BeginTabItem(_openedEditors[i]->editorTarget()->name().c_str()))
+            {
+                _activeTab = i;
+                _openedEditors[i]->drawInterface();
+                ImGui::EndTabItem();
+            }
+        }
+        ImGui::EndTabBar();
+    }
+    if (_tabCreatorOpened)
+    {
+        ImGui::OpenPopup("New tab");
+        _tabCreatorOpened = false;
+    }
+    if (ImGui::BeginPopupModal("New tab", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        TabCreator();
+        ImGui::EndPopup();
+    }
+}
+
+filing::NamedObject &Editor::getFocusedObject() noexcept
+{
+    return *_openedEditors[_activeTab]->editorTarget();
+}
+
+void Editor::setEditor(game::game2d::Game2dEditor &editor)
+{
+    _editor = &editor;
 }
 } // namespace ample::gui
