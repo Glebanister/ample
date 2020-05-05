@@ -37,8 +37,6 @@ set(SOURCES
     src/Editor.cpp
     src/Browser.cpp
     src/TextureManager.cpp
-    src/StateMachineManager.cpp
-    src/TabEditor.cpp
     src/StateMachineEditor.cpp
     src/LevelEditor.cpp
     src/ObjectConstructor.cpp
