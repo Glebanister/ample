@@ -21,7 +21,8 @@ public:
 
     float getMaxTorque() const;
 
-    WorldFrictionJoint2d(WorldObject2d &bodyA,
+    WorldFrictionJoint2d(const std::string &name,
+                         WorldObject2d &bodyA,
                          WorldObject2d &bodyB,
                          const ample::graphics::Vector2d<float> &anchor,
                          bool collideConnected = false);

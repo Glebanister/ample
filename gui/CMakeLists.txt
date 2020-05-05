@@ -33,8 +33,11 @@ set(SOURCES
     src/Observer.cpp
     src/InterfaceUnit.cpp
     src/Editor.cpp
-    src/SliceManager.cpp
+    src/Browser.cpp
     src/TextureManager.cpp
+    src/TabEditor.cpp
+    src/StateMachineEditor.cpp
+    src/LevelEditor.cpp
     )
 
 add_executable(ample-gui ${SOURCES} ${IMGUI_SOURCES})

@@ -102,6 +102,7 @@ void ample::physics::WorldLayer2d::addWorldObject(std::shared_ptr<ample::physics
     graphics::Layer::addObject(std::static_pointer_cast<graphics::GraphicalObject>(obj));
     _bodies.push_back(obj);
     obj->_body = world.CreateBody(&obj->_bodyDef);
+    obj->setMassData({obj->_startMass, obj->_startCenter, obj->_startInertia});
     obj->_body->SetUserData(obj.get());
 }
 

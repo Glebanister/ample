@@ -95,10 +95,9 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Geometry/Point.cpp
 
     src/Game/Game2d/Game2d.cpp
+    src/Game/Game2d/Game2dEditor.cpp
     src/Game/Game2d/Level.cpp
     src/Game/GameException.cpp
-    src/Game/GameEnvironment.cpp
-    src/Game/GameController.cpp
     src/Game/StateMachine/StateMachine.cpp
     src/Game/StateMachine/Transitions/Os/EnvironmentTransition.cpp
     src/Game/StateMachine/Transitions/Os/KeyboardTransition.cpp
@@ -109,9 +108,14 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Game/StateMachine/Transitions/Physics/SpeedTransition.cpp
     src/Game/StateMachine/Transitions/Physics/PositionTransition.cpp
     src/Game/StateMachine/Transitions/Physics/CollisionTransition.cpp
-    src/Game/StateMachine/ControlledObject.cpp
+    src/Game/StateMachine/Actions/Graphical/GraphicalAction.cpp
+    src/Game/StateMachine/Actions/Graphical/GraphicalRotateAction.cpp
+    src/Game/StateMachine/Actions/Graphical/GraphicalTranslateAction.cpp
     src/Game/StateMachine/Action.cpp
     src/Game/Events/EventListener.cpp
+    src/Game/Namespace.cpp
+    src/Game/LevelSwitcher.cpp
+    src/Game/LevelLoader.cpp
    )
 
 include_directories(${SDL2_INCLUDE_DIRS})

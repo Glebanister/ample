@@ -75,13 +75,13 @@ CameraPerspective::CameraPerspective(const filing::JsonIO &input)
                         input.read<Vector2d<pixel_t>>("view_size"),
                         input.read<Vector2d<pixel_t>>("view_position"),
                         input.read<Vector3d<float>>("eye_pos"),
-                        input.read<Vector3d<float>>("direction"),
+                        input.read<Vector3d<float>>("eye_dir"),
                         input.read<float>("fov"),
                         input.read<float>("aspect_ratio"),
                         input.read<float>("near_clip"),
                         input.read<float>("far_clip"))
 {
-    input.read<std::string>("className");
+    input.read<std::string>("class_name");
 }
 
 std::string CameraPerspective::dump()

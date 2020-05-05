@@ -1,9 +1,9 @@
 #pragma once
 
-#include <memory>
-#include <unordered_map>
 #include <functional>
+#include <memory>
 #include <string>
+#include <unordered_map>
 
 namespace ample::utils
 {
