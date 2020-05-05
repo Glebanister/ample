@@ -10,6 +10,7 @@
 #include "LevelEditor.h"
 #include "StateMachineEditor.h"
 #include "Utils.h"
+#include "Browser.h"
 
 namespace ample::gui
 {
@@ -69,6 +70,7 @@ void Editor::drawInterface()
         {
             if (ImGui::BeginTabItem(_openedEditors[i]->editorTargetNamedObject()->name().c_str()))
             {
+                Browser::instance().openBrowserTab(_openedEditors[i]->editorTargetNamedObject());
                 _activeTab = i;
                 _openedEditors[i]->drawInterface();
                 ImGui::EndTabItem();
