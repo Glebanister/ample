@@ -128,6 +128,12 @@ std::shared_ptr<filing::Scene2d> Level::createSlice(const size_t num, const std:
     return _sliceByDistance[num];
 }
 
+std::shared_ptr<StateMachine> Level::createStateMachine(const std::string &name)
+{
+    _stateMachines.emplace_back(std::make_shared<StateMachine>(name));
+    return _stateMachines.back();
+}
+
 std::shared_ptr<filing::Scene2d> Level::frontSlice() noexcept
 {
     return _sliceByDistance[0];

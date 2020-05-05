@@ -49,6 +49,7 @@ public:
     void onActive() override;
 
     std::shared_ptr<filing::Scene2d> createSlice(const size_t num, const std::string &name);
+    std::shared_ptr<StateMachine> createStateMachine(const std::string &name);
     std::shared_ptr<filing::Scene2d> frontSlice() noexcept;
     std::shared_ptr<filing::Scene2d> numberedSlice(const size_t num);
 

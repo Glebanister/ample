@@ -4,6 +4,7 @@
 
 #include "LayeredWindowActivity.h"
 #include "Level.h"
+#include "StateMachine.h"
 
 namespace ample::game::game2d
 {
@@ -23,9 +24,13 @@ public:
         float physicsLayerPosition,
         const graphics::Vector2d<float> &gravity);
 
+    std::shared_ptr<StateMachine> createStateMachine(const std::string &name,
+                                                     std::shared_ptr<Level> level);
+
     void showLevel(std::shared_ptr<Level> level);
     std::shared_ptr<Level> getCurrentLevel() const noexcept;
     LevelSwitcher &levelSwitcher() noexcept;
+    std::vector<std::shared_ptr<Level>> &getLevelsList() noexcept;
 
     void setProjectPath(const std::filesystem::path &path);
     std::filesystem::path getProjectPath() const noexcept;

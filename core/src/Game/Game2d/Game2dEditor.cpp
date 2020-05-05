@@ -59,6 +59,11 @@ std::filesystem::path Game2dEditor::getProjectPath() const noexcept
     return _projectPath;
 }
 
+std::vector<std::shared_ptr<Level>> &Game2dEditor::getLevelsList() noexcept
+{
+    return _levels;
+}
+
 void Game2dEditor::save()
 {
     if (_projectPath.empty())
@@ -87,6 +92,12 @@ std::pair<std::shared_ptr<Level>, std::shared_ptr<LevelLoader>> Game2dEditor::cr
                                                                   level->name(),
                                                                   levelSwitcher());
     return {level, levelLoader};
+}
+
+std::shared_ptr<StateMachine> Game2dEditor::createStateMachine(const std::string &name,
+                                                               std::shared_ptr<Level> level)
+{
+    return level->createStateMachine(name);
 }
 
 void Game2dEditor::onActive()
