@@ -1,13 +1,12 @@
-#include "ample/Debug.h"
 #include "Observer.h"
-#include "ample/Vector2d.h"
+#include "ample/Debug.h"
 #include "ample/Utils.h"
+#include "ample/Vector2d.h"
 
 namespace ample::gui
 {
-Observer::Observer(gui::AmpleGui &gui, const graphics::Vector2d<int> &size)
-    : _game(gui),
-      _lamp(std::make_shared<graphics::light::LightSource>("observer_lamp")),
+Observer::Observer(const graphics::Vector2d<int> &size)
+    : _lamp(std::make_shared<graphics::light::LightSource>("observer_lamp")),
       _camera(std::make_shared<graphics::CameraPerspective>("observer_camera",
                                                             graphics::Vector2d<graphics::pixel_t>{size.x, size.y},
                                                             graphics::Vector2d<graphics::pixel_t>{0, 0},
@@ -27,6 +26,15 @@ void Observer::onWindowResized(const graphics::Vector2d<int> &size)
     int viewportH = size.y * _cfY;
     _camera->setViewport({viewportW, viewportH}, {(size.x - viewportW) / 2, (size.y - viewportH)});
     _camera->setAspectRatio((static_cast<float>(size.x)) / (static_cast<float>(size.y)) * (_cfX / _cfY));
+}
+
+void Observer::setLevel(std::shared_ptr<game::game2d::Level> level) noexcept
+{
+    _level = level;
+}
+void Observer::loseLevel() noexcept
+{
+    _level.reset();
 }
 
 void Observer::onActive()
@@ -52,14 +60,14 @@ void Observer::onActive()
 
     _lamp->setTranslate({_camera->getX(), _camera->getY(), _camera->getZ()});
 
-    if (!_game.getCurrentLevel())
+    if (!_level)
     {
         return;
     }
     _camera->look();
 
     _lamp->draw();
-    for (const auto &[_, slice] : _game.getCurrentLevel()->layers())
+    for (const auto &[_, slice] : _level->layers())
     {
         utils::ignore(_);
         for (const auto &obj : slice->objects())

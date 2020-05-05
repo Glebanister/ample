@@ -16,7 +16,7 @@ namespace ample::gui
 {
 AmpleGui::AmpleGui(ample::window::Window &window)
     : ImguiActivity(window),
-      _observer(std::make_shared<Observer>(*this)),
+      _observer(std::make_shared<Observer>()),
       _editor(*this)
 {
     addBehavior(_observer);
@@ -26,7 +26,7 @@ AmpleGui::AmpleGui(ample::window::Window &window)
 AmpleGui::AmpleGui(ample::window::Window &window,
                    const std::filesystem::path &existingProjectPath)
     : ImguiActivity(window, existingProjectPath),
-      _observer(std::make_shared<Observer>(*this)),
+      _observer(std::make_shared<Observer>()),
       _editor(*this)
 {
     addBehavior(_observer);
@@ -47,10 +47,22 @@ void AmpleGui::onResize()
 
 void AmpleGui::MenuBar()
 {
+    std::string savingError;
     if (ImGui::BeginMenu("File"))
     {
-        ImGui::MenuItem("Save", "Ctrl+S", false, !getProjectPath().empty());
-        if (ImGui::MenuItem("Save as", "Ctrl+Shift+S"))
+        if (ImGui::MenuItem("Save", NULL, false, !getProjectPath().empty()))
+        {
+            try
+            {
+                save();
+            }
+            catch (const std::exception &e)
+            {
+                ImGui::OpenPopup("Save unsuccessful");
+                savingError = e.what();
+            }
+        }
+        if (ImGui::MenuItem("Save as"))
         {
             _filebrowser.Open();
         }
@@ -72,6 +84,7 @@ void AmpleGui::MenuBar()
         }
         ImGui::EndMenu();
     }
+    gui_utils::MessagePopup("Save unsuccessful", savingError);
     if (ImGui::BeginMenu("Help"))
     {
         ImGui::Selectable("No");
