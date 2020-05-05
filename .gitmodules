@@ -19,3 +19,6 @@
 [submodule "extern/cxxopts"]
 	path = extern/cxxopts
 	url = https://github.com/jarro2783/cxxopts
+[submodule "extern/imnodes"]
+	path = extern/imnodes
+	url = https://github.com/Nelarius/imnodes

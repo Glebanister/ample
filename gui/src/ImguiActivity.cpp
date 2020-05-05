@@ -5,6 +5,7 @@
 #include <examples/imgui_impl_opengl3.h>
 #include <examples/imgui_impl_sdl.h>
 #include <imgui.h>
+#include <imnodes.h>
 
 #include "ImguiActivity.h"
 #include "ample/Debug.h"
@@ -21,6 +22,9 @@ void initImgui(ample::window::Window &window)
     ImGui::CreateContext();
     ImGui_ImplSDL2_InitForOpenGL(window.pointer(), window.glContext());
     ImGui_ImplOpenGL3_Init(glsl_version);
+    imnodes::Initialize();
+    ImGui::GetIO().Fonts->AddFontFromFileTTF("gui/resources/fonts/OpenSans-Regular.ttf", 20.0f);
+    os::environment::OpenGLEnvironment::instance().setColor({0.17f, 0.213f, 0.248f, 1.00f});
 }
 
 ImguiActivity::ImguiActivity(ample::window::Window &window,
@@ -58,6 +62,7 @@ void ImguiActivity::onActive()
 
 ImguiActivity::~ImguiActivity()
 {
+    imnodes::Shutdown();
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();

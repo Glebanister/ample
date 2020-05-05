@@ -18,7 +18,6 @@ AmpleGui::AmpleGui(ample::window::Window &window)
     : ImguiActivity(window),
       _editor(*this)
 {
-    os::environment::OpenGLEnvironment::instance().setColor({0.17f, 0.213f, 0.248f, 1.00f});
 }
 
 AmpleGui::AmpleGui(ample::window::Window &window,

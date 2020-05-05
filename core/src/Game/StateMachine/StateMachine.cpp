@@ -44,6 +44,11 @@ std::string StateMachine::Transition::dump()
     return output;
 }
 
+bool StateMachine::Transition::listen() 
+{
+    return false;
+}
+  
 StateMachine::State::State(StateMachine &machine, const std::string &name, const std::string &className)
     : NamedStoredObject(name, className), _machine(machine) {}
 
