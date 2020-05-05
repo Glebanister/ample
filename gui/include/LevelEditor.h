@@ -6,10 +6,10 @@
 
 namespace ample::gui
 {
-class LevelEditor : public TabEditor
+class LevelEditor : public TabObjectEditor<game::game2d::Level>
 {
 public:
-    LevelEditor(std::shared_ptr<game::game2d::Level>);
+    using TabObjectEditor<game::game2d::Level>::TabObjectEditor;
 
     void drawInterface() override;
 };

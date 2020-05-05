@@ -41,6 +41,9 @@ set(SOURCES
     src/TabEditor.cpp
     src/StateMachineEditor.cpp
     src/LevelEditor.cpp
+    src/ObjectConstructor.cpp
+    src/LevelBrowser.cpp
+    src/StateMachineBrowser.cpp
     )
 
 add_executable(ample-gui ${SOURCES} ${IMGUI_SOURCES})
