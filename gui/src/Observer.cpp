@@ -31,9 +31,8 @@ void Observer::setViewport(const graphics::Vector2d<float> &size,
     _camera->setAspectRatio(size.x / size.y);
 }
 
-void Observer::look(std::shared_ptr<game::game2d::Level> level) noexcept
+void Observer::updatePos()
 {
-    ASSERT(level);
     if (control::EventManager::instance().keyboard().isKeyDown(control::keysym::ARROW_LEFT))
     {
         _camera->translate({1.0f, 0.0f, 0.0f});
@@ -53,6 +52,11 @@ void Observer::look(std::shared_ptr<game::game2d::Level> level) noexcept
     _camera->translate({0.0f, 0.0f, 2.0f * control::EventManager::instance().mouse().getWheelY()});
 
     _lamp->setTranslate({_camera->getX(), _camera->getY(), _camera->getZ()});
+}
+
+void Observer::look(std::shared_ptr<game::game2d::Level> level) noexcept
+{
+    ASSERT(level);
 
     _camera->look();
 

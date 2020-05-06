@@ -6,11 +6,11 @@
 #include "ample/WorldObject2d.h"
 
 #include "AmpleGui.h"
+#include "Browser.h"
 #include "Editor.h"
 #include "LevelEditor.h"
 #include "StateMachineEditor.h"
 #include "Utils.h"
-#include "Browser.h"
 
 namespace ample::gui
 {
@@ -71,8 +71,18 @@ void Editor::drawInterface()
             if (ImGui::BeginTabItem(_openedEditors[i]->editorTargetNamedObject()->name().c_str()))
             {
                 Browser::instance().openBrowserTab(_openedEditors[i]->editorTargetNamedObject());
-                _activeTab = i;
+                _activeTab = i;                 
+                ImGui::BeginChild(_openedEditors[i]->editorTargetNamedObject()->name().c_str());
+                if (ImGui::IsAnyItemActive())
+                {
+                    _openedEditors[i]->setActive(false);    
+                }
+                if (ImGui::IsItemActive())
+                {
+                    _openedEditors[i]->setActive(true);    
+                }
                 _openedEditors[i]->drawInterface();
+                ImGui::EndChild();
                 ImGui::EndTabItem();
             }
         }

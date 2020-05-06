@@ -125,8 +125,6 @@ void AmpleGui::Workspace()
     ImGui::GetColumnWidth();
     ImGui::NextColumn();
 
-    Observer::instance().setViewport({ImGui::GetColumnWidth(1), ImGui::GetWindowHeight() - 44 - ImGui::GetFont()->FontSize},
-                                     {ImGui::GetColumnWidth(0), 0});
 }
 
 void AmpleGui::drawInterface()

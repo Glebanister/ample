@@ -12,6 +12,11 @@ class TabEditor : public GraphicalInterface
 {
 public:
     virtual std::shared_ptr<filing::NamedObject> editorTargetNamedObject() const noexcept = 0;
+    void setActive(bool flag) { _isActive = flag; }
+    bool isActive() const noexcept { return _isActive; }
+
+private:
+    bool _isActive;
 };
 
 template <class T>
@@ -25,6 +30,6 @@ public:
 private:
     std::shared_ptr<T> _editorTarget;
 };
-}
+} // namespace ample::gui
 
 #include "templates/TabEditor.hpp"

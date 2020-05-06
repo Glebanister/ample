@@ -16,12 +16,14 @@ class AmpleGui;
 
 namespace ample::gui
 {
-class Observer : public utils::Singleton<Observer>
+class Observer
 {
 public:
     Observer(const graphics::Vector2d<float> &size = {1920, 1080});
 
     void look(std::shared_ptr<game::game2d::Level>) noexcept;
+
+    void updatePos();
 
     void setViewport(const graphics::Vector2d<float> &size,
                      const graphics::Vector2d<float> &position);
