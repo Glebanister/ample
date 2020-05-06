@@ -88,6 +88,11 @@ void dumpLevelsRecursive(std::shared_ptr<StateMachine::State> level,
     levelStateFile << result.getJSONstring();
 }
 
+bool LevelSwitcher::hasStartState() const noexcept
+{
+    return _startState.operator bool();
+}
+
 void LevelSwitcher::save(const std::filesystem::path &path)
 {
     if (!_startState)

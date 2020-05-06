@@ -25,5 +25,6 @@ public:
     LevelSwitcher(const std::filesystem::path &projectPath);
     LevelSwitcher();
     void save(const std::filesystem::path &path);
+    bool hasStartState() const noexcept;
 };
 } // namespace ample::game
