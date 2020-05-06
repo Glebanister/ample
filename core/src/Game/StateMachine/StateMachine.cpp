@@ -44,11 +44,11 @@ std::string StateMachine::Transition::dump()
     return output;
 }
 
-bool StateMachine::Transition::listen() 
+bool StateMachine::Transition::listen()
 {
     return false;
 }
-  
+
 StateMachine::State::State(StateMachine &machine, const std::string &name, const std::string &className)
     : NamedStoredObject(name, className), _machine(machine) {}
 
@@ -237,6 +237,20 @@ std::string StateMachine::State::dump()
     });
 }
 
+void StateMachine::onStart()
+{
+    ASSERT(_currentState);
+    Behavior::onActive();
+    _currentState->onStart();
+}
+
+void StateMachine::onStop()
+{
+    ASSERT(_currentState);
+    Behavior::onStop();
+    _currentState->onStop();
+}
+
 void StateMachine::onActive()
 {
     activity::Behavior::onActive();
@@ -254,7 +268,13 @@ void StateMachine::setStartState(std::shared_ptr<State> state)
 
 void StateMachine::setCurrentState(std::shared_ptr<State> state)
 {
+    ASSERT(state);
+    if (_currentState)
+    {
+        _currentState->onStop();
+    }
     _currentState = state;
+    _currentState->onStart();
 }
 
 std::shared_ptr<StateMachine::State> StateMachine::getCurrentState() noexcept

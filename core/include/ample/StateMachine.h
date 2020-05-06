@@ -86,7 +86,9 @@ public:
     void setStartState(std::shared_ptr<State> state);
     void setCurrentState(std::shared_ptr<State> state);
     std::shared_ptr<State> getCurrentState() noexcept;
+    void onStart() override;
     void onActive() override;
+    void onStop() override;
 
     std::string dump() override;
 
