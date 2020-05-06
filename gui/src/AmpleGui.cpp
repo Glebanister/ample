@@ -16,8 +16,20 @@ namespace ample::gui
 {
 AmpleGui::AmpleGui(ample::window::Window &window)
     : ImguiActivity(window),
-      _editor(*this)
+      _editor(*this),
+      _projectPathSelector("Create new project",
+                           false,
+                           static_cast<ImGuiWindowFlags_>(ImGuiWindowFlags_NoResize |
+                                                          ImGuiWindowFlags_NoSavedSettings |
+                                                          ImGuiWindowFlags_AlwaysAutoResize |
+                                                          ImGuiWindowFlags_NoTitleBar | 
+                                                          ImGuiWindowFlags_NoMove),
+                           false)
 {
+    _projectPathSelector.addParameters()
+        .add<param::Path>("Select path", static_cast<ImGuiFileBrowserFlags_>(ImGuiFileBrowserFlags_SelectDirectory |
+                                                                             ImGuiFileBrowserFlags_CreateNewDir |
+                                                                             ImGuiFileBrowserFlags_NoTitleBar));
 }
 
 AmpleGui::AmpleGui(ample::window::Window &window,
@@ -27,22 +39,25 @@ AmpleGui::AmpleGui(ample::window::Window &window,
 {
 }
 
+void AmpleGui::trySaveProject()
+{
+    try
+    {
+        save();
+    }
+    catch (const std::exception &e)
+    {
+        _savingPopup = {"Saving error", e.what(), true};
+    }
+}
+
 void AmpleGui::MenuBar()
 {
-    std::string savingError;
     if (ImGui::BeginMenu("File"))
     {
         if (ImGui::MenuItem("Save", NULL, false, !getProjectPath().empty()))
         {
-            try
-            {
-                save();
-            }
-            catch (const std::exception &e)
-            {
-                ImGui::OpenPopup("Save unsuccessful");
-                savingError = e.what();
-            }
+            trySaveProject();
         }
         if (ImGui::MenuItem("Save as"))
         {
@@ -66,7 +81,6 @@ void AmpleGui::MenuBar()
         }
         ImGui::EndMenu();
     }
-    gui_utils::MessagePopup("Save unsuccessful", savingError);
     if (ImGui::BeginMenu("Help"))
     {
         ImGui::Selectable("No");
@@ -77,8 +91,42 @@ void AmpleGui::MenuBar()
     if (_filebrowser.HasSelected())
     {
         setProjectPath(_filebrowser.GetSelected());
+        trySaveProject();
         _filebrowser.ClearSelected();
     }
+}
+
+void AmpleGui::Workspace()
+{
+    if (ImGui::BeginMenuBar())
+    {
+        MenuBar();
+        ImGui::EndMenuBar();
+    }
+    ImGui::Columns(2, "Workspace");
+
+    static bool columnFirstTimeDrawing = true;
+    if (columnFirstTimeDrawing)
+    {
+        columnFirstTimeDrawing = false;
+        ImGui::SetColumnWidth(0, 400);
+    }
+
+    ImGui::Separator();
+
+    ImGui::BeginChild("Browser");
+    Browser::instance().drawInterface();
+    ImGui::EndChild();
+    ImGui::NextColumn();
+
+    ImGui::BeginChild("Editor");
+    _editor.drawInterface();
+    ImGui::EndChild();
+    ImGui::GetColumnWidth();
+    ImGui::NextColumn();
+
+    Observer::instance().setViewport({ImGui::GetColumnWidth(1), ImGui::GetWindowHeight() - 44 - ImGui::GetFont()->FontSize},
+                                     {ImGui::GetColumnWidth(0), 0});
 }
 
 void AmpleGui::drawInterface()
@@ -95,36 +143,17 @@ void AmpleGui::drawInterface()
                          ImGuiWindowFlags_NoTitleBar |
                          ImGuiWindowFlags_NoSavedSettings))
     {
-        if (ImGui::BeginMenuBar())
+        if (getProjectPath().empty())
         {
-            MenuBar();
-            ImGui::EndMenuBar();
+            _projectPathSelector.drawInterface([&](const auto &params) {
+                setProjectPath(param::value<std::filesystem::path>(*params[0]));
+            });
         }
-        ImGui::Columns(2, "Workspace");
-
-        static bool columnFirstTimeDrawing = true;
-        if (columnFirstTimeDrawing)
+        else
         {
-            columnFirstTimeDrawing = false;
-            ImGui::SetColumnWidth(0, 400);
+            Workspace();
         }
-
-        ImGui::Separator();
-
-        ImGui::SetNextWindowBgAlpha(1.0f);
-        ImGui::BeginChild("Browser");
-        Browser::instance().drawInterface();
-        ImGui::EndChild();
-        ImGui::NextColumn();
-
-        ImGui::BeginChild("Editor");
-        _editor.drawInterface();
-        ImGui::EndChild();
-        ImGui::GetColumnWidth();
-        ImGui::NextColumn();
-
-        Observer::instance().setViewport({ImGui::GetColumnWidth(1), ImGui::GetWindowHeight() - 50},
-                                         {ImGui::GetColumnWidth(0), 0});
+        _savingPopup.drawInterface();
     }
     ImGui::End();
 }

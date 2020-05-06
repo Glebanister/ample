@@ -13,8 +13,8 @@ typename ObjectConstructor::ParamsAdder &ObjectConstructor::addParameters()
     return _adder;
 }
 
-ObjectConstructor::ObjectConstructor()
-    : _adder(_params)
+ObjectConstructor::ObjectConstructor(const std::string &buttonName, bool closable, ImGuiWindowFlags_ flags, bool modal)
+    : _adder(_params), _buttonName(buttonName), _closable(closable), _windowFlags(flags), _modal(modal)
 {
 }
 
@@ -84,6 +84,30 @@ void String::imguiInput()
 void String::reset()
 {
     buffer[0] = '\0';
+}
+
+Path::Path(const std::string &name, ImGuiFileBrowserFlags_ flags)
+    : Parameter(name), _filebrowser(flags) {}
+
+void Path::imguiInput()
+{
+    if (ImGui::Button(name.c_str()))
+    {
+        _filebrowser.Open();
+    }
+    ImGui::SameLine();
+    ImGui::Text("%s", _buffer.c_str());
+    _filebrowser.Display();
+    if (_filebrowser.HasSelected())
+    {
+        _buffer = _filebrowser.GetSelected();
+    }
+}
+
+void Path::reset()
+{
+    _buffer.erase();
+    _filebrowser.ClearSelected();
 }
 
 LevelsList::LevelsList(const std::string &name, std::vector<std::shared_ptr<game::game2d::Level>> *list)

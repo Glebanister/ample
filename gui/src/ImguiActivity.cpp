@@ -51,12 +51,13 @@ void ImguiActivity::onActive()
     {
         ImGui_ImplSDL2_ProcessEvent(&ev);
     }
+    Game2dEditor::onActive();
+
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame(_window.pointer());
     ImGui::NewFrame();
     drawInterface();
     ImGui::Render();
-    Game2dEditor::onActive();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 

@@ -15,6 +15,7 @@
 #include "ImguiActivity.h"
 #include "Observer.h"
 #include "Editor.h"
+#include "ObjectConstructor.h"
 
 namespace ample::gui
 {
@@ -35,10 +36,14 @@ public:
 
 private:
     void MenuBar();
+    void Workspace();
+    void trySaveProject();
     ImGui::FileBrowser _filebrowser{ImGuiFileBrowserFlags_CloseOnEsc |
                                     ImGuiFileBrowserFlags_CreateNewDir |
                                     ImGuiFileBrowserFlags_SelectDirectory |
                                     ImGuiFileBrowserFlags_NoTitleBar};
     Editor _editor;
+    ObjectConstructor _projectPathSelector;
+    gui_utils::MessagePopup _savingPopup;
 };
 } // namespace ample::gui

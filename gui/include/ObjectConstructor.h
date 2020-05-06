@@ -4,10 +4,14 @@
 #include <string>
 #include <vector>
 
-#include "ample/NamedObject.h"
+#include <imgui.h>
+#include <imfilebrowser.h>
+
 #include "ample/Level.h"
+#include "ample/NamedObject.h"
 
 #include "InterfaceUnit.h"
+#include "Utils.h"
 
 namespace ample::gui
 {
@@ -70,6 +74,17 @@ struct String : Parameter
     char buffer[255] = {'\0'};
 };
 
+struct Path : Parameter
+{
+    Path(const std::string &name, ImGuiFileBrowserFlags_);
+
+    void imguiInput() override;
+    void reset() override;
+
+    ImGui::FileBrowser _filebrowser;
+    std::string _buffer;
+};
+
 struct LevelsList : Parameter
 {
     LevelsList(const std::string &name, std::vector<std::shared_ptr<game::game2d::Level>> *list);
@@ -98,7 +113,10 @@ public:
     };
 
 public:
-    ObjectConstructor();
+    ObjectConstructor(const std::string &_buttonName = "Create",
+                      bool closable = true,
+                      ImGuiWindowFlags_ = ImGuiWindowFlags_None,
+                      bool modal = true);
 
     template <class Creator>
     void drawInterface(const Creator &);
@@ -109,6 +127,12 @@ private:
     bool _success = false;
     std::string _errorString;
     ParamsAdder _adder;
+    std::string _buttonName;
+    gui_utils::MessagePopup _errorPopup;
+    bool _closable = true;
+    ImGuiWindowFlags_ _windowFlags;
+    bool _closed = false;
+    bool _modal = true;
 };
 } // namespace ample::gui
 
