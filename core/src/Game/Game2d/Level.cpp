@@ -71,26 +71,28 @@ void Level::saveAs(const std::filesystem::path &path)
     cameraFile << camera()->dump();
     cameraFile.close();
 
-    std::ofstream settingsFile(path / "settings.json");
     filing::JsonIO settingsJson = NamedStoredObject::dump();
     settingsJson.write<float>("slice_thickness", _sliceThikness);
     settingsJson.write<float>("physics_layer_position", _physicsLayerPosition);
     settingsJson.write<graphics::Vector2d<float>>("gravity", _defaultGravity);
+    std::ofstream settingsFile(path / "settings.json");
     settingsFile << settingsJson.getJSONstring();
     settingsFile.close();
 
     utils::tryCreateDirectory(path / "scenes");
     for (const auto &[dist, slice] : _sliceByDistance)
     {
+        std::string sliceData = slice->dump();
         std::ofstream sliceFile(path / "scenes" / (slice->name() + ".json"));
-        sliceFile << slice->dump();
+        sliceFile << sliceData;
     }
 
     utils::tryCreateDirectory(path / "state_machines");
     for (const auto &machine : _stateMachines)
     {
+        std::string smdata = machine->dump();
         std::ofstream machineFile(path / "state_machines" / (machine->name() + ".json"));
-        machineFile << machine->dump();
+        machineFile << smdata;
     }
 }
 

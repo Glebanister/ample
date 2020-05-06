@@ -91,6 +91,10 @@ std::pair<std::shared_ptr<Level>, std::shared_ptr<LevelLoader>> Game2dEditor::cr
     auto levelLoader = std::make_shared<ample::game::LevelLoader>(getProjectPath(),
                                                                   level->name(),
                                                                   levelSwitcher());
+    if (!_levelSwitcher.hasStartState())
+    {
+        _levelSwitcher.setStartState(levelLoader);
+    }
     return {level, levelLoader};
 }
 

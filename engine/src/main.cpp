@@ -35,7 +35,7 @@ int main(int argc, char **argv)
                                      1920, 1080,
                                      ample::window::winpos::CENTERED_X | ample::window::winpos::CENTERED_Y,
                                      ample::window::FULLSCREEN);
-        auto activity = ample::game::game2d::Game2d(window, argv[1]);
+        auto activity = ample::game::game2d::Game2d(window, projectName);
         activity.loop();
     }
     catch (const ample::exception::Exception &ex)

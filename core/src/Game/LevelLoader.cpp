@@ -36,6 +36,7 @@ void LevelLoader::onStart()
 void LevelLoader::onActive()
 {
     Behavior::onActive();
+    ASSERT(_level);
     _level->onActive();
 }
 
