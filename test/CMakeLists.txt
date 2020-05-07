@@ -1,11 +1,17 @@
 set(TEST_SOURCES
     test_all.cpp
-    testActivity.cpp
+    testJsonIO.cpp
     )
 
-add_executable(test_${CMAKE_PROJECT_NAME} ${TEST_SOURCES})
+add_subdirectory(../extern/googletest buildGoogletest)
 
-add_test(NAME test_${CMAKE_PROJECT_NAME} COMMAND test_${CMAKE_PROJECT_NAME})
+include_directories(../extern/rapidjson/include/)
+include_directories(../extern/googletest/googletest/include/)
+include_directories(../core/include/)
 
-target_link_libraries(test_${CMAKE_PROJECT_NAME} PUBLIC ${CMAKE_PROJECT_NAME} gtest)
-target_link_libraries(test_${CMAKE_PROJECT_NAME} PUBLIC ${CMAKE_PROJECT_NAME} Ample)
+add_executable(${CMAKE_PROJECT_NAME}-test ${TEST_SOURCES})
+
+add_test(NAME ${CMAKE_PROJECT_NAME}-test COMMAND ${CMAKE_PROJECT_NAME}-test)
+
+target_link_libraries(${CMAKE_PROJECT_NAME}-test PUBLIC ${CMAKE_PROJECT_NAME} gtest)
+target_link_libraries(${CMAKE_PROJECT_NAME}-test PUBLIC ${CMAKE_PROJECT_NAME} ample)

@@ -33,7 +33,6 @@ CameraPerspective::CameraPerspective(const std::string &name,
       _viewMatrixUniform(std::make_unique<shaders::ShaderProcessor::Uniform>(_viewMatrix, "view_matrix")),
       _projectionMatrixUniform(std::make_unique<shaders::ShaderProcessor::Uniform>(_projectionMatrix, "projection_matrix"))
 {
-    DEBUG("Setup perspective camera") << _fov << ' ' << _aspectRatio << ' ' << std::endl;
     exception::OpenGLException::handle();
 }
 
@@ -82,7 +81,7 @@ CameraPerspective::CameraPerspective(const filing::JsonIO &input)
                         input.read<float>("near_clip"),
                         input.read<float>("far_clip"))
 {
-    input.read<std::string>("className");
+    input.read<std::string>("class_name");
 }
 
 std::string CameraPerspective::dump()

@@ -2,7 +2,8 @@
 
 namespace ample::physics
 {
-WorldPulleyJoint2d::WorldPulleyJoint2d(WorldObject2d &bodyA,
+WorldPulleyJoint2d::WorldPulleyJoint2d(const std::string &name,
+                                       WorldObject2d &bodyA,
                                        WorldObject2d &bodyB,
                                        const ample::graphics::Vector2d<float> &groundAnchorA,
                                        const ample::graphics::Vector2d<float> &groundAnchorB,
@@ -12,7 +13,7 @@ WorldPulleyJoint2d::WorldPulleyJoint2d(WorldObject2d &bodyA,
                                        float lengthB,
                                        float ratio,
                                        bool collideConnected)
-    : WorldJoint2d(bodyA, bodyB)
+    : WorldJoint2d(name, "WorldPulleyJoint2d", bodyA, bodyB)
 {
     b2PulleyJointDef jointDef;
     jointDef.Initialize(getB2Body(bodyA), getB2Body(bodyB),

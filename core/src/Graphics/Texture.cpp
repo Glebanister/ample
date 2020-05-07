@@ -18,7 +18,7 @@ TextureRaw::TextureRaw(const std::string &texturePath,
                        const texturePlayback playback,
                        const size_t total,
                        const Vector2d<textureOrigin> &origin)
-    : NamedObject(name),
+    : NamedObject(name, "Texture"),
       path(texturePath),
       eachSize(eachSize),
       startPosition(startPosition),

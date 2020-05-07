@@ -11,7 +11,8 @@ public:
     TimerTransition(const std::string &name,
                     std::shared_ptr<StateMachine::State> nextState,
                     int timeDelta);
-    // TimerTransition(std::shared_ptr<StateMachine::State> nextState, int timeDelta);
+    TimerTransition(const filing::JsonIO &input, std::shared_ptr<StateMachine::State> nextState);
+
     std::string dump() override;
 
     void onStart() override;

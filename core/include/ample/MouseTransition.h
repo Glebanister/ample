@@ -30,21 +30,18 @@ public:
 public:
     MouseTransition(const std::string &name,
                     std::shared_ptr<ample::game::StateMachine::State> state,
-                    control::EventManager &manager,
                     type eventType,
                     control::mouseButton button,
                     const geometry::Point &area);
 
     MouseTransition(const std::string &name,
                     std::shared_ptr<ample::game::StateMachine::State> state,
-                    control::EventManager &manager,
                     type eventType,
                     control::mouseButton button,
                     const geometry::Rectangle &area);
 
     MouseTransition(const std::string &name,
                     std::shared_ptr<ample::game::StateMachine::State> state,
-                    control::EventManager &manager,
                     type eventType,
                     control::mouseButton button,
                     const geometry::Circle &area);
@@ -54,7 +51,6 @@ public:
 private:
     MouseTransition(const std::string &name,
                     std::shared_ptr<ample::game::StateMachine::State> state,
-                    control::EventManager &manager,
                     type eventType,
                     control::mouseButton button,
                     std::shared_ptr<geometry::Shape> area);

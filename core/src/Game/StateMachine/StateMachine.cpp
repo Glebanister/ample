@@ -1,11 +1,13 @@
-#include <memory>
 #include <iostream>
+#include <memory>
 #include <numeric>
 
-#include "StateMachine.h"
-#include "GameException.h"
+#include "ActionsFactory.h"
 #include "Debug.h"
 #include "Factory.h"
+#include "GameException.h"
+#include "StateMachine.h"
+#include "TransitionsFactory.h"
 
 namespace ample::game
 {
@@ -41,16 +43,8 @@ std::string StateMachine::Transition::dump()
     return output;
 }
 
-StateMachine::State::State(std::shared_ptr<StateMachine> machine, const std::string &name)
+StateMachine::State::State(StateMachine &machine, const std::string &name)
     : NamedStoredObject(name, "State"), _machine(machine) {}
-
-StateMachine::State::State(const std::string &name)
-    : NamedStoredObject(name, "State"), _machine(nullptr) {} // TODO: may be mistake
-
-void StateMachine::State::setMachine(std::shared_ptr<StateMachine> machine) noexcept
-{
-    _machine = machine;
-}
 
 void StateMachine::State::addTransition(std::shared_ptr<StateMachine::Transition> transition) noexcept
 {
@@ -93,11 +87,7 @@ void StateMachine::State::onActive()
         if (transition->isActivated())
         {
             transition->reset();
-            if (!_machine)
-            {
-                throw GameException{"state machine is empty, transition can not be done"};
-            }
-            _machine->setCurrentState(transition->getNextState());
+            _machine.setCurrentState(transition->getNextState());
         }
     }
 }
@@ -124,23 +114,23 @@ void StateMachine::State::dumpRecursive(std::vector<std::string> &strings,
     strings.push_back(output);
 }
 
-StateMachine::State::State(const filing::JsonIO &input)
-    : NamedStoredObject(input, "State")
+StateMachine::State::State(const filing::JsonIO &input, StateMachine &machine)
+    : NamedStoredObject(input), _machine(machine)
 {
-    auto onStartActionStrings = filing::loadObjectsVector(input.read<std::string>("onStart"));
-    auto onActiveActionStrings = filing::loadObjectsVector(input.read<std::string>("onActive"));
-    auto onStopActionStrings = filing::loadObjectsVector(input.read<std::string>("onStop"));
+    auto onStartActionStrings = filing::loadObjectsVector(input.updateJsonIO("onStart"));
+    auto onActiveActionStrings = filing::loadObjectsVector(input.updateJsonIO("onActive"));
+    auto onStopActionStrings = filing::loadObjectsVector(input.updateJsonIO("onStop"));
     for (const auto &actionString : onStartActionStrings)
     {
-        // addOnStartAction(utils::Factory<Action>())
+        addOnStartAction(factory::ActionsFactory.produce(filing::JsonIO(actionString).read<std::string>("class_name"), actionString));
     }
     for (const auto &actionString : onActiveActionStrings)
     {
-        // addOnStartAction(utils::Factory<Action>())
+        addOnActiveAction(factory::ActionsFactory.produce(filing::JsonIO(actionString).read<std::string>("class_name"), actionString));
     }
     for (const auto &actionString : onStopActionStrings)
     {
-        // addOnStartAction(utils::Factory<Action>()) // TODO
+        addOnStopAction(factory::ActionsFactory.produce(filing::JsonIO(actionString).read<std::string>("class_name"), actionString));
     }
 }
 
@@ -163,18 +153,18 @@ std::string StateMachine::State::dump()
 {
     filing::JsonIO output = NamedStoredObject::dump();
     std::vector<std::string> startActions, activeActions, stopActions;
-    // TODO: it's c++2a, use iterators?
+    // TODO: use iterators?
     for (const auto &act : _onStartActions)
     {
-        startActions.emplace_back(act->name());
+        startActions.emplace_back(act->dump());
     }
     for (const auto &act : _onActiveActions)
     {
-        activeActions.emplace_back(act->name());
+        activeActions.emplace_back(act->dump());
     }
     for (const auto &act : _onStopActions)
     {
-        stopActions.emplace_back(act->name());
+        stopActions.emplace_back(act->dump());
     }
     return filing::mergeStrings({
         output.getJSONstring(),
@@ -221,20 +211,31 @@ StateMachine::StateMachine(const std::string &name)
 StateMachine::StateMachine(const filing::JsonIO &input)
     : NamedStoredObject(input)
 {
-    auto stateStrings = filing::loadObjectsVector(input.read<std::string>("states"));
+    auto stateStrings = filing::loadObjectsVector(input.updateJsonIO("states"));
     std::string startStateName = input.read<std::string>("start_state");
-    for (const auto &string : stateStrings)
+    std::unordered_map<std::string, std::shared_ptr<State>> statesMap;
+    for (const filing::JsonIO &string : stateStrings)
     {
-        std::shared_ptr<State> newState = std::make_shared<State>(string);
-        newState->setMachine(shared_from_this());
-        auto transitionStrings = filing::loadObjectsVector(input.read<std::string>("transitions"));
-        for (const auto &transitionString : transitionStrings)
-        {
-            // newState->addTransition() // TODO
-        }
+        std::shared_ptr<State> newState = std::make_shared<State>(string, *this);
         if (newState->name() == startStateName)
         {
             setStartState(newState);
+        }
+        statesMap[newState->name()] = newState;
+    }
+    for (const filing::JsonIO &stateData : stateStrings)
+    {
+        auto transitionStrings = filing::loadObjectsVector(stateData.updateJsonIO("transitions"));
+        auto currentState = statesMap[stateData.read<std::string>("name")];
+        for (const filing::JsonIO &transitionData : transitionStrings)
+        {
+            std::string transitionClass = transitionData.read<std::string>("class_name");
+            auto nextState = statesMap[transitionData.read<std::string>("to")];
+            currentState->addTransition(
+                game::factory::TransitionsFactory.produce(
+                    transitionClass,
+                    transitionData.getJSONstring(),
+                    nextState));
         }
     }
 

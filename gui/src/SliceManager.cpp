@@ -17,11 +17,6 @@ void SliceManager::drawInterface()
                 size_t id = 0;
                 for (auto &obj : slice->objects())
                 {
-                    if (id == 0)
-                    {
-                        ++id;
-                        continue;
-                    }
                     if (ImGui::TreeNode(obj->name().c_str()))
                     {
                         auto go2d = std::static_pointer_cast<graphics::GraphicalObject2d>(obj);

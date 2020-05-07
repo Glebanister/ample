@@ -2,13 +2,14 @@
 
 namespace ample::physics
 {
-WorldRopeJoint2d::WorldRopeJoint2d(WorldObject2d &bodyA,
+WorldRopeJoint2d::WorldRopeJoint2d(const std::string &name,
+                                   WorldObject2d &bodyA,
                                    WorldObject2d &bodyB,
                                    const ample::graphics::Vector2d<float> &localAnchorA,
                                    const ample::graphics::Vector2d<float> &localAnchorB,
                                    float maxLength,
                                    bool collideConnected)
-    : WorldJoint2d(bodyA, bodyB)
+    : WorldJoint2d(name, "WorldRopeJoint2d", bodyA, bodyB)
 {
     b2RopeJointDef jointDef;
     jointDef.bodyA = getB2Body(bodyA);

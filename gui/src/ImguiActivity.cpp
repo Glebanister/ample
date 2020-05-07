@@ -31,7 +31,7 @@ void ImguiActivity::drawInterface()
 
 void ImguiActivity::onActive()
 {
-    for (auto &ev : eventManager().events())
+    for (auto &ev : control::EventManager::instance().events())
     {
         ImGui_ImplSDL2_ProcessEvent(&ev);
     }
