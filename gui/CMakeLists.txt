@@ -41,6 +41,7 @@ set(SOURCES
     src/LevelEditor.cpp
     src/ObjectConstructor.cpp
     src/LevelBrowser.cpp
+    src/ObjectStorageGui.cpp
     src/StateMachineBrowser.cpp
     )
 

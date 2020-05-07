@@ -11,6 +11,7 @@
 #include "Browser.h"
 #include "Editor.h"
 #include "TextureManager.h"
+#include "ObjectStorageGui.h"
 
 namespace ample::gui
 {
@@ -103,26 +104,31 @@ void AmpleGui::Workspace()
         MenuBar();
         ImGui::EndMenuBar();
     }
-    ImGui::Columns(2, "Workspace");
+    ImGui::Columns(3, "Workspace");
 
     static bool columnFirstTimeDrawing = true;
     if (columnFirstTimeDrawing)
     {
         columnFirstTimeDrawing = false;
         ImGui::SetColumnWidth(0, 400);
+        ImGui::SetColumnWidth(2, 400);
     }
 
     ImGui::Separator();
 
     ImGui::BeginChild("Browser");
-    Browser::instance().drawInterface();
+    ObjectStorageGui::instance().Browser();
+    ImGui::EndChild();
+    ImGui::NextColumn();
+
+    ImGui::BeginChild("Viewer");
+    ObjectStorageGui::instance().Viewer();
     ImGui::EndChild();
     ImGui::NextColumn();
 
     ImGui::BeginChild("Editor");
-    _editor.drawInterface();
+    ObjectStorageGui::instance().Editor();
     ImGui::EndChild();
-    ImGui::GetColumnWidth();
     ImGui::NextColumn();
 
 }
