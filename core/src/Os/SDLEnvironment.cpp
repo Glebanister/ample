@@ -9,7 +9,7 @@ namespace ample::os::environment
 SDLEnvironment::SDLEnvironment()
 {
     DEBUG("Setting up SDL environment");
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_AUDIO) < 0)
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0)
     {
         exception::SDLException::handle();
     }

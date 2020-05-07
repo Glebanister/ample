@@ -3,32 +3,17 @@
 #include <SDL2/SDL.h>
 #include <string>
 
+#include "SDLWindow.h"
+#include "GLContext.h"
+#include "Noncopyable.h"
+
 namespace ample::window
 {
-typedef double pixel_t;
+using pixel_t = double;
 
-enum winpos : uint32_t
-{
-    UNDEFINED_POS = 0b0,
-    CENTERED_X = 0b1,
-    CENTERED_Y = 0b10,
-};
-
-enum winmode : uint32_t
-{
-    UNDEFINED_MODE = 0,
-    FULLSCREEN = SDL_WINDOW_FULLSCREEN,
-    BORDERLESS = SDL_WINDOW_BORDERLESS,
-    RESIZABLE = SDL_WINDOW_RESIZABLE,
-    MAXIMIZED = SDL_WINDOW_MAXIMIZED,
-    MINIMIZED = SDL_WINDOW_MINIMIZED,
-};
-
-class Window final
+class Window final : public utils::Noncopyable
 {
 public:
-    Window() = delete;
-
     Window(const std::string &name,
            const pixel_t &x,
            const pixel_t &y,
@@ -37,32 +22,24 @@ public:
            const uint32_t &posFlags,
            const uint32_t &modeFlags);
 
-    Window(const Window &other) = delete;
-    Window &operator=(const Window &) = delete;
+    void swapBuffer() noexcept;
 
-    void swapBuffer();
+    pixel_t getWidth() const noexcept;
+    pixel_t getHeight() const noexcept;
 
-    pixel_t getWidth() const;
-    pixel_t getHeight() const;
+    void disableCursor() noexcept;
+    void enableCursor() noexcept;
+    void moveCursor(pixel_t x, pixel_t y) noexcept;
+    void resize(pixel_t w, pixel_t h) noexcept;
 
-    void disableCursor() const;
-    void enableCursor() const;
-    void moveCursor(pixel_t x, pixel_t y) const;
-
-    void resize(const pixel_t w, const pixel_t &h);
-
-    SDL_Window *pointer();
-    SDL_GLContext *glContext() const noexcept;
-
-    ~Window();
+    SDL_Window *pointer() noexcept;
+    SDL_GLContext *glContext() noexcept;
 
 private:
-    SDL_Window *_winPtr = nullptr;
-    std::string _name;
+    SDLWindow _window;
+    os::GLContext _glContext;
+
     pixel_t _x, _y;
     pixel_t _width, _height;
-    uint32_t _modeFlags;
-    SDL_GLContext *_glContext;
-    SDL_GLContext _glContextImpl;
 };
 } // namespace ample::window

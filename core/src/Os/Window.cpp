@@ -1,11 +1,11 @@
-#include <string>
-#include <SDL2/SDL.h>
 #include <GL/gl.h>
+#include <SDL2/SDL.h>
+#include <string>
 
-#include "Window.h"
+#include "Debug.h"
 #include "Exception.h"
 #include "SDLEnvironment.h"
-#include "Debug.h"
+#include "Window.h"
 
 namespace ample::window
 {
@@ -16,98 +16,59 @@ Window::Window(const std::string &name,
                const pixel_t &height,
                const uint32_t &posFlags,
                const uint32_t &modeFlags)
-    : _winPtr(nullptr),
-      _name(name),
-      _x(x), _y(y),
-      _width(width), _height(height),
-      _modeFlags(modeFlags),
-      _glContext(nullptr)
+    : _window(name, x, y, width, height, posFlags, modeFlags),
+      _glContext(_window.pointer()),
+      _width(width), _height(height)
 {
-    if (posFlags & winpos::CENTERED_X)
-    {
-        _x = SDL_WINDOWPOS_CENTERED;
-    }
-    if (posFlags & winpos::CENTERED_Y)
-    {
-        _y = SDL_WINDOWPOS_CENTERED;
-    }
-    if (posFlags & winpos::UNDEFINED_POS)
-    {
-        _x = SDL_WINDOWPOS_UNDEFINED;
-        _y = SDL_WINDOWPOS_UNDEFINED;
-    }
-
-    os::environment::SDLEnvironment::instance();
-
-    _winPtr = SDL_CreateWindow(_name.c_str(), _x, _y,
-                               _width, _height,
-                               _modeFlags | SDL_WINDOW_OPENGL);
-    if (!_winPtr)
-    {
-        exception::SDLException::handle();
-    }
-    _glContextImpl = SDL_GL_CreateContext(_winPtr);
-    _glContext = &_glContextImpl;
-    if (!_glContextImpl)
-    {
-        SDL_DestroyWindow(_winPtr);
-        exception::OpenGLException::handle();
-    }
     DEBUG(glGetString(GL_VERSION));
     if (SDL_GL_SetSwapInterval(1) < 0)
     {
-        SDL_DestroyWindow(_winPtr);
         exception::SDLException::handle();
     }
 }
 
-void Window::swapBuffer()
+void Window::swapBuffer() noexcept
 {
-    SDL_GL_SwapWindow(_winPtr);
+    SDL_GL_SwapWindow(_window.pointer());
 }
 
-pixel_t Window::getHeight() const
+pixel_t Window::getHeight() const noexcept
 {
     return _height;
 }
 
-pixel_t Window::getWidth() const
+pixel_t Window::getWidth() const noexcept
 {
     return _width;
 }
 
-void Window::disableCursor() const
+void Window::disableCursor() noexcept
 {
     SDL_ShowCursor(SDL_DISABLE);
 }
-void Window::enableCursor() const
+
+void Window::enableCursor() noexcept
 {
     SDL_ShowCursor(SDL_ENABLE);
 }
-void Window::moveCursor(pixel_t x, pixel_t y) const
+void Window::moveCursor(pixel_t x, pixel_t y) noexcept
 {
-    SDL_WarpMouseInWindow(_winPtr, x + getWidth() / 2, -y + getHeight() / 2);
+    SDL_WarpMouseInWindow(_window.pointer(), x, y);
 }
 
-void Window::resize(const pixel_t w, const pixel_t &h)
+void Window::resize(pixel_t w, pixel_t h) noexcept
 {
     _width = w;
     _height = h;
 }
 
-SDL_Window *Window::pointer()
+SDL_Window *Window::pointer() noexcept
 {
-    return _winPtr;
+    return _window.pointer();
 }
 
-SDL_GLContext *ample::window::Window::glContext() const noexcept
+SDL_GLContext *ample::window::Window::glContext() noexcept
 {
-    return _glContext;
-}
-
-Window::~Window()
-{
-    SDL_GL_DeleteContext(_glContextImpl);
-    SDL_DestroyWindow(_winPtr);
+    return _glContext.pointer();
 }
 } // namespace ample::window
