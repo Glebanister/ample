@@ -2,6 +2,9 @@
 
 #include <memory>
 
+#include "ample/Game2dEditor.h"
+#include "ample/Level.h"
+
 #include "ample/Scene2d.h"
 #include "ample/NamedObject.h"
 
@@ -12,8 +15,8 @@ namespace ample::gui
 class SliceGui : public ObjectGui
 {
 public:
-    SliceGui(std::shared_ptr<filing::NamedObject>);
-    SliceGui();
+    SliceGui(std::shared_ptr<filing::NamedObject>, std::shared_ptr<game::game2d::Game2dEditor>);
+    SliceGui(std::shared_ptr<game::game2d::Game2dEditor>);
 
     void onCreate() override;
     void onSubmitCreate() override;
@@ -27,9 +30,14 @@ public:
     std::string className() const override;
 
 private:
-    std::shared_ptr<filing::Scene2d> _slice;
+    void levelSelection();
 
-    char nameBuffer[255];
-    
+    std::shared_ptr<filing::Scene2d> _slice;
+    std::shared_ptr<game::game2d::Game2dEditor> _game2dEditor;
+    std::shared_ptr<game::game2d::Level> _level;
+
+    char nameBuffer[255] = {0};
+    int32_t num;
+
 };
 } // namespace ample::gui

@@ -36,9 +36,9 @@ inline std::unique_ptr<ObjectGui> ObjectStorageGui::buildGui(finalObjectClass ob
     case finalObjectClass::LEVEL:
         result = std::make_unique<LevelGui>(args...);
         break;
-    // case finalObjectClass::SLICE:
-    //     result = std::make_unique<SliceGui>(args...);
-    //     break;
+    case finalObjectClass::SLICE:
+        result = std::make_unique<SliceGui>(args...);
+        break;
     // case finalObjectClass::STATE_MACHINE:
     //     result = std::make_unique<StateMachineGui>(args...);
     //     break;

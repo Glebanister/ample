@@ -17,7 +17,7 @@ namespace ample::gui
 enum class finalObjectClass
 {
     LEVEL,
-    // SLICE,
+    SLICE,
     // GRAPHICAL_OBJECT,
     // GRAPHICAL_POLYGON,
     // GRAPHICAL_EDGE,
@@ -28,7 +28,7 @@ enum class finalObjectClass
 
 static std::unordered_map<std::string, finalObjectClass> classIdByClassName{
     {"Level", finalObjectClass::LEVEL},
-    // {"Scene2d", finalObjectClass::SLICE},
+    {"Scene2d", finalObjectClass::SLICE},
     // {"GraphicalObject", finalObjectClass::GRAPHICAL_OBJECT},
     // {"GraphicalPolygon", finalObjectClass::GRAPHICAL_POLYGON},
     // {"GraphicalEdge", finalObjectClass::GRAPHICAL_EDGE},
