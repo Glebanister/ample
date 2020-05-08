@@ -73,9 +73,9 @@ void ObjectStorageGui::inspectSingleItem(const std::string &name)
 void ObjectStorageGui::inspectSingleItem(std::shared_ptr<ObjectGui> gui)
 {
     gui->onPreview();
-    if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
+    if (ImGui::Button("Edit"))
     {
-        setFocus(std::move(gui));
+        setFocus(gui);
     }
     gui->onInspect();
 }
@@ -106,12 +106,12 @@ void ObjectStorageGui::editor()
         ImGui::Text("Select object to edit");
         return;
     }
-    _onInput->onEdit();
-    if (ImGui::Button("Submit"))
+    _focusedGui->onEdit();
+    if (ImGui::IsItemEdited())
     {
         try
         {
-            _onInput->onSubmitEdit();
+            _focusedGui->onSubmitEdit();
         }
         catch (const std::exception &e)
         {

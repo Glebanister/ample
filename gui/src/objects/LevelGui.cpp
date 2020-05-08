@@ -53,18 +53,18 @@ void LevelGui::onSubmitEdit()
 void LevelGui::onView()
 {
     ASSERT(_level);
-    ImGui::Text("Level editor");
-
+    ImGui::BeginChild("Level view");
     _observer.setViewport({ImGui::GetWindowSize().x, ImGui::GetWindowSize().y - 24},
                           {ImGui::GetWindowPos().x, 7});
     _observer.look(_level);
-    bool isActive = false;
+    bool isActive = true;
     if (ImGui::IsAnyItemActive())
         isActive = false;
     if (ImGui::IsItemActive())
         isActive = true;
     if (isActive)
         _observer.updatePos();
+    ImGui::EndChild();
 }
 
 void LevelGui::onInspect()
