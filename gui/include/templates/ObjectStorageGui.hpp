@@ -21,30 +21,30 @@ inline std::unique_ptr<ObjectGui> ObjectStorageGui::buildGui(finalObjectClass ob
     std::unique_ptr<ObjectGui> result;
     switch (objClass)
     {
-    case finalObjectClass::GRAPHICAL_EDGE:
-        result = std::make_unique<GraphicalEdgeGui>(args...);
-        break;
-    case finalObjectClass::GRAPHICAL_OBJECT_2D:
-        result = std::make_unique<GraphicalObject2dGui>(args...);
-        break;
-    case finalObjectClass::GRAPHICAL_OBJECT:
-        result = std::make_unique<GraphicalObjectGui>(args...);
-        break;
-    case finalObjectClass::GRAPHICAL_POLYGON:
-        result = std::make_unique<GraphicalPolygonGui>(args...);
-        break;
+    // case finalObjectClass::GRAPHICAL_EDGE:
+    //     result = std::make_unique<GraphicalEdgeGui>(args...);
+    //     break;
+    // case finalObjectClass::GRAPHICAL_OBJECT_2D:
+    //     result = std::make_unique<GraphicalObject2dGui>(args...);
+    //     break;
+    // case finalObjectClass::GRAPHICAL_OBJECT:
+    //     result = std::make_unique<GraphicalObjectGui>(args...);
+    //     break;
+    // case finalObjectClass::GRAPHICAL_POLYGON:
+    //     result = std::make_unique<GraphicalPolygonGui>(args...);
+    //     break;
     case finalObjectClass::LEVEL:
         result = std::make_unique<LevelGui>(args...);
         break;
-    case finalObjectClass::SLICE:
-        result = std::make_unique<SliceGui>(args...);
-        break;
-    case finalObjectClass::STATE_MACHINE:
-        result = std::make_unique<StateMachineGui>(args...);
-        break;
-    case finalObjectClass::WORLD_OBJECT:
-        result = std::make_unique<WorldObjectGui>(args...);
-        break;
+    // case finalObjectClass::SLICE:
+    //     result = std::make_unique<SliceGui>(args...);
+    //     break;
+    // case finalObjectClass::STATE_MACHINE:
+    //     result = std::make_unique<StateMachineGui>(args...);
+    //     break;
+    // case finalObjectClass::WORLD_OBJECT:
+    //     result = std::make_unique<WorldObjectGui>(args...);
+    //     break;
     }
 
     return result;
@@ -57,11 +57,11 @@ inline void ObjectStorageGui::create(finalObjectClass objClass, Args... args)
     _onInput = buildGui(objClass, args...); // TODO: std::forward
 }
 
-template <class T, typename... Args>
-void ObjectStorageGui::buildGuiAndAdd(std::shared_ptr<T> object, Args... args)
+template <class T>
+void ObjectStorageGui::buildGuiAndAdd(std::shared_ptr<T> object)
 {
     ASSERT(classIdByClassName.find(object->className()) != classIdByClassName.end());
-    std::shared_ptr<ObjectGui> objectGui = buildGui(classIdByClassName[object->className()], object, args...);
+    std::shared_ptr<ObjectGui> objectGui = buildGui(classIdByClassName[object->className()], object, _game2dEditor);
     _guiByObjectName.emplace(object->name(), objectGui);
 }
 } // namespace ample::gui

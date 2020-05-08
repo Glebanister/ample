@@ -16,7 +16,13 @@ namespace ample::game::game2d
 class Game2d : public graphics::LayeredWindowActivity
 {
 public:
-    Game2d(window::Window &window,
+    Game2d(const std::string &name,
+           const window::pixel_t &x,
+           const window::pixel_t &y,
+           const window::pixel_t &width,
+           const window::pixel_t &height,
+           const uint32_t &posFlags,
+           const uint32_t &modeFlags,
            const std::filesystem::path &path);
 
 private:

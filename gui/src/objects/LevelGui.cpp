@@ -8,14 +8,14 @@
 
 namespace ample::gui
 {
-LevelGui::LevelGui(std::shared_ptr<filing::NamedObject> level, game::game2d::Game2dEditor *editor)
+LevelGui::LevelGui(std::shared_ptr<filing::NamedObject> level, std::shared_ptr<game::game2d::Game2dEditor> editor)
     : _level(std::dynamic_pointer_cast<game::game2d::Level>(level)),
       _game2dEditor(editor)
 {
     ASSERT(_game2dEditor);
 }
 
-LevelGui::LevelGui(game::game2d::Game2dEditor *editor)
+LevelGui::LevelGui(std::shared_ptr<game::game2d::Game2dEditor> editor)
     : _game2dEditor(editor)
 {
     ASSERT(_game2dEditor);
@@ -31,7 +31,6 @@ void LevelGui::onCreate()
 
 void LevelGui::onSubmitCreate()
 {
-
     std::tie(_level, _loader) = _game2dEditor->createLevel(nameBuffer, thickness, physicsLayerPos, gravity);
 }
 
@@ -88,7 +87,7 @@ void LevelGui::onPreview()
     ImGui::Text("Name: %s", name().c_str());
     ImGui::Text("Slice thickness: %.2f", thickness);
     ImGui::Text("Physics layer position: %.2f", physicsLayerPos);
-    ImGui::Text("Gravity x: %.2f y: %2f", gravity.x, gravity.y);
+    ImGui::Text("Gravity x: %.2f \nGravity y: %2f", gravity.x, gravity.y);
 }
 
 std::string LevelGui::name() const

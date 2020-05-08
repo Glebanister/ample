@@ -17,24 +17,24 @@ namespace ample::gui
 enum class finalObjectClass
 {
     LEVEL,
-    SLICE,
-    GRAPHICAL_OBJECT,
-    GRAPHICAL_POLYGON,
-    GRAPHICAL_EDGE,
-    GRAPHICAL_OBJECT_2D,
-    WORLD_OBJECT,
-    STATE_MACHINE,
+    // SLICE,
+    // GRAPHICAL_OBJECT,
+    // GRAPHICAL_POLYGON,
+    // GRAPHICAL_EDGE,
+    // GRAPHICAL_OBJECT_2D,
+    // WORLD_OBJECT,
+    // STATE_MACHINE,
 };
 
 static std::unordered_map<std::string, finalObjectClass> classIdByClassName{
     {"Level", finalObjectClass::LEVEL},
-    {"Scene2d", finalObjectClass::SLICE},
-    {"GraphicalObject", finalObjectClass::GRAPHICAL_OBJECT},
-    {"GraphicalPolygon", finalObjectClass::GRAPHICAL_POLYGON},
-    {"GraphicalEdge", finalObjectClass::GRAPHICAL_EDGE},
-    {"GraphicalObject2d", finalObjectClass::GRAPHICAL_OBJECT_2D},
-    {"WorldObject2d", finalObjectClass::WORLD_OBJECT},
-    {"StateMachine", finalObjectClass::STATE_MACHINE},
+    // {"Scene2d", finalObjectClass::SLICE},
+    // {"GraphicalObject", finalObjectClass::GRAPHICAL_OBJECT},
+    // {"GraphicalPolygon", finalObjectClass::GRAPHICAL_POLYGON},
+    // {"GraphicalEdge", finalObjectClass::GRAPHICAL_EDGE},
+    // {"GraphicalObject2d", finalObjectClass::GRAPHICAL_OBJECT_2D},
+    // {"WorldObject2d", finalObjectClass::WORLD_OBJECT},
+    // {"StateMachine", finalObjectClass::STATE_MACHINE},
 };
 
 class ObjectStorageGui
@@ -62,8 +62,8 @@ public:
 private:
     template <typename... Args>
     std::unique_ptr<ObjectGui> buildGui(finalObjectClass, Args... args);
-    template <class T, typename... Args>
-    void buildGuiAndAdd(std::shared_ptr<T>, Args... args);
+    template <class T>
+    void buildGuiAndAdd(std::shared_ptr<T>);
 
     std::shared_ptr<ObjectGui> _onInput; // always no more than one
     std::unordered_map<std::string, std::shared_ptr<ObjectGui>> _guiByObjectName;

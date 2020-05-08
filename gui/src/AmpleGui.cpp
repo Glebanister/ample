@@ -18,16 +18,14 @@
 namespace ample::gui
 {
 AmpleGui::AmpleGui()
-    : ImguiActivity(*(new window::Window(
+    : ImguiActivity(
           "ample",
           0,
           0,
           1920 / 1.5,
           1080 / 1.5,
           ample::window::CENTERED_X | ample::window::CENTERED_Y,
-          ample::window::MINIMIZED | ample::window::RESIZABLE
-
-          )))
+          ample::window::MINIMIZED | ample::window::RESIZABLE)
 {
 }
 
@@ -91,7 +89,7 @@ void AmpleGui::openProject(const std::filesystem::path &path)
         {
             _game2dEditor->save();
         }
-        _game2dEditor = std::make_shared<game::game2d::Game2dEditor>(_window, path);
+        _game2dEditor = std::make_shared<game::game2d::Game2dEditor>(path);
         _objectsGui = std::make_shared<ObjectStorageGui>(_game2dEditor);
     }
     catch (const std::exception &e)
@@ -108,7 +106,7 @@ void AmpleGui::createNewProject(const std::filesystem::path &path)
         {
             _game2dEditor->save();
         }
-        _game2dEditor = std::make_shared<game::game2d::Game2dEditor>(_window);
+        _game2dEditor = std::make_shared<game::game2d::Game2dEditor>();
         _objectsGui = std::make_shared<ObjectStorageGui>(_game2dEditor);
         _game2dEditor->setProjectPath(path);
     }

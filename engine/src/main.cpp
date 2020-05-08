@@ -30,13 +30,13 @@ int main(int argc, char **argv)
 
     try
     {
-        ample::window::Window window("DemoGame",
-                                     0, 0,
-                                     1920, 1080,
-                                     ample::window::winpos::CENTERED_X | ample::window::winpos::CENTERED_Y,
-                                     ample::window::FULLSCREEN);
-        auto activity = ample::game::game2d::Game2d(window, projectName);
-        activity.loop();
+        ample::game::game2d::Game2d("engine",
+                                    0, 0,
+                                    1920, 1080,
+                                    ample::window::winpos::CENTERED_X | ample::window::winpos::CENTERED_Y,
+                                    ample::window::FULLSCREEN,
+                                    projectName)
+            .loop();
     }
     catch (const ample::exception::Exception &ex)
     {

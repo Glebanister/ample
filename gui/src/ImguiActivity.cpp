@@ -7,9 +7,11 @@
 #include <imgui.h>
 #include <imnodes.h>
 
-#include "ImguiActivity.h"
 #include "ample/Debug.h"
 #include "ample/Exception.h"
+#include "ample/Window.h"
+
+#include "ImguiActivity.h"
 
 namespace ample::gui
 {
@@ -27,10 +29,16 @@ void initImgui(ample::window::Window &window)
     os::environment::OpenGLEnvironment::instance().setColor({0.17f, 0.213f, 0.248f, 1.00f});
 }
 
-ImguiActivity::ImguiActivity(ample::window::Window &window)
-    : LayeredWindowActivity(window)
+ImguiActivity::ImguiActivity(const std::string &name,
+                             const window::pixel_t &x,
+                             const window::pixel_t &y,
+                             const window::pixel_t &width,
+                             const window::pixel_t &height,
+                             const uint32_t &posFlags,
+                             const uint32_t &modeFlags)
+    : LayeredWindowActivity(name, x, y, width, height, posFlags, modeFlags)
 {
-    initImgui(window);
+    initImgui(osWindow());
 }
 
 void ImguiActivity::drawInterface()

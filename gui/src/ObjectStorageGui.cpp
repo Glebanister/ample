@@ -8,46 +8,46 @@ namespace ample::gui
 ObjectStorageGui::ObjectStorageGui(std::shared_ptr<game::game2d::Game2dEditor> editor)
     : _game2dEditor(editor)
 {
-    // for (auto level : editor->getLevelsList())
-    // {
-    //     buildGuiAndAdd(level, editor);
-    //     for (auto &[id, slice] : level->layers())
-    //     {
-    //         buildGuiAndAdd(slice);
-    //         for (auto &object : slice->objects())
-    //         {
-    //             buildGuiAndAdd(object);
-    //         }
-    //     }
-    //     for (auto &sm : level->stateMachines())
-    //     {
-    //         buildGuiAndAdd(sm);
-    //         std::unordered_map<std::string, bool> used;
-    //         std::function<void(std::shared_ptr<game::StateMachine::State>)> dfs =
-    //             [&](std::shared_ptr<game::StateMachine::State> curState) {
-    //                 ASSERT(curState);
-    //                 if (used[curState->name()])
-    //                     return;
-    //                 used[curState->name()] = true;
-    //                 for (const auto &transition : curState->transitions())
-    //                 {
-    //                     buildGuiAndAdd(transition);
-    //                     dfs(transition->getNextState());
-    //                 }
-    //                 buildGuiAndAdd(curState);
-    //                 auto actionAdder = [&](std::vector<std::shared_ptr<game::Action>> &actions) {
-    //                     std::for_each(actions.begin(), actions.end(),
-    //                                   [&](auto &act) {
-    //                                       buildGuiAndAdd(act);
-    //                                   });
-    //                 };
-    //                 actionAdder(curState->getOnStartActions());
-    //                 actionAdder(curState->getOnActiveActions());
-    //                 actionAdder(curState->getOnStopActions());
-    //             };
-    //         dfs(sm->getCurrentState());
-    //     }
-    // }
+    for (auto level : editor->getLevelsList())
+    {
+        buildGuiAndAdd(level);
+        //     for (auto &[id, slice] : level->layers())
+        //     {
+        //         buildGuiAndAdd(slice);
+        //         for (auto &object : slice->objects())
+        //         {
+        //             buildGuiAndAdd(object);
+        //         }
+        //     }
+        //     for (auto &sm : level->stateMachines())
+        //     {
+        //         buildGuiAndAdd(sm);
+        //         std::unordered_map<std::string, bool> used;
+        //         std::function<void(std::shared_ptr<game::StateMachine::State>)> dfs =
+        //             [&](std::shared_ptr<game::StateMachine::State> curState) {
+        //                 ASSERT(curState);
+        //                 if (used[curState->name()])
+        //                     return;
+        //                 used[curState->name()] = true;
+        //                 for (const auto &transition : curState->transitions())
+        //                 {
+        //                     buildGuiAndAdd(transition);
+        //                     dfs(transition->getNextState());
+        //                 }
+        //                 buildGuiAndAdd(curState);
+        //                 auto actionAdder = [&](std::vector<std::shared_ptr<game::Action>> &actions) {
+        //                     std::for_each(actions.begin(), actions.end(),
+        //                                   [&](auto &act) {
+        //                                       buildGuiAndAdd(act);
+        //                                   });
+        //                 };
+        //                 actionAdder(curState->getOnStartActions());
+        //                 actionAdder(curState->getOnActiveActions());
+        //                 actionAdder(curState->getOnStopActions());
+        //             };
+        //         dfs(sm->getCurrentState());
+        //     }
+    }
 }
 
 void ObjectStorageGui::cancelCreate()
@@ -123,10 +123,10 @@ void ObjectStorageGui::editor()
 
 void ObjectStorageGui::creator()
 {
-    // if (ImGui::Selectable("Level"))
-    // {
-    //     create(finalObjectClass::LEVEL);
-    // }
+    if (ImGui::Selectable("Level"))
+    {
+        create(finalObjectClass::LEVEL, _game2dEditor);
+    }
     // if (ImGui::Selectable("Slice"))
     // {
     //     create(finalObjectClass::SLICE);
@@ -161,9 +161,11 @@ void ObjectStorageGui::creator()
         return;
     }
     ImGui::OpenPopup(("Create new " + _onInput->className()).c_str());
-    if (ImGui::BeginPopupModal(("Create new " + _onInput->className()).c_str(), NULL, ImGuiWindowFlags_NoResize |
-                                                                                      ImGuiWindowFlags_NoMove |
-                                                                                      ImGuiWindowFlags_AlwaysAutoResize))
+    if (ImGui::BeginPopupModal(("Create new " + _onInput->className()).c_str(),
+                               NULL,
+                               ImGuiWindowFlags_NoResize |
+                                   ImGuiWindowFlags_NoMove |
+                                   ImGuiWindowFlags_AlwaysAutoResize))
     {
         _onInput->onCreate();
         if (ImGui::Button("Submit"))
@@ -171,6 +173,7 @@ void ObjectStorageGui::creator()
             try
             {
                 _onInput->onSubmitCreate();
+                _guiByObjectName[_onInput->name()] = _onInput;
                 _creationSuccess = true;
             }
             catch (const std::exception &e)

@@ -40,7 +40,7 @@ inline void InputScalar(const std::string &label, T &value, T step, T min, T max
 template <>
 inline void InputScalar(const std::string &label, float &value, float step)
 {
-    InputScalar(label, value, step);
+    ImGui::InputScalar(label.c_str(), ImGuiDataType_Float, &value, &step);
 }
 
 template <>
@@ -59,15 +59,13 @@ template <typename T>
 inline void InputCoordinates(const std::string &label, T &valueX, T &valueY, T step)
 {
     InputScalar(label + " x", valueX, step);
-    ImGui::SameLine();
-    InputScalar(label + "y", valueY, step);
+    InputScalar(label + " y", valueY, step);
 }
 
 template <typename T>
 inline void InputCoordinates(const std::string &label, T &valueX, T &valueY, T step, T min, T max)
 {
     InputScalar(label + " x", valueX, step, min, max);
-    ImGui::SameLine();
-    InputScalar(label + "y", valueY, step, min, max);
+    InputScalar(label + " y", valueY, step, min, max);
 }
 } // namespace ample::gui::gui_utils

@@ -14,8 +14,8 @@ namespace ample::gui
 class LevelGui : public ObjectGui
 {
 public:
-    LevelGui(std::shared_ptr<filing::NamedObject>, game::game2d::Game2dEditor *);
-    LevelGui(game::game2d::Game2dEditor *);
+    LevelGui(std::shared_ptr<filing::NamedObject>, std::shared_ptr<game::game2d::Game2dEditor>);
+    LevelGui(std::shared_ptr<game::game2d::Game2dEditor>);
 
     void onCreate() override;
     void onSubmitCreate() override;
@@ -31,9 +31,9 @@ public:
 private:
     std::shared_ptr<game::game2d::Level> _level;
     std::shared_ptr<game::LevelLoader> _loader;
-    game::game2d::Game2dEditor *_game2dEditor;
+    std::shared_ptr<game::game2d::Game2dEditor> _game2dEditor;
 
-    char nameBuffer[255];
+    char nameBuffer[255] = {0};
     float thickness = 20.0f;
     float physicsLayerPos = 20.0f;
     graphics::Vector2d<float> gravity;

@@ -68,7 +68,7 @@ private:
     };
 
 public:
-    void addKeyHandler(const keysym key, KeyHandler &handler);
+    void addKeyHandler(const keysym key, std::shared_ptr<KeyHandler> handler);
     void clearKey(const keysym key);
     void handleEvent(const SDL_Event &event) override;
     bool isKeyPressed(keysym key);
@@ -81,7 +81,7 @@ public:
     bool getPressedScancode() const noexcept;
 
 private:
-    std::unordered_map<int32_t, std::vector<KeyHandler *>> _handlers;
+    std::unordered_map<int32_t, std::vector<std::shared_ptr<KeyHandler>>> _handlers;
     std::unordered_map<int32_t, int32_t> _keymapWasUp;
     std::unordered_map<int32_t, int32_t> _keymapWasDown;
     std::unordered_map<int32_t, int32_t> _keymapPressed;
@@ -97,8 +97,7 @@ class EventManager : public utils::Singleton<EventManager>, public utils::Noncop
 public:
     void update();
 
-    void addKeyHandler(const keysym key, KeyHandler &handler);
-    void addEventHandler(const int eventType, EventHandler &handler);
+    void addEventHandler(const int eventType, std::shared_ptr<EventHandler> handler);
     void clearType(const int &eventType);
 
     KeyboardManager &keyboard();
@@ -112,6 +111,6 @@ protected:
     std::shared_ptr<MouseHandler> _mouse;
     std::vector<SDL_Event> _events;
 
-    std::unordered_map<int, std::vector<EventHandler *>> _handlerByType;
+    std::unordered_map<int, std::vector<std::shared_ptr<EventHandler>>> _handlerByType;
 };
 } // namespace ample::control
