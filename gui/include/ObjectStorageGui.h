@@ -14,6 +14,12 @@
 
 namespace ample::gui
 {
+class ObjectGui;   
+} // namespace ample::gui
+
+
+namespace ample::gui
+{
 enum class finalObjectClass
 {
     LEVEL,
@@ -23,7 +29,7 @@ enum class finalObjectClass
     // GRAPHICAL_EDGE,
     // GRAPHICAL_OBJECT_2D,
     // WORLD_OBJECT,
-    // STATE_MACHINE,
+    STATE_MACHINE,
 };
 
 static std::unordered_map<std::string, finalObjectClass> classIdByClassName{
@@ -34,7 +40,7 @@ static std::unordered_map<std::string, finalObjectClass> classIdByClassName{
     // {"GraphicalEdge", finalObjectClass::GRAPHICAL_EDGE},
     // {"GraphicalObject2d", finalObjectClass::GRAPHICAL_OBJECT_2D},
     // {"WorldObject2d", finalObjectClass::WORLD_OBJECT},
-    // {"StateMachine", finalObjectClass::STATE_MACHINE},
+    {"StateMachine", finalObjectClass::STATE_MACHINE},
 };
 
 class ObjectStorageGui

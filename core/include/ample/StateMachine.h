@@ -85,7 +85,7 @@ public:
     StateMachine(const filing::JsonIO &input, const game::Namespace &globalNamespace);
     void setStartState(std::shared_ptr<State> state);
     void setCurrentState(std::shared_ptr<State> state);
-    std::shared_ptr<State> getCurrentState() noexcept;
+    std::shared_ptr<State> getCurrentState() const noexcept;
     void onStart() override;
     void onActive() override;
     void onStop() override;
@@ -100,4 +100,6 @@ protected:
 private:
     std::shared_ptr<State> _currentState{nullptr};
 };
+
+std::vector<std::shared_ptr<StateMachine::State>> getStatesList(const StateMachine &machine);
 } // namespace ample::game

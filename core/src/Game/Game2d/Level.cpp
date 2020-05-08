@@ -114,6 +114,11 @@ void Level::onActive()
     }
 }
 
+void Level::setGravity(const graphics::Vector2d<float> &gravity) noexcept
+{
+    _defaultGravity = gravity;
+}
+
 std::shared_ptr<filing::Scene2d> Level::createSlice(const size_t num, const std::string &name)
 {
     if (_sliceByDistance[num])

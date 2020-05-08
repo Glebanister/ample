@@ -57,6 +57,8 @@ public:
     std::unordered_map<size_t, std::shared_ptr<filing::Scene2d>> &layers() noexcept;
     std::vector<std::shared_ptr<StateMachine>> stateMachines() noexcept;
 
+    void setGravity(const graphics::Vector2d<float> &gravity) noexcept;
+
     Namespace &globalNamespace();
 
 private:

@@ -1,6 +1,8 @@
 #pragma once
 
 #include <imgui.h>
+#include <vector>
+#include <string>
 #include <memory>
 
 namespace ample::gui::gui_utils
