@@ -68,4 +68,37 @@ inline void InputCoordinates(const std::string &label, T &valueX, T &valueY, T s
     InputScalar(label + " x", valueX, step, min, max);
     InputScalar(label + " y", valueY, step, min, max);
 }
+
+template <typename T>
+inline void NamedObjectSelector(const std::string &label, std::shared_ptr<T> &object, const std::vector<std::shared_ptr<T>> &list)
+{
+    if (ImGui::Button(label.c_str()))
+    {
+        ImGui::OpenPopup((label + ".popup").c_str());
+    }
+    ImGui::SameLine();
+    if (object)
+    {
+        ImGui::Text("%s", object->name().c_str());
+    }
+    else
+    {
+        gui_utils::TextDisabled("[select]");
+    }
+    if (ImGui::BeginPopup((label + ".popup").c_str()))
+    {
+        if (list.empty())
+        {
+            gui_utils::TextDisabled("[empty]");
+        }
+        for (auto obj : list)
+        {
+            if (ImGui::Selectable(obj->name().c_str()))
+            {
+                object = obj;
+            }
+        }
+        ImGui::EndPopup();
+    }
+}
 } // namespace ample::gui::gui_utils
