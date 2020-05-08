@@ -1,9 +1,9 @@
 #include "Observer.h"
 #include "ample/Debug.h"
 #include "ample/GraphicalPolygon.h"
+#include "ample/RegularPolygon.h"
 #include "ample/Utils.h"
 #include "ample/Vector2d.h"
-#include "ample/RegularPolygon.h"
 
 namespace ample::gui
 {
@@ -57,18 +57,13 @@ void Observer::updatePos()
 void Observer::look(std::shared_ptr<game::game2d::Level> level) noexcept
 {
     ASSERT(level);
-
     _camera->look();
-
     _lamp->draw();
-
     auto obj1 = ample::graphics::GraphicalPolygon("ObjectName",
                                                   ample::geometry::RegularPolygon<float>(10.0f, 4),
                                                   10.0f,
                                                   {1.0f, 2.0f});
-    
     obj1.draw();
-
     for (const auto &[_, slice] : level->layers())
     {
         utils::ignore(_);
@@ -78,5 +73,44 @@ void Observer::look(std::shared_ptr<game::game2d::Level> level) noexcept
         }
     }
     _camera->unlook();
+}
+
+void Observer::look(std::shared_ptr<filing::Scene2d> slice) noexcept
+{
+    ASSERT(slice);
+    _camera->look();
+    _lamp->draw();
+    auto obj1 = ample::graphics::GraphicalPolygon("ObjectName",
+                                                  ample::geometry::RegularPolygon<float>(10.0f, 4),
+                                                  10.0f,
+                                                  {1.0f, 2.0f});
+    obj1.draw();
+    for (const auto &obj : slice->objects())
+    {
+        obj->draw();
+    }
+    _camera->unlook();
+}
+
+void Observer::look(std::shared_ptr<graphics::GraphicalObject> object) noexcept
+{
+    ASSERT(object);
+    _camera->look();
+    _lamp->draw();
+    object->draw();
+    _camera->unlook();
+}
+
+void Observer::look(std::shared_ptr<physics::WorldObject2d> object) noexcept
+{
+    ASSERT(object);
+    _camera->look();
+    _lamp->draw();
+    object->draw();
+    _camera->unlook();
+}
+
+void Observer::look(std::shared_ptr<graphics::Texture>) noexcept
+{
 }
 } // namespace ample::gui

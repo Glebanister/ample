@@ -6,6 +6,7 @@
 #include "ample/Game2dEditor.h"
 #include "ample/LightSource.h"
 #include "ample/Singleton.h"
+#include "ample/Texture.h"
 
 namespace ample::gui
 {
@@ -15,6 +16,10 @@ public:
     Observer(const graphics::Vector2d<float> &size = {1920, 1080});
 
     void look(std::shared_ptr<game::game2d::Level>) noexcept;
+    void look(std::shared_ptr<filing::Scene2d>) noexcept;
+    void look(std::shared_ptr<graphics::GraphicalObject>) noexcept;
+    void look(std::shared_ptr<physics::WorldObject2d>) noexcept;
+    void look(std::shared_ptr<graphics::Texture>) noexcept;
 
     void updatePos();
 
