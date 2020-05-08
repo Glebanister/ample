@@ -11,14 +11,14 @@ ObjectStorageGui::ObjectStorageGui(std::shared_ptr<game::game2d::Game2dEditor> e
     for (auto level : editor->getLevelsList())
     {
         buildGuiAndAdd(level);
-        //     for (auto &[id, slice] : level->layers())
-        //     {
-        //         buildGuiAndAdd(slice);
-        //         for (auto &object : slice->objects())
-        //         {
-        //             buildGuiAndAdd(object);
-        //         }
-        //     }
+        for (auto &[id, slice] : level->layers())
+        {
+            buildGuiAndAdd(slice);
+            for (auto &object : slice->objects())
+            {
+                buildGuiAndAdd(object);
+            }
+        }
         //     for (auto &sm : level->stateMachines())
         //     {
         //         buildGuiAndAdd(sm);
@@ -127,10 +127,10 @@ void ObjectStorageGui::creator()
     {
         create(finalObjectClass::LEVEL, _game2dEditor, this);
     }
-    // if (ImGui::Selectable("Slice"))
-    // {
-    //     create(finalObjectClass::SLICE, _game2dEditor, this);
-    // }
+    if (ImGui::Selectable("Slice"))
+    {
+        create(finalObjectClass::SLICE, _game2dEditor, this);
+    }
     // if (ImGui::Selectable("Graphical Object"))
     // {
     //     create(finalObjectClass::GRAPHICAL_OBJECT, _game2dEditor, this);
