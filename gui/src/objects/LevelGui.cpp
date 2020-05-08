@@ -10,7 +10,7 @@ namespace ample::gui
 {
 LevelGui::LevelGui(std::shared_ptr<filing::NamedObject> level, std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *storage)
     : _game2dEditor(editor),
-       _objectStorageGui(storage),
+      _objectStorageGui(storage),
       _level(std::dynamic_pointer_cast<game::game2d::Level>(level))
 {
 }
@@ -70,20 +70,34 @@ void LevelGui::onView()
 void LevelGui::onInspect()
 {
     ASSERT(_level);
-    for (auto &[id, slice] : _level->layers())
+    if (ImGui::TreeNode("Slices"))
     {
-        // if (auto sliceGui = _game2dEditor->objectGuiByName(slice->name());
-        //     ImGui::TreeNode(sliceGui->name().c_str()))
-        // {
-        //     ObjectStorageGui::instance().inspectSingleItem(sliceGui);
-        //     sliceGui->onInspect();
-        //     ImGui::TreePop();
-        // }
+        for (auto &[id, slice] : _level->layers())
+        {
+            // if (auto sliceGui = _game2dEditor->objectGuiByName(slice->name());
+            //     ImGui::TreeNode(sliceGui->name().c_str()))
+            // {
+            //     ObjectStorageGui::instance().inspectSingleItem(sliceGui);
+            //     sliceGui->onInspect();
+            //     ImGui::TreePop();
+            // }
+        }
+        ImGui::TreePop();
     }
-    // for (auto &stateMachine : _level->stateMachines())
-    // {
-    //     if (auto smGui = Objec)
-    // }
+    if (ImGui::TreeNode("State Machines"))
+    {
+        for (auto &stateMachine : _level->stateMachines())
+        {
+            if (auto smGui = _objectStorageGui->objectGuiByName(stateMachine->name());
+                ImGui::TreeNode(smGui->name().c_str()))
+            {
+                _objectStorageGui->inspectSingleItem(smGui);
+                smGui->onInspect();
+                ImGui::TreePop();
+            }
+        }
+        ImGui::TreePop();
+    }
 }
 
 void LevelGui::onPreview()

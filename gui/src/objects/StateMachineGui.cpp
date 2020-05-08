@@ -73,6 +73,17 @@ void StateMachineGui::onView()
 
 void StateMachineGui::onInspect()
 {
+    ASSERT(_stateMachine);
+    for (auto &state : game::getStatesList(*_stateMachine))
+    {
+        // if (auto stateGui = _objectStorageGui->objectGuiByName(state->name());
+        //     ImGui::TreeNode(stateGui->name().c_str()))
+        // {
+        //     _objectStorageGui->inspectSingleItem(stateGui);
+        //     stateGui->onInspect();
+        //     ImGui::TreePop();
+        // }
+    }
 }
 
 void StateMachineGui::onPreview()
