@@ -14,12 +14,12 @@ EventManager::EventManager()
       _mouse(std::make_shared<MouseHandler>())
 {
     os::environment::SDLEnvironment::instance();
-    _handlerByType[SDL_KEYDOWN].push_back(_keyboard.get());
-    _handlerByType[SDL_KEYUP].push_back(_keyboard.get());
-    _handlerByType[SDL_MOUSEBUTTONDOWN].push_back(_mouse.get());
-    _handlerByType[SDL_MOUSEBUTTONUP].push_back(_mouse.get());
-    _handlerByType[SDL_MOUSEWHEEL].push_back(_mouse.get());
-    _handlerByType[SDL_MOUSEMOTION].push_back(_mouse.get());
+    _handlerByType[SDL_KEYDOWN].push_back(_keyboard);
+    _handlerByType[SDL_KEYUP].push_back(_keyboard);
+    _handlerByType[SDL_MOUSEBUTTONDOWN].push_back(_mouse);
+    _handlerByType[SDL_MOUSEBUTTONUP].push_back(_mouse);
+    _handlerByType[SDL_MOUSEWHEEL].push_back(_mouse);
+    _handlerByType[SDL_MOUSEMOTION].push_back(_mouse);
 }
 
 void EventManager::update()
@@ -33,6 +33,7 @@ void EventManager::update()
         _events.push_back(ev);
         for (auto &handler : _handlerByType[ev.type])
         {
+            assert(handler);
             handler->handleEvent(_events.back());
         }
     }
@@ -43,14 +44,9 @@ std::vector<SDL_Event> &EventManager::events() noexcept
     return _events;
 }
 
-void EventManager::addKeyHandler(const keysym key, KeyHandler &handler)
+void EventManager::addEventHandler(const int eventType, std::shared_ptr<EventHandler> handler)
 {
-    _keyboard->addKeyHandler(key, handler);
-}
-
-void EventManager::addEventHandler(const int eventType, EventHandler &handler)
-{
-    _handlerByType[eventType].push_back(&handler);
+    _handlerByType[eventType].push_back(handler);
 }
 
 void EventManager::clearType(const int &eventType)
@@ -85,9 +81,9 @@ MouseHandler &EventManager::mouse()
     return *_mouse;
 }
 
-void KeyboardManager::addKeyHandler(const keysym key, KeyHandler &handler)
+void KeyboardManager::addKeyHandler(const keysym key, std::shared_ptr<KeyHandler> handler)
 {
-    _handlers[key].push_back(&handler);
+    _handlers[key].push_back(handler);
 }
 
 void KeyboardManager::clearKey(const keysym key)

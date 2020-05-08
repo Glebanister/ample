@@ -2,10 +2,15 @@
 
 namespace ample::graphics
 {
-LayeredWindowActivity::LayeredWindowActivity(window::Window &window)
-    : WindowActivity(window)
+LayeredWindowActivity::LayeredWindowActivity(const std::string &name,
+                                             const pixel_t &x,
+                                             const pixel_t &y,
+                                             const pixel_t &width,
+                                             const pixel_t &height,
+                                             const uint32_t &posFlags,
+                                             const uint32_t &modeFlags)
+    : WindowActivity(name, x, y, width, height, posFlags, modeFlags)
 {
-
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     graphics::shaders::ShaderProcessor::instance().use();
 }

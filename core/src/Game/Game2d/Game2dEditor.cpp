@@ -5,16 +5,13 @@
 namespace ample::game::game2d
 {
 
-Game2dEditor::Game2dEditor(window::Window &window)
-    : LayeredWindowActivity(window),
-      _levelSwitcher()
+Game2dEditor::Game2dEditor()
+    : _levelSwitcher()
 {
 }
 
-Game2dEditor::Game2dEditor(window::Window &window,
-                           const std::filesystem::path &existingProjectPath)
-    : LayeredWindowActivity(window),
-      _levelSwitcher(existingProjectPath),
+Game2dEditor::Game2dEditor(const std::filesystem::path &existingProjectPath)
+    : _levelSwitcher(existingProjectPath),
       _projectPath(existingProjectPath)
 {
     for (const auto &entry : std::filesystem::directory_iterator(existingProjectPath / "levels"))
@@ -106,7 +103,7 @@ std::shared_ptr<StateMachine> Game2dEditor::createStateMachine(const std::string
 
 void Game2dEditor::onActive()
 {
-    LayeredWindowActivity::onActive();
+    activity::Activity::onActive();
     if (_currentLevel)
     {
         _currentLevel->onActive();

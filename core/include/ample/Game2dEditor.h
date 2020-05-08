@@ -8,12 +8,11 @@
 
 namespace ample::game::game2d
 {
-class Game2dEditor : public graphics::LayeredWindowActivity
+class Game2dEditor : public activity::Activity
 {
 public:
-    Game2dEditor(window::Window &window);
-    Game2dEditor(window::Window &window,
-                 const std::filesystem::path &existingProjectPath);
+    Game2dEditor();
+    Game2dEditor(const std::filesystem::path &existingProjectPath);
 
     void save();
     void saveAs(const std::filesystem::path &projectPath);

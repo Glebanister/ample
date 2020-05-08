@@ -141,6 +141,11 @@ std::shared_ptr<filing::Scene2d> Level::frontSlice() noexcept
     return _sliceByDistance[0];
 }
 
+std::vector<std::shared_ptr<StateMachine>> Level::stateMachines() noexcept
+{
+    return _stateMachines;
+}
+
 std::shared_ptr<filing::Scene2d> Level::numberedSlice(const size_t num)
 {
     if (!_sliceByDistance[num])

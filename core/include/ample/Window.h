@@ -37,9 +37,6 @@ public:
            const uint32_t &posFlags,
            const uint32_t &modeFlags);
 
-    Window(const Window &other) = delete;
-    Window &operator=(const Window &) = delete;
-
     void swapBuffer();
 
     pixel_t getWidth() const;

@@ -1,13 +1,13 @@
 #pragma once
 
-#include <SDL2/SDL.h>
 #include <GL/gl.h>
-#include <string>
+#include <SDL2/SDL.h>
 #include <memory>
+#include <string>
 
 #include "Activity.h"
-#include "Window.h"
 #include "ShaderProcessor.h"
+#include "Window.h"
 
 namespace ample::window
 {
@@ -42,11 +42,13 @@ private:
 class WindowActivity : public activity::Activity
 {
 public:
-
-    WindowActivity() = delete;
-    WindowActivity(Window &window);
-
-    WindowActivity(const WindowActivity &other) = delete;
+    WindowActivity(const std::string &name,
+                   const pixel_t &x,
+                   const pixel_t &y,
+                   const pixel_t &width,
+                   const pixel_t &height,
+                   const uint32_t &posFlags,
+                   const uint32_t &modeFlags);
 
     pixel_t getWidth() const;
     pixel_t getHeight() const;
@@ -58,9 +60,7 @@ public:
 protected:
     virtual void onResize();
 
-    Window &_window;
-    std::shared_ptr<QuitHandler> _quitHandler;
-    std::shared_ptr<WindowEventHandler> _windowEventHandler;
+    Window _window;
 
     friend void WindowEventHandler::handleEvent(const SDL_Event &event);
 };
