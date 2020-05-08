@@ -147,10 +147,10 @@ void ObjectStorageGui::creator()
     // {
     //     create(finalObjectClass::GRAPHICAL_OBJECT_2D, _game2dEditor, this);
     // }
-    // if (ImGui::Selectable("World Object"))
-    // {
-    //     create(finalObjectClass::WORLD_OBJECT, _game2dEditor, this);
-    // }
+    if (ImGui::Selectable("World Object 2d"))
+    {
+        create(finalObjectClass::WORLD_OBJECT_2D, _game2dEditor, this);
+    }
     if (ImGui::Selectable("State Machine"))
     {
         create(finalObjectClass::STATE_MACHINE, _game2dEditor, this);
@@ -164,7 +164,6 @@ void ObjectStorageGui::creator()
     if (ImGui::BeginPopupModal(("Create new " + _onInput->className()).c_str(),
                                NULL,
                                ImGuiWindowFlags_NoResize |
-                                   ImGuiWindowFlags_NoMove |
                                    ImGuiWindowFlags_AlwaysAutoResize))
     {
         _onInput->onCreate();

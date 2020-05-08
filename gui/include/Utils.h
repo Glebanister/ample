@@ -1,9 +1,10 @@
 #pragma once
 
 #include <imgui.h>
-#include <vector>
-#include <string>
 #include <memory>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 namespace ample::gui::gui_utils
 {
@@ -69,6 +70,41 @@ void InputCoordinates(const std::string &label, T &valueX, T &valueY, T step, T 
 
 template <typename T>
 void NamedObjectSelector(const std::string &label, std::shared_ptr<T> &object, const std::vector<std::shared_ptr<T>> &list);
+
+template <typename T>
+void NamedObjectSelector(const std::string &label, std::shared_ptr<T> &object, const std::unordered_map<size_t, std::shared_ptr<T>> &list);
+
+inline void StringSelector(const std::string &label, std::string &string, const std::vector<std::string> &list)
+{
+    if (ImGui::Button(label.c_str()))
+    {
+        ImGui::OpenPopup((label + ".popup").c_str());
+    }
+    ImGui::SameLine();
+    if (!string.empty())
+    {
+        ImGui::Text("%s", string.c_str());
+    }
+    else
+    {
+        gui_utils::TextDisabled("[select]");
+    }
+    if (ImGui::BeginPopup((label + ".popup").c_str()))
+    {
+        if (list.empty())
+        {
+            gui_utils::TextDisabled("[empty]");
+        }
+        for (const auto &obj : list)
+        {
+            if (ImGui::Selectable(obj.c_str()))
+            {
+                string = obj;
+            }
+        }
+        ImGui::EndPopup();
+    }
+}
 } // namespace ample::gui::gui_utils
 
 #include "templates/Utils.hpp"

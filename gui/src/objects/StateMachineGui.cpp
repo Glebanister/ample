@@ -20,34 +20,7 @@ StateMachineGui::StateMachineGui(std::shared_ptr<game::game2d::Game2dEditor> edi
 void StateMachineGui::onCreate()
 {
     ImGui::InputText("Name", nameBuffer, 255);
-    if (ImGui::Button("Level"))
-    {
-        ImGui::OpenPopup("Level.popup");
-    }
-    ImGui::SameLine();
-    if (selectedLevel)
-    {
-        ImGui::Text("%s", selectedLevel->name().c_str());
-    }
-    else
-    {
-        gui_utils::TextDisabled("[select level]");
-    }
-    if (ImGui::BeginPopup("Level.popup"))
-    {
-        if (_game2dEditor->getLevelsList().empty())
-        {
-            gui_utils::TextDisabled("[empty]");
-        }
-        for (auto level : _game2dEditor->getLevelsList())
-        {
-            if (ImGui::Selectable(level->name().c_str()))
-            {
-                selectedLevel = level;
-            }
-        }
-        ImGui::EndPopup();
-    }
+    gui_utils::NamedObjectSelector("Level", selectedLevel, _game2dEditor->getLevelsList());
 }
 
 void StateMachineGui::onSubmitCreate()

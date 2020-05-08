@@ -105,7 +105,7 @@ void LevelGui::onPreview()
     ImGui::Text("Name: %s", name().c_str());
     ImGui::Text("Slice thickness: %.2f", thickness);
     ImGui::Text("Physics layer position: %.2f", physicsLayerPos);
-    ImGui::Text("Gravity x: %.2f \nGravity y: %2f", gravity.x, gravity.y);
+    ImGui::Text("Gravity x: %.2f \nGravity y: %.2f", gravity.x, gravity.y);
 }
 
 std::string LevelGui::name() const
