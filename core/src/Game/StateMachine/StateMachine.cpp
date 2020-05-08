@@ -350,6 +350,10 @@ StateMachine::~StateMachine()
 
 std::vector<std::shared_ptr<StateMachine::State>> getStatesList(const StateMachine &machine)
 {
+    if (!machine.getCurrentState())
+    {
+        return {};
+    }
     std::vector<std::shared_ptr<StateMachine::State>> result;
     std::unordered_map<std::string, bool> used;
     std::function<void(std::shared_ptr<game::StateMachine::State>)> dfs =

@@ -28,7 +28,7 @@ enum class finalObjectClass
     // GRAPHICAL_POLYGON,
     // GRAPHICAL_EDGE,
     // GRAPHICAL_OBJECT_2D,
-    // WORLD_OBJECT,
+    WORLD_OBJECT_2D,
     STATE_MACHINE,
 };
 
@@ -39,7 +39,7 @@ static std::unordered_map<std::string, finalObjectClass> classIdByClassName{
     // {"GraphicalPolygon", finalObjectClass::GRAPHICAL_POLYGON},
     // {"GraphicalEdge", finalObjectClass::GRAPHICAL_EDGE},
     // {"GraphicalObject2d", finalObjectClass::GRAPHICAL_OBJECT_2D},
-    // {"WorldObject2d", finalObjectClass::WORLD_OBJECT},
+    {"WorldObject2d", finalObjectClass::WORLD_OBJECT_2D},
     {"StateMachine", finalObjectClass::STATE_MACHINE},
 };
 
