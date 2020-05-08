@@ -7,15 +7,17 @@
 
 namespace ample::gui
 {
-SliceGui::SliceGui(std::shared_ptr<filing::NamedObject> slice, std::shared_ptr<game::game2d::Game2dEditor> editor)
+SliceGui::SliceGui(std::shared_ptr<filing::NamedObject> slice, std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *storage)
     : _slice(std::dynamic_pointer_cast<filing::Scene2d>(slice)),
-      _game2dEditor(editor)
+      _game2dEditor(editor),
+      _objectStorageGui(storage)
 {
     ASSERT(_game2dEditor); 
 }
 
-SliceGui::SliceGui(std::shared_ptr<game::game2d::Game2dEditor> editor) 
-    : _game2dEditor(editor)
+SliceGui::SliceGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *storage) 
+    : _game2dEditor(editor),
+    _objectStorageGui(storage)
 {
     ASSERT(_game2dEditor);
 }
@@ -30,18 +32,31 @@ void SliceGui::onCreate()
 
 void SliceGui::onSubmitCreate()
 {
+    if (!_level)
+    {
+        throw game::GameException("Level is not selected");
+    }
+
     _slice = _level->createSlice(num, nameBuffer);
 }
 
 void SliceGui::onEdit()
 {
+    ASSERT(_slice);
+    gui_utils::InputCoordinates("Gravity", gravity.x, gravity.y, 0.5f);
 }
+
 void SliceGui::onSubmitEdit()
 {
+    ASSERT(_slice);
+    _level->setGravity(gravity);
 }
+
 void SliceGui::onView()
 {
+
 }
+
 void SliceGui::onInspect()
 {
 }
@@ -49,7 +64,7 @@ void SliceGui::onInspect()
 void SliceGui::onPreview()
 {
     ImGui::Text("Name: %s", name().c_str());
-    ImGui::Text("Num: %d", num);
+    ImGui::Text("Number: %d", num);
 }
 
 std::string SliceGui::name() const

@@ -8,6 +8,7 @@
 #include "ample/Scene2d.h"
 #include "ample/NamedObject.h"
 
+#include "ObjectStorageGui.h"
 #include "objects/ObjectGui.h"
 
 namespace ample::gui
@@ -15,8 +16,8 @@ namespace ample::gui
 class SliceGui : public ObjectGui
 {
 public:
-    SliceGui(std::shared_ptr<filing::NamedObject>, std::shared_ptr<game::game2d::Game2dEditor>);
-    SliceGui(std::shared_ptr<game::game2d::Game2dEditor>);
+    SliceGui(std::shared_ptr<filing::NamedObject>, std::shared_ptr<game::game2d::Game2dEditor>, ObjectStorageGui *);
+    SliceGui(std::shared_ptr<game::game2d::Game2dEditor>, ObjectStorageGui *);
 
     void onCreate() override;
     void onSubmitCreate() override;
@@ -36,8 +37,9 @@ private:
     std::shared_ptr<game::game2d::Game2dEditor> _game2dEditor;
     std::shared_ptr<game::game2d::Level> _level;
 
-    char nameBuffer[255] = {0};
-    int32_t num;
+    ObjectStorageGui * _objectStorageGui;
 
+    char nameBuffer[255] = {0};
+    int32_t num = 1;
 };
 } // namespace ample::gui

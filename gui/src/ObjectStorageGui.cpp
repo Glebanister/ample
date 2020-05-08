@@ -127,10 +127,10 @@ void ObjectStorageGui::creator()
     {
         create(finalObjectClass::LEVEL, _game2dEditor, this);
     }
-    // if (ImGui::Selectable("Slice"))
-    // {
-    //     create(finalObjectClass::SLICE, _game2dEditor, this);
-    // }
+    if (ImGui::Selectable("Slice"))
+    {
+        create(finalObjectClass::SLICE, _game2dEditor, this);
+    }
     // if (ImGui::Selectable("Graphical Object"))
     // {
     //     create(finalObjectClass::GRAPHICAL_OBJECT, _game2dEditor, this);
