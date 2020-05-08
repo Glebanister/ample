@@ -31,8 +31,6 @@ public:
     std::string className() const override;
 
 private:
-    void levelSelection();
-
     std::shared_ptr<filing::Scene2d> _slice;
     std::shared_ptr<game::game2d::Game2dEditor> _game2dEditor;
     std::shared_ptr<game::game2d::Level> _level;
@@ -41,5 +39,6 @@ private:
 
     char nameBuffer[255] = {0};
     int32_t num = 1;
+    graphics::Vector2d<float> gravity;
 };
 } // namespace ample::gui

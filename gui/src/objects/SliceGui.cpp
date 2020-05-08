@@ -25,9 +25,9 @@ SliceGui::SliceGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectSto
 void SliceGui::onCreate()
 {
     ImGui::InputText("Name", nameBuffer, 255);
-    gui_utils::InputScalar("Num", static_cast<int32_t &>(num), static_cast<int32_t>(1));
+    gui_utils::InputScalar("Number", static_cast<int32_t &>(num), static_cast<int32_t>(1));
 
-    levelSelection();
+    gui_utils::NamedObjectSelector("Level", _level, _game2dEditor->getLevelsList());
 }
 
 void SliceGui::onSubmitCreate()
@@ -75,38 +75,5 @@ std::string SliceGui::name() const
 std::string SliceGui::className() const
 {
     return "Scene2d";
-}
-
-void SliceGui::levelSelection() 
-{
-    if (ImGui::Button("Level"))
-    {
-        ImGui::OpenPopup("Level.popup");
-    }
-    ImGui::SameLine();
-    if (_level)
-    {
-        ImGui::Text("%s", _level->name().c_str());
-    }
-    else
-    {
-        gui_utils::TextDisabled("[select level]");
-    }
-
-    if (ImGui::BeginPopup("Level.popup"))
-    {
-        if (_game2dEditor->getLevelsList().empty())
-        {
-            gui_utils::TextDisabled("[empty]");
-        }
-        for (auto level : _game2dEditor->getLevelsList())
-        {
-            if (ImGui::Selectable(level->name().c_str()))
-            {
-                _level = level;
-            }
-        }
-        ImGui::EndPopup();
-    }
 }
 } // namespace ample::gui
