@@ -33,6 +33,7 @@ void Observer::setViewport(const graphics::Vector2d<float> &size,
 
 void Observer::updatePos()
 {
+    _targetDistance += control::EventManager::instance().mouse().getWheelY() * 2.0f;
     if (control::EventManager::instance().keyboard().isKeyDown(control::keysym::ARROW_LEFT))
     {
         _camera->translate({1.0f, 0.0f, 0.0f});
@@ -49,7 +50,7 @@ void Observer::updatePos()
     {
         _camera->translate({0.0f, -1.0f, 0.0f});
     }
-    _camera->translate({0.0f, 0.0f, 2.0f * control::EventManager::instance().mouse().getWheelY()});
+    _camera->translate({0.0f, 0.0f, (_targetDistance - _camera->getZ()) / 3.0f});
 
     _lamp->setTranslate({_camera->getX(), _camera->getY(), _camera->getZ()});
 }

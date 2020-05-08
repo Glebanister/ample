@@ -31,6 +31,8 @@ protected:
     float _cfY = 1.0f;
     std::shared_ptr<ample::graphics::light::LightSource> _lamp;
     std::shared_ptr<ample::graphics::CameraPerspective> _camera;
+
+    float _targetDistance = 0.0f;
 };
 
 } // namespace ample::gui

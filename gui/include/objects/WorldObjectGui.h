@@ -7,6 +7,7 @@
 
 #include "ObjectStorageGui.h"
 #include "objects/ObjectGui.h"
+#include "Observer.h"
 
 namespace ample::gui
 {
@@ -30,6 +31,7 @@ public:
 private:
     std::shared_ptr<game::game2d::Game2dEditor> _game2dEditor;
     ObjectStorageGui *_objectStorageGui;
+    Observer _observer;
 
     std::shared_ptr<physics::WorldObject2d> _object;
 

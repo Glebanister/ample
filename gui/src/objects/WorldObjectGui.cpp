@@ -137,6 +137,19 @@ void WorldObjectGui::onSubmitEdit()
 
 void WorldObjectGui::onView()
 {
+    ASSERT(_object);
+    ImGui::BeginChild("World object view");
+    _observer.setViewport({ImGui::GetWindowSize().x, ImGui::GetWindowSize().y - 24},
+                          {ImGui::GetWindowPos().x, 7});
+    _observer.look(_object);
+    bool isActive = true;
+    if (ImGui::IsAnyItemActive())
+        isActive = false;
+    if (ImGui::IsItemActive())
+        isActive = true;
+    if (isActive)
+        _observer.updatePos();
+    ImGui::EndChild();
 }
 
 void WorldObjectGui::onInspect()

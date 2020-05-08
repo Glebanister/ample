@@ -174,6 +174,7 @@ void ObjectStorageGui::creator()
                 _onInput->onSubmitCreate();
                 _guiByObjectName[_onInput->name()] = _onInput;
                 _creationSuccess = true;
+                setFocus(_onInput);
             }
             catch (const std::exception &e)
             {
