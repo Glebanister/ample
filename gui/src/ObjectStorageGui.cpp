@@ -107,7 +107,7 @@ void ObjectStorageGui::editor()
         return;
     }
     _focusedGui->onEdit();
-    if (ImGui::IsItemEdited())
+    if (ImGui::Button("Submit"))
     {
         try
         {

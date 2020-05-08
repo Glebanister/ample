@@ -43,6 +43,7 @@ void LevelGui::onEdit()
 void LevelGui::onSubmitEdit()
 {
     ASSERT(_level);
+    
     for (auto &[id, slice] : _level->layers())
     {
         utils::ignore(id);
