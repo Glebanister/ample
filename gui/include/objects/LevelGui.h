@@ -14,8 +14,8 @@ namespace ample::gui
 class LevelGui : public ObjectGui
 {
 public:
-    LevelGui(std::shared_ptr<filing::NamedObject>, std::shared_ptr<game::game2d::Game2dEditor>);
-    LevelGui(std::shared_ptr<game::game2d::Game2dEditor>);
+    LevelGui(std::shared_ptr<filing::NamedObject>, std::shared_ptr<game::game2d::Game2dEditor>, ObjectStorageGui *);
+    LevelGui(std::shared_ptr<game::game2d::Game2dEditor>, ObjectStorageGui *);
 
     void onCreate() override;
     void onSubmitCreate() override;
@@ -29,9 +29,11 @@ public:
     std::string className() const override;
 
 private:
+    std::shared_ptr<game::game2d::Game2dEditor> _game2dEditor;
+    ObjectStorageGui *_objectStorageGui;
+
     std::shared_ptr<game::game2d::Level> _level;
     std::shared_ptr<game::LevelLoader> _loader;
-    std::shared_ptr<game::game2d::Game2dEditor> _game2dEditor;
 
     char nameBuffer[255] = {0};
     float thickness = 20.0f;

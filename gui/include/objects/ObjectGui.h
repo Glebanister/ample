@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "ample/Debug.h"
+#include "ample/Game2dEditor.h"
 
 namespace ample::gui
 {

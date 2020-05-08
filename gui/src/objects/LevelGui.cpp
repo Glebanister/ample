@@ -8,17 +8,16 @@
 
 namespace ample::gui
 {
-LevelGui::LevelGui(std::shared_ptr<filing::NamedObject> level, std::shared_ptr<game::game2d::Game2dEditor> editor)
-    : _level(std::dynamic_pointer_cast<game::game2d::Level>(level)),
-      _game2dEditor(editor)
+LevelGui::LevelGui(std::shared_ptr<filing::NamedObject> level, std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *storage)
+    : _game2dEditor(editor),
+       _objectStorageGui(storage),
+      _level(std::dynamic_pointer_cast<game::game2d::Level>(level))
 {
-    ASSERT(_game2dEditor);
 }
 
-LevelGui::LevelGui(std::shared_ptr<game::game2d::Game2dEditor> editor)
-    : _game2dEditor(editor)
+LevelGui::LevelGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *storage)
+    : _game2dEditor(editor), _objectStorageGui(storage)
 {
-    ASSERT(_game2dEditor);
 }
 
 void LevelGui::onCreate()
@@ -43,7 +42,7 @@ void LevelGui::onEdit()
 void LevelGui::onSubmitEdit()
 {
     ASSERT(_level);
-    
+    _level->setGravity(gravity);
     for (auto &[id, slice] : _level->layers())
     {
         utils::ignore(id);
@@ -73,7 +72,7 @@ void LevelGui::onInspect()
     ASSERT(_level);
     for (auto &[id, slice] : _level->layers())
     {
-        // if (auto sliceGui = ObjectStorageGui::instance().objectGuiByName(slice->name());
+        // if (auto sliceGui = _game2dEditor->objectGuiByName(slice->name());
         //     ImGui::TreeNode(sliceGui->name().c_str()))
         // {
         //     ObjectStorageGui::instance().inspectSingleItem(sliceGui);
@@ -81,6 +80,10 @@ void LevelGui::onInspect()
         //     ImGui::TreePop();
         // }
     }
+    // for (auto &stateMachine : _level->stateMachines())
+    // {
+    //     if (auto smGui = Objec)
+    // }
 }
 
 void LevelGui::onPreview()

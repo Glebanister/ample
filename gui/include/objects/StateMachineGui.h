@@ -2,17 +2,20 @@
 
 #include <memory>
 
+#include "ample/Game2dEditor.h"
 #include "ample/StateMachine.h"
 
-#include "objects/ObjectGui.h"
+#include "ObjectGui.h"
+#include "ObjectStorageGui.h"
 
 namespace ample::gui
 {
+class ObjectStorageGui;
 class StateMachineGui : public ObjectGui
 {
 public:
-    StateMachineGui(std::shared_ptr<filing::NamedObject>);
-    StateMachineGui();
+    StateMachineGui(std::shared_ptr<filing::NamedObject>, std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *);
+    StateMachineGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *);
 
     void onCreate() override;
     void onSubmitCreate() override;
@@ -26,9 +29,12 @@ public:
     std::string className() const override;
 
 private:
-    std::shared_ptr<game::StateMachine> _sm;
+    std::shared_ptr<game::game2d::Game2dEditor> _game2dEditor;
+    ObjectStorageGui *_objectStorageGui;
+
+    std::shared_ptr<game::StateMachine> _stateMachine;
 
     char nameBuffer[255];
-    
+    std::shared_ptr<game::game2d::Level> selectedLevel;
 };
 } // namespace ample::gui

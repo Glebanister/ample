@@ -125,36 +125,36 @@ void ObjectStorageGui::creator()
 {
     if (ImGui::Selectable("Level"))
     {
-        create(finalObjectClass::LEVEL, _game2dEditor);
+        create(finalObjectClass::LEVEL, _game2dEditor, this);
     }
     // if (ImGui::Selectable("Slice"))
     // {
-    //     create(finalObjectClass::SLICE);
+    //     create(finalObjectClass::SLICE, _game2dEditor, this);
     // }
     // if (ImGui::Selectable("Graphical Object"))
     // {
-    //     create(finalObjectClass::GRAPHICAL_OBJECT);
+    //     create(finalObjectClass::GRAPHICAL_OBJECT, _game2dEditor, this);
     // }
     // if (ImGui::Selectable("Polygon"))
     // {
-    //     create(finalObjectClass::GRAPHICAL_POLYGON);
+    //     create(finalObjectClass::GRAPHICAL_POLYGON, _game2dEditor, this);
     // }
     // if (ImGui::Selectable("Edge"))
     // {
-    //     create(finalObjectClass::GRAPHICAL_EDGE);
+    //     create(finalObjectClass::GRAPHICAL_EDGE, _game2dEditor, this);
     // }
     // if (ImGui::Selectable("Graphical Object 2d"))
     // {
-    //     create(finalObjectClass::GRAPHICAL_OBJECT_2D);
+    //     create(finalObjectClass::GRAPHICAL_OBJECT_2D, _game2dEditor, this);
     // }
     // if (ImGui::Selectable("World Object"))
     // {
-    //     create(finalObjectClass::WORLD_OBJECT);
+    //     create(finalObjectClass::WORLD_OBJECT, _game2dEditor, this);
     // }
-    // if (ImGui::Selectable("State Machine"))
-    // {
-    //     create(finalObjectClass::STATE_MACHINE);
-    // }
+    if (ImGui::Selectable("State Machine"))
+    {
+        create(finalObjectClass::STATE_MACHINE, _game2dEditor, this);
+    }
 
     if (!_onInput)
     {

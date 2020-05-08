@@ -50,6 +50,7 @@ set(SOURCES
     src/objects/GraphicalObject2dGui.cpp
     src/objects/LevelGui.cpp
     src/objects/SliceGui.cpp
+    src/objects/ObjectGui.cpp
     src/objects/StateMachineGui.cpp
     src/objects/WorldObjectGui.cpp
     )

@@ -15,6 +15,18 @@
 
 namespace ample::gui
 {
+class GraphicalEdgeGui;
+class GraphicalObject2dGui;
+class GraphicalObjectGui;
+class GraphicalPolygonGui;
+class LevelGui;
+class SliceGui;
+class StateMachineGui;
+class WorldObjectGui;
+} // namespace ample::gui
+
+namespace ample::gui
+{
 template <typename... Args>
 inline std::unique_ptr<ObjectGui> ObjectStorageGui::buildGui(finalObjectClass objClass, Args... args)
 {
@@ -39,12 +51,12 @@ inline std::unique_ptr<ObjectGui> ObjectStorageGui::buildGui(finalObjectClass ob
     // case finalObjectClass::SLICE:
     //     result = std::make_unique<SliceGui>(args...);
     //     break;
-    // case finalObjectClass::STATE_MACHINE:
-    //     result = std::make_unique<StateMachineGui>(args...);
-    //     break;
-    // case finalObjectClass::WORLD_OBJECT:
-    //     result = std::make_unique<WorldObjectGui>(args...);
-    //     break;
+    case finalObjectClass::STATE_MACHINE:
+        result = std::make_unique<StateMachineGui>(args...);
+        break;
+        // case finalObjectClass::WORLD_OBJECT:
+        //     result = std::make_unique<WorldObjectGui>(args...);
+        //     break;
     }
 
     return result;
@@ -61,7 +73,7 @@ template <class T>
 void ObjectStorageGui::buildGuiAndAdd(std::shared_ptr<T> object)
 {
     ASSERT(classIdByClassName.find(object->className()) != classIdByClassName.end());
-    std::shared_ptr<ObjectGui> objectGui = buildGui(classIdByClassName[object->className()], object, _game2dEditor);
+    std::shared_ptr<ObjectGui> objectGui = buildGui(classIdByClassName[object->className()], object, _game2dEditor, this);
     _guiByObjectName.emplace(object->name(), objectGui);
 }
 } // namespace ample::gui
