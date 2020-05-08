@@ -159,6 +159,10 @@ private:
     b2Body *_body = nullptr;
     b2BodyDef _bodyDef;
     const BodyType _bodyType;
+    const float _relativeThickness;
+    const graphics::Vector2d<float> _faceTextureRepeats;
+    const graphics::Vector2d<float> _sideTextureRepeats;
+    const graphics::normalsMode _normalsMode;
     const float _startAngle;
     const graphics::Vector2d<float> _startPos;
     const float _startMass;

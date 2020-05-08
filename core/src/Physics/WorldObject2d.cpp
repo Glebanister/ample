@@ -336,6 +336,10 @@ WorldObject2d::WorldObject2d(const std::string &name,
                         translated,
                         rotated),
       _bodyType(type),
+      _relativeThickness(relativeThickness),
+      _faceTextureRepeats(faceTextureRepeats),
+      _sideTextureRepeats(sideTextureRepeats),
+      _normalsMode(sideNormalsMode),
       _startAngle(rotated),
       _startPos(translated),
       _startMass(mass),
@@ -411,6 +415,11 @@ std::string WorldObject2d::dump()
 {
     filing::JsonIO output = GraphicalObject2d::dump();
     output.write<physics::BodyType>("body_type", _bodyType);
+    output.write<std::vector<graphics::Vector2d<float>>>("shape", face().shape());
+    output.write<float>("relative_thickness", _relativeThickness);
+    output.write<graphics::Vector2d<float>>("face_texture_repeats", _faceTextureRepeats);
+    output.write<graphics::Vector2d<float>>("side_texture_repeats", _sideTextureRepeats);
+    output.write<graphics::normalsMode>("normals_mode", _normalsMode);
     output.write<float>("world_rotated", _startAngle);
     output.write<graphics::Vector2d<float>>("world_pos", _startPos);
     output.write<graphics::Vector2d<float>>("linear_velocity", _bodyDef.linearVelocity);

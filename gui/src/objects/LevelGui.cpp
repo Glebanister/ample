@@ -57,13 +57,7 @@ void LevelGui::onView()
     _observer.setViewport({ImGui::GetWindowSize().x, ImGui::GetWindowSize().y - 24},
                           {ImGui::GetWindowPos().x, 7});
     _observer.look(_level);
-    bool isActive = true;
-    if (ImGui::IsAnyItemActive())
-        isActive = false;
-    if (ImGui::IsItemActive())
-        isActive = true;
-    if (isActive)
-        _observer.updatePos();
+    _observer.updatePos();
     ImGui::EndChild();
 }
 
@@ -74,13 +68,13 @@ void LevelGui::onInspect()
     {
         for (auto &[id, slice] : _level->layers())
         {
-            // if (auto sliceGui = _game2dEditor->objectGuiByName(slice->name());
-            //     ImGui::TreeNode(sliceGui->name().c_str()))
-            // {
-            //     ObjectStorageGui::instance().inspectSingleItem(sliceGui);
-            //     sliceGui->onInspect();
-            //     ImGui::TreePop();
-            // }
+            if (auto sliceGui = _objectStorageGui->objectGuiByName(slice->name());
+                ImGui::TreeNode(sliceGui->name().c_str()))
+            {
+                _objectStorageGui->inspectSingleItem(sliceGui);
+                sliceGui->onInspect();
+                ImGui::TreePop();
+            }
         }
         ImGui::TreePop();
     }

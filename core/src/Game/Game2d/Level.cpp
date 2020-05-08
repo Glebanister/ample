@@ -27,7 +27,6 @@ Level::Level(const std::string &name,
                                                                        1000.0)),
       _editingMode(true)
 {
-    createSlice(0, "front_slice");
 }
 
 Level::Level(const std::filesystem::path &path)
@@ -56,6 +55,28 @@ Level::Level(const std::filesystem::path &path)
         auto newMachine = std::make_shared<StateMachine>(filing::openJSONfile(entry.path()), _levelNamespace); // use level namespace
         _stateMachines.push_back(newMachine);
         addBehavior(newMachine);
+    }
+
+    auto bindTexture = [&](graphics::GraphicalObject &obj) {
+        if (obj.getTextureName().length())
+        {
+            std::string textureInfo = utils::readAllFile(path / "textures");
+            auto texture = std::make_shared<graphics::Texture>(textureInfo);
+            obj.bindTexture(texture);
+        }
+    };
+
+    for (const auto &[dist, slice] : _sliceByDistance)
+    {
+        for (const auto &obj : slice->objects())
+        {
+            bindTexture(*obj);
+            if (obj->className() == "GraphicalObject2d" || obj->className() == "WorldObject2d")
+            {
+                bindTexture(std::dynamic_pointer_cast<graphics::GraphicalObject2d>(obj)->face());
+                bindTexture(std::dynamic_pointer_cast<graphics::GraphicalObject2d>(obj)->side());
+            }
+        }
     }
 }
 
@@ -93,6 +114,30 @@ void Level::saveAs(const std::filesystem::path &path)
         std::string smdata = machine->dump();
         std::ofstream machineFile(path / "state_machines" / (machine->name() + ".json"));
         machineFile << smdata;
+    }
+
+    utils::tryCreateDirectory(path / "textures");
+
+    auto saveTexture = [&](graphics::GraphicalObject &obj) {
+        if (obj.texture())
+        {
+            obj.texture()->setPath(path / "textures");
+            std::ofstream textureInfo(obj.texture()->path());
+            textureInfo << obj.texture()->dump();
+        }
+    };
+
+    for (const auto &[dist, slice] : _sliceByDistance)
+    {
+        for (const auto &obj : slice->objects())
+        {
+            saveTexture(*std::dynamic_pointer_cast<graphics::GraphicalObject2d>(obj));
+            if (obj->className() == "GraphicalObject2d" || obj->className() == "WorldObject2d")
+            {
+                saveTexture(std::dynamic_pointer_cast<graphics::GraphicalObject2d>(obj)->face());
+                saveTexture(std::dynamic_pointer_cast<graphics::GraphicalObject2d>(obj)->side());
+            }
+        }
     }
 }
 
@@ -139,11 +184,6 @@ std::shared_ptr<StateMachine> Level::createStateMachine(const std::string &name)
 {
     _stateMachines.emplace_back(std::make_shared<StateMachine>(name));
     return _stateMachines.back();
-}
-
-std::shared_ptr<filing::Scene2d> Level::frontSlice() noexcept
-{
-    return _sliceByDistance[0];
 }
 
 std::vector<std::shared_ptr<StateMachine>> Level::stateMachines() noexcept

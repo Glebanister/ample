@@ -49,6 +49,7 @@ public:
 
     void bindTexture(std::shared_ptr<Texture> texturePtr) noexcept;
     std::shared_ptr<Texture> texture() const noexcept;
+    std::string getTextureName() const noexcept;
 
     void bindVertexArray(std::shared_ptr<VertexArray>) noexcept;
 
@@ -63,5 +64,6 @@ private:
     shaders::ShaderProcessor::Uniform _modelMatrixUniform;
     std::shared_ptr<Texture> _texturePtr = nullptr;
     std::shared_ptr<VertexArray> _vertexArrayPtr = nullptr;
+    std::string _texutureName;
 };
 } // namespace ample::graphics

@@ -142,13 +142,7 @@ void WorldObjectGui::onView()
     _observer.setViewport({ImGui::GetWindowSize().x, ImGui::GetWindowSize().y - 24},
                           {ImGui::GetWindowPos().x, 7});
     _observer.look(_object);
-    bool isActive = true;
-    if (ImGui::IsAnyItemActive())
-        isActive = false;
-    if (ImGui::IsItemActive())
-        isActive = true;
-    if (isActive)
-        _observer.updatePos();
+    _observer.updatePos();
     ImGui::EndChild();
 }
 

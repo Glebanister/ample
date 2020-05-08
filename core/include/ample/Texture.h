@@ -7,6 +7,7 @@
 #include <GL/gl.h>
 #include <string>
 #include <vector>
+#include <filesystem>
 #include <cstddef>
 
 #include "Vector2d.h"
@@ -160,11 +161,14 @@ public:
 
     std::string path() const noexcept;
 
+    void setPath(const std::filesystem::path &path);
+
 private:
     TextureRaw _raw;
     std::vector<GLSingleTexture> _frames;
     size_t _currentFrame = 0U;
     friend class TextureRaw;
     bool _boomerangAnimationForward = true;
+    std::filesystem::path _realPath;
 };
 } // namespace ample::graphics

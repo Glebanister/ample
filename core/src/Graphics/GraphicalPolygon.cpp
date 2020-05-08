@@ -79,6 +79,11 @@ GraphicalPolygon::GraphicalPolygon(filing::JsonIO input)
 {
 }
 
+std::vector<Vector2d<float>> &GraphicalPolygon::shape()
+{
+    return _shape;
+}
+
 std::string GraphicalPolygon::dump()
 {
     filing::JsonIO output = GraphicalObject::dump();

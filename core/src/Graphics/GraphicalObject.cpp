@@ -1,16 +1,16 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #define GL_GLEXT_PROTOTYPES 1
 
-#include <glm/glm.hpp>
-#include <glm/gtx/transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <memory>
 #include <algorithm>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/transform.hpp>
+#include <memory>
 
+#include "Debug.h"
+#include "Exception.h"
 #include "GraphicalObject.h"
 #include "ShaderProcessor.h"
-#include "Exception.h"
-#include "Debug.h"
 
 namespace ample::graphics
 {
@@ -119,6 +119,16 @@ GraphicalObject::GraphicalObject(filing::JsonIO input)
                       input.read<glm::mat4>("scaled"),
                       input.read<glm::mat4>("rotated"))
 {
+    _texutureName = input.read<std::string>("texture_name");
+}
+
+std::string GraphicalObject::getTextureName() const noexcept
+{
+    if (_texturePtr)
+    {
+        return _texturePtr->name();
+    }
+    return _texutureName;
 }
 
 std::string GraphicalObject::dump()
@@ -127,6 +137,7 @@ std::string GraphicalObject::dump()
     output.write<glm::mat4>("translated", _translated);
     output.write<glm::mat4>("scaled", _scaled);
     output.write<glm::mat4>("rotated", _rotated);
+    output.write<std::string>("texture_name", _texturePtr ? _texturePtr->name() : "");
 
     return output;
 }

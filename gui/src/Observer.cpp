@@ -1,9 +1,12 @@
-#include "Observer.h"
+#include <imgui.h>
+
 #include "ample/Debug.h"
 #include "ample/GraphicalPolygon.h"
 #include "ample/RegularPolygon.h"
 #include "ample/Utils.h"
 #include "ample/Vector2d.h"
+
+#include "Observer.h"
 
 namespace ample::gui
 {
@@ -33,6 +36,10 @@ void Observer::setViewport(const graphics::Vector2d<float> &size,
 
 void Observer::updatePos()
 {
+    if (!checkActiveness())
+    {
+        return;
+    }
     _targetDistance += control::EventManager::instance().mouse().getWheelY() * 2.0f;
     if (control::EventManager::instance().keyboard().isKeyDown(control::keysym::ARROW_LEFT))
     {
@@ -55,16 +62,22 @@ void Observer::updatePos()
     _lamp->setTranslate({_camera->getX(), _camera->getY(), _camera->getZ()});
 }
 
+bool Observer::checkActiveness()
+{
+    
+    if (ImGui::IsAnyItemActive() && ImGui::IsItemActive())
+        _active = true;
+    if (ImGui::IsAnyItemActive() && (!ImGui::IsItemActive()))
+        _active = false;
+
+    return _active;
+}
+
 void Observer::look(std::shared_ptr<game::game2d::Level> level) noexcept
 {
     ASSERT(level);
     _camera->look();
     _lamp->draw();
-    auto obj1 = ample::graphics::GraphicalPolygon("ObjectName",
-                                                  ample::geometry::RegularPolygon<float>(10.0f, 4),
-                                                  10.0f,
-                                                  {1.0f, 2.0f});
-    obj1.draw();
     for (const auto &[_, slice] : level->layers())
     {
         utils::ignore(_);
@@ -81,11 +94,6 @@ void Observer::look(std::shared_ptr<filing::Scene2d> slice) noexcept
     ASSERT(slice);
     _camera->look();
     _lamp->draw();
-    auto obj1 = ample::graphics::GraphicalPolygon("ObjectName",
-                                                  ample::geometry::RegularPolygon<float>(10.0f, 4),
-                                                  10.0f,
-                                                  {1.0f, 2.0f});
-    obj1.draw();
     for (const auto &obj : slice->objects())
     {
         obj->draw();

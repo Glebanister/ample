@@ -1,11 +1,11 @@
 #include <GL/glu.h>
 #include <algorithm>
 
-#include "Texture.h"
-#include "Exception.h"
 #include "Debug.h"
+#include "Exception.h"
 #include "ILEnvironment.h"
 #include "OpenGLEnvironment.h"
+#include "Texture.h"
 
 namespace ample::graphics
 {
@@ -187,7 +187,8 @@ Texture::ILimage::~ILimage()
 
 Texture::Texture(const TextureRaw &rawTexture)
     : NamedStoredObject(rawTexture.name(), "Texture"),
-      _raw(rawTexture)
+      _raw(rawTexture),
+      _realPath(rawTexture.path)
 {
     name() = _raw.name();
     DEBUG("Loading texture " + _raw.path);
@@ -272,7 +273,16 @@ std::string Texture::dump()
     output.write<size_t>("total", _raw.total);
     output.write<Vector2d<int>>("origin", {static_cast<int>(_raw.origin.x),
                                            static_cast<int>(_raw.origin.y)});
+    if (_realPath != _raw.path)
+    {
+        std::filesystem::copy(_realPath, _raw.path);
+    }
     return output;
+}
+
+void Texture::setPath(const std::filesystem::path &path)
+{
+    _raw.path = path;
 }
 
 GLint Texture::getWidth() const noexcept
