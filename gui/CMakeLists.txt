@@ -43,6 +43,15 @@ set(SOURCES
     src/LevelBrowser.cpp
     src/ObjectStorageGui.cpp
     src/StateMachineBrowser.cpp
+
+    src/objects/GraphicalEdgeGui.cpp
+    src/objects/GraphicalPolygonGui.cpp
+    src/objects/GraphicalObjectGui.cpp
+    src/objects/GraphicalObject2dGui.cpp
+    src/objects/LevelGui.cpp
+    src/objects/SliceGui.cpp
+    src/objects/StateMachineGui.cpp
+    src/objects/WorldObjectGui.cpp
     )
 
 add_executable(ample-gui ${SOURCES} ${IMGUI_SOURCES})

@@ -12,18 +12,16 @@
 
 namespace ample::gui
 {
-class ImguiActivity : public game::game2d::Game2dEditor
+class ImguiActivity : public graphics::LayeredWindowActivity
 {
 public:
     ImguiActivity(ample::window::Window &window);
-    ImguiActivity(ample::window::Window &window,
-                  const std::filesystem::path &existingProjectPath);
 
-    void onActive() override;
+    void onActive() final;
+    virtual void drawInterface();
 
     ~ImguiActivity();
 
 protected:
-    virtual void drawInterface();
 };
 } // namespace ample::gui

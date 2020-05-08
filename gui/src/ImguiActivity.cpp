@@ -27,15 +27,8 @@ void initImgui(ample::window::Window &window)
     os::environment::OpenGLEnvironment::instance().setColor({0.17f, 0.213f, 0.248f, 1.00f});
 }
 
-ImguiActivity::ImguiActivity(ample::window::Window &window,
-                             const std::filesystem::path &existingProjectPath)
-    : Game2dEditor(window, existingProjectPath)
-{
-    initImgui(window);
-}
-
 ImguiActivity::ImguiActivity(ample::window::Window &window)
-    : Game2dEditor(window)
+    : LayeredWindowActivity(window)
 {
     initImgui(window);
 }
@@ -51,12 +44,13 @@ void ImguiActivity::onActive()
     {
         ImGui_ImplSDL2_ProcessEvent(&ev);
     }
-    Game2dEditor::onActive();
-
+    LayeredWindowActivity::onActive();
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame(_window.pointer());
     ImGui::NewFrame();
+
     drawInterface();
+
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

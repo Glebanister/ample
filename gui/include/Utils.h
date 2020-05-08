@@ -12,11 +12,11 @@ std::shared_ptr<T> SelectNamedObjectFromList(const std::string &selectionName,
 class MessagePopup
 {
 public:
-    MessagePopup(const std::string &id, const std::string &message, bool opened = false)    
+    MessagePopup(const std::string &id, const std::string &message, bool opened = false)
         : id(id), message(message), opened(opened) {}
 
     MessagePopup() = default;
-    
+
     std::string id;
     std::string message;
     bool opened = false;
@@ -53,6 +53,17 @@ inline void CloseCurrentPopupOnSuccessButton(bool &success)
         ImGui::CloseCurrentPopup();
     }
 }
+template <typename T>
+void InputScalar(const std::string &label, T &value, T step);
+
+template <typename T>
+void InputScalar(const std::string &label, T &value, T step, T min, T max);
+
+template <typename T>
+void InputCoordinates(const std::string &label, T &valueX, T &valueY, T step);
+
+template <typename T>
+void InputCoordinates(const std::string &label, T &valueX, T &valueY, T step, T min, T max);
 } // namespace ample::gui::gui_utils
 
 #include "templates/Utils.hpp"

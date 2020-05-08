@@ -1,7 +1,8 @@
 #pragma once
 
-#include <imgui.h>
+#include <optional>
 
+#include <imgui.h>
 #include <imfilebrowser.h>
 
 #include "ample/Behaviour.h"
@@ -12,38 +13,40 @@
 #include "ample/Window.h"
 #include "ample/WorldObject2d.h"
 
-#include "ImguiActivity.h"
-#include "Observer.h"
 #include "Editor.h"
+#include "ImguiActivity.h"
 #include "ObjectConstructor.h"
+#include "Observer.h"
+#include "ObjectStorageGui.h"
 
 namespace ample::gui
 {
-class Observer;
-} // namespace ample::gui
-
-namespace ample::gui
-{
-class AmpleGui : public ImguiActivity
+class AmpleGui : public utils::Singleton<AmpleGui>, public ImguiActivity
 {
 public:
-    AmpleGui(ample::window::Window &window);
-    AmpleGui(ample::window::Window &window,
-             const std::filesystem::path &existingProjectPath);
+    AmpleGui();
+
     void drawInterface() override;
 
-    std::shared_ptr<gui::Observer> getObserver() const noexcept;
+    void saveProject();
+    void saveProjectAs(const std::filesystem::path &path);
+    void openProject(const std::filesystem::path &path);
+    void createNewProject(const std::filesystem::path &);
 
 private:
+    std::shared_ptr<game::game2d::Game2dEditor> _game2dEditor;
+    std::shared_ptr<ObjectStorageGui> _objectsGui;
+
+    void ProjectOpener();
     void MenuBar();
     void Workspace();
     void trySaveProject();
+
+    gui_utils::MessagePopup _messagePopup;
+
     ImGui::FileBrowser _filebrowser{ImGuiFileBrowserFlags_CloseOnEsc |
                                     ImGuiFileBrowserFlags_CreateNewDir |
                                     ImGuiFileBrowserFlags_SelectDirectory |
                                     ImGuiFileBrowserFlags_NoTitleBar};
-    Editor _editor;
-    ObjectConstructor _projectPathSelector;
-    gui_utils::MessagePopup _savingPopup;
 };
 } // namespace ample::gui

@@ -7,13 +7,6 @@
 #include "ample/LightSource.h"
 #include "ample/Singleton.h"
 
-#include "AmpleGui.h"
-
-namespace ample::gui
-{
-class AmpleGui;
-} // namespace ample::gui
-
 namespace ample::gui
 {
 class Observer
