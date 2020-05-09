@@ -43,6 +43,8 @@ private:
     float relativeThickness = 0.3f;
     graphics::Vector2d<float> faceTextureRep = {1.0f, 1.0f};
     graphics::Vector2d<float> sideTextureRep = {1.0f, 1.0f};
+    std::string textureSizeFace = "fit";
+    std::string textureSizeSide = "fit";
     std::string normalsMode = "face";
     graphics::Vector2d<float> position = {0.0f, 0.0f};
     float angle = 0.0f;
@@ -59,5 +61,7 @@ private:
     graphics::Vector2d<float> center = {0.0f, 0.0f};
     float mass = 0.0f;
     float inertia = 0.0f;
+    std::shared_ptr<graphics::Texture> _faceTexture = nullptr;
+    std::shared_ptr<graphics::Texture> _sideTexture = nullptr;
 };
 } // namespace ample::gui

@@ -120,7 +120,6 @@ inline void PathSelector(const std::string &label, std::string &path, ImGui::Fil
     if (filebrowser.HasSelected())
     {
         path = filebrowser.GetSelected();
-        filebrowser.ClearSelected();
     }
 }
 } // namespace ample::gui::gui_utils

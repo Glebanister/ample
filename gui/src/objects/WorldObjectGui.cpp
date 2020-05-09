@@ -24,6 +24,18 @@ WorldObjectGui::WorldObjectGui(std::shared_ptr<filing::NamedObject> object,
       _objectStorageGui(storage),
       _object(std::dynamic_pointer_cast<physics::WorldObject2d>(object))
 {
+    angularDamping = _object->getAngularDamping();
+    awake = _object->isAwake();
+    enabled = _object->isEnabled();
+    fixedRotation = _object->isFixedRotation();
+    gravityScale = _object->getGravityScale();
+    linearDamping = _object->getLinearDamping();
+    linearVelocity = _object->getLinearVelocity();
+    allowSleep = _object->isSleepingAllowed();
+    angle = _object->getStartAngle();
+    position = _object->getStartPosition();
+    _faceTexture = _object->face().texture();
+    _sideTexture = _object->side().texture();
 }
 
 WorldObjectGui::WorldObjectGui(std::shared_ptr<game::game2d::Game2dEditor> editor,
@@ -31,6 +43,34 @@ WorldObjectGui::WorldObjectGui(std::shared_ptr<game::game2d::Game2dEditor> edito
     : _game2dEditor(editor),
       _objectStorageGui(storage)
 {
+}
+
+void setTextureModeFace(const std::string mode, graphics::Vector2d<float> &textureRep, const graphics::Vector2d<float> size, float blockSize)
+{
+    if (mode == "fit")
+    {
+        textureRep.x = 1.0f;
+        textureRep.y = 1.0f;
+    }
+    else if (mode == "tile")
+    {
+        textureRep.x = size.x / blockSize;
+        textureRep.y = size.y / blockSize;
+    }
+}
+
+void setTextureModeSide(const std::string mode, graphics::Vector2d<float> &textureRep, const graphics::Vector2d<float> size, float blockSize)
+{
+    if (mode == "fit")
+    {
+        textureRep.x = 1.0f;
+        textureRep.y = 1.0f;
+    }
+    else if (mode == "tile")
+    {
+        textureRep.x = 1.0f;
+        textureRep.y = (size.x + size.y) * 2.0f / blockSize;
+    }
 }
 
 void WorldObjectGui::onCreate()
@@ -44,13 +84,11 @@ void WorldObjectGui::onCreate()
     gui_utils::StringSelector("Body type", bodyType, {"static", "kinematic", "dynamic"});
     gui_utils::InputCoordinates("Size", size.x, size.y, 10.0f);
     gui_utils::InputScalar("Relative thickness", relativeThickness, 0.1f);
-    faceTextureRep.x = size.x / 10.0f;
-    faceTextureRep.y = size.y / 10.0f;
-    sideTextureRep.x = 1.0f;
-    sideTextureRep.y = (size.x + size.y) * 0.2f;
-    // gui_utils::InputCoordinates("Face texture repeats", faceTextureRep.x, faceTextureRep.y, 1.0f);
-    // gui_utils::InputCoordinates("Side texture repeats", sideTextureRep.x, sideTextureRep.y, 1.0f);
     gui_utils::StringSelector("Normals mode", normalsMode, {"face", "vertex"});
+    gui_utils::StringSelector("Texture mode face", textureSizeFace, {"fit", "tile"});
+    gui_utils::StringSelector("Texture mode side", textureSizeSide, {"fit", "tile"});
+    setTextureModeFace(textureSizeFace, faceTextureRep, size, 10.0f);
+    setTextureModeFace(textureSizeSide, sideTextureRep, size, 10.0f);
     gui_utils::InputCoordinates("Position", position.x, position.y, 10.0f);
     gui_utils::InputScalar("Angle", angle, 1.0f);
     gui_utils::InputCoordinates("Linear velocity", linearVelocity.x, linearVelocity.y, 1.0f);
@@ -66,6 +104,8 @@ void WorldObjectGui::onCreate()
     gui_utils::InputCoordinates("Center shift", center.x, center.y, 0.1f, -1.0f, 1.0f);
     gui_utils::InputScalar("Mass", mass, 1.0f);
     gui_utils::InputScalar("Inertia", inertia, 1.0f);
+    gui_utils::NamedObjectSelector("Face texture", _faceTexture, _objectStorageGui->texturesList());
+    gui_utils::NamedObjectSelector("Side texture", _sideTexture, _objectStorageGui->texturesList());
 }
 
 void WorldObjectGui::onSubmitCreate()
@@ -106,11 +146,16 @@ void WorldObjectGui::onSubmitCreate()
         mass,
         inertia);
 
+    _object->face().bindTexture(_faceTexture);
+    _object->side().bindTexture(_sideTexture);
+
     selectedScene->addWorldObject(_object);
 }
 
 void WorldObjectGui::onEdit()
 {
+    gui_utils::InputCoordinates("Position", position.x, position.y, 10.0f);
+    gui_utils::InputScalar("Angle", angle, 1.0f);
     gui_utils::InputScalar("Angular damping", angularDamping, 1.0f);
     gui_utils::InputScalar("Angular velocity", angularVelocity, 1.0f);
     ImGui::Checkbox("Awake", &awake);
@@ -120,6 +165,8 @@ void WorldObjectGui::onEdit()
     gui_utils::InputScalar("Linear damping", linearDamping, 1.0f);
     gui_utils::InputCoordinates("Linear velocity", linearVelocity.x, linearVelocity.y, 1.0f);
     ImGui::Checkbox("Allow sleep", &allowSleep);
+    gui_utils::NamedObjectSelector("Face texture", _faceTexture, _objectStorageGui->texturesList());
+    gui_utils::NamedObjectSelector("Side texture", _sideTexture, _objectStorageGui->texturesList());
 }
 
 void WorldObjectGui::onSubmitEdit()
@@ -133,6 +180,12 @@ void WorldObjectGui::onSubmitEdit()
     _object->setLinearDamping(linearDamping);
     _object->setLinearVelocity(linearVelocity);
     _object->setSleepingAllowed(allowSleep);
+    _object->setStartAngle(angle);
+    _object->setStartPosition(position);
+    gui_utils::NamedObjectSelector("Face texture", _faceTexture, _objectStorageGui->texturesList());
+    gui_utils::NamedObjectSelector("Side texture", _sideTexture, _objectStorageGui->texturesList());
+    _object->face().bindTexture(_faceTexture);
+    _object->side().bindTexture(_sideTexture);
 }
 
 void WorldObjectGui::onView()

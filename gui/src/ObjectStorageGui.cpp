@@ -198,6 +198,20 @@ void ObjectStorageGui::creator()
     }
 }
 
+void ObjectStorageGui::texturesViewer()
+{
+    for (auto &tex : texturesList())
+    {
+        if (auto texGui = objectGuiByName(tex->name());
+            ImGui::TreeNode(texGui->name().c_str()))
+        {
+            inspectSingleItem(texGui);
+            texGui->onInspect();
+            ImGui::TreePop();
+        }
+    }
+}
+
 void ObjectStorageGui::inspector()
 {
     if (!_focusedGui)
@@ -216,5 +230,10 @@ void ObjectStorageGui::viewer()
         return;
     }
     _focusedGui->onView();
+}
+
+std::vector<std::shared_ptr<graphics::Texture>> &ObjectStorageGui::texturesList() noexcept
+{
+    return _textures;
 }
 } // namespace ample::gui

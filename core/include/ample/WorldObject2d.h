@@ -145,6 +145,12 @@ public:
     void setFixedRotation(bool flag);
     bool isFixedRotation() const;
 
+    void setStartPosition(const graphics::Vector2d<float> &pos) noexcept;
+    graphics::Vector2d<float> getStartPosition() const noexcept;
+
+    void setStartAngle(float angle) noexcept;
+    float getStartAngle() const noexcept;
+
     WorldContactEdge2d getContactList();
 
     WorldObject2d &getNext();
@@ -160,11 +166,8 @@ private:
     b2BodyDef _bodyDef;
     const BodyType _bodyType;
     const float _relativeThickness;
-    const graphics::Vector2d<float> _faceTextureRepeats;
-    const graphics::Vector2d<float> _sideTextureRepeats;
-    const graphics::normalsMode _normalsMode;
-    const float _startAngle;
-    const graphics::Vector2d<float> _startPos;
+    float _startAngle;
+    graphics::Vector2d<float> _startPos;
     const float _startMass;
     const float _startInertia;
     const graphics::Vector2d<float> _startCenter;

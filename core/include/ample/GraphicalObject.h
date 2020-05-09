@@ -2,16 +2,16 @@
 
 #include <GL/gl.h>
 #include <glm/glm.hpp>
-#include <vector>
 #include <memory>
 #include <string>
+#include <vector>
 
-#include "Vector3d.h"
+#include "Behaviour.h"
+#include "JsonIO.h"
 #include "ShaderProcessor.h"
 #include "Texture.h"
+#include "Vector3d.h"
 #include "VertexArray.h"
-#include "JsonIO.h"
-#include "Behaviour.h"
 
 namespace ample::graphics
 {
@@ -65,5 +65,6 @@ private:
     std::shared_ptr<Texture> _texturePtr = nullptr;
     std::shared_ptr<VertexArray> _vertexArrayPtr = nullptr;
     std::string _texutureName;
+    glm::vec3 _position = {0.0f, 0.0f, 0.0f};
 };
 } // namespace ample::graphics

@@ -72,7 +72,6 @@ void LevelGui::onInspect()
                 ImGui::TreeNode(sliceGui->name().c_str()))
             {
                 _objectStorageGui->inspectSingleItem(sliceGui);
-                sliceGui->onInspect();
                 ImGui::TreePop();
             }
         }
@@ -86,7 +85,6 @@ void LevelGui::onInspect()
                 ImGui::TreeNode(smGui->name().c_str()))
             {
                 _objectStorageGui->inspectSingleItem(smGui);
-                smGui->onInspect();
                 ImGui::TreePop();
             }
         }

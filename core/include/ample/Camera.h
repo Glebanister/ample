@@ -65,8 +65,8 @@ protected:
     Viewport _viewport;
     glm::vec3 _position{0.0f};
     glm::vec3 _direction{0.0, 0.0, 1.0};
-    glm::vec3 _head{0.0, 1.0, 0.0};
-    glm::vec3 _right{1.0, 0.0, 0.0};
+    glm::vec3 _head{0.0, -1.0, 0.0};
+    glm::vec3 _right{-1.0, 0.0, 0.0};
 
     bool _visible = true;
 };

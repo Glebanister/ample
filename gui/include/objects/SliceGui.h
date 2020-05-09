@@ -40,5 +40,7 @@ private:
     char nameBuffer[255] = {0};
     int32_t num = 1;
     graphics::Vector2d<float> gravity;
+    
+    Observer _observer;
 };
 } // namespace ample::gui

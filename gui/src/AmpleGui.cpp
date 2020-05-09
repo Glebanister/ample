@@ -239,6 +239,10 @@ void AmpleGui::Workspace()
     {
         _objectsGui->inspector();
     }
+    if (ImGui::CollapsingHeader("Textures"))
+    {
+        _objectsGui->texturesViewer();
+    }
     ImGui::EndChild();
     ImGui::NextColumn();
 }

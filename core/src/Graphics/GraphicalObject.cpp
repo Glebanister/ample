@@ -39,17 +39,19 @@ void GraphicalObject::removeSubObject(std::shared_ptr<GraphicalObject> object)
     std::remove(_subObjects.begin(), _subObjects.end(), object);
 }
 
-float GraphicalObject::getX() const { return _translated[0][0]; }
-float GraphicalObject::getY() const { return _translated[1][1]; }
-float GraphicalObject::getZ() const { return _translated[2][2]; }
+float GraphicalObject::getX() const { return _position[0]; }
+float GraphicalObject::getY() const { return _position[1]; }
+float GraphicalObject::getZ() const { return _position[2]; }
 
 void GraphicalObject::setTranslate(const glm::vec3 &vector) noexcept
 {
     _translated = glm::translate(vector);
+    _position = vector;
 }
 void GraphicalObject::translate(const glm::vec3 &vector) noexcept
 {
     _translated *= glm::translate(vector);
+    _position += vector;
 }
 
 void GraphicalObject::setRotate(const glm::vec3 &axis, const float angle) noexcept

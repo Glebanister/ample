@@ -288,7 +288,7 @@ std::string Texture::dump()
 
 void Texture::setPath(const std::string &path)
 {
-    _raw.path = path;
+    _raw.path = std::filesystem::path(path) / (name() + std::filesystem::path(_raw.path).extension().string());
 }
 
 GLint Texture::getWidth() const noexcept

@@ -66,6 +66,7 @@ void TextureGui::onSubmitCreate()
             playbackByName[playback],
             total,
             {originByName[originX], originByName[originY]}));
+    _objectStorageGui->texturesList().push_back(_texture);
 }
 
 void TextureGui::onEdit()
@@ -77,24 +78,27 @@ void TextureGui::onSubmitEdit()
 {
 }
 
-void TextureGui::onView()
+graphics::Vector2d<float> fitSize(graphics::Vector2d<float> tex, graphics::Vector2d<float> win)
 {
-    auto winX = ImGui::GetWindowSize().x;
-    auto winY = ImGui::GetWindowSize().y;
-    float texX = _texture->getWidth();
-    float texY = _texture->getHeight();
-    if (winX / winY < texX / texY)
+    if (win.x / win.y < tex.x / tex.y)
     {
-        texY = (texY / texX) * winX;
-        texX = winX;
+        tex.y = (tex.y / tex.x) * win.x;
+        tex.x = win.x;
     }
     else
     {
-        texX = (texX / texY) * winY;
-        texY = winY;
+        tex.x = (tex.x / tex.y) * win.y;
+        tex.y = win.y;
     }
+    return tex;
+}
+
+void TextureGui::onView()
+{
+    auto texSize = fitSize({static_cast<float>(_texture->getWidth()), static_cast<float>(_texture->getHeight())},
+                           {ImGui::GetWindowWidth(), ImGui::GetWindowHeight()});
     ImGui::Image((void *)(intptr_t)_texture->getCurrentTexture().glTextureId(),
-                 ImVec2(texX, texY));
+                 ImVec2(texSize.x, texSize.y));
 }
 
 void TextureGui::onInspect()
@@ -103,10 +107,16 @@ void TextureGui::onInspect()
 
 void TextureGui::onPreview()
 {
+    ImGui::Separator();
+    ImGui::Columns(2);
     ImGui::Text("Name: %s", _texture->name().c_str());
     ImGui::Text("Size: %dx%d", _texture->getWidth(), _texture->getHeight());
+    ImGui::NextColumn();
+    auto texSize = fitSize({static_cast<float>(_texture->getWidth()), static_cast<float>(_texture->getHeight())},
+                           {64.0f, 64.0f});
     ImGui::Image((void *)(intptr_t)_texture->getCurrentTexture().glTextureId(),
-                 ImVec2(32, 32));
+                 ImVec2(texSize.x, texSize.y));
+    ImGui::NextColumn();
 }
 
 std::string TextureGui::name() const

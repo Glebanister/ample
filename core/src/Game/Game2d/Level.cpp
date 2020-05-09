@@ -57,12 +57,27 @@ Level::Level(const std::filesystem::path &path)
         addBehavior(newMachine);
     }
 
+    auto texturesPath = path.parent_path().parent_path() / "textures";
+    std::unordered_map<std::string, std::shared_ptr<graphics::Texture>> textureByName;
+    for (const auto &entry : std::filesystem::directory_iterator(texturesPath))
+    {
+        if (entry.path().extension() == ".json")
+        {
+            std::string textureInfo = utils::readAllFile(entry);
+            auto texture = std::make_shared<graphics::Texture>(textureInfo);
+            textureByName.emplace(texture->name(), texture);
+        }
+    }
+
     auto bindTexture = [&](graphics::GraphicalObject &obj) {
         if (obj.getTextureName().length())
         {
-            std::string textureInfo = utils::readAllFile(path / "textures");
-            auto texture = std::make_shared<graphics::Texture>(textureInfo);
-            obj.bindTexture(texture);
+            auto tex = textureByName[obj.getTextureName()];
+            if (!tex)
+            {
+                throw GameException("texture not found: " + obj.getTextureName());
+            }
+            obj.bindTexture(tex);
         }
     };
 
@@ -116,13 +131,19 @@ void Level::saveAs(const std::filesystem::path &path)
         machineFile << smdata;
     }
 
-    utils::tryCreateDirectory(path / "textures");
+    auto texturesPath = path.parent_path().parent_path() / "textures";
+    utils::tryCreateDirectory(texturesPath);
 
     auto saveTexture = [&](graphics::GraphicalObject &obj) {
         if (obj.texture())
         {
-            obj.texture()->setPath(path / "textures");
-            std::ofstream textureInfo(obj.texture()->path());
+            obj.texture()->setPath(texturesPath);
+            auto texInfoPath = texturesPath / (obj.texture()->name() + ".json");
+            if (std::filesystem::exists(texInfoPath))
+            {
+                return;
+            }
+            std::ofstream textureInfo(texInfoPath);
             textureInfo << obj.texture()->dump();
         }
     };

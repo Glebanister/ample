@@ -43,19 +43,19 @@ void Observer::updatePos()
     _targetDistance += control::EventManager::instance().mouse().getWheelY() * 2.0f;
     if (control::EventManager::instance().keyboard().isKeyDown(control::keysym::ARROW_LEFT))
     {
-        _camera->translate({1.0f, 0.0f, 0.0f});
+        _camera->translate({-1.0f, 0.0f, 0.0f});
     }
     if (control::EventManager::instance().keyboard().isKeyDown(control::keysym::ARROW_RIGHT))
     {
-        _camera->translate({-1.0f, 0.0f, 0.0f});
+        _camera->translate({1.0f, 0.0f, 0.0f});
     }
     if (control::EventManager::instance().keyboard().isKeyDown(control::keysym::ARROW_UP))
     {
-        _camera->translate({0.0f, 1.0f, 0.0f});
+        _camera->translate({0.0f, -1.0f, 0.0f});
     }
     if (control::EventManager::instance().keyboard().isKeyDown(control::keysym::ARROW_DOWN))
     {
-        _camera->translate({0.0f, -1.0f, 0.0f});
+        _camera->translate({0.0f, 1.0f, 0.0f});
     }
     _camera->translate({0.0f, 0.0f, (_targetDistance - _camera->getZ()) / 3.0f});
 

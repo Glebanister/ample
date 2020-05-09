@@ -1,7 +1,7 @@
 #include <imgui.h>
 
-#include "ample/Utils.h"
 #include "Utils.h"
+#include "ample/Utils.h"
 
 #include "objects/SliceGui.h"
 
@@ -12,12 +12,12 @@ SliceGui::SliceGui(std::shared_ptr<filing::NamedObject> slice, std::shared_ptr<g
       _game2dEditor(editor),
       _objectStorageGui(storage)
 {
-    ASSERT(_game2dEditor); 
+    ASSERT(_game2dEditor);
 }
 
-SliceGui::SliceGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *storage) 
+SliceGui::SliceGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *storage)
     : _game2dEditor(editor),
-    _objectStorageGui(storage)
+      _objectStorageGui(storage)
 {
     ASSERT(_game2dEditor);
 }
@@ -54,11 +54,28 @@ void SliceGui::onSubmitEdit()
 
 void SliceGui::onView()
 {
-
+    ASSERT(_slice);
+    ImGui::BeginChild("Level view");
+    _observer.setViewport({ImGui::GetWindowSize().x, ImGui::GetWindowSize().y - 24},
+                          {ImGui::GetWindowPos().x, 7});
+    _observer.look(_slice);
+    _observer.updatePos();
+    ImGui::EndChild();
 }
 
 void SliceGui::onInspect()
 {
+    ASSERT(_slice);
+    for (auto &object : _slice->objects())
+    {
+        if (auto gui = _objectStorageGui->objectGuiByName(object->name());
+            ImGui::TreeNode(gui->name().c_str()))
+        {
+            _objectStorageGui->inspectSingleItem(gui);
+            gui->onInspect();
+            ImGui::TreePop();
+        }
+    }
 }
 
 void SliceGui::onPreview()

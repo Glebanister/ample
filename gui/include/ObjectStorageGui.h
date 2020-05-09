@@ -59,6 +59,7 @@ public:
     void creator();
     void inspector();
     void viewer();
+    void texturesViewer();
 
     std::shared_ptr<ObjectGui> objectGuiByName(const std::string &name);
 
@@ -66,6 +67,8 @@ public:
 
     void inspectSingleItem(const std::string &name);
     void inspectSingleItem(std::shared_ptr<ObjectGui>);
+
+    std::vector<std::shared_ptr<graphics::Texture>> &texturesList() noexcept;
 
 private:
     template <typename... Args>
@@ -81,6 +84,8 @@ private:
     bool _creationSuccess = false;
     gui_utils::MessagePopup _creationFailPopup;
     gui_utils::MessagePopup _editionFailPopup;
+
+    std::vector<std::shared_ptr<graphics::Texture>> _textures;
 };
 } // namespace ample::gui
 
