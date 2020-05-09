@@ -12,6 +12,7 @@
 #include "objects/SliceGui.h"
 #include "objects/StateMachineGui.h"
 #include "objects/WorldObjectGui.h"
+#include "objects/TextureGui.h"
 
 namespace ample::gui
 {
@@ -23,6 +24,7 @@ class LevelGui;
 class SliceGui;
 class StateMachineGui;
 class WorldObjectGui;
+class TextureGui;
 } // namespace ample::gui
 
 namespace ample::gui
@@ -65,6 +67,9 @@ inline std::unique_ptr<ObjectGui> ObjectStorageGui::buildGui(finalObjectClass ob
         break;
     case finalObjectClass::WORLD_OBJECT_2D:
         result = std::make_unique<WorldObjectGui>(args...);
+        break;
+    case finalObjectClass::TEXTURE:
+        result = std::make_unique<TextureGui>(args...);
         break;
     }
 

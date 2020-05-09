@@ -17,6 +17,7 @@ ObjectStorageGui::ObjectStorageGui(std::shared_ptr<game::game2d::Game2dEditor> e
             for (auto &object : slice->objects())
             {
                 buildGuiAndAdd(object);
+                // TODO: texture
             }
         }
         //     for (auto &sm : level->stateMachines())
@@ -154,6 +155,10 @@ void ObjectStorageGui::creator()
     if (ImGui::Selectable("State Machine"))
     {
         create(finalObjectClass::STATE_MACHINE, _game2dEditor, this);
+    }
+    if (ImGui::Selectable("Texture"))
+    {
+        create(finalObjectClass::TEXTURE, _game2dEditor, this);
     }
 
     if (!_onInput)

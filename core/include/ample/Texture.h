@@ -124,7 +124,7 @@ private:
 
     private:
         ILuint _imgId;
-        PixelMap _pixels;
+        std::unique_ptr<PixelMap> _pixels;
     };
 
     class GLSingleTexture final
@@ -161,7 +161,7 @@ public:
 
     std::string path() const noexcept;
 
-    void setPath(const std::filesystem::path &path);
+    void setPath(const std::string &path);
 
 private:
     TextureRaw _raw;
@@ -169,6 +169,6 @@ private:
     size_t _currentFrame = 0U;
     friend class TextureRaw;
     bool _boomerangAnimationForward = true;
-    std::filesystem::path _realPath;
+    std::string _realPath;
 };
 } // namespace ample::graphics

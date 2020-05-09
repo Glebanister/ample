@@ -1,6 +1,8 @@
 #pragma once
 
 #include <imgui.h>
+
+#include <imfilebrowser.h>
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -103,6 +105,22 @@ inline void StringSelector(const std::string &label, std::string &string, const 
             }
         }
         ImGui::EndPopup();
+    }
+}
+
+inline void PathSelector(const std::string &label, std::string &path, ImGui::FileBrowser &filebrowser)
+{
+    if (ImGui::Button(label.c_str()))
+    {
+        filebrowser.Open();
+    }
+    ImGui::SameLine();
+    ImGui::Text("%s", path.c_str());
+    filebrowser.Display();
+    if (filebrowser.HasSelected())
+    {
+        path = filebrowser.GetSelected();
+        filebrowser.ClearSelected();
     }
 }
 } // namespace ample::gui::gui_utils

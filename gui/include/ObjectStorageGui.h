@@ -30,6 +30,7 @@ enum class finalObjectClass
     // GRAPHICAL_OBJECT_2D,
     WORLD_OBJECT_2D,
     STATE_MACHINE,
+    TEXTURE,
 };
 
 static std::unordered_map<std::string, finalObjectClass> classIdByClassName{
@@ -41,6 +42,7 @@ static std::unordered_map<std::string, finalObjectClass> classIdByClassName{
     // {"GraphicalObject2d", finalObjectClass::GRAPHICAL_OBJECT_2D},
     {"WorldObject2d", finalObjectClass::WORLD_OBJECT_2D},
     {"StateMachine", finalObjectClass::STATE_MACHINE},
+    {"Texture", finalObjectClass::TEXTURE},
 };
 
 class ObjectStorageGui
