@@ -214,11 +214,11 @@ void AmpleGui::Workspace()
     ImGui::Columns(3, "Workspace");
 
     ImGui::BeginChild("Left");
-    if (ImGui::CollapsingHeader("Browser", NULL, 0))
+    if (ImGui::CollapsingHeader("Browser", NULL, ImGuiTreeNodeFlags_DefaultOpen))
     {
         _objectsGui->browser();
     }
-    if (ImGui::CollapsingHeader("Editor"))
+    if (ImGui::CollapsingHeader("Editor", NULL, ImGuiTreeNodeFlags_DefaultOpen))
     {
         _objectsGui->editor();
     }
@@ -231,15 +231,14 @@ void AmpleGui::Workspace()
     ImGui::NextColumn();
 
     ImGui::BeginChild("Right");
-    if (ImGui::CollapsingHeader("Creator"))
+    if (ImGui::CollapsingHeader("Creator", NULL, ImGuiTreeNodeFlags_DefaultOpen))
     {
         _objectsGui->creator();
     }
-    if (ImGui::CollapsingHeader("Inspector"))
+    if (ImGui::CollapsingHeader("Inspector", NULL, ImGuiTreeNodeFlags_DefaultOpen))
     {
         _objectsGui->inspector();
     }
-    if (ImGui::CollapsingHeader("Textures"))
     {
         _objectsGui->texturesViewer();
     }

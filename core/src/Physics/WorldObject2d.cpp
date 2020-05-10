@@ -436,8 +436,8 @@ std::string WorldObject2d::dump()
     output.write<physics::BodyType>("body_type", _bodyType);
     output.write<std::vector<graphics::Vector2d<float>>>("shape", face().shape());
     output.write<float>("relative_thickness", _relativeThickness);
-    output.write<float>("world_rotated", _startAngle);
-    output.write<graphics::Vector2d<float>>("world_pos", _startPos);
+    output.write<float>("world_rotated", getAxisAngle());
+    output.write<graphics::Vector2d<float>>("world_pos", {getX(), getY()});
     output.write<graphics::Vector2d<float>>("linear_velocity", _bodyDef.linearVelocity);
     output.write<float>("angular_velocity", _bodyDef.angularVelocity);
     output.write<float>("linear_damping", _bodyDef.linearDamping);

@@ -38,6 +38,8 @@ public:
     float getY() const;
     float getZ() const;
 
+    float getAxisAngle() const noexcept;
+
     void setScale(const glm::vec3 &) noexcept;
     void scale(const glm::vec3 &) noexcept;
 
@@ -66,5 +68,6 @@ private:
     std::shared_ptr<VertexArray> _vertexArrayPtr = nullptr;
     std::string _texutureName;
     glm::vec3 _position = {0.0f, 0.0f, 0.0f};
+    float _angle = 0.0f;
 };
 } // namespace ample::graphics
