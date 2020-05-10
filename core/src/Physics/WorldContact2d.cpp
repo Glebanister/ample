@@ -112,4 +112,9 @@ WorldContactEdge2d WorldContactEdge2d::getNext()
 {
     return {_contactEdge->prev};
 }
+
+WorldContactEdge2d::operator bool()
+{
+    return _contactEdge;
+}
 } // namespace ample::physics
