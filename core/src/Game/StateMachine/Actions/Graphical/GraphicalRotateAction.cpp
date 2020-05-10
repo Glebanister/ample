@@ -25,6 +25,25 @@ GraphicalRotateAction::GraphicalRotateAction(const filing::JsonIO &input)
 {
 }
 
+graphics::Vector3d<float> GraphicalRotateAction::getAxis() const noexcept
+{
+    return _axis;
+}
+
+void GraphicalRotateAction::setAxis(const graphics::Vector3d<float> &axis) noexcept
+{
+    _axis = axis;
+}
+
+float GraphicalRotateAction::getAngle() const noexcept
+{
+    return _angle;
+}
+void GraphicalRotateAction::setAngle(float angle) noexcept
+{
+    _angle = angle;
+}
+
 std::string GraphicalRotateAction::dump()
 {
     filing::JsonIO result = GraphicalAction::dump();

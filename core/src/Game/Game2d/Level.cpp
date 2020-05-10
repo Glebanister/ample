@@ -8,62 +8,11 @@
 
 namespace ample::game::game2d
 {
-Level::Level(const std::filesystem::path &path,
-             StateMachine &controller)
-    : State(filing::JsonIO(filing::openJSONfile(path / "settings.json")).read<std::string>("name"), controller),
-      _path(path)
-{
-    filing::JsonIO settings{filing::openJSONfile(path / "settings.json")};
-    _sliceThikness = settings.read<float>("slice_thickness");
-    _physicsLayerPosition = settings.read<float>("physics_layer_poistion");
-    ASSERT(0.0f <= _physicsLayerPosition && _physicsLayerPosition <= 1.0f);
-    _defaultGravity = settings.read<graphics::Vector2d<float>>("gravity");
-    for (const auto &entry : std::filesystem::directory_iterator(path / "scenes"))
-    {
-        // TODO: use std::unordered_map::emplace
-        auto newScene = std::make_shared<filing::Scene2d>(filing::openJSONfile(entry.path()));
-        _sliceByDistance[newScene->getDistance()] = newScene;
-    }
-}
-
-void tryCreateDirectory(const std::filesystem::path &path)
-{
-    if (!(std::filesystem::exists(path) && std::filesystem::is_directory(path)))
-    {
-        if (!std::filesystem::create_directory(path))
-        {
-            throw exception::Exception(exception::exId::UNSPECIFIED,
-                                       exception::exType::CASUAL,
-                                       "can not create directory: " + std::string(path));
-        }
-    }
-}
-
-void Level::save()
-{
-    tryCreateDirectory(_path);
-    tryCreateDirectory(_path / "scenes");
-
-    std::ofstream settingsFile(_path / "settings.json");
-    filing::JsonIO settingsJson;
-    settingsJson.write<float>("slice_thickness", _sliceThikness);
-    settingsJson.write<float>("physics_layer_position", _physicsLayerPosition);
-    settingsJson.write<graphics::Vector2d<float>>("gravity", _defaultGravity);
-    settingsFile << settingsJson.getJSONstring();
-    for (const auto &[dist, slice] : _sliceByDistance)
-    {
-        std::ofstream sliceFile(_path / "scenes" / (slice->name() + ".json"));
-        sliceFile << slice->dump();
-    }
-}
-
 Level::Level(const std::string &name,
-             StateMachine &controller,
              float sliceThikness,
              float physicsLayerPosition,
-             const graphics::Vector2d<float> &gravity,
-             const std::filesystem::path &destPath)
-    : State(controller, name),
+             const graphics::Vector2d<float> &gravity)
+    : NamedStoredObject(name, "Level"),
       _sliceThikness(sliceThikness),
       _physicsLayerPosition(physicsLayerPosition),
       _defaultGravity(gravity),
@@ -76,15 +25,146 @@ Level::Level(const std::string &name,
                                                                        1920.0 / 1080.0,
                                                                        0.1,
                                                                        1000.0)),
-      _editingMode(true),
-      _path(destPath)
+      _editingMode(true)
 {
-    createSlice(0, "front_slice");
+}
+
+Level::Level(const std::filesystem::path &path)
+    : NamedStoredObject(filing::openJSONfile(path / "settings.json"))
+{
+    filing::JsonIO cameraSettings(filing::openJSONfile(path / "camera_settings.json"));
+    _perspectiveCamera = std::make_shared<graphics::CameraPerspective>(cameraSettings);
+    _levelNamespace.addObject(_perspectiveCamera);
+
+    filing::JsonIO settings{filing::openJSONfile(path / "settings.json")};
+    _sliceThikness = settings.read<float>("slice_thickness");
+    _physicsLayerPosition = settings.read<float>("physics_layer_position");
+    ASSERT(0.0f <= _physicsLayerPosition && _physicsLayerPosition <= 1.0f);
+    _defaultGravity = settings.read<graphics::Vector2d<float>>("gravity");
+
+    for (const auto &entry : std::filesystem::directory_iterator(path / "scenes"))
+    {
+        auto newScene = std::make_shared<filing::Scene2d>(filing::openJSONfile(entry.path()), _levelNamespace); // fill level namespace
+        _sliceByDistance[newScene->getDistance()] = newScene;
+        newScene->setVisibility(false);
+        addBehavior(newScene);
+    }
+
+    for (const auto &entry : std::filesystem::directory_iterator(path / "state_machines"))
+    {
+        auto newMachine = std::make_shared<StateMachine>(filing::openJSONfile(entry.path()), _levelNamespace); // use level namespace
+        _stateMachines.push_back(newMachine);
+        addBehavior(newMachine);
+    }
+
+    auto texturesPath = path.parent_path().parent_path() / "textures";
+    std::unordered_map<std::string, std::shared_ptr<graphics::Texture>> textureByName;
+    for (const auto &entry : std::filesystem::directory_iterator(texturesPath))
+    {
+        if (entry.path().extension() == ".json")
+        {
+            std::string textureInfo = utils::readAllFile(entry);
+            auto texture = std::make_shared<graphics::Texture>(textureInfo);
+            textureByName.emplace(texture->name(), texture);
+        }
+    }
+
+    auto bindTexture = [&](graphics::GraphicalObject &obj) {
+        if (obj.getTextureName().length())
+        {
+            auto tex = textureByName[obj.getTextureName()];
+            if (!tex)
+            {
+                throw GameException("texture not found: " + obj.getTextureName());
+            }
+            obj.bindTexture(tex);
+        }
+    };
+
+    for (const auto &[dist, slice] : _sliceByDistance)
+    {
+        for (const auto &obj : slice->objects())
+        {
+            bindTexture(*obj);
+            if (obj->className() == "GraphicalObject2d" || obj->className() == "WorldObject2d")
+            {
+                bindTexture(std::dynamic_pointer_cast<graphics::GraphicalObject2d>(obj)->face());
+                bindTexture(std::dynamic_pointer_cast<graphics::GraphicalObject2d>(obj)->side());
+            }
+        }
+    }
+}
+
+Namespace &Level::globalNamespace()
+{
+    return _levelNamespace;
+}
+
+void Level::saveAs(const std::filesystem::path &path)
+{
+    utils::tryCreateDirectory(path);
+    std::ofstream cameraFile(path / "camera_settings.json");
+    cameraFile << camera()->dump();
+    cameraFile.close();
+
+    filing::JsonIO settingsJson = NamedStoredObject::dump();
+    settingsJson.write<float>("slice_thickness", _sliceThikness);
+    settingsJson.write<float>("physics_layer_position", _physicsLayerPosition);
+    settingsJson.write<graphics::Vector2d<float>>("gravity", _defaultGravity);
+    std::ofstream settingsFile(path / "settings.json");
+    settingsFile << settingsJson.getJSONstring();
+    settingsFile.close();
+
+    utils::tryCreateDirectory(path / "scenes");
+    for (const auto &[dist, slice] : _sliceByDistance)
+    {
+        std::string sliceData = slice->dump();
+        std::ofstream sliceFile(path / "scenes" / (slice->name() + ".json"));
+        sliceFile << sliceData;
+    }
+
+    utils::tryCreateDirectory(path / "state_machines");
+    for (const auto &machine : _stateMachines)
+    {
+        std::string smdata = machine->dump();
+        std::ofstream machineFile(path / "state_machines" / (machine->name() + ".json"));
+        machineFile << smdata;
+    }
+
+    auto texturesPath = path.parent_path().parent_path() / "textures";
+    utils::tryCreateDirectory(texturesPath);
+
+    auto saveTexture = [&](graphics::GraphicalObject &obj) {
+        if (obj.texture())
+        {
+            obj.texture()->setPath(texturesPath);
+            auto texInfoPath = texturesPath / (obj.texture()->name() + ".json");
+            if (std::filesystem::exists(texInfoPath))
+            {
+                return;
+            }
+            std::ofstream textureInfo(texInfoPath);
+            textureInfo << obj.texture()->dump();
+        }
+    };
+
+    for (const auto &[dist, slice] : _sliceByDistance)
+    {
+        for (const auto &obj : slice->objects())
+        {
+            saveTexture(*std::dynamic_pointer_cast<graphics::GraphicalObject2d>(obj));
+            if (obj->className() == "GraphicalObject2d" || obj->className() == "WorldObject2d")
+            {
+                saveTexture(std::dynamic_pointer_cast<graphics::GraphicalObject2d>(obj)->face());
+                saveTexture(std::dynamic_pointer_cast<graphics::GraphicalObject2d>(obj)->side());
+            }
+        }
+    }
 }
 
 void Level::onActive()
 {
-    State::onActive();
+    Behavior::onActive();
     if (_editingMode)
     {
         return;
@@ -100,6 +180,11 @@ void Level::onActive()
     }
 }
 
+void Level::setGravity(const graphics::Vector2d<float> &gravity) noexcept
+{
+    _defaultGravity = gravity;
+}
+
 std::shared_ptr<filing::Scene2d> Level::createSlice(const size_t num, const std::string &name)
 {
     if (_sliceByDistance[num])
@@ -111,16 +196,20 @@ std::shared_ptr<filing::Scene2d> Level::createSlice(const size_t num, const std:
                                                               num * _sliceThikness,
                                                               _sliceThikness,
                                                               _physicsLayerPosition);
-    auto &slice = *_sliceByDistance[num].get();
-    slice.addCamera(std::static_pointer_cast<graphics::Camera>(_perspectiveCamera));
-    slice.setVisibility(false);
+    _sliceByDistance[num]->setVisibility(false);
     addBehavior(_sliceByDistance[num]);
     return _sliceByDistance[num];
 }
 
-std::shared_ptr<filing::Scene2d> Level::frontSlice() noexcept
+std::shared_ptr<StateMachine> Level::createStateMachine(const std::string &name)
 {
-    return _sliceByDistance[0];
+    _stateMachines.emplace_back(std::make_shared<StateMachine>(name));
+    return _stateMachines.back();
+}
+
+std::vector<std::shared_ptr<StateMachine>> Level::stateMachines() noexcept
+{
+    return _stateMachines;
 }
 
 std::shared_ptr<filing::Scene2d> Level::numberedSlice(const size_t num)

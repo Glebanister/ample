@@ -30,6 +30,12 @@ void ObjectGroupAction<T>::updateObjectPointers()
 }
 
 template <typename T>
+void ObjectGroupAction<T>::addObjectName(const std::string &name) noexcept
+{
+    _bodyNames.push_back(name);
+}
+
+template <typename T>
 void ObjectGroupAction<T>::onAwake()
 {
     updateObjectPointers();

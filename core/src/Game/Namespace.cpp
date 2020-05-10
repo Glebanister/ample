@@ -5,8 +5,10 @@
 
 namespace ample::game
 {
-Namespace::Namespace(std::shared_ptr<Namespace> parent)
-    : _parentalNamespace(std::move(parent)) {}
+void Namespace::setParentalNamespace(std::shared_ptr<Namespace> parent)
+{
+    _parentalNamespace = std::move(parent);
+}
 
 bool Namespace::hasName(const std::string &name)
 {
@@ -59,5 +61,11 @@ void Namespace::removeName(const std::string &name)
 void Namespace::removeObject(std::shared_ptr<filing::NamedObject> namedObject)
 {
     removeName(namedObject->name());
+}
+
+void Namespace::clear() noexcept
+{
+    _names.clear();
+    _parentalNamespace.reset();
 }
 } // namespace ample::game

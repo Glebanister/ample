@@ -95,6 +95,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Geometry/Point.cpp
 
     src/Game/Game2d/Game2d.cpp
+    src/Game/Game2d/Game2dEditor.cpp
     src/Game/Game2d/Level.cpp
     src/Game/GameException.cpp
     src/Game/StateMachine/StateMachine.cpp
@@ -114,6 +115,8 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Game/StateMachine/Action.cpp
     src/Game/Events/EventListener.cpp
     src/Game/Namespace.cpp
+    src/Game/LevelSwitcher.cpp
+    src/Game/LevelLoader.cpp
    )
 
 include_directories(${SDL2_INCLUDE_DIRS})

@@ -4,3 +4,4 @@ TODOLIST.md
 .bashrc
 .idea/
 cmake-build-debug/
+imgui.ini

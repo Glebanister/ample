@@ -20,6 +20,8 @@ public:
 
     GraphicalPolygon(filing::JsonIO input);
 
+    std::vector<Vector2d<float>> &shape();
+
     std::string dump() override;
 
 private:

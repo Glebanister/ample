@@ -29,6 +29,16 @@ TimerTransition::TimerTransition(const filing::JsonIO &input, std::shared_ptr<St
 {
 }
 
+int TimerTransition::getTimeDelta() const noexcept
+{
+    return _timeDelta;
+}
+
+void TimerTransition::setTimeDelta(int time) noexcept
+{
+    _timeDelta = time;
+}
+
 std::string TimerTransition::dump()
 {
     filing::JsonIO output{Transition::dump()};

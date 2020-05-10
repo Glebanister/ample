@@ -6,5 +6,5 @@ include_directories(${CMAKE_PROJECT_NAME}/include)
 
 add_subdirectory(core)
 add_subdirectory(gui)
-add_subdirectory(demo)
+add_subdirectory(engine)
 add_subdirectory(test)
