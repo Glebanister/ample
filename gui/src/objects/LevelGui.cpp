@@ -8,17 +8,16 @@
 
 namespace ample::gui
 {
-LevelGui::LevelGui(std::shared_ptr<filing::NamedObject> level, std::shared_ptr<game::game2d::Game2dEditor> editor)
-    : _level(std::dynamic_pointer_cast<game::game2d::Level>(level)),
-      _game2dEditor(editor)
+LevelGui::LevelGui(std::shared_ptr<filing::NamedObject> level, std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *storage)
+    : _game2dEditor(editor),
+      _objectStorageGui(storage),
+      _level(std::dynamic_pointer_cast<game::game2d::Level>(level))
 {
-    ASSERT(_game2dEditor);
 }
 
-LevelGui::LevelGui(std::shared_ptr<game::game2d::Game2dEditor> editor)
-    : _game2dEditor(editor)
+LevelGui::LevelGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *storage)
+    : _game2dEditor(editor), _objectStorageGui(storage)
 {
-    ASSERT(_game2dEditor);
 }
 
 void LevelGui::onCreate()
@@ -43,6 +42,7 @@ void LevelGui::onEdit()
 void LevelGui::onSubmitEdit()
 {
     ASSERT(_level);
+    _level->setGravity(gravity);
     for (auto &[id, slice] : _level->layers())
     {
         utils::ignore(id);
@@ -53,32 +53,42 @@ void LevelGui::onSubmitEdit()
 void LevelGui::onView()
 {
     ASSERT(_level);
-    ImGui::Text("Level editor");
-
+    ImGui::BeginChild("Level view");
     _observer.setViewport({ImGui::GetWindowSize().x, ImGui::GetWindowSize().y - 24},
                           {ImGui::GetWindowPos().x, 7});
     _observer.look(_level);
-    bool isActive = false;
-    if (ImGui::IsAnyItemActive())
-        isActive = false;
-    if (ImGui::IsItemActive())
-        isActive = true;
-    if (isActive)
-        _observer.updatePos();
+    _observer.updatePos();
+    ImGui::EndChild();
 }
 
 void LevelGui::onInspect()
 {
     ASSERT(_level);
-    for (auto &[id, slice] : _level->layers())
+    if (ImGui::TreeNode("Slices"))
     {
-        // if (auto sliceGui = ObjectStorageGui::instance().objectGuiByName(slice->name());
-        //     ImGui::TreeNode(sliceGui->name().c_str()))
-        // {
-        //     ObjectStorageGui::instance().inspectSingleItem(sliceGui);
-        //     sliceGui->onInspect();
-        //     ImGui::TreePop();
-        // }
+        for (auto &[id, slice] : _level->layers())
+        {
+            if (auto sliceGui = _objectStorageGui->objectGuiByName(slice->name());
+                ImGui::TreeNode(sliceGui->name().c_str()))
+            {
+                _objectStorageGui->inspectSingleItem(sliceGui);
+                ImGui::TreePop();
+            }
+        }
+        ImGui::TreePop();
+    }
+    if (ImGui::TreeNode("State Machines"))
+    {
+        for (auto &stateMachine : _level->stateMachines())
+        {
+            if (auto smGui = _objectStorageGui->objectGuiByName(stateMachine->name());
+                ImGui::TreeNode(smGui->name().c_str()))
+            {
+                _objectStorageGui->inspectSingleItem(smGui);
+                ImGui::TreePop();
+            }
+        }
+        ImGui::TreePop();
     }
 }
 
@@ -87,7 +97,7 @@ void LevelGui::onPreview()
     ImGui::Text("Name: %s", name().c_str());
     ImGui::Text("Slice thickness: %.2f", thickness);
     ImGui::Text("Physics layer position: %.2f", physicsLayerPos);
-    ImGui::Text("Gravity x: %.2f \nGravity y: %2f", gravity.x, gravity.y);
+    ImGui::Text("Gravity x: %.2f \nGravity y: %.2f", gravity.x, gravity.y);
 }
 
 std::string LevelGui::name() const

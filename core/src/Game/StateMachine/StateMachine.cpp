@@ -1,3 +1,4 @@
+#include <functional>
 #include <iostream>
 #include <memory>
 #include <numeric>
@@ -277,7 +278,7 @@ void StateMachine::setCurrentState(std::shared_ptr<State> state)
     _currentState->onStart();
 }
 
-std::shared_ptr<StateMachine::State> StateMachine::getCurrentState() noexcept
+std::shared_ptr<StateMachine::State> StateMachine::getCurrentState() const noexcept
 {
     return _currentState;
 }
@@ -345,5 +346,29 @@ StateMachine::~StateMachine()
     {
         _currentState->onStop();
     }
+}
+
+std::vector<std::shared_ptr<StateMachine::State>> getStatesList(const StateMachine &machine)
+{
+    if (!machine.getCurrentState())
+    {
+        return {};
+    }
+    std::vector<std::shared_ptr<StateMachine::State>> result;
+    std::unordered_map<std::string, bool> used;
+    std::function<void(std::shared_ptr<game::StateMachine::State>)> dfs =
+        [&](std::shared_ptr<game::StateMachine::State> curState) {
+            ASSERT(curState);
+            if (used[curState->name()])
+                return;
+            used[curState->name()] = true;
+            for (const auto &transition : curState->transitions())
+            {
+                dfs(transition->getNextState());
+            }
+            result.push_back(curState);
+        };
+    dfs(machine.getCurrentState());
+    return result;
 }
 } // namespace ample::game

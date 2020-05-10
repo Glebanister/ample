@@ -14,7 +14,6 @@
 
 namespace ample::filing
 {
-
 Scene2d::Scene2d(const std::string &name,
                  const ample::graphics::Vector2d<float> &gravity,
                  float z,

@@ -11,14 +11,15 @@ ObjectStorageGui::ObjectStorageGui(std::shared_ptr<game::game2d::Game2dEditor> e
     for (auto level : editor->getLevelsList())
     {
         buildGuiAndAdd(level);
-        //     for (auto &[id, slice] : level->layers())
-        //     {
-        //         buildGuiAndAdd(slice);
-        //         for (auto &object : slice->objects())
-        //         {
-        //             buildGuiAndAdd(object);
-        //         }
-        //     }
+        for (auto &[id, slice] : level->layers())
+        {
+            buildGuiAndAdd(slice);
+            for (auto &object : slice->objects())
+            {
+                buildGuiAndAdd(object);
+                // TODO: texture
+            }
+        }
         //     for (auto &sm : level->stateMachines())
         //     {
         //         buildGuiAndAdd(sm);
@@ -50,6 +51,19 @@ ObjectStorageGui::ObjectStorageGui(std::shared_ptr<game::game2d::Game2dEditor> e
     }
 }
 
+std::shared_ptr<ObjectGui> ObjectStorageGui::getOnInputGui() const noexcept
+{
+    return _onInput;
+}
+
+inline void ObjectStorageGui::create(finalObjectClass objClass, bool needsFocus, std::function<void(std::shared_ptr<ObjectGui>)> func)
+{
+    ASSERT(!_onInput);
+    _onInput = buildGui(objClass, _game2dEditor, this); // TODO: std::forward
+    _onInputFunction = func;
+    _onInputNeedsFocus = needsFocus;
+}
+
 void ObjectStorageGui::cancelCreate()
 {
     _onInput.reset();
@@ -73,11 +87,16 @@ void ObjectStorageGui::inspectSingleItem(const std::string &name)
 void ObjectStorageGui::inspectSingleItem(std::shared_ptr<ObjectGui> gui)
 {
     gui->onPreview();
-    if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
+    if (ImGui::Button("Edit"))
     {
-        setFocus(std::move(gui));
+        setFocus(gui);
     }
     gui->onInspect();
+}
+
+std::vector<std::shared_ptr<game::StateMachine::State>> &ObjectStorageGui::statesList(const std::string &machineName)
+{
+    return std::dynamic_pointer_cast<StateMachineGui>(objectGuiByName(machineName))->getStatesList();
 }
 
 void ObjectStorageGui::setFocus(std::shared_ptr<ObjectGui> gui)
@@ -106,12 +125,12 @@ void ObjectStorageGui::editor()
         ImGui::Text("Select object to edit");
         return;
     }
-    _onInput->onEdit();
+    _focusedGui->onEdit();
     if (ImGui::Button("Submit"))
     {
         try
         {
-            _onInput->onSubmitEdit();
+            _focusedGui->onSubmitEdit();
         }
         catch (const std::exception &e)
         {
@@ -123,38 +142,16 @@ void ObjectStorageGui::editor()
 
 void ObjectStorageGui::creator()
 {
-    if (ImGui::Selectable("Level"))
+    for (const auto &[name, type] : classIdByClassName)
     {
-        create(finalObjectClass::LEVEL, _game2dEditor);
+        if (type.drawInCreator)
+        {
+            if (ImGui::Selectable(name.c_str()))
+            {
+                create(type.finalClass);
+            }
+        }
     }
-    // if (ImGui::Selectable("Slice"))
-    // {
-    //     create(finalObjectClass::SLICE);
-    // }
-    // if (ImGui::Selectable("Graphical Object"))
-    // {
-    //     create(finalObjectClass::GRAPHICAL_OBJECT);
-    // }
-    // if (ImGui::Selectable("Polygon"))
-    // {
-    //     create(finalObjectClass::GRAPHICAL_POLYGON);
-    // }
-    // if (ImGui::Selectable("Edge"))
-    // {
-    //     create(finalObjectClass::GRAPHICAL_EDGE);
-    // }
-    // if (ImGui::Selectable("Graphical Object 2d"))
-    // {
-    //     create(finalObjectClass::GRAPHICAL_OBJECT_2D);
-    // }
-    // if (ImGui::Selectable("World Object"))
-    // {
-    //     create(finalObjectClass::WORLD_OBJECT);
-    // }
-    // if (ImGui::Selectable("State Machine"))
-    // {
-    //     create(finalObjectClass::STATE_MACHINE);
-    // }
 
     if (!_onInput)
     {
@@ -164,7 +161,6 @@ void ObjectStorageGui::creator()
     if (ImGui::BeginPopupModal(("Create new " + _onInput->className()).c_str(),
                                NULL,
                                ImGuiWindowFlags_NoResize |
-                                   ImGuiWindowFlags_NoMove |
                                    ImGuiWindowFlags_AlwaysAutoResize))
     {
         _onInput->onCreate();
@@ -174,7 +170,17 @@ void ObjectStorageGui::creator()
             {
                 _onInput->onSubmitCreate();
                 _guiByObjectName[_onInput->name()] = _onInput;
+                if (_onInputFunction)
+                {
+                    _onInputFunction(_onInput);
+                    _onInputFunction = {};
+                }
                 _creationSuccess = true;
+                if (_onInputNeedsFocus)
+                {
+                    setFocus(_onInput);
+                }
+                _onInputNeedsFocus = false;
             }
             catch (const std::exception &e)
             {
@@ -190,6 +196,20 @@ void ObjectStorageGui::creator()
             _creationSuccess = false;
         }
         ImGui::EndPopup();
+    }
+}
+
+void ObjectStorageGui::texturesViewer()
+{
+    for (auto &tex : texturesList())
+    {
+        if (auto texGui = objectGuiByName(tex->name());
+            ImGui::TreeNode(texGui->name().c_str()))
+        {
+            inspectSingleItem(texGui);
+            texGui->onInspect();
+            ImGui::TreePop();
+        }
     }
 }
 
@@ -211,5 +231,10 @@ void ObjectStorageGui::viewer()
         return;
     }
     _focusedGui->onView();
+}
+
+std::vector<std::shared_ptr<graphics::Texture>> &ObjectStorageGui::texturesList() noexcept
+{
+    return _textures;
 }
 } // namespace ample::gui

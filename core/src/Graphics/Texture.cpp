@@ -1,11 +1,11 @@
 #include <GL/glu.h>
 #include <algorithm>
 
-#include "Texture.h"
-#include "Exception.h"
 #include "Debug.h"
+#include "Exception.h"
 #include "ILEnvironment.h"
 #include "OpenGLEnvironment.h"
+#include "Texture.h"
 
 namespace ample::graphics
 {
@@ -138,7 +138,6 @@ Texture::ILimage::ILimage(const std::string &imagePath,
                           ILenum format,
                           const Vector2d<size_t> &size,
                           const Vector2d<int> &position)
-    : _pixels(size, format == IL_RGB ? channelMode::RGB : channelMode::RGBA)
 {
     ilGenImages(1, &_imgId);
     ilBindImage(_imgId);
@@ -148,35 +147,42 @@ Texture::ILimage::ILimage(const std::string &imagePath,
     }
     ILuint realWidth = ilGetInteger(IL_IMAGE_WIDTH);
     ILuint realHeight = ilGetInteger(IL_IMAGE_HEIGHT);
+    graphics::Vector2d<size_t> trueSize = size;
+    if (!size.x || !size.y)
+    {
+        trueSize.x = realWidth;
+        trueSize.y = realHeight;
+    }
     if (realWidth < size.x || realHeight < size.y)
     {
         throw exception::DevILException{"requried size does not fit"};
     }
+    _pixels = std::make_unique<PixelMap>(trueSize, format == IL_RGB ? channelMode::RGB : channelMode::RGBA);
     ilCopyPixels(position.x,
                  position.y,
                  0,
-                 size.x,
-                 size.y,
+                 trueSize.x,
+                 trueSize.y,
                  1,
                  format,
                  IL_UNSIGNED_BYTE,
-                 _pixels.data());
+                 _pixels->data());
     exception::DevILException::handle();
 }
 
 size_t Texture::ILimage::width() const noexcept
 {
-    return _pixels.getWidth();
+    return _pixels->getWidth();
 }
 
 size_t Texture::ILimage::height() const noexcept
 {
-    return _pixels.getHeight();
+    return _pixels->getHeight();
 }
 
 Texture::PixelMap &Texture::ILimage::pixels()
 {
-    return _pixels;
+    return *_pixels;
 }
 
 Texture::ILimage::~ILimage()
@@ -187,9 +193,9 @@ Texture::ILimage::~ILimage()
 
 Texture::Texture(const TextureRaw &rawTexture)
     : NamedStoredObject(rawTexture.name(), "Texture"),
-      _raw(rawTexture)
+      _raw(rawTexture),
+      _realPath(rawTexture.path)
 {
-    name() = _raw.name();
     DEBUG("Loading texture " + _raw.path);
     os::environment::ILEnvironment::instance();
 
@@ -210,6 +216,7 @@ Texture::Texture(const TextureRaw &rawTexture)
     DEBUG("Uploading texture to OpenGL");
     _frames.reserve(_raw.framesCount.x * _raw.framesCount.y);
     bool readAllFrames = false;
+    _raw.eachSize = {image.width(), image.height()};
 
     for (size_t i = 0; i < _raw.framesCount.y; ++i)
     {
@@ -272,7 +279,16 @@ std::string Texture::dump()
     output.write<size_t>("total", _raw.total);
     output.write<Vector2d<int>>("origin", {static_cast<int>(_raw.origin.x),
                                            static_cast<int>(_raw.origin.y)});
+    if (_realPath != _raw.path)
+    {
+        std::filesystem::copy(_realPath, _raw.path);
+    }
     return output;
+}
+
+void Texture::setPath(const std::string &path)
+{
+    _raw.path = std::filesystem::path(path) / (name() + std::filesystem::path(_raw.path).extension().string());
 }
 
 GLint Texture::getWidth() const noexcept

@@ -1,16 +1,16 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #define GL_GLEXT_PROTOTYPES 1
 
-#include <glm/glm.hpp>
-#include <glm/gtx/transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <memory>
 #include <algorithm>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/transform.hpp>
+#include <memory>
 
+#include "Debug.h"
+#include "Exception.h"
 #include "GraphicalObject.h"
 #include "ShaderProcessor.h"
-#include "Exception.h"
-#include "Debug.h"
 
 namespace ample::graphics
 {
@@ -25,6 +25,7 @@ GraphicalObject::GraphicalObject(const std::string &name,
       _rotated(rotated),
       _modelMatrixUniform(_modelMatrix, "model_matrix")
 {
+    _position = translated * rotated * scaled * glm::vec4{_position, 1};
 }
 
 void GraphicalObject::addSubObject(std::shared_ptr<GraphicalObject> object)
@@ -39,26 +40,31 @@ void GraphicalObject::removeSubObject(std::shared_ptr<GraphicalObject> object)
     std::remove(_subObjects.begin(), _subObjects.end(), object);
 }
 
-float GraphicalObject::getX() const { return _translated[0][0]; }
-float GraphicalObject::getY() const { return _translated[1][1]; }
-float GraphicalObject::getZ() const { return _translated[2][2]; }
+float GraphicalObject::getX() const { return _position[0]; }
+float GraphicalObject::getY() const { return _position[1]; }
+float GraphicalObject::getZ() const { return _position[2]; }
+float GraphicalObject::getAxisAngle() const noexcept { return _angle; }
 
 void GraphicalObject::setTranslate(const glm::vec3 &vector) noexcept
 {
     _translated = glm::translate(vector);
+    _position = vector;
 }
 void GraphicalObject::translate(const glm::vec3 &vector) noexcept
 {
     _translated *= glm::translate(vector);
+    _position += vector;
 }
 
 void GraphicalObject::setRotate(const glm::vec3 &axis, const float angle) noexcept
 {
     _rotated = glm::rotate(glm::radians(angle), axis);
+    _angle = angle; // TODO: not expected result
 }
 void GraphicalObject::rotate(const glm::vec3 &axis, const float angle) noexcept
 {
     _rotated = glm::rotate(_rotated, glm::radians(angle), axis);
+    _angle += angle;
 }
 
 void GraphicalObject::setScale(const glm::vec3 &coef) noexcept
@@ -119,6 +125,16 @@ GraphicalObject::GraphicalObject(filing::JsonIO input)
                       input.read<glm::mat4>("scaled"),
                       input.read<glm::mat4>("rotated"))
 {
+    _texutureName = input.read<std::string>("texture_name");
+}
+
+std::string GraphicalObject::getTextureName() const noexcept
+{
+    if (_texturePtr)
+    {
+        return _texturePtr->name();
+    }
+    return _texutureName;
 }
 
 std::string GraphicalObject::dump()
@@ -127,6 +143,7 @@ std::string GraphicalObject::dump()
     output.write<glm::mat4>("translated", _translated);
     output.write<glm::mat4>("scaled", _scaled);
     output.write<glm::mat4>("rotated", _rotated);
+    output.write<std::string>("texture_name", _texturePtr ? _texturePtr->name() : "");
 
     return output;
 }

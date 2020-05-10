@@ -69,21 +69,26 @@ GraphicalPolygon::GraphicalPolygon(const std::string &name,
 }
 
 GraphicalPolygon::GraphicalPolygon(filing::JsonIO input)
-    : GraphicalPolygon(input.read<std::string>("name"),
-                       input.read<std::vector<Vector2d<float>>>("shape"),
-                       input.read<float>("z"),
-                       input.read<Vector2d<float>>("textureRepeats"),
-                       input.read<glm::mat4>("translated"),
-                       input.read<glm::mat4>("scaled"),
-                       input.read<glm::mat4>("rotated"))
+    : GraphicalObject(input),
+      _shape(input.read<std::vector<Vector2d<float>>>("shape")),
+      _textureRepeats(input.read<Vector2d<float>>("textureRepeats"))
 {
+    bindVertexArray(std::make_shared<VertexArray>(
+        generateFaceCoords(_shape, getZ()), // TODO: error getZ()
+        generateFaceUVCoords(_shape, _textureRepeats, getZ()),
+        generateFaceNormals(_shape, getZ())));
+}
+
+std::vector<Vector2d<float>> &GraphicalPolygon::shape()
+{
+    return _shape;
 }
 
 std::string GraphicalPolygon::dump()
 {
     filing::JsonIO output = GraphicalObject::dump();
     output.write<std::vector<Vector2d<float>>>("shape", _shape);
-    output.write<float>("z", getZ());
+    output.write<float>("z", getZ()); // TODO: mistake getZ()
     output.write<Vector2d<float>>("textureRepeats", _textureRepeats);
     return output;
 }

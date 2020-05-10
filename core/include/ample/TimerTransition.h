@@ -18,8 +18,11 @@ public:
     void onStart() override;
     bool listen() override;
 
+    int getTimeDelta() const noexcept;
+    void setTimeDelta(int time) noexcept;
+
 private:
-    const int _timeDelta;
+    int _timeDelta;
     int _startTime;
 };
 } // namespace ample::game

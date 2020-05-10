@@ -1,9 +1,12 @@
-#include "Observer.h"
+#include <imgui.h>
+
 #include "ample/Debug.h"
 #include "ample/GraphicalPolygon.h"
+#include "ample/RegularPolygon.h"
 #include "ample/Utils.h"
 #include "ample/Vector2d.h"
-#include "ample/RegularPolygon.h"
+
+#include "Observer.h"
 
 namespace ample::gui
 {
@@ -33,42 +36,48 @@ void Observer::setViewport(const graphics::Vector2d<float> &size,
 
 void Observer::updatePos()
 {
-    if (control::EventManager::instance().keyboard().isKeyDown(control::keysym::ARROW_LEFT))
+    if (!checkActiveness())
     {
-        _camera->translate({1.0f, 0.0f, 0.0f});
+        return;
     }
-    if (control::EventManager::instance().keyboard().isKeyDown(control::keysym::ARROW_RIGHT))
+    _targetDistance += control::EventManager::instance().mouse().getWheelY() * 2.0f;
+    if (control::EventManager::instance().keyboard().isKeyDown(control::keysym::ARROW_LEFT))
     {
         _camera->translate({-1.0f, 0.0f, 0.0f});
     }
-    if (control::EventManager::instance().keyboard().isKeyDown(control::keysym::ARROW_UP))
+    if (control::EventManager::instance().keyboard().isKeyDown(control::keysym::ARROW_RIGHT))
     {
-        _camera->translate({0.0f, 1.0f, 0.0f});
+        _camera->translate({1.0f, 0.0f, 0.0f});
     }
-    if (control::EventManager::instance().keyboard().isKeyDown(control::keysym::ARROW_DOWN))
+    if (control::EventManager::instance().keyboard().isKeyDown(control::keysym::ARROW_UP))
     {
         _camera->translate({0.0f, -1.0f, 0.0f});
     }
-    _camera->translate({0.0f, 0.0f, 2.0f * control::EventManager::instance().mouse().getWheelY()});
+    if (control::EventManager::instance().keyboard().isKeyDown(control::keysym::ARROW_DOWN))
+    {
+        _camera->translate({0.0f, 1.0f, 0.0f});
+    }
+    _camera->translate({0.0f, 0.0f, (_targetDistance - _camera->getZ()) / 3.0f});
 
     _lamp->setTranslate({_camera->getX(), _camera->getY(), _camera->getZ()});
+}
+
+bool Observer::checkActiveness()
+{
+    
+    if (ImGui::IsAnyItemActive() && ImGui::IsItemActive())
+        _active = true;
+    if (ImGui::IsAnyItemActive() && (!ImGui::IsItemActive()))
+        _active = false;
+
+    return _active;
 }
 
 void Observer::look(std::shared_ptr<game::game2d::Level> level) noexcept
 {
     ASSERT(level);
-
     _camera->look();
-
     _lamp->draw();
-
-    auto obj1 = ample::graphics::GraphicalPolygon("ObjectName",
-                                                  ample::geometry::RegularPolygon<float>(10.0f, 4),
-                                                  10.0f,
-                                                  {1.0f, 2.0f});
-    
-    obj1.draw();
-
     for (const auto &[_, slice] : level->layers())
     {
         utils::ignore(_);
@@ -78,5 +87,39 @@ void Observer::look(std::shared_ptr<game::game2d::Level> level) noexcept
         }
     }
     _camera->unlook();
+}
+
+void Observer::look(std::shared_ptr<filing::Scene2d> slice) noexcept
+{
+    ASSERT(slice);
+    _camera->look();
+    _lamp->draw();
+    for (const auto &obj : slice->objects())
+    {
+        obj->draw();
+    }
+    _camera->unlook();
+}
+
+void Observer::look(std::shared_ptr<graphics::GraphicalObject> object) noexcept
+{
+    ASSERT(object);
+    _camera->look();
+    _lamp->draw();
+    object->draw();
+    _camera->unlook();
+}
+
+void Observer::look(std::shared_ptr<physics::WorldObject2d> object) noexcept
+{
+    ASSERT(object);
+    _camera->look();
+    _lamp->draw();
+    object->draw();
+    _camera->unlook();
+}
+
+void Observer::look(std::shared_ptr<graphics::Texture>) noexcept
+{
 }
 } // namespace ample::gui
