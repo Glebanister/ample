@@ -17,6 +17,8 @@
 
 namespace ample::gui
 {
+class ObjectStorageGui;
+class ObjectGui;
 class TextureGui : public ObjectGui
 {
 public:

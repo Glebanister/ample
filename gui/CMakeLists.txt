@@ -54,6 +54,11 @@ set(SOURCES
     src/objects/StateMachineGui.cpp
     src/objects/WorldObjectGui.cpp
     src/objects/TextureGui.cpp
+    src/objects/TimerTransitionGui.cpp
+    src/objects/StateGui.cpp
+    src/objects/ActionGui.cpp
+    src/objects/TransitionGui.cpp
+    src/objects/GraphicalRotateActionGui.cpp
     )
 
 add_executable(ample-gui ${SOURCES} ${IMGUI_SOURCES})

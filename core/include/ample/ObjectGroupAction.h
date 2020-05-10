@@ -17,6 +17,8 @@ public:
     ObjectGroupAction(const filing::JsonIO &input);
     std::string dump() override;
 
+    void addObjectName(const std::string &name) noexcept;
+
     void onAwake() override;
 
 protected:

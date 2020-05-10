@@ -11,6 +11,9 @@
 
 namespace ample::gui
 {
+class Observer;
+class ObjectStorageGui;
+class ObjectGui;
 class WorldObjectGui : public ObjectGui
 {
 public:

@@ -11,6 +11,8 @@
 
 namespace ample::gui
 {
+class Observer;
+class ObjectGui;
 class LevelGui : public ObjectGui
 {
 public:

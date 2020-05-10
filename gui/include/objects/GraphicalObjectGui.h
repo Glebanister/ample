@@ -9,6 +9,7 @@
 
 namespace ample::gui
 {
+class ObjectGui;
 class GraphicalObjectGui : public ObjectGui
 {
 public:

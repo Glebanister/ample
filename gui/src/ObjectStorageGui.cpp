@@ -51,6 +51,19 @@ ObjectStorageGui::ObjectStorageGui(std::shared_ptr<game::game2d::Game2dEditor> e
     }
 }
 
+std::shared_ptr<ObjectGui> ObjectStorageGui::getOnInputGui() const noexcept
+{
+    return _onInput;
+}
+
+inline void ObjectStorageGui::create(finalObjectClass objClass, bool needsFocus, std::function<void(std::shared_ptr<ObjectGui>)> func)
+{
+    ASSERT(!_onInput);
+    _onInput = buildGui(objClass, _game2dEditor, this); // TODO: std::forward
+    _onInputFunction = func;
+    _onInputNeedsFocus = needsFocus;
+}
+
 void ObjectStorageGui::cancelCreate()
 {
     _onInput.reset();
@@ -79,6 +92,11 @@ void ObjectStorageGui::inspectSingleItem(std::shared_ptr<ObjectGui> gui)
         setFocus(gui);
     }
     gui->onInspect();
+}
+
+std::vector<std::shared_ptr<game::StateMachine::State>> &ObjectStorageGui::statesList(const std::string &machineName)
+{
+    return std::dynamic_pointer_cast<StateMachineGui>(objectGuiByName(machineName))->getStatesList();
 }
 
 void ObjectStorageGui::setFocus(std::shared_ptr<ObjectGui> gui)
@@ -124,41 +142,15 @@ void ObjectStorageGui::editor()
 
 void ObjectStorageGui::creator()
 {
-    if (ImGui::Selectable("Level"))
+    for (const auto &[name, type] : classIdByClassName)
     {
-        create(finalObjectClass::LEVEL, _game2dEditor, this);
-    }
-    if (ImGui::Selectable("Slice"))
-    {
-        create(finalObjectClass::SLICE, _game2dEditor, this);
-    }
-    // if (ImGui::Selectable("Graphical Object"))
-    // {
-    //     create(finalObjectClass::GRAPHICAL_OBJECT, _game2dEditor, this);
-    // }
-    // if (ImGui::Selectable("Polygon"))
-    // {
-    //     create(finalObjectClass::GRAPHICAL_POLYGON, _game2dEditor, this);
-    // }
-    // if (ImGui::Selectable("Edge"))
-    // {
-    //     create(finalObjectClass::GRAPHICAL_EDGE, _game2dEditor, this);
-    // }
-    // if (ImGui::Selectable("Graphical Object 2d"))
-    // {
-    //     create(finalObjectClass::GRAPHICAL_OBJECT_2D, _game2dEditor, this);
-    // }
-    if (ImGui::Selectable("World Object 2d"))
-    {
-        create(finalObjectClass::WORLD_OBJECT_2D, _game2dEditor, this);
-    }
-    if (ImGui::Selectable("State Machine"))
-    {
-        create(finalObjectClass::STATE_MACHINE, _game2dEditor, this);
-    }
-    if (ImGui::Selectable("Texture"))
-    {
-        create(finalObjectClass::TEXTURE, _game2dEditor, this);
+        if (type.drawInCreator)
+        {
+            if (ImGui::Selectable(name.c_str()))
+            {
+                create(type.finalClass);
+            }
+        }
     }
 
     if (!_onInput)
@@ -178,8 +170,17 @@ void ObjectStorageGui::creator()
             {
                 _onInput->onSubmitCreate();
                 _guiByObjectName[_onInput->name()] = _onInput;
+                if (_onInputFunction)
+                {
+                    _onInputFunction(_onInput);
+                    _onInputFunction = {};
+                }
                 _creationSuccess = true;
-                setFocus(_onInput);
+                if (_onInputNeedsFocus)
+                {
+                    setFocus(_onInput);
+                }
+                _onInputNeedsFocus = false;
             }
             catch (const std::exception &e)
             {
