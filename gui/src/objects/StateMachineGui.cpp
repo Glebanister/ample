@@ -80,6 +80,31 @@ StateMachineGui::StateMachineGui(std::shared_ptr<filing::NamedObject> sm, std::s
       _statesList(game::getStatesList(*_stateMachine)),
       _startState(_stateMachine->getCurrentState())
 {
+    for (auto &level : _game2dEditor->getLevelsList())
+    {
+        for (auto &stateMachine : level->stateMachines())
+        {
+            if (stateMachine->name() == sm->name())
+            {
+                selectedLevel = level;
+                break;
+            }
+        }
+    }
+    ASSERT(selectedLevel);
+    std::unordered_map<std::shared_ptr<game::StateMachine::State>, int> stateId;
+    for (size_t i = 0; i < _statesList.size(); ++i)
+    {
+        stateId[_statesList[i]] = i;
+    }
+    for (const auto &state : _statesList)
+    {
+        for (const auto &tr : state->transitions())
+        {
+            _links.emplace_back(stateId[state], stateId[tr->getNextState()]);
+        }
+    }
+    _links.emplace_back(-1, stateId[_stateMachine->getCurrentState()]);
 }
 
 StateMachineGui::StateMachineGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *storage)
@@ -216,6 +241,7 @@ void StateMachineGui::onView()
             auto tr = std::dynamic_pointer_cast<TransitionGui>(gui)->getBaseTransition();
             _statesList[stateIdFrom]->addTransition(tr);
             _links.emplace_back(idFrom, idTo);
+            tr->getNamespace().setParentalNamespace(_stateMachine->getNamespacePointer());
         });
         auto newTrGui = std::dynamic_pointer_cast<TransitionGui>(_objectStorageGui->getOnInputGui());
         newTrGui->presetNextState(_statesList[stateIdTo]);

@@ -11,7 +11,10 @@ namespace ample::gui
 LevelGui::LevelGui(std::shared_ptr<filing::NamedObject> level, std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *storage)
     : _game2dEditor(editor),
       _objectStorageGui(storage),
-      _level(std::dynamic_pointer_cast<game::game2d::Level>(level))
+      _level(std::dynamic_pointer_cast<game::game2d::Level>(level)),
+      thickness(_level->getThickness()),
+      physicsLayerPos(_level->getPhysicsLayerPos()),
+      gravity(_level->getGravity())
 {
 }
 

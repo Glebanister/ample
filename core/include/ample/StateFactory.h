@@ -9,10 +9,10 @@ namespace ample::game::factory
 {
 using utils::Factory;
 
-static Factory<StateMachine::State, const std::string &, StateMachine &, const Namespace &> StateFactory;
+// static Factory<StateMachine::State, const std::string &, StateMachine &, const Namespace &> StateFactory;
 
 namespace registers
 {
-static decltype(StateFactory)::Register<StateMachine::State> StateRegister("State");
+// static decltype(StateFactory)::Register<StateMachine::State> StateRegister("State");
 } // namespace registers
 } // namespace ample::factory

@@ -34,6 +34,5 @@ protected:
     bool _levelPresetted = false;
     bool _stateMachinePresetted = false;
     bool _nextStatePresetted = false;
-    
 };
 } // namespace ample::gui

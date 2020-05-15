@@ -5,3 +5,4 @@ TODOLIST.md
 .idea/
 cmake-build-debug/
 imgui.ini
+examples/

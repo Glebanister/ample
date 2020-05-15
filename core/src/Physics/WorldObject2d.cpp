@@ -418,6 +418,19 @@ WorldObject2d::WorldObject2d(const filing::JsonIO &input,
     _bodyDef.enabled = input.read<bool>("enabled");
     _bodyDef.gravityScale = input.read<float>("gravity_scale");
 
+    switch (_bodyType)
+    {
+    case BodyType::STATIC_BODY:
+        _bodyDef.type = b2_staticBody;
+        break;
+    case BodyType::KINEMATIC_BODY:
+        _bodyDef.type = b2_kinematicBody;
+        break;
+    case BodyType::DYNAMIC_BODY:
+        _bodyDef.type = b2_dynamicBody;
+        break;
+    }
+
     // _fixtures = input.read<std::vector<std::vector<graphics::Vector2d<float>>>>("fixtures"); // TODO
     for (const auto &fixture : _fixtures)
     {

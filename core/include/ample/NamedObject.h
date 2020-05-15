@@ -17,16 +17,15 @@ class NamedObject
 {
 public:
     NamedObject(const std::string &name,
-                const std::string &className,
-                const std::vector<std::string> &knownNames = {});
+                const std::string &className);
 
-    void fillNamespace(std::shared_ptr<game::Namespace> parentalNamespace,
-                       const game::Namespace &globalNamespace);
+    void setNamespace(std::shared_ptr<game::Namespace>);
 
     std::string name() const noexcept;
     std::string className() const noexcept;
 
     game::Namespace &getNamespace() noexcept;
+    std::shared_ptr<game::Namespace> getNamespacePointer() noexcept;
 
     virtual ~NamedObject() = default;
 
@@ -34,6 +33,5 @@ protected:
     std::string _name;
     std::string _className;
     std::shared_ptr<game::Namespace> _namespace;
-    std::vector<std::string> _knownNames;
 };
 } // namespace ample::filing
