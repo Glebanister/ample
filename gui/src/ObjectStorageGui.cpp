@@ -86,7 +86,7 @@ std::shared_ptr<ObjectGui> ObjectStorageGui::getOnInputGui() const noexcept
     return _onInput;
 }
 
-inline void ObjectStorageGui::create(finalObjectClass objClass, bool needsFocus, std::function<void(std::shared_ptr<ObjectGui>)> func)
+void ObjectStorageGui::create(finalObjectClass objClass, bool needsFocus, std::function<void(std::shared_ptr<ObjectGui>)> func)
 {
     ASSERT(!_onInput);
     _onInput = buildGui(objClass, _game2dEditor, this); // TODO: std::forward
