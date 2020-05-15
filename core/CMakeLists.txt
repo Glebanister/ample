@@ -115,6 +115,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Game/StateMachine/Actions/Physical/PhysicalAction.cpp
     src/Game/StateMachine/Actions/Physical/PhysicalLinearVelocityAction.cpp
     src/Game/StateMachine/Actions/Physical/PhysicalAngularVelocityAction.cpp
+    src/Game/StateMachine/Actions/Physical/PhysicalApplyForceAction.cpp
     src/Game/StateMachine/Action.cpp
     src/Game/Events/EventListener.cpp
     src/Game/Namespace.cpp

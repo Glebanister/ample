@@ -11,7 +11,13 @@ class PhysicalAngularVelocityAction : public PhysicalAction
                                   float angularVelocity);
     PhysicalAngularVelocityAction(const filing::JsonIO &input);
 
+    float getAngularVelocity() const noexcept;
+
+    void setAngularVelocity(float newAngularVelocity) noexcept;
+
     std::string dump() override;
+
+    void onActive() override;
 
 private:
     float _angularVelocity;

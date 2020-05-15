@@ -7,17 +7,12 @@
 
 namespace ample::game::stateMachine::actions
 {
-class PhysicalAction : public ObjectGroupAction<physics::WorldObject2d> //Maybe ObjectGroupAction<graphics::WorldObject2d>
+class PhysicalAction : public ObjectGroupAction<physics::WorldObject2d>
 {
 public:
     PhysicalAction(const std::string &name,
                    const std::string &className,
-                   const std::vector<std::string> &bodyNames,
-                   const std::function<void(std::shared_ptr<physics::WorldObject2d>)> &function);
+                   const std::vector<std::string> &bodyNames);
     PhysicalAction(const filing::JsonIO &input);
-    void onActive() override;
-
-private:
-    std::function<void(std::shared_ptr<physics::WorldObject2d>)> _func;
 };
 } // namespace ample::game::stateMachine::actions

@@ -7,20 +7,36 @@ PhysicalAngularVelocityAction::PhysicalAngularVelocityAction(const std::string &
                                                              float angularVelocity)
     : PhysicalAction(name,
                      "PhysicalAngularVelocityAction",
-                     bodyNames,
-                     [angularVelocity](std::shared_ptr<physics::WorldObject2d> obj) {
-                         obj->setAngularVelocity(angularVelocity);
-                     }),
+                     bodyNames),
       _angularVelocity(angularVelocity) {}
 
 PhysicalAngularVelocityAction::PhysicalAngularVelocityAction(const filing::JsonIO &input)
     : PhysicalAction(input),
       _angularVelocity(input.read<float>("angular_valocity")) {}
 
+float PhysicalAngularVelocityAction::getAngularVelocity() const noexcept
+{
+    return _angularVelocity;
+}
+
+void PhysicalAngularVelocityAction::setAngularVelocity(float newAngularVelocity) noexcept
+{
+    _angularVelocity = newAngularVelocity;
+}
+
 std::string PhysicalAngularVelocityAction::dump()
 {
     filing::JsonIO result = PhysicalAction::dump();
     result.write<float>("angular_valocity", _angularVelocity);
     return result;
+}
+
+void PhysicalAngularVelocityAction::onActive()
+{
+    PhysicalAction::onActive();
+    for (auto &obj : bodyPointers())
+    {
+        obj->setAngularVelocity(_angularVelocity);
+    }
 }
 } // namespace ample::game::stateMachine::actions
