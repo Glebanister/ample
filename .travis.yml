@@ -13,7 +13,7 @@ script:
   - mkdir build 
   - cd build
   - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DTARGET_CPU=$TARGET_CPU -DCMAKE_CXX_COMPILER=g++-9
-  - make -j4
+  - cmake --build .
   # - diff -u <(find demo -type f -name '*.cpp' -exec cat {} +) <(clang-format <(find demo -type f -name '*.cpp' -exec cat {} +)) // TODO: check clang-format
   # - mkdir TestingDir
   # - ./test/test_Ample

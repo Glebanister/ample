@@ -42,7 +42,12 @@ private:
     std::shared_ptr<game::game2d::Level> selectedLevel = nullptr;
     std::shared_ptr<filing::Scene2d> selectedScene = nullptr;
     std::string bodyType = "static";
+
+    std::string formType = "rectangle";
     graphics::Vector2d<float> size = {10.0f, 10.0f};
+    float radius = 5.0f;
+    uint32_t nVert = 6;
+
     float relativeThickness = 0.3f;
     graphics::Vector2d<float> faceTextureRep = {1.0f, 1.0f};
     graphics::Vector2d<float> sideTextureRep = {1.0f, 1.0f};

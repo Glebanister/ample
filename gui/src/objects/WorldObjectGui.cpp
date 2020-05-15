@@ -1,5 +1,6 @@
 #include <imgui.h>
 
+#include "ample/RegularPolygon.h"
 #include "ample/VectorRectangle.h"
 
 #include "objects/WorldObjectGui.h"
@@ -82,7 +83,17 @@ void WorldObjectGui::onCreate()
         gui_utils::NamedObjectSelector("Slice", selectedScene, selectedLevel->layers());
     }
     gui_utils::StringSelector("Body type", bodyType, {"static", "kinematic", "dynamic"});
-    gui_utils::InputCoordinates("Size", size.x, size.y, 10.0f);
+    gui_utils::StringSelector("Form type", formType, {"rectangle", "polygon"});
+    if (formType == "rectangle")
+    {
+        gui_utils::InputCoordinates("Size", size.x, size.y, 10.0f);
+    }
+    else
+    {
+        gui_utils::InputScalar("Radius", radius, 1.0f);
+        gui_utils::InputScalar("N verts", nVert, 1U, 0U, 8U);
+    }
+
     gui_utils::InputScalar("Relative thickness", relativeThickness, 0.1f);
     gui_utils::StringSelector("Normals mode", normalsMode, {"face", "vertex"});
     gui_utils::StringSelector("Texture mode face", textureSizeFace, {"fit", "tile"});
@@ -120,12 +131,13 @@ void WorldObjectGui::onSubmitCreate()
     }
     graphics::normalsMode normMode = normalsModeByName[normalsMode];
     physics::BodyType bodyTypeEnum = bodyTypeByName[bodyType];
+    auto form = formType == "rectangle" ? geometry::VectorRectangle<float>(size) : geometry::RegularPolygon<float>(radius, nVert);
 
     _object = std::make_shared<physics::WorldObject2d>(
         nameBuffer,
         *selectedScene,
         bodyTypeEnum,
-        geometry::VectorRectangle<float>(size),
+        form,
         relativeThickness,
         faceTextureRep,
         sideTextureRep,
