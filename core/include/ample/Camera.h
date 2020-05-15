@@ -43,6 +43,7 @@ public:
     void setViewport(const Vector2d<pixel_t> &size);
 
     void translate(const glm::vec3 &);
+    void setTranslate(const glm::vec3 &);
     void moveForward(float);
     void moveRight(float);
     void moveUp(float);

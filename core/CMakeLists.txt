@@ -112,6 +112,8 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Game/StateMachine/Actions/Graphical/GraphicalAction.cpp
     src/Game/StateMachine/Actions/Graphical/GraphicalRotateAction.cpp
     src/Game/StateMachine/Actions/Graphical/GraphicalTranslateAction.cpp
+    src/Game/StateMachine/Actions/Camera/CameraAction.cpp
+    src/Game/StateMachine/Actions/Camera/FollowObjectAction.cpp
     src/Game/StateMachine/Action.cpp
     src/Game/Events/EventListener.cpp
     src/Game/Namespace.cpp

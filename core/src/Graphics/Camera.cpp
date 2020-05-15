@@ -69,6 +69,11 @@ void Camera::translate(const glm::vec3 &vector)
     _position += vector;
 }
 
+void Camera::setTranslate(const glm::vec3 &vector)
+{
+    _position = vector;
+}
+
 void Camera::rotate(const glm::vec3 &axis, const float angle)
 {
     _direction = glm::rotate(_direction, glm::radians(angle), axis);
