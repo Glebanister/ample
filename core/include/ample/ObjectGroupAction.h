@@ -20,7 +20,7 @@ public:
     void addObjectName(const std::string &name) noexcept;
 
     std::vector<std::shared_ptr<T>> &bodyPointers() noexcept;
-    std::vector<std::string> &bodyNames() noexcept;
+    std::vector<std::string> &bodyNames() override;
 
     void onActive() override;
 

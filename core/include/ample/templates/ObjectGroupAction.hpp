@@ -35,7 +35,7 @@ std::vector<std::shared_ptr<T>> &ObjectGroupAction<T>::bodyPointers() noexcept
 }
 
 template <typename T>
-std::vector<std::string> &ObjectGroupAction<T>::bodyNames() noexcept
+std::vector<std::string> &ObjectGroupAction<T>::bodyNames()
 {
     return _bodyNames;
 }

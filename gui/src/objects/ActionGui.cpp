@@ -1,6 +1,7 @@
 #include <imgui.h>
 
 #include "objects/ActionGui.h"
+#include "Utils.h"
 
 namespace ample::gui
 {
@@ -17,19 +18,12 @@ ActionGui::ActionGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectS
 
 void ActionGui::onEdit()
 {
-    ImGui::InputText("Attach object", attachedObjectName, 255);
+    gui_utils::NamedObjectSelector("Add object to action", _selectedObjectToAdd, _baseActionPointer->getNamespacePointer()->getAllNames());
 }
 
 void ActionGui::onSubmitEdit()
 {
-    if (attachedObjectName[0])
-    {
-        if (!_baseActionPointer->getNamespace().getObject(attachedObjectName))
-        {
-            throw game::GameException("Could not find object in namespace with name" + static_cast<std::string>(attachedObjectName));
-        }
-        _baseActionPointer->addObjectName(attachedObjectName);
-    }
+    _baseActionPointer->addObjectName(_selectedObjectToAdd->name());
 }
 
 std::shared_ptr<game::Action> ActionGui::getAction()

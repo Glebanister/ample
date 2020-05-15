@@ -39,13 +39,11 @@ void TimerTransitionGui::onSubmitCreate()
 void TimerTransitionGui::onEdit()
 {
     ASSERT(_transition);
-    TransitionGui::onEdit();
     gui_utils::InputScalar("Time, ms", milliseconds, 10, 0, INT32_MAX - 1);
 }
 
 void TimerTransitionGui::onSubmitEdit()
 {
-    TransitionGui::onSubmitEdit();
     _transition->setTimeDelta(milliseconds);
 }
 

@@ -134,4 +134,37 @@ void NamedObjectSelector(const std::string &label, std::shared_ptr<T> &object, c
         ImGui::EndPopup();
     }
 }
+
+template <typename T>
+void NamedObjectSelector(const std::string &label, std::shared_ptr<T> &object, const std::unordered_map<std::string, std::shared_ptr<T>> &list)
+{
+    if (ImGui::Button(label.c_str()))
+    {
+        ImGui::OpenPopup((label + ".popup").c_str());
+    }
+    ImGui::SameLine();
+    if (object)
+    {
+        ImGui::Text("%s", object->name().c_str());
+    }
+    else
+    {
+        gui_utils::TextDisabled("[select]");
+    }
+    if (ImGui::BeginPopup((label + ".popup").c_str()))
+    {
+        if (list.empty())
+        {
+            gui_utils::TextDisabled("[empty]");
+        }
+        for (auto &[id, obj] : list)
+        {
+            if (ImGui::Selectable(id.c_str()))
+            {
+                object = obj;
+            }
+        }
+        ImGui::EndPopup();
+    }
+}
 } // namespace ample::gui::gui_utils

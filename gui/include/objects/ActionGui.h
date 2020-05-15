@@ -27,6 +27,6 @@ protected:
     ObjectStorageGui *_objectStorageGui;
     std::shared_ptr<game::Action> _baseActionPointer;
 
-    char attachedObjectName[255] = {0};
+    std::shared_ptr<filing::NamedObject> _selectedObjectToAdd;
 };
 } // namespace ample::gui
