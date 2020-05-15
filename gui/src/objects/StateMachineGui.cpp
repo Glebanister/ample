@@ -92,10 +92,19 @@ StateMachineGui::StateMachineGui(std::shared_ptr<filing::NamedObject> sm, std::s
         }
     }
     ASSERT(selectedLevel);
-    for (const auto state : game::getStatesList(*_stateMachine))
+    std::unordered_map<std::shared_ptr<game::StateMachine::State>, int> stateId;
+    for (size_t i = 0; i < _statesList.size(); ++i)
     {
-        _statesList.push_back(state);
+        stateId[_statesList[i]] = i;
     }
+    for (const auto &state : _statesList)
+    {
+        for (const auto &tr : state->transitions())
+        {
+            _links.emplace_back(stateId[state], stateId[tr->getNextState()]);
+        }
+    }
+    _links.emplace_back(-1, stateId[_stateMachine->getCurrentState()]);
 }
 
 StateMachineGui::StateMachineGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *storage)
@@ -126,36 +135,6 @@ void StateMachineGui::onSubmitCreate()
 
 void StateMachineGui::onEdit()
 {
-    if (ImGui::Button("Bind object"))
-    {
-        ImGui::OpenPopup("Bind object to State Machine");
-    }
-    if (ImGui::BeginPopupModal("Bind object to State Machine"))
-    {
-        ASSERT(selectedLevel);
-        bool selected = false;
-        for (auto &[id, scene] : selectedLevel->layers())
-        {
-            if (ImGui::TreeNode(scene->name().c_str()))
-            {
-                for (auto &obj : scene->objects())
-                {
-                    if (ImGui::Selectable(obj->name().c_str()))
-                    {
-                        _stateMachine->getNamespace().addObject(obj);
-                        selected = true;
-                    }
-                }
-                ImGui::TreePop();
-            }
-        }
-
-        if (ImGui::Button("Close") || selected)
-        {
-            ImGui::CloseCurrentPopup();
-        }
-        ImGui::EndPopup();
-    }
 }
 
 void StateMachineGui::onSubmitEdit()
