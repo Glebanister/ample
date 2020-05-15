@@ -16,7 +16,7 @@ namespace ample::game
 class Namespace
 {
 public:
-    Namespace(std::shared_ptr<Namespace> parent);
+    void setParentalNamespace(std::shared_ptr<Namespace> parent);
 
     bool hasName(const std::string &name);
     bool hasObject(std::shared_ptr<filing::NamedObject> namedObject);
@@ -29,9 +29,10 @@ public:
     void removeName(const std::string &name);
     void removeObject(std::shared_ptr<filing::NamedObject> namedObject);
 
+    void clear() noexcept;
+
 private:
     std::unordered_map<std::string, std::shared_ptr<filing::NamedObject>> _names = {};
-    
     std::shared_ptr<Namespace> _parentalNamespace;
 };
 } // namespace ample::game

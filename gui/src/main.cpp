@@ -9,16 +9,7 @@
 
 int main()
 {
-    ample::window::Window window{
-        "ample gui",
-        0,
-        0,
-        1920 / 1.5,
-        1080 / 1.5,
-        ample::window::CENTERED_X | ample::window::CENTERED_Y,
-        ample::window::MAXIMIZED | ample::window::RESIZABLE,
-    };
-    ample::gui::AmpleGui{window}.loop();
+    ample::gui::AmpleGui().loop();
 
     return 0;
 }

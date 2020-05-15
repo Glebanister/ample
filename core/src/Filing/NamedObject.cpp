@@ -10,7 +10,7 @@ NamedObject::NamedObject(const std::string &name,
                          const std::vector<std::string> &knownNames)
     : _name(name),
       _className(className),
-      _namespace(std::make_shared<game::Namespace>(nullptr)),
+      _namespace(std::make_shared<game::Namespace>()),
       _knownNames(knownNames)
 {
     if (name.empty())
@@ -25,8 +25,10 @@ NamedObject::NamedObject(const std::string &name,
     }
 }
 
-void NamedObject::fillNamespace(const game::Namespace &globalNamespace)
+void NamedObject::fillNamespace(std::shared_ptr<game::Namespace> parentalNamespace,
+                                const game::Namespace &globalNamespace)
 {
+    getNamespace().setParentalNamespace(parentalNamespace);
     for (const auto &name : _knownNames)
     {
         if (!getNamespace().hasName(name))

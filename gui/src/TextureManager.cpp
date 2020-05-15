@@ -123,18 +123,16 @@ void TextureManager::TextureLoader()
 
 void TextureManager::drawInterface()
 {
-    ImGui::Begin("Texture manager");
     TexturesList();
     if (ImGui::Button("Upload new texture"))
     {
         ImGui::OpenPopup("Texture loader");
     }
-    if (ImGui::BeginPopupModal("Texture loader", NULL, ImGuiWindowFlags_MenuBar))
+    if (ImGui::BeginPopupModal("Texture loader", NULL, ImGuiWindowFlags_AlwaysAutoResize))
     {
         TextureLoader();
         ImGui::EndPopup();
     }
-    ImGui::End();
 }
 
 std::vector<std::shared_ptr<ample::graphics::Texture>> TextureManager::textures() noexcept

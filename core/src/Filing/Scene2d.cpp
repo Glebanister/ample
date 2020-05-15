@@ -14,7 +14,6 @@
 
 namespace ample::filing
 {
-
 Scene2d::Scene2d(const std::string &name,
                  const ample::graphics::Vector2d<float> &gravity,
                  float z,
@@ -29,32 +28,44 @@ Scene2d::Scene2d(const std::string &name,
 {
 }
 
-Scene2d::Scene2d(const JsonIO &input)
+Scene2d::Scene2d(const JsonIO &input,
+                 game::Namespace &globalNamespace)
     : Scene2d(input.read<std::string>("name"),
               input.read<graphics::Vector2d<float>>("gravity"),
               input.read<float>("z"),
               input.read<float>("thickness"),
               input.read<float>("relative_position_in_slice"))
 {
-    auto objectStrings = filing::loadObjectsVector(input.read<std::string>("objects"));
-    auto cameraStrings = filing::loadObjectsVector(input.read<std::string>("cameras"));
+    auto objectStrings = filing::loadObjectsVector(input.updateJsonIO("objects"));
+    auto cameraStrings = filing::loadObjectsVector(input.updateJsonIO("cameras"));
     for (const auto &objString : objectStrings)
     {
         std::string objectClass = JsonIO(objString).read<std::string>("class_name");
-        if (objString == "WorldObject2d")
+        if (objectClass == "WorldObject2d")
         {
-            addWorldObject(game::factory::WorldObjecsFactory.produce(objectClass, objString, shared_from_this()));
+            std::shared_ptr<physics::WorldObject2d> object =
+                game::factory::WorldObjecsFactory.produce(objectClass,
+                                                          objString,
+                                                          *this);
+            addWorldObject(object);
+            globalNamespace.addObject(object);
         }
         else
         {
-            addObject(game::factory::GraphicalObjecsFactory.produce(objectClass, objString));
+            std::shared_ptr<graphics::GraphicalObject> object =
+                game::factory::GraphicalObjecsFactory.produce(objectClass,
+                                                              objString);
+            addObject(object);
+            globalNamespace.addObject(object);
         }
         // addWorldJoint(); // TODO
     }
     for (const auto &cameraString : cameraStrings)
     {
         std::string cameraType = JsonIO(cameraString).read<std::string>("class_name");
-        addCamera(game::factory::CamerasFactory.produce(cameraType, cameraString));
+        std::shared_ptr<graphics::Camera> camera = game::factory::CamerasFactory.produce(cameraType, cameraString);
+        addCamera(camera);
+        globalNamespace.addObject(camera);
     }
 }
 

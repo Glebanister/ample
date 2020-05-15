@@ -1,18 +1,18 @@
 #define GLM_ENABLE_EXPERIMENTAL
 
+#include <cmath>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/normal.hpp>
-#include <cmath>
+#include <glm/gtx/transform.hpp>
 #include <vector>
 
-#include "Vector3d.h"
-#include "Vector2d.h"
-#include "VertexArray.h"
-#include "GraphicalEdge.h"
 #include "Debug.h"
+#include "GraphicalEdge.h"
+#include "Vector2d.h"
+#include "Vector3d.h"
+#include "VertexArray.h"
 
 namespace ample::graphics
 {
@@ -136,16 +136,15 @@ GraphicalEdge::GraphicalEdge(const std::string &name,
 }
 
 GraphicalEdge::GraphicalEdge(filing::JsonIO input)
-    : GraphicalEdge(input.read<std::string>("name"),
-                    input.read<std::vector<Vector2d<float>>>("shape"),
-                    input.read<float>("z"),
-                    input.read<float>("thickness"),
-                    input.read<Vector2d<float>>("textureRepeats"),
-                    input.read<normalsMode>("normalsMode"),
-                    input.read<glm::mat4>("translated"),
-                    input.read<glm::mat4>("scaled"),
-                    input.read<glm::mat4>("rotated"))
+    : GraphicalObject(input),
+      _shape(input.read<std::vector<Vector2d<float>>>("shape")),
+      _thickness(input.read<float>("thickness")),
+      _textureRepeats(input.read<Vector2d<float>>("textureRepeats")),
+      _normMode(input.read<normalsMode>("normalsMode"))
 {
+    bindVertexArray(std::make_shared<VertexArray>(generateSideCoords(_shape, getZ(), _thickness),
+                                                  generateSideUVCoords(_shape, getZ(), _thickness, _textureRepeats),
+                                                  generateSideNormals(_shape, _normMode, getZ(), _thickness)));
 }
 
 std::string GraphicalEdge::dump()

@@ -4,11 +4,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
-#include "GraphicalObject2d.h"
-#include "Vector2d.h"
 #include "Debug.h"
 #include "Exception.h"
+#include "GraphicalObject2d.h"
 #include "ShaderProcessor.h"
+#include "Vector2d.h"
 
 namespace ample::graphics
 {
@@ -80,6 +80,8 @@ GraphicalObject2d::GraphicalObject2d(filing::JsonIO input)
       _face(std::make_shared<GraphicalPolygon>(input.updateJsonIO("face"))),
       _side(std::make_shared<GraphicalEdge>(input.updateJsonIO("side")))
 {
+    addSubObject(std::static_pointer_cast<GraphicalObject>(_face));
+    addSubObject(std::static_pointer_cast<GraphicalObject>(_side));
 }
 
 std::string GraphicalObject2d::dump()

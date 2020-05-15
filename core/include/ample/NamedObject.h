@@ -3,8 +3,8 @@
 #include <memory>
 #include <string>
 
-#include "Namespace.h"
 #include "JsonIO.h"
+#include "Namespace.h"
 
 namespace ample::game
 {
@@ -20,7 +20,8 @@ public:
                 const std::string &className,
                 const std::vector<std::string> &knownNames = {});
 
-    void fillNamespace(const game::Namespace &globalNamespace);
+    void fillNamespace(std::shared_ptr<game::Namespace> parentalNamespace,
+                       const game::Namespace &globalNamespace);
 
     std::string name() const noexcept;
     std::string className() const noexcept;
