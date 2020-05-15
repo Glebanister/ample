@@ -43,62 +43,44 @@ void StateGui::onSubmitCreate()
 
 void StateGui::onEdit()
 {
-    if (ImGui::TreeNode("Add on start action"))
+    if (ImGui::Selectable("Add on start action"))
     {
-        for (const auto &[trName, trId] : classIdByClassName)
-        {
-            if (trId.parentClass != "Action")
-            {
-                continue;
-            }
-            if (ImGui::Selectable(trName.c_str()))
-            {
-                _objectStorageGui->create(trId.finalClass, false, [&](std::shared_ptr<ObjectGui> gui) {
-                    auto actionGui = std::dynamic_pointer_cast<ActionGui>(gui);
-                    _state->addOnStartAction(actionGui->getAction());
-                    actionGui->getAction()->getNamespacePointer()->setParentalNamespace(_state->getStateMachine().getNamespacePointer());
-                });
-            }
-        }
-        ImGui::TreePop();
+        _actionSelector.open();
+        _actionType = 0;
     }
-    if (ImGui::TreeNode("Add on active action"))
+    if (ImGui::Selectable("Add on active action"))
     {
-        for (const auto &[trName, trId] : classIdByClassName)
-        {
-            if (trId.parentClass != "Action")
-            {
-                continue;
-            }
-            if (ImGui::Selectable(trName.c_str()))
-            {
-                _objectStorageGui->create(trId.finalClass, false, [&](std::shared_ptr<ObjectGui> gui) {
-                    auto actionGui = std::dynamic_pointer_cast<ActionGui>(gui);
-                    _state->addOnActiveAction(actionGui->getAction());
-                    actionGui->getAction()->getNamespacePointer()->setParentalNamespace(_state->getStateMachine().getNamespacePointer());
-                });
-            }
-        }
-        ImGui::TreePop();
+        _actionSelector.open();
+        _actionType = 1;
     }
-    if (ImGui::TreeNode("Add on stop action"))
+    if (ImGui::Selectable("Add on stop action"))
     {
-        for (const auto &[trName, trId] : classIdByClassName)
-        {
-            if (trId.parentClass != "Action")
+        _actionSelector.open();
+        _actionType = 2;
+    }
+
+    if (_actionSelector.hasResult())
+    {
+        auto res = _actionSelector.popResult();
+        _objectStorageGui->create(res.finalClass, false, [&](std::shared_ptr<ObjectGui> gui) {
+            auto actionGui = std::dynamic_pointer_cast<ActionGui>(gui);
+            auto action = actionGui->getAction();
+            switch (_actionType)
             {
-                continue;
+            case 0:
+                _state->addOnStartAction(action);
+                break;
+            case 1:
+                _state->addOnActiveAction(action);
+                break;
+            case 2:
+                _state->addOnStopAction(action);
+                break;
+            default:
+                break;
             }
-            if (ImGui::Selectable(trName.c_str()))
-            {
-                _objectStorageGui->create(trId.finalClass, false, [&](std::shared_ptr<ObjectGui> gui) {
-                    auto actionGui = std::dynamic_pointer_cast<ActionGui>(gui);
-                    _state->addOnStopAction(actionGui->getAction());
-                    actionGui->getAction()->getNamespacePointer()->setParentalNamespace(_state->getStateMachine().getNamespacePointer());
-                });
-            }
-        }
-        ImGui::TreePop();
+            actionGui->getAction()->getNamespacePointer()->setParentalNamespace(_state->getStateMachine().getNamespacePointer());
+        });
     }
 }
 
@@ -108,50 +90,51 @@ void StateGui::onSubmitEdit()
 
 void StateGui::onView()
 {
+    _objectStorageGui->objectGuiByName(_stateMachine->name())->onView();
+    _actionSelector.drawInterface();
 }
 
 void StateGui::onInspect()
 {
     ASSERT(_state);
-    ImGui::TextColored({0, 1, 0, 1}, "%s", "Start");
-    for (auto &act : _state->getOnStartActions())
-    {
-        if (auto actGui = _objectStorageGui->objectGuiByName(act->name());
-            ImGui::TreeNode(actGui->name().c_str()))
+    auto inspectActionsList = [&](std::vector<std::shared_ptr<game::Action>> &list) {
+        for (auto &act : list)
         {
-            _objectStorageGui->inspectSingleItem(actGui);
-            ImGui::TreePop();
+            if (auto actGui = _objectStorageGui->objectGuiByName(act->name());
+                ImGui::TreeNode(actGui->name().c_str()))
+            {
+                _objectStorageGui->inspectSingleItem(actGui);
+            }
         }
+    };
+    if (ImGui::TreeNode("Start"))
+    {
+        inspectActionsList(_state->getOnStartActions());
+        ImGui::TreePop();
     }
-    ImGui::TextColored({0, 0, 1, 1}, "%s", "Active");
-    for (auto &act : _state->getOnActiveActions())
+    if (ImGui::TreeNode("Active"))
     {
-        if (auto actGui = _objectStorageGui->objectGuiByName(act->name());
-            ImGui::TreeNode(actGui->name().c_str()))
-        {
-            _objectStorageGui->inspectSingleItem(actGui);
-            ImGui::TreePop();
-        }
+        inspectActionsList(_state->getOnActiveActions());
+        ImGui::TreePop();
     }
-    ImGui::TextColored({1, 0, 0, 1}, "%s", "Stop");
-    for (auto &act : _state->getOnStopActions())
+    if (ImGui::TreeNode("Stop"))
     {
-        if (auto actGui = _objectStorageGui->objectGuiByName(act->name());
-            ImGui::TreeNode(actGui->name().c_str()))
-        {
-            _objectStorageGui->inspectSingleItem(actGui);
-            ImGui::TreePop();
-        }
+        inspectActionsList(_state->getOnStopActions());
+        ImGui::TreePop();
     }
-    ImGui::Text("%s", "Transitions");
-    for (auto &tr : _state->transitions())
+
+    if (ImGui::TreeNode("Transitions"))
     {
-        if (auto trGui = _objectStorageGui->objectGuiByName(tr->name());
-            ImGui::TreeNode(trGui->name().c_str()))
+        for (auto &tr : _state->transitions())
         {
-            _objectStorageGui->inspectSingleItem(trGui);
-            ImGui::TreePop();
+            if (auto trGui = _objectStorageGui->objectGuiByName(tr->name());
+                ImGui::TreeNode(trGui->name().c_str()))
+            {
+                _objectStorageGui->inspectSingleItem(trGui);
+                ImGui::TreePop();
+            }
         }
+        ImGui::TreePop();
     }
 }
 

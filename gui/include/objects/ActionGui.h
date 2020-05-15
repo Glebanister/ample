@@ -21,6 +21,7 @@ public:
 
     void onEdit() override;
     void onSubmitEdit() override;
+    void onInspect() override;
 
 protected:
     std::shared_ptr<game::game2d::Game2dEditor> _game2dEditor;

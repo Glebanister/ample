@@ -43,6 +43,7 @@ set(SOURCES
     src/LevelBrowser.cpp
     src/ObjectStorageGui.cpp
     src/StateMachineBrowser.cpp
+    src/Utils.cpp
 
     src/objects/GraphicalEdgeGui.cpp
     src/objects/GraphicalPolygonGui.cpp

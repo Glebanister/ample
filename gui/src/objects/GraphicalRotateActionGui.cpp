@@ -53,7 +53,10 @@ void GraphicalRotateActionGui::onSubmitEdit()
 }
 
 void GraphicalRotateActionGui::onView() {}
-void GraphicalRotateActionGui::onInspect() {}
+void GraphicalRotateActionGui::onInspect()
+{
+    ActionGui::onInspect();
+}
 
 void GraphicalRotateActionGui::onPreview()
 {

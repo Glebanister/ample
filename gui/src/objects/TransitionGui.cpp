@@ -48,6 +48,11 @@ void TransitionGui::onCreate()
     }
 }
 
+void TransitionGui::onView()
+{
+    _objectStorageGui->objectGuiByName(_nextState->getStateMachine().name())->onView();
+}
+
 void TransitionGui::presetNextState(std::shared_ptr<game::StateMachine::State> nextState) noexcept
 {
     _nextState = nextState;

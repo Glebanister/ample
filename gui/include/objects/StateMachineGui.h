@@ -14,22 +14,6 @@ namespace ample::gui
 class ObjectStorageGui;
 class ObjectGui;
 
-class TransitionSelector : public GraphicalInterface
-{
-public:
-    TransitionSelector(const std::string &title);
-    void drawInterface() override;
-    void open();
-    bool hasResult();
-    ClassInfo popResult();
-
-private:
-    std::string _title;
-    bool _isOpened = false;
-    bool _has = false;
-    ClassInfo _result;
-};
-
 class StateMachineGui : public ObjectGui
 {
 public:
@@ -49,10 +33,12 @@ public:
 
     std::vector<std::shared_ptr<game::StateMachine::State>> &getStatesList() noexcept;
 
+    void focusState(std::shared_ptr<game::StateMachine::State>); // TODO
+
 private:
     std::shared_ptr<game::game2d::Game2dEditor> _game2dEditor;
     ObjectStorageGui *_objectStorageGui;
-    TransitionSelector _transitionSelector{"Select transition class"};
+    gui_utils::ClassSelector _transitionSelector{"Select transition class", "Transition"};
 
     std::shared_ptr<game::StateMachine> _stateMachine;
 
@@ -64,5 +50,6 @@ private:
 
     std::vector<std::shared_ptr<game::StateMachine::State>> _statesList;
     std::shared_ptr<game::StateMachine::State> _startState = nullptr;
+    std::shared_ptr<game::StateMachine::State> _activeState = nullptr;
 };
 } // namespace ample::gui

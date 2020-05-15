@@ -32,13 +32,6 @@ enum class finalObjectClass
     GRAPHICAL_ROTATE_ACTION,
 };
 
-struct ClassInfo
-{
-    finalObjectClass finalClass;
-    bool drawInCreator = true;
-    std::string parentClass = "";
-};
-
 static std::map<std::string, ClassInfo> classIdByClassName{
     {"Level", {finalObjectClass::LEVEL}},
     {"Scene2d", {finalObjectClass::SLICE}},
@@ -72,6 +65,7 @@ public:
     std::shared_ptr<ObjectGui> objectGuiByName(const std::string &name);
 
     void setFocus(std::shared_ptr<ObjectGui> gui);
+    void setFocus(std::string guiName);
 
     void inspectSingleItem(const std::string &name);
     void inspectSingleItem(std::shared_ptr<ObjectGui>);

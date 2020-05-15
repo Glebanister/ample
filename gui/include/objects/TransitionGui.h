@@ -17,6 +17,7 @@ public:
     TransitionGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *);
 
     void onCreate() override;
+    void onView() override;
 
     void presetStateMachine(std::shared_ptr<game::StateMachine>) noexcept;
     void presetNextState(std::shared_ptr<game::StateMachine::State>) noexcept;

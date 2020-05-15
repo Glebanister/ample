@@ -6,74 +6,6 @@
 
 namespace ample::gui
 {
-TransitionSelector::TransitionSelector(const std::string &title)
-    : _title(title) {}
-
-void TransitionSelector::drawInterface()
-{
-    if (_isOpened)
-    {
-        ImGui::OpenPopup(_title.c_str());
-    }
-    if (ImGui::BeginPopupModal(_title.c_str(), NULL, ImGuiWindowFlags_AlwaysAutoResize))
-    {
-        int curId = 0;
-        int choosenId = 0;
-        for (const auto &[name, type] : classIdByClassName)
-        {
-            if (type.parentClass == "Transition")
-            {
-                if (ImGui::RadioButton(name.c_str(), &choosenId, curId++))
-                {
-                    _result = type;
-                }
-            }
-        }
-        curId = 0;
-        for (const auto &[name, type] : classIdByClassName)
-        {
-            if (type.parentClass == "Transition")
-            {
-                if (curId++ == choosenId)
-                {
-                    _result = type;
-                }
-            }
-        }
-        if (ImGui::Button("Close"))
-        {
-            _isOpened = false;
-            _has = false;
-            ImGui::CloseCurrentPopup();
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Submit"))
-        {
-            _isOpened = false;
-            _has = true;
-        }
-        ImGui::EndPopup();
-    }
-}
-
-void TransitionSelector::open()
-{
-    _isOpened = true;
-}
-
-bool TransitionSelector::hasResult()
-{
-    return _has;
-}
-
-ClassInfo TransitionSelector::popResult()
-{
-    auto res = _result;
-    _result = {};
-    _has = false;
-    return res;
-}
-
 StateMachineGui::StateMachineGui(std::shared_ptr<filing::NamedObject> sm, std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *storage)
     : _game2dEditor(editor), _objectStorageGui(storage),
       _stateMachine(std::dynamic_pointer_cast<game::StateMachine>(sm)),
@@ -101,10 +33,10 @@ StateMachineGui::StateMachineGui(std::shared_ptr<filing::NamedObject> sm, std::s
     {
         for (const auto &tr : state->transitions())
         {
-            _links.emplace_back(stateId[state], stateId[tr->getNextState()]);
+            _links.emplace_back(stateId[state] * 2, stateId[tr->getNextState()] * 2 + 1);
         }
     }
-    _links.emplace_back(-1, stateId[_stateMachine->getCurrentState()]);
+    _links.emplace_back(-1, stateId[_stateMachine->getCurrentState()] * 2);
 }
 
 StateMachineGui::StateMachineGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *storage)
@@ -122,6 +54,11 @@ void StateMachineGui::onCreate()
 {
     ImGui::InputText("Name", nameBuffer, 255);
     gui_utils::NamedObjectSelector("Level", selectedLevel, _game2dEditor->getLevelsList());
+}
+
+void StateMachineGui::focusState(std::shared_ptr<game::StateMachine::State> state)
+{
+    _activeState = state;
 }
 
 void StateMachineGui::onSubmitCreate()
@@ -167,7 +104,7 @@ void StateMachineGui::onView()
 
     imnodes::BeginNode(-1);
     imnodes::BeginNodeTitleBar();
-    ImGui::Text("Entry point");
+    ImGui::Text("%s", _stateMachine->name().c_str());
     imnodes::EndNodeTitleBar();
     imnodes::BeginOutputAttribute(-1);
     imnodes::EndAttribute();
@@ -176,19 +113,20 @@ void StateMachineGui::onView()
     for (size_t i = 0; i < _statesList.size(); ++i)
     {
         auto state = _statesList[i];
-        ImGui::Indent(100.0f);
         imnodes::BeginNode(i);
-
-        imnodes::BeginInputAttribute(i * 2);
-        imnodes::EndAttribute();
 
         imnodes::BeginNodeTitleBar();
         ImGui::Text("%s", state->name().c_str());
         imnodes::EndNodeTitleBar();
 
-        _objectStorageGui->objectGuiByName(state->name())->onInspect();
-        imnodes::BeginOutputAttribute(i * 2 + 1);
+        imnodes::BeginInputAttribute(i * 2, imnodes::PinShape_CircleFilled);
+        ImGui::Text("inputs");
         imnodes::EndAttribute();
+
+        imnodes::BeginOutputAttribute(i * 2 + 1, imnodes::PinShape_TriangleFilled);
+        ImGui::Text("outputs");
+        imnodes::EndAttribute();
+
         imnodes::EndNode();
     }
 
@@ -215,6 +153,21 @@ void StateMachineGui::onView()
         ImGui::EndPopup();
     }
     imnodes::EndNodeEditor();
+
+    {
+        int hoveredId = -1;
+        if (imnodes::IsNodeHovered(&hoveredId) && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+        {
+            if (hoveredId != -1)
+            {
+                _objectStorageGui->setFocus(_statesList[hoveredId]->name());
+            }
+            else
+            {
+                _objectStorageGui->setFocus(name());
+            }
+        }
+    }
 
     if (imnodes::IsLinkCreated(&idFrom, &idTo))
     {

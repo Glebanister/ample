@@ -38,7 +38,8 @@ private:
     ObjectStorageGui *_objectStorageGui;
     std::shared_ptr<game::StateMachine> _stateMachine;
     std::shared_ptr<game::StateMachine::State> _state;
-
     char nameBuffer[255] = {0};
+    gui_utils::ClassSelector _actionSelector{"Select action class", "Action"};
+    int _actionType = 0;
 };
 } // namespace ample::gui

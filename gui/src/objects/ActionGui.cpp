@@ -1,7 +1,8 @@
 #include <imgui.h>
 
-#include "objects/ActionGui.h"
 #include "Utils.h"
+#include "objects/ActionGui.h"
+#include "ObjectStorageGui.h"
 
 namespace ample::gui
 {
@@ -14,6 +15,18 @@ ActionGui::ActionGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectS
     : _game2dEditor(editor),
       _objectStorageGui(storage)
 {
+}
+
+void ActionGui::onInspect()
+{
+    ImGui::Text("Operating objects");
+    for (const auto &objName : _baseActionPointer->bodyNames())
+    {
+        if (ImGui::Selectable(objName.c_str()))
+        {
+            _objectStorageGui->setFocus(objName);
+        }
+    }
 }
 
 void ActionGui::onEdit()

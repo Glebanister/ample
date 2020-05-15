@@ -49,6 +49,7 @@ void TimerTransitionGui::onSubmitEdit()
 
 void TimerTransitionGui::onView()
 {
+    TransitionGui::onView();
 }
 
 void TimerTransitionGui::onInspect()

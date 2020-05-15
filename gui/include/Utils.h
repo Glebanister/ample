@@ -8,6 +8,17 @@
 #include <unordered_map>
 #include <vector>
 
+namespace ample::gui
+{
+enum class finalObjectClass;
+struct ClassInfo
+{
+    finalObjectClass finalClass;
+    bool drawInCreator = true;
+    std::string parentClass = "";
+};
+} // namespace ample::gui
+
 namespace ample::gui::gui_utils
 {
 template <typename T>
@@ -125,6 +136,23 @@ inline void PathSelector(const std::string &label, std::string &path, ImGui::Fil
         path = filebrowser.GetSelected();
     }
 }
+
+class ClassSelector
+{
+public:
+    ClassSelector(const std::string &title, const std::string &parentClassName);
+    void drawInterface();
+    void open();
+    bool hasResult();
+    ClassInfo popResult();
+
+private:
+    std::string _title;
+    std::string _parentClassName;
+    bool _isOpened = false;
+    bool _has = false;
+    ClassInfo _result;
+};
 } // namespace ample::gui::gui_utils
 
 #include "templates/Utils.hpp"

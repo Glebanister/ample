@@ -59,10 +59,13 @@ ObjectStorageGui::ObjectStorageGui(std::shared_ptr<game::game2d::Game2dEditor> e
                     used[curState->name()] = true;
                     for (const auto &transition : curState->transitions())
                     {
-                        buildGuiAndAdd(transition);
+                        auto gui = std::dynamic_pointer_cast<TransitionGui>(buildGuiAndAdd(transition));
+                        gui->presetNextState(transition->getNextState());
+                        gui->presetStateMachine(sm);
                         dfs(transition->getNextState());
                     }
-                    buildGuiAndAdd(curState);
+                    auto stateGui = std::dynamic_pointer_cast<StateGui>(buildGuiAndAdd(curState));
+                    stateGui->presetStateMachine(sm);
                     auto actionAdder = [&](std::vector<std::shared_ptr<game::Action>> &actions) {
                         std::for_each(actions.begin(), actions.end(),
                                       [&](auto &act) {
@@ -129,6 +132,11 @@ std::vector<std::shared_ptr<game::StateMachine::State>> &ObjectStorageGui::state
 void ObjectStorageGui::setFocus(std::shared_ptr<ObjectGui> gui)
 {
     _focusedGui = gui;
+}
+
+void ObjectStorageGui::setFocus(std::string guiName)
+{
+    _focusedGui = objectGuiByName(guiName);
 }
 
 void ObjectStorageGui::browser()
