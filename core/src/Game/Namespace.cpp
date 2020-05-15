@@ -26,14 +26,25 @@ bool Namespace::addObject(std::shared_ptr<filing::NamedObject> namedObject)
     {
         return false;
     }
-    _names.emplace(namedObject->name(), namedObject);
+    _names[namedObject->name()] = namedObject;
     return true;
 }
 
 std::shared_ptr<filing::NamedObject> Namespace::getObject(const std::string &name) const
 {
+    // TODO: ????????? linear search in hash map ???????????
+    auto findInNamespace = [&](const std::unordered_map<std::string, std::shared_ptr<filing::NamedObject>> &nsp, const std::string &nm) {
+        for (const auto &[name, obj] : nsp)
+        {
+            if (nm == name)
+            {
+                return true;
+            }
+        }
+        return false;
+    };
     const Namespace *currentNamespace = this;
-    while (currentNamespace && !currentNamespace->_names.find(name)->second)
+    while (currentNamespace && !findInNamespace(currentNamespace->_names, name))
     {
         currentNamespace = currentNamespace->_parentalNamespace.get();
     }

@@ -4,19 +4,18 @@
 3D Graphics, 2D physics.
 This is a first year group project of a Saint Petersburg Higher School of Economics.
 
-### Install (Linux)
+### Install (Works on Ubuntu for sure)
 
-`$ ./ci/travis/install-linux.sh`  - installs dependencies \
+`$ ./ci/travis/install-linux.sh`  - installs dependencies, you may want to install them by yourself \
 `$ mkdir build && cd build` \
 `$ cmake .. -DCMAKE_CXX_COMPILER=g++-9` \
 `$ make -j4` or just make, if you have some time and don't want this process to disturb you
 
 
-### Create your project (in developing)
+### Create your project with gui
 
 `$ ./build/gui/ample-gui`
 
+### Run project with executor
 
-### Show demo
-
-`$ ./build/demo/demo`
+`$ ./build/engine/ample-engine`

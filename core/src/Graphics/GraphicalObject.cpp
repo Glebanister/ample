@@ -59,12 +59,12 @@ void GraphicalObject::translate(const glm::vec3 &vector) noexcept
 void GraphicalObject::setRotate(const glm::vec3 &axis, const float angle) noexcept
 {
     _rotated = glm::rotate(glm::radians(angle), axis);
-    _angle = angle; // TODO: not expected result
+    _angle = glm::radians(angle); // TODO: not expected result
 }
 void GraphicalObject::rotate(const glm::vec3 &axis, const float angle) noexcept
 {
     _rotated = glm::rotate(_rotated, glm::radians(angle), axis);
-    _angle += angle;
+    _angle += glm::radians(angle);
 }
 
 void GraphicalObject::setScale(const glm::vec3 &coef) noexcept

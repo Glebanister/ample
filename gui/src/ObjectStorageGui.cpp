@@ -17,37 +17,64 @@ ObjectStorageGui::ObjectStorageGui(std::shared_ptr<game::game2d::Game2dEditor> e
             for (auto &object : slice->objects())
             {
                 buildGuiAndAdd(object);
-                // TODO: texture
+                if (object->texture())
+                {
+                    if (!_guiByObjectName[object->texture()->name()])
+                    {
+                        buildGuiAndAdd(object->texture());
+                        _textures.push_back(object->texture());
+                    }
+                }
+                if (object->className() == "WorldObject2d" || object->className() == "GraphicalObject2d")
+                {
+                    auto doubleTextObject = std::dynamic_pointer_cast<graphics::GraphicalObject2d>(object);
+                    if (doubleTextObject->face().texture())
+                    {
+                        if (!_guiByObjectName[doubleTextObject->face().getTextureName()])
+                        {
+                            buildGuiAndAdd(doubleTextObject->face().texture());
+                            _textures.push_back(doubleTextObject->face().texture());
+                        }
+                    }
+                    if (doubleTextObject->side().texture())
+                    {
+                        if (!_guiByObjectName[doubleTextObject->side().getTextureName()])
+                        {
+                            buildGuiAndAdd(doubleTextObject->side().texture());
+                            _textures.push_back(doubleTextObject->side().texture());
+                        }
+                    }
+                }
             }
         }
-        //     for (auto &sm : level->stateMachines())
-        //     {
-        //         buildGuiAndAdd(sm);
-        //         std::unordered_map<std::string, bool> used;
-        //         std::function<void(std::shared_ptr<game::StateMachine::State>)> dfs =
-        //             [&](std::shared_ptr<game::StateMachine::State> curState) {
-        //                 ASSERT(curState);
-        //                 if (used[curState->name()])
-        //                     return;
-        //                 used[curState->name()] = true;
-        //                 for (const auto &transition : curState->transitions())
-        //                 {
-        //                     buildGuiAndAdd(transition);
-        //                     dfs(transition->getNextState());
-        //                 }
-        //                 buildGuiAndAdd(curState);
-        //                 auto actionAdder = [&](std::vector<std::shared_ptr<game::Action>> &actions) {
-        //                     std::for_each(actions.begin(), actions.end(),
-        //                                   [&](auto &act) {
-        //                                       buildGuiAndAdd(act);
-        //                                   });
-        //                 };
-        //                 actionAdder(curState->getOnStartActions());
-        //                 actionAdder(curState->getOnActiveActions());
-        //                 actionAdder(curState->getOnStopActions());
-        //             };
-        //         dfs(sm->getCurrentState());
-        //     }
+        for (auto &sm : level->stateMachines())
+        {
+            buildGuiAndAdd(sm);
+            std::unordered_map<std::string, bool> used;
+            std::function<void(std::shared_ptr<game::StateMachine::State>)> dfs =
+                [&](std::shared_ptr<game::StateMachine::State> curState) {
+                    ASSERT(curState);
+                    if (used[curState->name()])
+                        return;
+                    used[curState->name()] = true;
+                    for (const auto &transition : curState->transitions())
+                    {
+                        buildGuiAndAdd(transition);
+                        dfs(transition->getNextState());
+                    }
+                    buildGuiAndAdd(curState);
+                    auto actionAdder = [&](std::vector<std::shared_ptr<game::Action>> &actions) {
+                        std::for_each(actions.begin(), actions.end(),
+                                      [&](auto &act) {
+                                          buildGuiAndAdd(act);
+                                      });
+                    };
+                    actionAdder(curState->getOnStartActions());
+                    actionAdder(curState->getOnActiveActions());
+                    actionAdder(curState->getOnStopActions());
+                };
+            dfs(sm->getCurrentState());
+        }
     }
 }
 

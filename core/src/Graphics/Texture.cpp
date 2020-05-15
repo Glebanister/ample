@@ -1,3 +1,5 @@
+#define GL_GLEXT_PROTOTYPES 1
+
 #include <GL/glu.h>
 #include <algorithm>
 
@@ -118,8 +120,11 @@ Texture::GLSingleTexture::GLSingleTexture(PixelMap &pixels,
         format,
         GL_UNSIGNED_BYTE,
         pixels.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glGenerateMipmap(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, 0);
     exception::OpenGLException::handle();
 }

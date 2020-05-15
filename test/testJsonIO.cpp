@@ -62,7 +62,8 @@ TEST(StateMachineIO, Empty)
     auto run = std::make_shared<ample::game::StateMachine::State>(sm, "run");
     sm.setStartState(run);
     auto smData = sm.dump();
-    auto sameStateMachine = ample::game::StateMachine(ample::filing::JsonIO{smData}, ample::game::Namespace());
+    std::shared_ptr<ample::game::Namespace> names = std::make_shared<ample::game::Namespace>();
+    auto sameStateMachine = ample::game::StateMachine(ample::filing::JsonIO{smData}, names);
     auto sameData = sameStateMachine.dump();
     ASSERT_EQ(smData, sameData);
 }
@@ -78,7 +79,8 @@ TEST(StateMachineIO, WithOneTransition)
         idle,
         1000));
     auto smData = sm.dump();
-    auto sameStateMachine = ample::game::StateMachine(ample::filing::JsonIO{smData}, ample::game::Namespace());
+    std::shared_ptr<ample::game::Namespace> names = std::make_shared<ample::game::Namespace>();
+    auto sameStateMachine = ample::game::StateMachine(ample::filing::JsonIO{smData}, names);
     auto sameData = sameStateMachine.dump();
     ASSERT_EQ(smData, sameData);
 }
@@ -133,7 +135,8 @@ TEST(StateMachineIO, MultipleTransitions)
         s5,
         10000));
     auto smData = sm.dump();
-    auto sameStateMachine = ample::game::StateMachine(ample::filing::JsonIO{smData}, ample::game::Namespace());
+    std::shared_ptr<ample::game::Namespace> names = std::make_shared<ample::game::Namespace>();
+    auto sameStateMachine = ample::game::StateMachine(ample::filing::JsonIO{smData}, names);
     auto sameData = sameStateMachine.dump();
 
     ASSERT_EQ(smData, sameData);
@@ -166,7 +169,8 @@ TEST(StateMachineIO, Actions)
         ample::graphics::Vector3d<float>{1.0f, 0.0f, 0.0f},
         100.0f));
     auto smData = sm.dump();
-    auto sameStateMachine = ample::game::StateMachine(ample::filing::JsonIO{smData}, ample::game::Namespace());
+    std::shared_ptr<ample::game::Namespace> names = std::make_shared<ample::game::Namespace>();
+    auto sameStateMachine = ample::game::StateMachine(ample::filing::JsonIO{smData}, names);
     auto sameData = sameStateMachine.dump();
     ASSERT_EQ(smData, sameData);
 }

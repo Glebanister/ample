@@ -68,8 +68,8 @@ void setTextureModeSide(const std::string mode, graphics::Vector2d<float> &textu
     }
     else if (mode == "tile")
     {
-        textureRep.x = 1.0f;
-        textureRep.y = (size.x + size.y) * 2.0f / blockSize;
+        textureRep.y = 1.0f;
+        textureRep.x = (size.x + size.y) * 2.0f / blockSize;
     }
 }
 

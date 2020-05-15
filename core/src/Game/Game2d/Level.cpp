@@ -25,16 +25,20 @@ Level::Level(const std::string &name,
                                                                        1920.0 / 1080.0,
                                                                        0.1,
                                                                        1000.0)),
-      _editingMode(true)
+      _lamp(std::make_shared<graphics::light::LightSource>("lamp")),
+      _editingMode(true),
+      _levelNamespace(std::make_shared<Namespace>())
 {
 }
 
 Level::Level(const std::filesystem::path &path)
-    : NamedStoredObject(filing::openJSONfile(path / "settings.json"))
+    : NamedStoredObject(filing::openJSONfile(path / "settings.json")),
+      _lamp(std::make_shared<graphics::light::LightSource>("lamp")),
+      _levelNamespace(std::make_shared<Namespace>())
 {
     filing::JsonIO cameraSettings(filing::openJSONfile(path / "camera_settings.json"));
     _perspectiveCamera = std::make_shared<graphics::CameraPerspective>(cameraSettings);
-    _levelNamespace.addObject(_perspectiveCamera);
+    _levelNamespace->addObject(_perspectiveCamera);
 
     filing::JsonIO settings{filing::openJSONfile(path / "settings.json")};
     _sliceThikness = settings.read<float>("slice_thickness");
@@ -95,7 +99,7 @@ Level::Level(const std::filesystem::path &path)
     }
 }
 
-Namespace &Level::globalNamespace()
+std::shared_ptr<Namespace> Level::globalNamespace()
 {
     return _levelNamespace;
 }
@@ -170,6 +174,7 @@ void Level::onActive()
         return;
     }
     _perspectiveCamera->look();
+    _lamp->draw();
     for (auto &[_, slice] : _sliceByDistance)
     {
         utils::ignore(_);
@@ -178,11 +183,38 @@ void Level::onActive()
             obj->draw();
         }
     }
+    _lamp->setTranslate({_perspectiveCamera->getX(), _perspectiveCamera->getY(), _perspectiveCamera->getZ()});
+}
+
+graphics::Vector2d<float> Level::getGravity() const noexcept
+{
+    return _defaultGravity;
 }
 
 void Level::setGravity(const graphics::Vector2d<float> &gravity) noexcept
 {
     _defaultGravity = gravity;
+}
+
+float Level::getPhysicsLayerPos() const noexcept
+{
+    return _physicsLayerPosition;
+}
+
+void Level::setPhysicsLayerPos(float pos) noexcept
+{
+    ASSERT(0.0f <= pos && pos <= 1.0f);
+    _physicsLayerPosition = pos;
+}
+
+float Level::getThickness() const noexcept
+{
+    return _sliceThikness;
+}
+
+void Level::setThickness(float thickness) noexcept
+{
+    _sliceThikness = thickness;
 }
 
 std::shared_ptr<filing::Scene2d> Level::createSlice(const size_t num, const std::string &name)

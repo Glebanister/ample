@@ -104,6 +104,7 @@ void ample::physics::WorldLayer2d::addWorldObject(std::shared_ptr<ample::physics
     obj->_body = world.CreateBody(&obj->_bodyDef);
     obj->setMassData({obj->_startMass, obj->_startCenter, obj->_startInertia});
     obj->_body->SetUserData(obj.get());
+    obj->addFixture(obj->face().shape());
 }
 
 b2Joint *WorldLayer2d::addWorldJoint(std::shared_ptr<WorldJoint2d> joint, b2JointDef *jointDef)

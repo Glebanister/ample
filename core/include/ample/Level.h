@@ -13,6 +13,7 @@
 #include "StoredObject.h"
 #include "Vector2d.h"
 #include "WorldLayer2d.h"
+#include "LightSource.h"
 
 /*
 class Level
@@ -56,9 +57,16 @@ public:
     std::unordered_map<size_t, std::shared_ptr<filing::Scene2d>> &layers() noexcept;
     std::vector<std::shared_ptr<StateMachine>> stateMachines() noexcept;
 
+    graphics::Vector2d<float> getGravity() const noexcept;
     void setGravity(const graphics::Vector2d<float> &gravity) noexcept;
 
-    Namespace &globalNamespace();
+    float getPhysicsLayerPos() const noexcept;
+    void setPhysicsLayerPos(float) noexcept;
+
+    float getThickness() const noexcept;
+    void setThickness(float) noexcept;
+
+    std::shared_ptr<Namespace> globalNamespace();
 
 private:
     float _sliceThikness;
@@ -66,8 +74,9 @@ private:
     graphics::Vector2d<float> _defaultGravity;
     std::unordered_map<size_t, std::shared_ptr<filing::Scene2d>> _sliceByDistance;
     std::shared_ptr<graphics::CameraPerspective> _perspectiveCamera;
+    std::shared_ptr<graphics::light::LightSource> _lamp;
     std::vector<std::shared_ptr<StateMachine>> _stateMachines;
     bool _editingMode = false;
-    Namespace _levelNamespace;
+    std::shared_ptr<Namespace> _levelNamespace;
 };
 } // namespace ample::game::game2d
