@@ -76,6 +76,9 @@ void NamedObjectSelector(const std::string &label, std::shared_ptr<T> &object, c
 template <typename T>
 void NamedObjectSelector(const std::string &label, std::shared_ptr<T> &object, const std::unordered_map<size_t, std::shared_ptr<T>> &list);
 
+template <typename T>
+void NamedObjectSelector(const std::string &label, std::shared_ptr<T> &object, const std::unordered_map<std::string, std::shared_ptr<T>> &list);
+
 inline void StringSelector(const std::string &label, std::string &string, const std::vector<std::string> &list)
 {
     if (ImGui::Button(label.c_str()))

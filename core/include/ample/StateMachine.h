@@ -43,12 +43,12 @@ public:
         State(StateMachine &machine, const std::string &name, const std::string &className = "State");
         State(const filing::JsonIO &input,
               StateMachine &machine,
-              const game::Namespace &globalNamespace);
+              std::shared_ptr<game::Namespace> globalNamespace);
         State(const filing::JsonIO &input,
               StateMachine &machine);
 
-        void fillActionsNamespace(const game::Namespace &globalNamespace);
-        void fillTransitionsNamespace(const game::Namespace &globalNamespace);
+        void fillActionsNamespace(std::shared_ptr<game::Namespace> globalNamespace);
+        void fillTransitionsNamespace(std::shared_ptr<game::Namespace> globalNamespace);
 
         void onStart() override;
         void onActive() override;
@@ -63,6 +63,8 @@ public:
         void addOnStartAction(std::shared_ptr<Action>) noexcept;
         void addOnActiveAction(std::shared_ptr<Action>) noexcept;
         void addOnStopAction(std::shared_ptr<Action>) noexcept;
+
+        StateMachine &getStateMachine() noexcept;
 
         std::vector<std::shared_ptr<Action>> &getOnStartActions() noexcept;
         std::vector<std::shared_ptr<Action>> &getOnActiveActions() noexcept;
@@ -82,7 +84,7 @@ public:
 
 public:
     StateMachine(const std::string &name, const std::string &className = "StateMachine");
-    StateMachine(const filing::JsonIO &input, const game::Namespace &globalNamespace);
+    StateMachine(const filing::JsonIO &input, std::shared_ptr<game::Namespace> globalNamespace);
     void setStartState(std::shared_ptr<State> state);
     void setCurrentState(std::shared_ptr<State> state);
     std::shared_ptr<State> getCurrentState() const noexcept;

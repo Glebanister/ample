@@ -55,6 +55,7 @@ set(SOURCES
     src/objects/WorldObjectGui.cpp
     src/objects/TextureGui.cpp
     src/objects/TimerTransitionGui.cpp
+    src/objects/CollisionTransitionGui.cpp
     src/objects/StateGui.cpp
     src/objects/ActionGui.cpp
     src/objects/TransitionGui.cpp

@@ -27,6 +27,8 @@ public:
     float getAngle() const noexcept;
     void setAngle(float) noexcept;
 
+    void onActive() override;
+
 private:
     graphics::Vector3d<float> _axis;
     float _angle;

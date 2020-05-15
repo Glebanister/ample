@@ -1,4 +1,7 @@
+#include <imgui.h>
+
 #include "objects/ActionGui.h"
+#include "Utils.h"
 
 namespace ample::gui
 {
@@ -11,6 +14,16 @@ ActionGui::ActionGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectS
     : _game2dEditor(editor),
       _objectStorageGui(storage)
 {
+}
+
+void ActionGui::onEdit()
+{
+    gui_utils::NamedObjectSelector("Add object to action", _selectedObjectToAdd, _baseActionPointer->getNamespacePointer()->getAllNames());
+}
+
+void ActionGui::onSubmitEdit()
+{
+    _baseActionPointer->addObjectName(_selectedObjectToAdd->name());
 }
 
 std::shared_ptr<game::Action> ActionGui::getAction()

@@ -38,6 +38,7 @@ void GraphicalRotateActionGui::onSubmitCreate()
 
 void GraphicalRotateActionGui::onEdit()
 {
+    ActionGui::onEdit();
     gui_utils::InputScalar("Axis x", axis.x, 1.0f);
     gui_utils::InputScalar("Axis y", axis.y, 1.0f);
     gui_utils::InputScalar("Axis z", axis.z, 1.0f);
@@ -46,6 +47,7 @@ void GraphicalRotateActionGui::onEdit()
 
 void GraphicalRotateActionGui::onSubmitEdit()
 {
+    ActionGui::onSubmitEdit();
     _rotateAction->setAngle(angle);
     _rotateAction->setAxis(axis);
 }

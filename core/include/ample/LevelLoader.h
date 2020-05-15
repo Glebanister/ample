@@ -32,6 +32,7 @@ public:
     void onStop();
 
     std::string levelName() const noexcept;
+    game2d::Level &level();
 
 private:
     const std::filesystem::path _levelPath;

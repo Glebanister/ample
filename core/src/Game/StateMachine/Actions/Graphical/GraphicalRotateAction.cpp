@@ -8,20 +8,16 @@ GraphicalRotateAction::GraphicalRotateAction(const std::string &name,
                                              float angle)
     : GraphicalAction(name,
                       "GraphicalRotateAction",
-                      bodyNames,
-                      [axis, angle](std::shared_ptr<graphics::GraphicalObject> obj) {
-                          obj->rotate({axis.x, axis.y, axis.z}, angle);
-                      }),
+                      bodyNames),
       _axis(axis),
       _angle(angle)
 {
 }
 
 GraphicalRotateAction::GraphicalRotateAction(const filing::JsonIO &input)
-    : GraphicalRotateAction(input.read<std::string>("name"),
-                            input.read<std::vector<std::string>>("body_names"),
-                            input.read<graphics::Vector3d<float>>("axis"),
-                            input.read<float>("angle"))
+    : GraphicalAction(input),
+      _axis(input.read<graphics::Vector3d<float>>("axis")),
+      _angle(input.read<float>("angle"))
 {
 }
 
@@ -42,6 +38,15 @@ float GraphicalRotateAction::getAngle() const noexcept
 void GraphicalRotateAction::setAngle(float angle) noexcept
 {
     _angle = angle;
+}
+
+void GraphicalRotateAction::onActive()
+{
+    GraphicalAction::onActive();
+    for (auto &obj : bodyPointers())
+    {
+        obj->rotate({_axis.x, _axis.y, _axis.z}, _angle);
+    }
 }
 
 std::string GraphicalRotateAction::dump()

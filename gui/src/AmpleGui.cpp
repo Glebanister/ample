@@ -239,6 +239,7 @@ void AmpleGui::Workspace()
     {
         _objectsGui->inspector();
     }
+    if (ImGui::CollapsingHeader("Texture viewer", NULL, ImGuiTreeNodeFlags_DefaultOpen))
     {
         _objectsGui->texturesViewer();
     }
