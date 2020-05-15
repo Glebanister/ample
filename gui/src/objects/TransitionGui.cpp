@@ -48,6 +48,22 @@ void TransitionGui::onCreate()
     }
 }
 
+void TransitionGui::onEdit()
+{
+    ImGui::InputText("Attach object", attachedObjectName, 255);
+}
+
+void TransitionGui::onSubmitEdit()
+{
+    if (attachedObjectName[0])
+    {
+        if (!_baseTransition->getNamespace().getObject(attachedObjectName))
+        {
+            throw game::GameException("Could not find object in namespace with name" + static_cast<std::string>(attachedObjectName));
+        }
+    }
+}
+
 void TransitionGui::presetNextState(std::shared_ptr<game::StateMachine::State> nextState) noexcept
 {
     _nextState = nextState;

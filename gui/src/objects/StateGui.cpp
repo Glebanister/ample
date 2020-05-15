@@ -1,5 +1,5 @@
-#include <imnodes.h>
 #include <imgui.h>
+#include <imnodes.h>
 
 #include "Utils.h"
 #include "objects/StateGui.h"
@@ -56,6 +56,7 @@ void StateGui::onEdit()
                 _objectStorageGui->create(trId.finalClass, false, [&](std::shared_ptr<ObjectGui> gui) {
                     auto actionGui = std::dynamic_pointer_cast<ActionGui>(gui);
                     _state->addOnStartAction(actionGui->getAction());
+                    actionGui->getAction()->getNamespacePointer()->setParentalNamespace(_state->getStateMachine().getNamespacePointer());
                 });
             }
         }
@@ -74,6 +75,7 @@ void StateGui::onEdit()
                 _objectStorageGui->create(trId.finalClass, false, [&](std::shared_ptr<ObjectGui> gui) {
                     auto actionGui = std::dynamic_pointer_cast<ActionGui>(gui);
                     _state->addOnActiveAction(actionGui->getAction());
+                    actionGui->getAction()->getNamespacePointer()->setParentalNamespace(_state->getStateMachine().getNamespacePointer());
                 });
             }
         }
@@ -92,6 +94,7 @@ void StateGui::onEdit()
                 _objectStorageGui->create(trId.finalClass, false, [&](std::shared_ptr<ObjectGui> gui) {
                     auto actionGui = std::dynamic_pointer_cast<ActionGui>(gui);
                     _state->addOnStopAction(actionGui->getAction());
+                    actionGui->getAction()->getNamespacePointer()->setParentalNamespace(_state->getStateMachine().getNamespacePointer());
                 });
             }
         }

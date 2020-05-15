@@ -20,6 +20,15 @@ LevelLoader::LevelLoader(const std::filesystem::path &projectPath,
 {
 }
 
+game2d::Level &LevelLoader::level()
+{
+    if (!_level)
+    {
+        throw GameException("level is not loaded");
+    }
+    return *_level;
+}
+
 std::string LevelLoader::levelName() const noexcept
 {
     return _levelName;

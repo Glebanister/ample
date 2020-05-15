@@ -7,6 +7,7 @@
 #include "LayeredWindowActivity.h"
 #include "Level.h"
 #include "LevelSwitcher.h"
+#include "LightSource.h"
 
 /*
 */
@@ -25,7 +26,10 @@ public:
            const uint32_t &modeFlags,
            const std::filesystem::path &path);
 
+    void onActive() override;
+
 private:
     std::shared_ptr<LevelSwitcher> _levelSwitchingController;
+    graphics::GraphicalObject _skybox;
 };
 } // namespace ample::game::game2d

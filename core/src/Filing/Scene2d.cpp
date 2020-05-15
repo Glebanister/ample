@@ -29,10 +29,10 @@ Scene2d::Scene2d(const std::string &name,
 }
 
 Scene2d::Scene2d(const JsonIO &input,
-                 game::Namespace &globalNamespace)
+                 std::shared_ptr<game::Namespace> globalNamespace)
     : Scene2d(input.read<std::string>("name"),
               input.read<graphics::Vector2d<float>>("gravity"),
-              input.read<float>("z"),
+              input.read<float>("z_position"),
               input.read<float>("thickness"),
               input.read<float>("relative_position_in_slice"))
 {
@@ -48,7 +48,7 @@ Scene2d::Scene2d(const JsonIO &input,
                                                           objString,
                                                           *this);
             addWorldObject(object);
-            globalNamespace.addObject(object);
+            globalNamespace->addObject(object);
         }
         else
         {
@@ -56,7 +56,7 @@ Scene2d::Scene2d(const JsonIO &input,
                 game::factory::GraphicalObjecsFactory.produce(objectClass,
                                                               objString);
             addObject(object);
-            globalNamespace.addObject(object);
+            globalNamespace->addObject(object);
         }
         // addWorldJoint(); // TODO
     }
@@ -65,7 +65,7 @@ Scene2d::Scene2d(const JsonIO &input,
         std::string cameraType = JsonIO(cameraString).read<std::string>("class_name");
         std::shared_ptr<graphics::Camera> camera = game::factory::CamerasFactory.produce(cameraType, cameraString);
         addCamera(camera);
-        globalNamespace.addObject(camera);
+        globalNamespace->addObject(camera);
     }
 }
 
@@ -84,7 +84,7 @@ std::string Scene2d::dump()
     }
     JsonIO output{NamedStoredObject::dump()};
     output.write<graphics::Vector2d<float>>("gravity", _gravity);
-    output.write<float>("z", _zPosition);
+    output.write<float>("z_position", _zPosition);
     output.write<float>("thickness", _sceneThickness);
     output.write<float>("relative_position_in_slice", _relativeSlicePosition);
     return filing::mergeStrings({

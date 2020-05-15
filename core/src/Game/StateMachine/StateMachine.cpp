@@ -64,6 +64,11 @@ std::vector<std::shared_ptr<StateMachine::Transition>> &StateMachine::State::tra
     return _transitions;
 }
 
+StateMachine &StateMachine::State::getStateMachine() noexcept
+{
+    return _machine;
+}
+
 void StateMachine::State::onStart()
 {
     activity::Behavior::onStart();
@@ -128,10 +133,11 @@ void StateMachine::State::dumpRecursive(std::vector<std::string> &strings,
 
 StateMachine::State::State(const filing::JsonIO &input,
                            StateMachine &machine,
-                           const game::Namespace &globalNamespace)
+                           std::shared_ptr<game::Namespace> globalNamespace)
     : State(input, machine)
 {
     fillActionsNamespace(globalNamespace);
+    fillTransitionsNamespace(globalNamespace);
 }
 
 StateMachine::State::State(const filing::JsonIO &input,
@@ -159,27 +165,27 @@ StateMachine::State::State(const filing::JsonIO &input,
     }
 }
 
-void StateMachine::State::fillActionsNamespace(const game::Namespace &globalNamespace)
+void StateMachine::State::fillActionsNamespace(std::shared_ptr<game::Namespace> globalNamespace)
 {
     for (auto &action : _onStartActions)
     {
-        action->fillNamespace(_namespace, globalNamespace);
+        action->setNamespace(globalNamespace);
     }
     for (auto &action : _onActiveActions)
     {
-        action->fillNamespace(_namespace, globalNamespace);
+        action->setNamespace(globalNamespace);
     }
     for (auto &action : _onStopActions)
     {
-        action->fillNamespace(_namespace, globalNamespace);
+        action->setNamespace(globalNamespace);
     }
 }
 
-void StateMachine::State::fillTransitionsNamespace(const game::Namespace &globalNamespace)
+void StateMachine::State::fillTransitionsNamespace(std::shared_ptr<game::Namespace> globalNamespace)
 {
     for (auto &transition : _transitions)
     {
-        transition->fillNamespace(_namespace, globalNamespace);
+        transition->setNamespace(globalNamespace);
     }
 }
 
@@ -287,7 +293,7 @@ StateMachine::StateMachine(const std::string &name, const std::string &className
     : NamedStoredObject(name, className) {}
 
 StateMachine::StateMachine(const filing::JsonIO &input,
-                           const game::Namespace &globalNamespace) // TODO: implement immediate mode states loading
+                           std::shared_ptr<game::Namespace> globalNamespace) // TODO: implement immediate mode states loading
     : NamedStoredObject(input)
 {
     auto stateStrings = filing::loadObjectsVector(input.updateJsonIO("states"));
@@ -295,11 +301,8 @@ StateMachine::StateMachine(const filing::JsonIO &input,
     std::unordered_map<std::string, std::shared_ptr<State>> statesMap;
     for (const filing::JsonIO &string : stateStrings)
     {
-        std::shared_ptr<State> newState = factory::StateFactory.produce(string.read<std::string>("class_name"),
-                                                                        string,
-                                                                        *this,
-                                                                        globalNamespace);
-        newState->fillNamespace(_namespace, globalNamespace);
+        std::shared_ptr<State> newState = std::make_shared<StateMachine::State>(string, *this, globalNamespace);
+        newState->setNamespace(globalNamespace);
         if (newState->name() == startStateName)
         {
             setStartState(newState);
@@ -319,7 +322,7 @@ StateMachine::StateMachine(const filing::JsonIO &input,
                     transitionClass,
                     transitionData.getJSONstring(),
                     nextState));
-            currentState->_transitions.back()->fillNamespace(currentState->_namespace, globalNamespace);
+            currentState->_transitions.back()->setNamespace(globalNamespace);
         }
     }
 

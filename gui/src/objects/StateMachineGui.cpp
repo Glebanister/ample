@@ -80,6 +80,22 @@ StateMachineGui::StateMachineGui(std::shared_ptr<filing::NamedObject> sm, std::s
       _statesList(game::getStatesList(*_stateMachine)),
       _startState(_stateMachine->getCurrentState())
 {
+    for (auto &level : _game2dEditor->getLevelsList())
+    {
+        for (auto &stateMachine : level->stateMachines())
+        {
+            if (stateMachine->name() == sm->name())
+            {
+                selectedLevel = level;
+                break;
+            }
+        }
+    }
+    ASSERT(selectedLevel);
+    for (const auto state : game::getStatesList(*_stateMachine))
+    {
+        _statesList.push_back(state);
+    }
 }
 
 StateMachineGui::StateMachineGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *storage)
@@ -110,6 +126,36 @@ void StateMachineGui::onSubmitCreate()
 
 void StateMachineGui::onEdit()
 {
+    if (ImGui::Button("Bind object"))
+    {
+        ImGui::OpenPopup("Bind object to State Machine");
+    }
+    if (ImGui::BeginPopupModal("Bind object to State Machine"))
+    {
+        ASSERT(selectedLevel);
+        bool selected = false;
+        for (auto &[id, scene] : selectedLevel->layers())
+        {
+            if (ImGui::TreeNode(scene->name().c_str()))
+            {
+                for (auto &obj : scene->objects())
+                {
+                    if (ImGui::Selectable(obj->name().c_str()))
+                    {
+                        _stateMachine->getNamespace().addObject(obj);
+                        selected = true;
+                    }
+                }
+                ImGui::TreePop();
+            }
+        }
+
+        if (ImGui::Button("Close") || selected)
+        {
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
 }
 
 void StateMachineGui::onSubmitEdit()
@@ -216,6 +262,7 @@ void StateMachineGui::onView()
             auto tr = std::dynamic_pointer_cast<TransitionGui>(gui)->getBaseTransition();
             _statesList[stateIdFrom]->addTransition(tr);
             _links.emplace_back(idFrom, idTo);
+            tr->getNamespace().setParentalNamespace(_stateMachine->getNamespacePointer());
         });
         auto newTrGui = std::dynamic_pointer_cast<TransitionGui>(_objectStorageGui->getOnInputGui());
         newTrGui->presetNextState(_statesList[stateIdTo]);

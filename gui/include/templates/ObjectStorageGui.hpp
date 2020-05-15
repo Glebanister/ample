@@ -78,7 +78,7 @@ std::shared_ptr<ObjectGui> ObjectStorageGui::buildGuiAndAdd(std::shared_ptr<T> o
 {
     ASSERT(classIdByClassName.find(object->className()) != classIdByClassName.end());
     std::shared_ptr<ObjectGui> objectGui = buildGui(classIdByClassName[object->className()].finalClass, object, _game2dEditor, this);
-    _guiByObjectName.emplace(object->name(), objectGui);
+    _guiByObjectName[object->name()] = objectGui;
     return objectGui;
 }
 } // namespace ample::gui

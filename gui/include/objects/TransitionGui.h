@@ -17,6 +17,8 @@ public:
     TransitionGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *);
 
     void onCreate() override;
+    void onEdit() override;
+    void onSubmitEdit() override;
 
     void presetStateMachine(std::shared_ptr<game::StateMachine>) noexcept;
     void presetNextState(std::shared_ptr<game::StateMachine::State>) noexcept;
@@ -34,6 +36,9 @@ protected:
     bool _levelPresetted = false;
     bool _stateMachinePresetted = false;
     bool _nextStatePresetted = false;
+
+private:
+    char attachedObjectName[255] = {0};
     
 };
 } // namespace ample::gui

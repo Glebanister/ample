@@ -19,9 +19,14 @@ public:
 
     std::shared_ptr<game::Action> getAction();
 
+    void onEdit() override;
+    void onSubmitEdit() override;
+
 protected:
     std::shared_ptr<game::game2d::Game2dEditor> _game2dEditor;
     ObjectStorageGui *_objectStorageGui;
     std::shared_ptr<game::Action> _baseActionPointer;
+
+    char attachedObjectName[255] = {0};
 };
 } // namespace ample::gui

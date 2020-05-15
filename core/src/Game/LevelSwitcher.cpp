@@ -7,7 +7,7 @@
 namespace ample::game
 {
 LevelSwitcher::LevelSwitcher()
-    : StateMachine("level_swithcer") {}
+    : StateMachine("level_swithcer", "LevelSwitcher") {}
 
 LevelSwitcher::LevelSwitcher(const std::filesystem::path &projectPath)
     : LevelSwitcher()

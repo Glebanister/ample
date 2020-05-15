@@ -13,9 +13,8 @@ ObjectGroupAction<T>::ObjectGroupAction(const std::string &name,
 
 template <typename T>
 ObjectGroupAction<T>::ObjectGroupAction(const filing::JsonIO &input)
-    : ObjectGroupAction(input.read<std::string>("name"),
-                        input.read<std::string>("class_name"),
-                        input.read<std::vector<std::string>>("body_names"))
+    : Action(input),
+      _bodyNames(input.read<std::vector<std::string>>("body_names"))
 {
 }
 
@@ -30,13 +29,25 @@ void ObjectGroupAction<T>::updateObjectPointers()
 }
 
 template <typename T>
+std::vector<std::shared_ptr<T>> &ObjectGroupAction<T>::bodyPointers() noexcept
+{
+    return _bodyPointers;
+}
+
+template <typename T>
+std::vector<std::string> &ObjectGroupAction<T>::bodyNames() noexcept
+{
+    return _bodyNames;
+}
+
+template <typename T>
 void ObjectGroupAction<T>::addObjectName(const std::string &name) noexcept
 {
     _bodyNames.push_back(name);
 }
 
 template <typename T>
-void ObjectGroupAction<T>::onAwake()
+void ObjectGroupAction<T>::onActive() // TODO: move away from onActive!
 {
     updateObjectPointers();
     _pointersInitialized = true;

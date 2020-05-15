@@ -19,16 +19,19 @@ public:
 
     void addObjectName(const std::string &name) noexcept;
 
-    void onAwake() override;
+    std::vector<std::shared_ptr<T>> &bodyPointers() noexcept;
+    std::vector<std::string> &bodyNames() noexcept;
+
+    void onActive() override;
 
 protected:
     std::vector<std::string> _bodyNames;
     std::vector<std::shared_ptr<T>> _bodyPointers;
+    void updateObjectPointers();
 
 private:
-    void updateObjectPointers();
     std::shared_ptr<T> getObjectPointer(const std::string &name);
-    bool _pointersInitialized;
+    bool _pointersInitialized = false;
 };
 } // namespace ample::game::stateMachine::actions
 
