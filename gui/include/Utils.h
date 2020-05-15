@@ -8,6 +8,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include "ample/EventManager.h"
+
 namespace ample::gui
 {
 enum class finalObjectClass;
@@ -69,6 +71,9 @@ inline void CloseCurrentPopupOnSuccessButton(bool &success)
         ImGui::CloseCurrentPopup();
     }
 }
+
+void inputKeysym(const std::string &label, control::keysym &key);
+
 template <typename T>
 void InputScalar(const std::string &label, T &value, T step);
 
@@ -152,6 +157,7 @@ private:
     bool _isOpened = false;
     bool _has = false;
     ClassInfo _result;
+    int choosenId = 0;
 };
 } // namespace ample::gui::gui_utils
 

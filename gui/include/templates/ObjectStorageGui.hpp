@@ -16,6 +16,7 @@
 #include "objects/StateMachineGui.h"
 #include "objects/TextureGui.h"
 #include "objects/TimerTransitionGui.h"
+#include "objects/KeyboardTransitionGui.h"
 #include "objects/WorldObjectGui.h"
 
 namespace ample::gui
@@ -33,6 +34,7 @@ class TimerTransitionGui;
 class GraphicalRotateActionGui;
 class StateGui;
 class ActionGui;
+class KeyboardTransitionGui;
 } // namespace ample::gui
 
 namespace ample::gui
@@ -63,6 +65,9 @@ inline std::unique_ptr<ObjectGui> ObjectStorageGui::buildGui(finalObjectClass ob
         break;
     case finalObjectClass::TIMER_TRANSITION:
         result = std::make_unique<TimerTransitionGui>(args...);
+        break;
+    case finalObjectClass::KEYBOARD_TRANSITION:
+        result = std::make_unique<KeyboardTransitionGui>(args...);
         break;
     case finalObjectClass::GRAPHICAL_ROTATE_ACTION:
         result = std::make_unique<GraphicalRotateActionGui>(args...);

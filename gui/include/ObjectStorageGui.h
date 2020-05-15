@@ -29,6 +29,7 @@ enum class finalObjectClass
     STATE,
     TEXTURE,
     TIMER_TRANSITION,
+    KEYBOARD_TRANSITION,
     GRAPHICAL_ROTATE_ACTION,
 };
 
@@ -40,6 +41,7 @@ static std::map<std::string, ClassInfo> classIdByClassName{
     {"State", {finalObjectClass::STATE, false}},
     {"Texture", {finalObjectClass::TEXTURE}},
     {"TimerTransition", {finalObjectClass::TIMER_TRANSITION, false, "Transition"}},
+    {"KeyboardTransition", {finalObjectClass::KEYBOARD_TRANSITION, false, "Transition"}},
     {"GraphicalRotateAction", {finalObjectClass::GRAPHICAL_ROTATE_ACTION, false, "Action"}},
 };
 

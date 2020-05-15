@@ -15,7 +15,6 @@ void ClassSelector::drawInterface()
     if (ImGui::BeginPopupModal(_title.c_str(), NULL, ImGuiWindowFlags_AlwaysAutoResize))
     {
         int curId = 0;
-        int choosenId = 0;
         for (const auto &[name, type] : classIdByClassName)
         {
             if (type.parentClass == _parentClassName)
@@ -69,5 +68,10 @@ ClassInfo ClassSelector::popResult()
     _result = {};
     _has = false;
     return res;
+}
+
+void inputKeysym(const std::string &label, control::keysym &key)
+{
+    ImGui::InputScalar(label.c_str(), ImGuiDataType_S16, &key);
 }
 } // namespace ample::gui::gui_utils
