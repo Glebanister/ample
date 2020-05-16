@@ -17,28 +17,6 @@ ActionGui::ActionGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectS
 {
 }
 
-void ActionGui::onInspect()
-{
-    ImGui::Text("Operating objects");
-    for (const auto &objName : _baseActionPointer->bodyNames())
-    {
-        if (ImGui::Selectable(objName.c_str()))
-        {
-            _objectStorageGui->setFocus(objName);
-        }
-    }
-}
-
-void ActionGui::onEdit()
-{
-    gui_utils::NamedObjectSelector("Add object to action", _selectedObjectToAdd, _baseActionPointer->getNamespacePointer()->getAllNames());
-}
-
-void ActionGui::onSubmitEdit()
-{
-    _baseActionPointer->addObjectName(_selectedObjectToAdd->name());
-}
-
 std::shared_ptr<game::Action> ActionGui::getAction()
 {
     return _baseActionPointer;

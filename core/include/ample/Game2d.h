@@ -30,6 +30,5 @@ public:
 
 private:
     std::shared_ptr<LevelSwitcher> _levelSwitchingController;
-    graphics::GraphicalObject _skybox;
 };
 } // namespace ample::game::game2d
