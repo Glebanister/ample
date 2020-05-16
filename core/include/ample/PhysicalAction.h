@@ -2,16 +2,17 @@
 
 #include "ObjectGroupAction.h"
 #include "WorldObject2d.h"
+#include <functional>
+#include <memory>
 
 namespace ample::game::stateMachine::actions
 {
-template <class Function>
-class PhysicalAction : public ObjectGroupAction<graphics::GraphicalObject>
+class PhysicalAction : public ObjectGroupAction<physics::WorldObject2d>
 {
 public:
-    using ObjectGroupAction<graphics::GraphicalObject>::ObjectGroupAction;
-    void onActive() override;
+    PhysicalAction(const std::string &name,
+                   const std::string &className,
+                   const std::vector<std::string> &bodyNames);
+    PhysicalAction(const filing::JsonIO &input);
 };
 } // namespace ample::game::stateMachine::actions
-
-#include "templates/PhysicalAction.hpp"
