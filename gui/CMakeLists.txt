@@ -62,6 +62,7 @@ set(SOURCES
     src/objects/ActionGui.cpp
     src/objects/TransitionGui.cpp
     src/objects/GraphicalRotateActionGui.cpp
+    src/objects/PhysicalApplyForceActionGui.cpp
     )
 
 add_executable(ample-gui ${SOURCES} ${IMGUI_SOURCES})

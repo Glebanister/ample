@@ -104,6 +104,7 @@ void StateGui::onInspect()
                 ImGui::TreeNode(actGui->name().c_str()))
             {
                 _objectStorageGui->inspectSingleItem(actGui);
+                ImGui::TreePop();
             }
         }
     };

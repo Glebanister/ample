@@ -31,6 +31,7 @@ enum class finalObjectClass
     TIMER_TRANSITION,
     KEYBOARD_TRANSITION,
     GRAPHICAL_ROTATE_ACTION,
+    PHYSICAL_APPLY_FORCE_ACTION,
 };
 
 static std::map<std::string, ClassInfo> classIdByClassName{
@@ -43,6 +44,7 @@ static std::map<std::string, ClassInfo> classIdByClassName{
     {"TimerTransition", {finalObjectClass::TIMER_TRANSITION, false, "Transition"}},
     {"KeyboardTransition", {finalObjectClass::KEYBOARD_TRANSITION, false, "Transition"}},
     {"GraphicalRotateAction", {finalObjectClass::GRAPHICAL_ROTATE_ACTION, false, "Action"}},
+    {"PhysicalApplyForceAction", {finalObjectClass::PHYSICAL_APPLY_FORCE_ACTION, false, "Action"}},
 };
 
 class ObjectStorageGui

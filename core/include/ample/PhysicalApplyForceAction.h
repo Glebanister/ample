@@ -6,6 +6,7 @@ namespace ample::game::stateMachine::actions
 {
 class PhysicalApplyForceAction : public PhysicalAction
 {
+public:
     PhysicalApplyForceAction(const std::string &name,
                              const std::vector<std::string> &bodyNames,
                              const graphics::Vector2d<float> &force,

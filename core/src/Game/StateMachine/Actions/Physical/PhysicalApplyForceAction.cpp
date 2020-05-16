@@ -64,7 +64,7 @@ void PhysicalApplyForceAction::onActive()
     PhysicalAction::onActive();
     for (auto &obj : bodyPointers())
     {
-        obj->applyForce(_force, _point, _awake);
+        obj->applyForceToCenter(_force, _awake); // TODO: stub, should be applyForce
     }
 }
 } // namespace ample::game::stateMachine::actions
