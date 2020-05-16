@@ -33,6 +33,7 @@ enum class finalObjectClass
     GRAPHICAL_ROTATE_ACTION,
     PHYSICAL_APPLY_FORCE_ACTION,
     FOLLOW_OBJECT_ACTION,
+    CAMERA_TRANSLATE_ACTION,
 };
 
 static std::map<std::string, ClassInfo> classIdByClassName{
@@ -48,6 +49,7 @@ static std::map<std::string, ClassInfo> classIdByClassName{
     {"PhysicalApplyForceAction", {finalObjectClass::PHYSICAL_APPLY_FORCE_ACTION, false, "Action"}},
     {"PhysicalApplyForceAction", {finalObjectClass::PHYSICAL_APPLY_FORCE_ACTION, false, "Action"}},
     {"FollowObjectAction", {finalObjectClass::FOLLOW_OBJECT_ACTION, false, "Action"}},
+    {"CameraTranslateAction", {finalObjectClass::CAMERA_TRANSLATE_ACTION, false, "Action"}},
 };
 
 class ObjectStorageGui
