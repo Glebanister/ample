@@ -26,6 +26,13 @@ KeyboardTransitionGui::KeyboardTransitionGui(std::shared_ptr<filing::NamedObject
 {
     pressType = _transition->getPressType();
     keycode = _transition->getKey();
+    for (const auto [name, sym] : gui_utils::keysymByName)
+    {
+        if (sym == static_cast<control::KeyboardManager::scancodes>(keycode))
+        {
+            key = name;
+        }
+    }
     pressTypeString = typeNameById[pressType];
 }
 

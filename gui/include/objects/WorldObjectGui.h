@@ -31,6 +31,8 @@ public:
     std::string name() const override;
     std::string className() const override;
 
+    void setLevel(std::shared_ptr<game::game2d::Level> level);
+
 private:
     std::shared_ptr<game::game2d::Game2dEditor> _game2dEditor;
     ObjectStorageGui *_objectStorageGui;
@@ -68,8 +70,9 @@ private:
     float gravityScale = 1.0f;
     graphics::Vector2d<float> center = {0.0f, 0.0f};
     float mass = 0.0f;
-    float inertia = 0.0f;
+    float inertia = 1.0f;
     std::shared_ptr<graphics::Texture> _faceTexture = nullptr;
     std::shared_ptr<graphics::Texture> _sideTexture = nullptr;
+    std::string faceTextureSizeInput = "auto";
 };
 } // namespace ample::gui

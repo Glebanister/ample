@@ -53,6 +53,11 @@ void setTextureModeFace(const std::string mode, graphics::Vector2d<float> &textu
         textureRep.x = 1.0f;
         textureRep.y = 1.0f;
     }
+    else if (mode == "tile x")
+    {
+        textureRep.x = size.x / blockSize;
+        textureRep.y = 1.0f;
+    }
     else if (mode == "tile")
     {
         textureRep.x = size.x / blockSize;
@@ -69,8 +74,8 @@ void setTextureModeSide(const std::string mode, graphics::Vector2d<float> &textu
     }
     else if (mode == "tile")
     {
-        textureRep.y = 1.0f;
-        textureRep.x = (size.x + size.y) * 2.0f / blockSize;
+        textureRep.x = 1.0f;
+        textureRep.y = (size.x + size.y) * 2.0f / blockSize;
     }
 }
 
@@ -93,13 +98,20 @@ void WorldObjectGui::onCreate()
         gui_utils::InputScalar("Radius", radius, 1.0f);
         gui_utils::InputScalar("N verts", nVert, 1U, 0U, 8U);
     }
-
     gui_utils::InputScalar("Relative thickness", relativeThickness, 0.1f);
     gui_utils::StringSelector("Normals mode", normalsMode, {"face", "vertex"});
-    gui_utils::StringSelector("Texture mode face", textureSizeFace, {"fit", "tile"});
+    gui_utils::StringSelector("Texture mode face", textureSizeFace, {"fit", "tile", "tile x"});
     gui_utils::StringSelector("Texture mode side", textureSizeSide, {"fit", "tile"});
-    setTextureModeFace(textureSizeFace, faceTextureRep, size, 10.0f);
-    setTextureModeFace(textureSizeSide, sideTextureRep, size, 10.0f);
+    gui_utils::StringSelector("Face texture size input", faceTextureSizeInput, {"auto", "manual"});
+    if (faceTextureSizeInput == "manual")
+    {
+        gui_utils::InputCoordinates("Face texture repeats", faceTextureRep.x, faceTextureRep.y, 1.0f, 0.0f, 1000.0f);
+    }
+    else
+    {
+        setTextureModeFace(textureSizeFace, faceTextureRep, size, 10.0f);
+    }
+    setTextureModeSide(textureSizeSide, sideTextureRep, size, 10.0f);
     gui_utils::InputCoordinates("Position", position.x, position.y, 10.0f);
     gui_utils::InputScalar("Angle", angle, 1.0f);
     gui_utils::InputCoordinates("Linear velocity", linearVelocity.x, linearVelocity.y, 1.0f);
@@ -167,7 +179,11 @@ void WorldObjectGui::onSubmitCreate()
 void WorldObjectGui::onEdit()
 {
     gui_utils::InputCoordinates("Position", position.x, position.y, 10.0f);
+    if (ImGui::IsItemEdited())
+        _object->setStartPosition(position);
     gui_utils::InputScalar("Angle", angle, 1.0f);
+    if (ImGui::IsItemEdited())
+        _object->setStartAngle(angle);
     gui_utils::InputScalar("Angular damping", angularDamping, 1.0f);
     gui_utils::InputScalar("Angular velocity", angularVelocity, 1.0f);
     ImGui::Checkbox("Awake", &awake);
@@ -178,7 +194,11 @@ void WorldObjectGui::onEdit()
     gui_utils::InputCoordinates("Linear velocity", linearVelocity.x, linearVelocity.y, 1.0f);
     ImGui::Checkbox("Allow sleep", &allowSleep);
     gui_utils::NamedObjectSelector("Face texture", _faceTexture, _objectStorageGui->texturesList());
+    if (ImGui::IsItemEdited())
+        _object->face().bindTexture(_faceTexture);
     gui_utils::NamedObjectSelector("Side texture", _sideTexture, _objectStorageGui->texturesList());
+    if (ImGui::IsItemEdited())
+        _object->side().bindTexture(_sideTexture);
 }
 
 void WorldObjectGui::onSubmitEdit()
@@ -194,21 +214,26 @@ void WorldObjectGui::onSubmitEdit()
     _object->setSleepingAllowed(allowSleep);
     _object->setStartAngle(angle);
     _object->setStartPosition(position);
-    gui_utils::NamedObjectSelector("Face texture", _faceTexture, _objectStorageGui->texturesList());
-    gui_utils::NamedObjectSelector("Side texture", _sideTexture, _objectStorageGui->texturesList());
     _object->face().bindTexture(_faceTexture);
     _object->side().bindTexture(_sideTexture);
+}
+
+void WorldObjectGui::setLevel(std::shared_ptr<game::game2d::Level> level)
+{
+    selectedLevel = level;
 }
 
 void WorldObjectGui::onView()
 {
     ASSERT(_object);
-    ImGui::BeginChild("World object view");
-    _observer.setViewport({ImGui::GetWindowSize().x, ImGui::GetWindowSize().y - 24},
-                          {ImGui::GetWindowPos().x, 7});
-    _observer.look(_object);
-    _observer.updatePos();
-    ImGui::EndChild();
+    ASSERT(selectedLevel);
+    _objectStorageGui->objectGuiByName(selectedLevel->name())->onView();
+    // ImGui::BeginChild("World object view");
+    // _observer.setViewport({ImGui::GetWindowSize().x, ImGui::GetWindowSize().y - 24},
+    //                       {ImGui::GetWindowPos().x, 7});
+    // _observer.look(_object);
+    // _observer.updatePos();
+    // ImGui::EndChild();
 }
 
 void WorldObjectGui::onInspect()

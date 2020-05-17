@@ -16,7 +16,8 @@ ObjectStorageGui::ObjectStorageGui(std::shared_ptr<game::game2d::Game2dEditor> e
             buildGuiAndAdd(slice);
             for (auto &object : slice->objects())
             {
-                buildGuiAndAdd(object);
+                auto objGui = std::dynamic_pointer_cast<WorldObjectGui>(buildGuiAndAdd(object));
+                objGui->setLevel(level);
                 if (object->texture())
                 {
                     if (!_guiByObjectName[object->texture()->name()])
