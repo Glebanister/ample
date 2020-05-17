@@ -6,6 +6,7 @@ namespace ample::game::stateMachine::actions
 {
 class PhysicalApplyAngularImpAction : public PhysicalAction
 {
+public:
     PhysicalApplyAngularImpAction(const std::string &name,
                                   const std::vector<std::string> &bodyNames,
                                   float impulse,
