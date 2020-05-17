@@ -12,12 +12,12 @@ PhysicalAngularDampingAction::PhysicalAngularDampingAction(const filing::JsonIO 
     : PhysicalAction(input),
       _angularDamping(input.read<float>("angular_damping")) {}
 
-float PhysicalAngularDampingAction::getAngulardamping() const noexcept
+float PhysicalAngularDampingAction::getAngularDamping() const noexcept
 {
     return _angularDamping;
 }
 
-void PhysicalAngularDampingAction::setAngulardamping(float angularDamping) noexcept
+void PhysicalAngularDampingAction::setAngularDamping(float angularDamping) noexcept
 {
     _angularDamping = angularDamping;
 }

@@ -12,9 +12,9 @@ public:
                                  float angularDamping);
     PhysicalAngularDampingAction(const filing::JsonIO &input);
 
-    float getAngulardamping() const noexcept;
+    float getAngularDamping() const noexcept;
 
-    void setAngulardamping(float angularDamping) noexcept;
+    void setAngularDamping(float angularDamping) noexcept;
 
     std::string dump() override;
 
