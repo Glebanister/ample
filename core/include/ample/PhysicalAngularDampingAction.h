@@ -6,6 +6,7 @@ namespace ample::game::stateMachine::actions
 {
 class PhysicalAngularDampingAction : public PhysicalAction
 {
+public:
     PhysicalAngularDampingAction(const std::string &name,
                                  const std::vector<std::string> &bodyNames,
                                  float angularDamping);
