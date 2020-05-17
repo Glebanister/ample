@@ -14,8 +14,8 @@ public:
     Circle(const std::string &input);
     std::string dump() override;
 
-private:
     graphics::Vector2d<float> _center;
     float _r;
+private:
 };
 } // namespace ample::geometry

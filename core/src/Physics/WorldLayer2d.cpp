@@ -1,12 +1,12 @@
-#include "box2d/b2_polygon_shape.h"
 #include "box2d/b2_body.h"
-#include "box2d/b2_joint.h"
 #include "box2d/b2_distance_joint.h"
+#include "box2d/b2_joint.h"
+#include "box2d/b2_polygon_shape.h"
 
-#include "WorldLayer2d.h"
 #include "Clock.h"
-#include "Exception.h"
 #include "Debug.h"
+#include "Exception.h"
+#include "WorldLayer2d.h"
 
 namespace ample::physics
 {
@@ -106,7 +106,14 @@ void ample::physics::WorldLayer2d::addWorldObject(std::shared_ptr<ample::physics
     obj->_body = world.CreateBody(&obj->_bodyDef);
     obj->setMassData({obj->_startMass, obj->_startCenter, obj->_startInertia});
     obj->_body->SetUserData(obj.get());
-    obj->addFixture(obj->face().shape());
+    if (obj->face().shape().size() > b2_maxPolygonVertices)
+    {
+        obj->addFixture(geometry::Circle{{0, 0}, obj->face().shape()[0].len()}); // TODO: not correct
+    }
+    else
+    {
+        obj->addFixture(obj->face().shape());
+    }
 }
 
 b2Joint *WorldLayer2d::addWorldJoint(std::shared_ptr<WorldJoint2d> joint, b2JointDef *jointDef)

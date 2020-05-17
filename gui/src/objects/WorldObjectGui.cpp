@@ -96,7 +96,7 @@ void WorldObjectGui::onCreate()
     else
     {
         gui_utils::InputScalar("Radius", radius, 1.0f);
-        gui_utils::InputScalar("N verts", nVert, 1U, 0U, 8U);
+        gui_utils::InputScalar("N verts", nVert, 1U, 0U, 60U);
     }
     gui_utils::InputScalar("Relative thickness", relativeThickness, 0.1f);
     gui_utils::StringSelector("Normals mode", normalsMode, {"face", "vertex"});
@@ -181,7 +181,7 @@ void WorldObjectGui::onEdit()
     gui_utils::InputCoordinates("Position", position.x, position.y, 10.0f);
     if (ImGui::IsItemEdited())
         _object->setStartPosition(position);
-    gui_utils::InputScalar("Angle", angle, 1.0f);
+    gui_utils::InputScalar("Angle", angle, 0.05f);
     if (ImGui::IsItemEdited())
         _object->setStartAngle(angle);
     gui_utils::InputScalar("Angular damping", angularDamping, 1.0f);
@@ -228,12 +228,6 @@ void WorldObjectGui::onView()
     ASSERT(_object);
     ASSERT(selectedLevel);
     _objectStorageGui->objectGuiByName(selectedLevel->name())->onView();
-    // ImGui::BeginChild("World object view");
-    // _observer.setViewport({ImGui::GetWindowSize().x, ImGui::GetWindowSize().y - 24},
-    //                       {ImGui::GetWindowPos().x, 7});
-    // _observer.look(_object);
-    // _observer.updatePos();
-    // ImGui::EndChild();
 }
 
 void WorldObjectGui::onInspect()

@@ -2,6 +2,7 @@
 
 #include "Debug.h"
 #include "WorldObject2d.h"
+#include "box2d/b2_circle_shape.h"
 #include "box2d/b2_polygon_shape.h"
 
 namespace ample::physics
@@ -51,6 +52,19 @@ Fixture WorldObject2d::addFixture(
     return {fixture};
 }
 
+Fixture WorldObject2d::addFixture(const geometry::Circle &shape)
+{
+    // _fixtures.push_back(shape);
+    b2FixtureDef fixtureDef;
+    b2CircleShape circleShape;
+    circleShape.m_p.Set(shape._center.x, shape._center.y);
+    circleShape.m_radius = shape._r;
+    fixtureDef.shape = &circleShape;
+    b2Fixture *fixture = _body->CreateFixture(&fixtureDef);
+    fixture->SetUserData(this);
+    return {fixture};
+}
+
 void WorldObject2d::setSpeedX(float desiredVelX)
 {
     ample::graphics::Vector2d<float> vel = getLinearVelocity();
@@ -71,7 +85,7 @@ void WorldObject2d::onActive()
 {
     GraphicalObject2d::onActive();
     setTranslate({_body->GetPosition().x, _body->GetPosition().y, getZ()});
-    setRotate({0.0f, 0.0f, 1.0f}, _body->GetAngle() * 180.0f / M_PI);
+    setRotate({0.0f, 0.0f, 1.0f}, _body->GetAngle());
 }
 
 void WorldObject2d::setTransform(const graphics::Vector2d<float> &position, float angle)
@@ -317,6 +331,7 @@ void WorldObject2d::setStartAngle(float angle) noexcept
 {
     _startAngle = angle;
     setRotate({0.0f, 0.0f, 1.0f}, angle);
+    std::cout << getAxisAngle() << std::endl;
 }
 
 float WorldObject2d::getStartAngle() const noexcept

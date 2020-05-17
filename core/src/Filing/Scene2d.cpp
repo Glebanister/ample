@@ -99,6 +99,6 @@ std::string Scene2d::dump()
 
 float Scene2d::getDistance() const
 {
-    return _zPosition;
+    return _zPosition / _thickness;
 }
 } // namespace ample::filing
