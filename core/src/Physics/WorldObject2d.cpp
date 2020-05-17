@@ -1,8 +1,9 @@
 #include <cmath>
 
-#include "WorldObject2d.h"
-#include "box2d/b2_polygon_shape.h"
 #include "Debug.h"
+#include "WorldObject2d.h"
+#include "box2d/b2_circle_shape.h"
+#include "box2d/b2_polygon_shape.h"
 
 namespace ample::physics
 {
@@ -51,6 +52,19 @@ Fixture WorldObject2d::addFixture(
     return {fixture};
 }
 
+Fixture WorldObject2d::addFixture(const geometry::Circle &shape)
+{
+    // _fixtures.push_back(shape);
+    b2FixtureDef fixtureDef;
+    b2CircleShape circleShape;
+    circleShape.m_p.Set(shape._center.x, shape._center.y);
+    circleShape.m_radius = shape._r;
+    fixtureDef.shape = &circleShape;
+    b2Fixture *fixture = _body->CreateFixture(&fixtureDef);
+    fixture->SetUserData(this);
+    return {fixture};
+}
+
 void WorldObject2d::setSpeedX(float desiredVelX)
 {
     ample::graphics::Vector2d<float> vel = getLinearVelocity();
@@ -71,7 +85,7 @@ void WorldObject2d::onActive()
 {
     GraphicalObject2d::onActive();
     setTranslate({_body->GetPosition().x, _body->GetPosition().y, getZ()});
-    setRotate({0.0f, 0.0f, 1.0f}, _body->GetAngle() * 180.0f / M_PI);
+    setRotate({0.0f, 0.0f, 1.0f}, _body->GetAngle());
 }
 
 void WorldObject2d::setTransform(const graphics::Vector2d<float> &position, float angle)
@@ -302,8 +316,31 @@ const WorldObject2d &WorldObject2d::getNext() const
     return *static_cast<WorldObject2d *>(_body->GetNext()->GetUserData());
 }
 
+void WorldObject2d::setStartPosition(const graphics::Vector2d<float> &pos) noexcept
+{
+    _startPos = pos;
+    setTranslate({pos.x, pos.y, getZ()});
+}
+
+graphics::Vector2d<float> WorldObject2d::getStartPosition() const noexcept
+{
+    return _startPos;
+}
+
+void WorldObject2d::setStartAngle(float angle) noexcept
+{
+    _startAngle = angle;
+    setRotate({0.0f, 0.0f, 1.0f}, angle);
+    std::cout << getAxisAngle() << std::endl;
+}
+
+float WorldObject2d::getStartAngle() const noexcept
+{
+    return _startAngle;
+}
+
 WorldObject2d::WorldObject2d(const std::string &name,
-                             std::shared_ptr<WorldLayer2d> layer,
+                             WorldLayer2d &layer,
                              BodyType type,
                              const std::vector<ample::graphics::Vector2d<float>> &shape,
                              const float relativeThickness,
@@ -328,20 +365,21 @@ WorldObject2d::WorldObject2d(const std::string &name,
     : GraphicalObject2d(name,
                         "WorldObject2d",
                         shape,
-                        layer->getThickness() * relativeThickness,
-                        layer->getThickness() * layer->getRelativePositionInSlice() - layer->getThickness() * relativeThickness / 2.0f,
+                        layer.getThickness() * relativeThickness,
+                        layer.getThickness() * layer.getRelativePositionInSlice() - layer.getThickness() * relativeThickness / 2.0f + layer.getZ(),
                         faceTextureRepeats,
                         sideTextureRepeats,
                         sideNormalsMode,
                         translated,
                         rotated),
-        _layer(layer),
-        _bodyType(type),
-        _startAngle(rotated),
-        _startPos(translated),
-        _startMass(mass),
-        _startInertia(inertia),
-        _startCenter(center)
+      _bodyType(type),
+      _relativeThickness(relativeThickness),
+      _startAngle(rotated),
+      _startPos(translated),
+      _startMass(mass),
+      _startInertia(inertia),
+      _startCenter(center),
+      _layer(layer)
 {
     _bodyDef.position.Set(translated.x, translated.y);
     _bodyDef.angle = rotated;
@@ -369,42 +407,45 @@ WorldObject2d::WorldObject2d(const std::string &name,
     }
 }
 
-WorldLayer2d &WorldObject2d::getWorldLayer() noexcept
-{
-    return *_layer;
-}
-
-std::shared_ptr<WorldLayer2d> WorldObject2d::getWorldLayerPointer() const noexcept
-{
-    return _layer;
-}
-
 WorldObject2d::WorldObject2d(const filing::JsonIO &input,
-                                std::shared_ptr<WorldLayer2d> layer)
-    : WorldObject2d(input.read<std::string>("name"),
-                    layer,
-                    input.read<physics::BodyType>("body_type"),
-                    input.read<std::vector<graphics::Vector2d<float>>>("shape"),
-                    input.read<float>("relative_thickness"),
-                    input.read<graphics::Vector2d<float>>("face_texture_repeats"),
-                    input.read<graphics::Vector2d<float>>("side_texture_repeats"),
-                    input.read<graphics::normalsMode>("normals_mode"),
-                    input.read<graphics::Vector2d<float>>("world_pos"),
-                    input.read<float>("world_rotated"),
-                    input.read<graphics::Vector2d<float>>("linear_velocity"),
-                    input.read<float>("angular_velocity"),
-                    input.read<float>("linear_damping"),
-                    input.read<float>("angular_damping"),
-                    input.read<bool>("allow_sleep"),
-                    input.read<bool>("awake"),
-                    input.read<bool>("fixed_rotation"),
-                    input.read<bool>("bullet"),
-                    input.read<bool>("enabled"),
-                    input.read<float>("gravity_scale"),
-                    input.read<graphics::Vector2d<float>>("body_center"),
-                    input.read<float>("body_mass"),
-                    input.read<float>("body_inertia"))
+                             WorldLayer2d &layer)
+    : GraphicalObject2d(input),
+      _bodyType(input.read<BodyType>("body_type")),
+      _relativeThickness(input.read<float>("relative_thickness")),
+      _startAngle(input.read<float>("world_rotated")),
+      _startPos(input.read<graphics::Vector2d<float>>("world_pos")),
+      _startMass(input.read<float>("body_mass")),
+      _startInertia(input.read<float>("body_inertia")),
+      _startCenter(input.read<graphics::Vector2d<float>>("body_center")),
+      _layer(layer)
 {
+    _bodyDef.position.Set(_startPos.x, _startPos.y);
+    _bodyDef.angle = _startAngle;
+    _bodyDef.linearVelocity.Set(input.read<graphics::Vector2d<float>>("linear_velocity").x,
+                                input.read<graphics::Vector2d<float>>("linear_velocity").y);
+    _bodyDef.angularVelocity = input.read<float>("angular_velocity");
+    _bodyDef.linearDamping = input.read<float>("linear_damping");
+    _bodyDef.angularDamping = input.read<float>("angular_damping");
+    _bodyDef.allowSleep = input.read<bool>("allow_sleep");
+    _bodyDef.awake = input.read<bool>("awake");
+    _bodyDef.fixedRotation = input.read<bool>("fixed_rotation");
+    _bodyDef.bullet = input.read<bool>("bullet");
+    _bodyDef.enabled = input.read<bool>("enabled");
+    _bodyDef.gravityScale = input.read<float>("gravity_scale");
+
+    switch (_bodyType)
+    {
+    case BodyType::STATIC_BODY:
+        _bodyDef.type = b2_staticBody;
+        break;
+    case BodyType::KINEMATIC_BODY:
+        _bodyDef.type = b2_kinematicBody;
+        break;
+    case BodyType::DYNAMIC_BODY:
+        _bodyDef.type = b2_dynamicBody;
+        break;
+    }
+
     // _fixtures = input.read<std::vector<std::vector<graphics::Vector2d<float>>>>("fixtures"); // TODO
     for (const auto &fixture : _fixtures)
     {
@@ -412,12 +453,19 @@ WorldObject2d::WorldObject2d(const filing::JsonIO &input,
     }
 }
 
+WorldLayer2d &WorldObject2d::getWorldLayer() noexcept
+{
+    return _layer;
+}
+
 std::string WorldObject2d::dump()
 {
     filing::JsonIO output = GraphicalObject2d::dump();
     output.write<physics::BodyType>("body_type", _bodyType);
-    output.write<float>("world_rotated", _startAngle);
-    output.write<graphics::Vector2d<float>>("world_pos", _startPos);
+    output.write<std::vector<graphics::Vector2d<float>>>("shape", face().shape());
+    output.write<float>("relative_thickness", _relativeThickness);
+    output.write<float>("world_rotated", getAxisAngle());
+    output.write<graphics::Vector2d<float>>("world_pos", {getX(), getY()});
     output.write<graphics::Vector2d<float>>("linear_velocity", _bodyDef.linearVelocity);
     output.write<float>("angular_velocity", _bodyDef.angularVelocity);
     output.write<float>("linear_damping", _bodyDef.linearDamping);

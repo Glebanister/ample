@@ -28,6 +28,12 @@ public:
 
     std::string dump() override;
 
+    type getPressType() const noexcept;
+    void setPressType(type) noexcept;
+
+    control::keysym getKey() const noexcept;
+    void setKey(control::keysym) noexcept;
+
     bool listen() override;
 
 private:

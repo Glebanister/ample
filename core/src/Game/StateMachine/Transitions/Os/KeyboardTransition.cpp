@@ -51,4 +51,21 @@ bool KeyboardTransition::listen()
     }
     return result;
 }
+
+KeyboardTransition::type KeyboardTransition::getPressType() const noexcept
+{
+    return _pressType;
+}
+void KeyboardTransition::setPressType(KeyboardTransition::type tp) noexcept
+{
+    _pressType = tp;
+}
+control::keysym KeyboardTransition::getKey() const noexcept
+{
+    return _key;
+}
+void KeyboardTransition::setKey(control::keysym key) noexcept
+{
+    _key = key;
+}
 } // namespace ample::game

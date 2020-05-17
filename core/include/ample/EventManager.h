@@ -38,9 +38,35 @@ public:
         C_ENTER = SDL_SCANCODE_RETURN,
         C_ESCAPE = SDL_SCANCODE_ESCAPE,
         C_KP_ENTER = SDL_SCANCODE_KP_ENTER,
+        C_LSHIFT = SDL_SCANCODE_LSHIFT,
+        C_RSHIFT = SDL_SCANCODE_RSHIFT,
+        C_LCTRL = SDL_SCANCODE_LCTRL,
+        C_RCTRL = SDL_SCANCODE_RCTRL,
+        C_LALT = SDL_SCANCODE_LALT,
+        C_RALT = SDL_SCANCODE_RALT,
         A = SDL_SCANCODE_A,
+        B = SDL_SCANCODE_B,
         C = SDL_SCANCODE_C,
+        D = SDL_SCANCODE_D,
+        E = SDL_SCANCODE_E,
+        F = SDL_SCANCODE_F,
+        G = SDL_SCANCODE_G,
+        H = SDL_SCANCODE_H,
+        I = SDL_SCANCODE_I,
+        J = SDL_SCANCODE_J,
+        K = SDL_SCANCODE_K,
+        L = SDL_SCANCODE_L,
+        M = SDL_SCANCODE_M,
+        N = SDL_SCANCODE_N,
+        O = SDL_SCANCODE_O,
+        P = SDL_SCANCODE_P,
+        Q = SDL_SCANCODE_Q,
+        R = SDL_SCANCODE_R,
+        S = SDL_SCANCODE_S,
+        T = SDL_SCANCODE_T,
+        U = SDL_SCANCODE_U,
         V = SDL_SCANCODE_V,
+        W = SDL_SCANCODE_W,
         X = SDL_SCANCODE_X,
         Y = SDL_SCANCODE_Y,
         Z = SDL_SCANCODE_Z,
@@ -68,7 +94,7 @@ private:
     };
 
 public:
-    void addKeyHandler(const keysym key, KeyHandler &handler);
+    void addKeyHandler(const keysym key, std::shared_ptr<KeyHandler> handler);
     void clearKey(const keysym key);
     void handleEvent(const SDL_Event &event) override;
     bool isKeyPressed(keysym key);
@@ -81,7 +107,7 @@ public:
     bool getPressedScancode() const noexcept;
 
 private:
-    std::unordered_map<int32_t, std::vector<KeyHandler *>> _handlers;
+    std::unordered_map<int32_t, std::vector<std::shared_ptr<KeyHandler>>> _handlers;
     std::unordered_map<int32_t, int32_t> _keymapWasUp;
     std::unordered_map<int32_t, int32_t> _keymapWasDown;
     std::unordered_map<int32_t, int32_t> _keymapPressed;
@@ -97,8 +123,7 @@ class EventManager : public utils::Singleton<EventManager>, public utils::Noncop
 public:
     void update();
 
-    void addKeyHandler(const keysym key, KeyHandler &handler);
-    void addEventHandler(const int eventType, EventHandler &handler);
+    void addEventHandler(const int eventType, std::shared_ptr<EventHandler> handler);
     void clearType(const int &eventType);
 
     KeyboardManager &keyboard();
@@ -112,6 +137,6 @@ protected:
     std::shared_ptr<MouseHandler> _mouse;
     std::vector<SDL_Event> _events;
 
-    std::unordered_map<int, std::vector<EventHandler *>> _handlerByType;
+    std::unordered_map<int, std::vector<std::shared_ptr<EventHandler>>> _handlerByType;
 };
 } // namespace ample::control

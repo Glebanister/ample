@@ -1,3 +1,4 @@
+#include <functional>
 #include <iostream>
 #include <memory>
 #include <numeric>
@@ -6,6 +7,7 @@
 #include "Debug.h"
 #include "Factory.h"
 #include "GameException.h"
+#include "StateFactory.h"
 #include "StateMachine.h"
 #include "TransitionsFactory.h"
 
@@ -43,8 +45,13 @@ std::string StateMachine::Transition::dump()
     return output;
 }
 
-StateMachine::State::State(StateMachine &machine, const std::string &name)
-    : NamedStoredObject(name, "State"), _machine(machine) {}
+bool StateMachine::Transition::listen()
+{
+    return false;
+}
+
+StateMachine::State::State(StateMachine &machine, const std::string &name, const std::string &className)
+    : NamedStoredObject(name, className), _machine(machine) {}
 
 void StateMachine::State::addTransition(std::shared_ptr<StateMachine::Transition> transition) noexcept
 {
@@ -52,9 +59,23 @@ void StateMachine::State::addTransition(std::shared_ptr<StateMachine::Transition
     _transitions.push_back(transition);
 }
 
+std::vector<std::shared_ptr<StateMachine::Transition>> &StateMachine::State::transitions() noexcept
+{
+    return _transitions;
+}
+
+StateMachine &StateMachine::State::getStateMachine() noexcept
+{
+    return _machine;
+}
+
 void StateMachine::State::onStart()
 {
     activity::Behavior::onStart();
+    for (const auto &transit : _transitions)
+    {
+        transit->onStart();
+    }
     for (const auto &action : _onStartActions)
     {
         action->onActive();
@@ -64,6 +85,10 @@ void StateMachine::State::onStart()
 void StateMachine::State::onStop()
 {
     activity::Behavior::onStop();
+    for (const auto &transit : _transitions)
+    {
+        transit->onStop();
+    }
     for (const auto &action : _onStartActions)
     {
         action->onActive();
@@ -73,6 +98,10 @@ void StateMachine::State::onStop()
 void StateMachine::State::onActive()
 {
     activity::Behavior::onActive();
+    for (const auto &transit : _transitions)
+    {
+        transit->onActive();
+    }
     for (const auto &action : _onActiveActions)
     {
         action->onActive();
@@ -81,9 +110,9 @@ void StateMachine::State::onActive()
     {
         if (!transition)
         {
-            throw GameException{"invalid transition"};
+            throw GameException{"empty transition"};
         }
-        transition->onActive();
+        // transition->onActive();
         if (transition->isActivated())
         {
             transition->reset();
@@ -114,23 +143,61 @@ void StateMachine::State::dumpRecursive(std::vector<std::string> &strings,
     strings.push_back(output);
 }
 
-StateMachine::State::State(const filing::JsonIO &input, StateMachine &machine)
-    : NamedStoredObject(input), _machine(machine)
+StateMachine::State::State(const filing::JsonIO &input,
+                           StateMachine &machine,
+                           std::shared_ptr<game::Namespace> globalNamespace)
+    : State(input, machine)
 {
-    auto onStartActionStrings = filing::loadObjectsVector(input.updateJsonIO("onStart"));
-    auto onActiveActionStrings = filing::loadObjectsVector(input.updateJsonIO("onActive"));
-    auto onStopActionStrings = filing::loadObjectsVector(input.updateJsonIO("onStop"));
+    fillActionsNamespace(globalNamespace);
+    fillTransitionsNamespace(globalNamespace);
+}
+
+StateMachine::State::State(const filing::JsonIO &input,
+                           StateMachine &machine)
+    : NamedStoredObject(input),
+      _machine(machine)
+{
+    auto onStartActionStrings = filing::loadObjectsVector(input.updateJsonIO("on_start"));
+    auto onActiveActionStrings = filing::loadObjectsVector(input.updateJsonIO("on_active"));
+    auto onStopActionStrings = filing::loadObjectsVector(input.updateJsonIO("on_stop"));
     for (const auto &actionString : onStartActionStrings)
     {
-        addOnStartAction(factory::ActionsFactory.produce(filing::JsonIO(actionString).read<std::string>("class_name"), actionString));
+        addOnStartAction(factory::ActionsFactory.produce(filing::JsonIO(actionString).read<std::string>("class_name"),
+                                                         actionString));
     }
     for (const auto &actionString : onActiveActionStrings)
     {
-        addOnActiveAction(factory::ActionsFactory.produce(filing::JsonIO(actionString).read<std::string>("class_name"), actionString));
+        addOnActiveAction(factory::ActionsFactory.produce(filing::JsonIO(actionString).read<std::string>("class_name"),
+                                                          actionString));
     }
     for (const auto &actionString : onStopActionStrings)
     {
-        addOnStopAction(factory::ActionsFactory.produce(filing::JsonIO(actionString).read<std::string>("class_name"), actionString));
+        addOnStopAction(factory::ActionsFactory.produce(filing::JsonIO(actionString).read<std::string>("class_name"),
+                                                        actionString));
+    }
+}
+
+void StateMachine::State::fillActionsNamespace(std::shared_ptr<game::Namespace> globalNamespace)
+{
+    for (auto &action : _onStartActions)
+    {
+        action->setNamespace(globalNamespace);
+    }
+    for (auto &action : _onActiveActions)
+    {
+        action->setNamespace(globalNamespace);
+    }
+    for (auto &action : _onStopActions)
+    {
+        action->setNamespace(globalNamespace);
+    }
+}
+
+void StateMachine::State::fillTransitionsNamespace(std::shared_ptr<game::Namespace> globalNamespace)
+{
+    for (auto &transition : _transitions)
+    {
+        transition->setNamespace(globalNamespace);
     }
 }
 
@@ -147,6 +214,21 @@ void StateMachine::State::addOnActiveAction(std::shared_ptr<Action> action) noex
 void StateMachine::State::addOnStopAction(std::shared_ptr<Action> action) noexcept
 {
     _onStopActions.emplace_back(action);
+}
+
+std::vector<std::shared_ptr<Action>> &StateMachine::State::getOnStartActions() noexcept
+{
+    return _onStartActions;
+}
+
+std::vector<std::shared_ptr<Action>> &StateMachine::State::getOnActiveActions() noexcept
+{
+    return _onActiveActions;
+}
+
+std::vector<std::shared_ptr<Action>> &StateMachine::State::getOnStopActions() noexcept
+{
+    return _onStopActions;
 }
 
 std::string StateMachine::State::dump()
@@ -168,10 +250,24 @@ std::string StateMachine::State::dump()
     }
     return filing::mergeStrings({
         output.getJSONstring(),
-        filing::makeField("onActive", filing::dumpObjectsVector(activeActions)),
-        filing::makeField("onStart", filing::dumpObjectsVector(startActions)),
-        filing::makeField("onStop", filing::dumpObjectsVector(stopActions)),
+        filing::makeField("on_active", filing::dumpObjectsVector(activeActions)),
+        filing::makeField("on_start", filing::dumpObjectsVector(startActions)),
+        filing::makeField("on_stop", filing::dumpObjectsVector(stopActions)),
     });
+}
+
+void StateMachine::onStart()
+{
+    ASSERT(_currentState);
+    Behavior::onActive();
+    _currentState->onStart();
+}
+
+void StateMachine::onStop()
+{
+    ASSERT(_currentState);
+    Behavior::onStop();
+    _currentState->onStop();
 }
 
 void StateMachine::onActive()
@@ -185,13 +281,13 @@ void StateMachine::onActive()
 
 void StateMachine::setStartState(std::shared_ptr<State> state)
 {
-    _currentState = state;
     _startState = state;
-    _currentState->onStart();
+    setCurrentState(state);
 }
 
 void StateMachine::setCurrentState(std::shared_ptr<State> state)
 {
+    ASSERT(state);
     if (_currentState)
     {
         _currentState->onStop();
@@ -200,15 +296,16 @@ void StateMachine::setCurrentState(std::shared_ptr<State> state)
     _currentState->onStart();
 }
 
-std::shared_ptr<StateMachine::State> StateMachine::getCurrentState() noexcept
+std::shared_ptr<StateMachine::State> StateMachine::getCurrentState() const noexcept
 {
     return _currentState;
 }
 
-StateMachine::StateMachine(const std::string &name)
-    : NamedStoredObject(name, "StateMachine") {}
+StateMachine::StateMachine(const std::string &name, const std::string &className)
+    : NamedStoredObject(name, className) {}
 
-StateMachine::StateMachine(const filing::JsonIO &input)
+StateMachine::StateMachine(const filing::JsonIO &input,
+                           std::shared_ptr<game::Namespace> globalNamespace) // TODO: implement immediate mode states loading
     : NamedStoredObject(input)
 {
     auto stateStrings = filing::loadObjectsVector(input.updateJsonIO("states"));
@@ -216,7 +313,8 @@ StateMachine::StateMachine(const filing::JsonIO &input)
     std::unordered_map<std::string, std::shared_ptr<State>> statesMap;
     for (const filing::JsonIO &string : stateStrings)
     {
-        std::shared_ptr<State> newState = std::make_shared<State>(string, *this);
+        std::shared_ptr<State> newState = std::make_shared<StateMachine::State>(string, *this, globalNamespace);
+        newState->setNamespace(globalNamespace);
         if (newState->name() == startStateName)
         {
             setStartState(newState);
@@ -236,6 +334,7 @@ StateMachine::StateMachine(const filing::JsonIO &input)
                     transitionClass,
                     transitionData.getJSONstring(),
                     nextState));
+            currentState->_transitions.back()->setNamespace(globalNamespace);
         }
     }
 
@@ -262,5 +361,29 @@ StateMachine::~StateMachine()
     {
         _currentState->onStop();
     }
+}
+
+std::vector<std::shared_ptr<StateMachine::State>> getStatesList(const StateMachine &machine)
+{
+    if (!machine.getCurrentState())
+    {
+        return {};
+    }
+    std::vector<std::shared_ptr<StateMachine::State>> result;
+    std::unordered_map<std::string, bool> used;
+    std::function<void(std::shared_ptr<game::StateMachine::State>)> dfs =
+        [&](std::shared_ptr<game::StateMachine::State> curState) {
+            ASSERT(curState);
+            if (used[curState->name()])
+                return;
+            used[curState->name()] = true;
+            for (const auto &transition : curState->transitions())
+            {
+                dfs(transition->getNextState());
+            }
+            result.push_back(curState);
+        };
+    dfs(machine.getCurrentState());
+    return result;
 }
 } // namespace ample::game

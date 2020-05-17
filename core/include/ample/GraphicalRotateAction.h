@@ -21,6 +21,14 @@ public:
     GraphicalRotateAction(const filing::JsonIO &input);
     std::string dump() override;
 
+    graphics::Vector3d<float> getAxis() const noexcept;
+    void setAxis(const graphics::Vector3d<float> &) noexcept;
+
+    float getAngle() const noexcept;
+    void setAngle(float) noexcept;
+
+    void onActive() override;
+
 private:
     graphics::Vector3d<float> _axis;
     float _angle;

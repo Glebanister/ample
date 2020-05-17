@@ -60,6 +60,8 @@ public:
     WorldContactEdge2d getPrev();
     WorldContactEdge2d getNext();
 
+    operator bool();
+
 private:
     friend WorldObject2d;
 

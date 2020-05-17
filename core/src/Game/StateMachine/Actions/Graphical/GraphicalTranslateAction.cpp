@@ -7,10 +7,7 @@ GraphicalTranslateAction::GraphicalTranslateAction(const std::string &name,
                                                    graphics::Vector3d<float> direction)
     : GraphicalAction(name,
                       "GraphicalTranslateAction",
-                      bodyNames,
-                      [direction](std::shared_ptr<graphics::GraphicalObject> obj) {
-                          obj->translate({direction.x, direction.y, direction.z});
-                      }),
+                      bodyNames),
       _direction(direction)
 {
 }
@@ -20,6 +17,15 @@ GraphicalTranslateAction::GraphicalTranslateAction(const filing::JsonIO &input)
                                input.read<std::vector<std::string>>("body_names"),
                                input.read<graphics::Vector3d<float>>("direction"))
 {
+}
+
+void GraphicalTranslateAction::onActive()
+{
+    GraphicalAction::onActive();
+    for (const auto &obj : bodyPointers())
+    {
+        obj->translate({_direction.x, _direction.y, _direction.z});
+    }
 }
 
 std::string GraphicalTranslateAction::dump()

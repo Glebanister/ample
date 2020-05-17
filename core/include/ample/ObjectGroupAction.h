@@ -17,16 +17,21 @@ public:
     ObjectGroupAction(const filing::JsonIO &input);
     std::string dump() override;
 
-    void onAwake() override;
+    void addObjectName(const std::string &name) noexcept;
+
+    std::vector<std::shared_ptr<T>> &bodyPointers();
+    std::vector<std::string> &bodyNames();
+
+    void onActive() override;
 
 protected:
     std::vector<std::string> _bodyNames;
     std::vector<std::shared_ptr<T>> _bodyPointers;
+    void updateObjectPointers();
 
 private:
-    void updateObjectPointers();
     std::shared_ptr<T> getObjectPointer(const std::string &name);
-    bool _pointersInitialized;
+    bool _pointersInitialized = false;
 };
 } // namespace ample::game::stateMachine::actions
 

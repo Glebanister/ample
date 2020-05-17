@@ -20,6 +20,8 @@ public:
     GraphicalTranslateAction(const filing::JsonIO &input);
     std::string dump() override;
 
+    void onActive() override;
+
 private:
     graphics::Vector3d<float> _direction;
 };

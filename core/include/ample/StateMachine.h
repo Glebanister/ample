@@ -1,15 +1,16 @@
 #pragma once
 
-#include <vector>
 #include <memory>
 #include <unordered_map>
+#include <vector>
 
+#include "Action.h"
 #include "Behaviour.h"
 #include "EventListener.h"
 #include "NamedObject.h"
-#include "StoredObject.h"
-#include "Action.h"
 #include "NamedStoredObject.h"
+#include "Namespace.h"
+#include "StoredObject.h"
 
 namespace ample::game
 {
@@ -29,6 +30,7 @@ public:
         bool isActivated() const noexcept;
         void reset() noexcept;
         std::string dump() override;
+        bool listen() override;
 
     private:
         std::shared_ptr<State> _nextState;
@@ -38,8 +40,15 @@ public:
     class State : public activity::Behavior, public filing::NamedStoredObject
     {
     public:
-        State(StateMachine &machine, const std::string &name);
-        State(const filing::JsonIO &input, StateMachine &machine);
+        State(StateMachine &machine, const std::string &name, const std::string &className = "State");
+        State(const filing::JsonIO &input,
+              StateMachine &machine,
+              std::shared_ptr<game::Namespace> globalNamespace);
+        State(const filing::JsonIO &input,
+              StateMachine &machine);
+
+        void fillActionsNamespace(std::shared_ptr<game::Namespace> globalNamespace);
+        void fillTransitionsNamespace(std::shared_ptr<game::Namespace> globalNamespace);
 
         void onStart() override;
         void onActive() override;
@@ -47,16 +56,23 @@ public:
 
         void addTransition(std::shared_ptr<Transition>) noexcept;
 
+        std::string dump() override;
         void dumpRecursive(std::vector<std::string> &strings,
                            std::unordered_map<std::string, bool> &used);
-
 
         void addOnStartAction(std::shared_ptr<Action>) noexcept;
         void addOnActiveAction(std::shared_ptr<Action>) noexcept;
         void addOnStopAction(std::shared_ptr<Action>) noexcept;
 
+        StateMachine &getStateMachine() noexcept;
+
+        std::vector<std::shared_ptr<Action>> &getOnStartActions() noexcept;
+        std::vector<std::shared_ptr<Action>> &getOnActiveActions() noexcept;
+        std::vector<std::shared_ptr<Action>> &getOnStopActions() noexcept;
+
+        std::vector<std::shared_ptr<Transition>> &transitions() noexcept;
+
     private:
-        std::string dump() override;
         StateMachine &_machine;
         std::vector<std::shared_ptr<Transition>> _transitions;
         std::vector<std::shared_ptr<Action>> _onStartActions;
@@ -67,19 +83,25 @@ public:
     };
 
 public:
-    StateMachine(const std::string &name);
+    StateMachine(const std::string &name, const std::string &className = "StateMachine");
+    StateMachine(const filing::JsonIO &input, std::shared_ptr<game::Namespace> globalNamespace);
     void setStartState(std::shared_ptr<State> state);
     void setCurrentState(std::shared_ptr<State> state);
-    std::shared_ptr<State> getCurrentState() noexcept;
+    std::shared_ptr<State> getCurrentState() const noexcept;
+    void onStart() override;
     void onActive() override;
+    void onStop() override;
 
-    StateMachine(const filing::JsonIO &input);
     std::string dump() override;
 
     virtual ~StateMachine();
 
+protected:
+    std::shared_ptr<State> _startState{nullptr};
+
 private:
     std::shared_ptr<State> _currentState{nullptr};
-    std::shared_ptr<State> _startState{nullptr};
 };
+
+std::vector<std::shared_ptr<StateMachine::State>> getStatesList(const StateMachine &machine);
 } // namespace ample::game

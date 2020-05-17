@@ -1,60 +1,36 @@
 #include <string>
+#include <tuple>
 
 #include "Game2d.h"
 #include "GameException.h"
 #include "Utils.h"
 
+struct node
+{
+    ample::graphics::Vector3d<float> c;
+    ample::graphics::Vector2d<float> u;
+    ample::graphics::Vector3d<float> n;
+};
+
 namespace ample::game::game2d
 {
-Game2d::Game2d(window::Window &window)
-    : graphics::LayeredWindowActivity(window),
-      _levelSwitchingController(std::make_shared<StateMachine>("game_controller"))
+Game2d::Game2d(const std::string &name,
+               const window::pixel_t &x,
+               const window::pixel_t &y,
+               const window::pixel_t &width,
+               const window::pixel_t &height,
+               const uint32_t &posFlags,
+               const uint32_t &modeFlags,
+               const std::filesystem::path &path)
+    : graphics::LayeredWindowActivity(name, x, y, width, height, posFlags, modeFlags),
+      _levelSwitchingController(std::make_shared<LevelSwitcher>(path))
 {
     addBehavior(_levelSwitchingController);
 }
 
-Game2d::Game2d(window::Window &window, const std::filesystem::path &directory)
-    : graphics::LayeredWindowActivity(window),
-      _levelSwitchingController(std::make_shared<StateMachine>(filing::JsonIO(filing::openJSONfile("game_controller.json"))))
+// stub for camera moving. TODO: implement camera actions
+void Game2d::onActive()
 {
-    addBehavior(_levelSwitchingController);
-    // setCurrentLevel();
-    // TODO
-}
-
-void Game2d::saveAs(const std::filesystem::path &path)
-{
-    std::ofstream gameControllerFile(_path / "game_controller.json");
-    // gameControllerFile << _levelSwitchingController->dump();
-    // TODO
-}
-
-void Game2d::save()
-{
-    saveAs(_path);
-}
-
-std::shared_ptr<game2d::Level> Game2d::createLevel(const std::string &name,
-                                                   const float sliceThickness,
-                                                   const float physicsLayerPosition,
-                                                   const graphics::Vector2d<float> &gravity,
-                                                   const std::filesystem::path &destination)
-{
-    return std::make_shared<game2d::Level>(name,
-                                           *_levelSwitchingController,
-                                           sliceThickness,
-                                           physicsLayerPosition,
-                                           gravity,
-                                           destination);
-}
-
-void Game2d::setCurrentLevel(std::shared_ptr<Level> level)
-{
-    _levelSwitchingController->setStartState(level);
-}
-
-std::shared_ptr<Level> Game2d::currentLevel() const noexcept
-{
-    return std::static_pointer_cast<Level>(_levelSwitchingController->getCurrentState());
+    graphics::LayeredWindowActivity::onActive();
 }
 } // namespace ample::game::game2d

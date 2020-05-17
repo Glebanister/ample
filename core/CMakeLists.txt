@@ -95,6 +95,7 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Geometry/Point.cpp
 
     src/Game/Game2d/Game2d.cpp
+    src/Game/Game2d/Game2dEditor.cpp
     src/Game/Game2d/Level.cpp
     src/Game/GameException.cpp
     src/Game/StateMachine/StateMachine.cpp
@@ -104,15 +105,37 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Game/StateMachine/Transitions/Os/TimerTransition.cpp
     src/Game/StateMachine/Transitions/Physics/PhysicalTransition.cpp
     src/Game/StateMachine/Transitions/Physics/DistanceTransition.cpp
+    src/Game/StateMachine/Transitions/Physics/CollisionTransition.cpp
     src/Game/StateMachine/Transitions/Physics/SpeedTransition.cpp
     src/Game/StateMachine/Transitions/Physics/PositionTransition.cpp
     src/Game/StateMachine/Transitions/Physics/CollisionTransition.cpp
     src/Game/StateMachine/Actions/Graphical/GraphicalAction.cpp
     src/Game/StateMachine/Actions/Graphical/GraphicalRotateAction.cpp
     src/Game/StateMachine/Actions/Graphical/GraphicalTranslateAction.cpp
+    src/Game/StateMachine/Actions/Camera/CameraAction.cpp
+    src/Game/StateMachine/Actions/Camera/CameraTranslateAction.cpp
+    src/Game/StateMachine/Actions/Camera/FollowObjectAction.cpp
+    src/Game/StateMachine/Actions/Physical/PhysicalAction.cpp
+    src/Game/StateMachine/Actions/Physical/PhysicalLinearVelocityAction.cpp
+    src/Game/StateMachine/Actions/Physical/PhysicalAngularVelocityAction.cpp
+    src/Game/StateMachine/Actions/Physical/PhysicalApplyForceAction.cpp
+    src/Game/StateMachine/Actions/Physical/PhysicalAngularDampingAction.cpp
+    src/Game/StateMachine/Actions/Physical/PhysicalApplyAngularImpAction.cpp
+    src/Game/StateMachine/Actions/Physical/PhysicalApplyLinearImpAction.cpp
+    src/Game/StateMachine/Actions/Physical/PhysicalApplyTorqueAction.cpp
+    src/Game/StateMachine/Actions/Physical/PhysicalFixRotationAction.cpp
+    src/Game/StateMachine/Actions/Physical/PhysicalGravityScaleAction.cpp
+    src/Game/StateMachine/Actions/Physical/PhysicalLinearDampingAction.cpp
+    src/Game/StateMachine/Actions/Physical/PhysicalSetAwakeAction.cpp
+    src/Game/StateMachine/Actions/Physical/PhysicalSetEnabledAction.cpp
+    src/Game/StateMachine/Actions/Physical/PhysicalSetCenterAction.cpp
+    src/Game/StateMachine/Actions/Physical/PhysicalSetInertiaAction.cpp
+    src/Game/StateMachine/Actions/Physical/PhysicalSetMassAction.cpp
     src/Game/StateMachine/Action.cpp
     src/Game/Events/EventListener.cpp
     src/Game/Namespace.cpp
+    src/Game/LevelSwitcher.cpp
+    src/Game/LevelLoader.cpp
    )
 
 include_directories(${SDL2_INCLUDE_DIRS})

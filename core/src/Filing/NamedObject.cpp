@@ -6,12 +6,10 @@
 namespace ample::filing
 {
 NamedObject::NamedObject(const std::string &name,
-                         const std::string &className,
-                         const std::vector<std::string> &knownNames)
+                         const std::string &className)
     : _name(name),
       _className(className),
-      _namespace(std::make_shared<game::Namespace>(nullptr)),
-      _knownNames(knownNames)
+      _namespace(std::make_shared<game::Namespace>())
 {
     if (name.empty())
     {
@@ -25,19 +23,9 @@ NamedObject::NamedObject(const std::string &name,
     }
 }
 
-void NamedObject::fillNamespace(const game::Namespace &globalNamespace)
+void NamedObject::setNamespace(std::shared_ptr<game::Namespace> names)
 {
-    for (const auto &name : _knownNames)
-    {
-        if (!getNamespace().hasName(name))
-        {
-            throw exception::Exception(exception::exId::UNSPECIFIED,
-                                       exception::exType::CASUAL,
-                                       "given namespace does not contain name " +
-                                           name);
-        }
-        getNamespace().addObject(globalNamespace.getObject(name));
-    }
+    _namespace = names;
 }
 
 std::string NamedObject::name() const noexcept
@@ -48,6 +36,11 @@ std::string NamedObject::name() const noexcept
 game::Namespace &NamedObject::getNamespace() noexcept
 {
     return *_namespace;
+}
+
+std::shared_ptr<game::Namespace> NamedObject::getNamespacePointer() noexcept
+{
+    return _namespace;
 }
 
 std::string NamedObject::className() const noexcept

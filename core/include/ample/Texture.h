@@ -7,6 +7,7 @@
 #include <GL/gl.h>
 #include <string>
 #include <vector>
+#include <filesystem>
 #include <cstddef>
 
 #include "Vector2d.h"
@@ -123,7 +124,7 @@ private:
 
     private:
         ILuint _imgId;
-        PixelMap _pixels;
+        std::unique_ptr<PixelMap> _pixels;
     };
 
     class GLSingleTexture final
@@ -160,11 +161,14 @@ public:
 
     std::string path() const noexcept;
 
+    void setPath(const std::string &path);
+
 private:
     TextureRaw _raw;
     std::vector<GLSingleTexture> _frames;
     size_t _currentFrame = 0U;
     friend class TextureRaw;
     bool _boomerangAnimationForward = true;
+    std::string _realPath;
 };
 } // namespace ample::graphics

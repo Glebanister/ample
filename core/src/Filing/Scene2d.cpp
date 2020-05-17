@@ -14,13 +14,13 @@
 
 namespace ample::filing
 {
-
 Scene2d::Scene2d(const std::string &name,
                  const ample::graphics::Vector2d<float> &gravity,
                  float z,
                  float thickness,
-                 float relativePositionInSlice)
-    : WorldLayer2d(gravity, z, thickness, relativePositionInSlice),
+                 float relativePositionInSlice,
+                 std::shared_ptr<game::Namespace> ns)
+    : WorldLayer2d(gravity, z, thickness, relativePositionInSlice, ns),
       NamedStoredObject(name, "Scene2d"),
       _gravity(gravity),
       _zPosition(z),
@@ -29,32 +29,46 @@ Scene2d::Scene2d(const std::string &name,
 {
 }
 
-Scene2d::Scene2d(const JsonIO &input)
-    : Scene2d(input.read<std::string>("name"),
-              input.read<graphics::Vector2d<float>>("gravity"),
-              input.read<float>("z"),
-              input.read<float>("thickness"),
-              input.read<float>("relative_position_in_slice"))
+Scene2d::Scene2d(const JsonIO &input,
+                 std::shared_ptr<game::Namespace> globalNamespace)
+    : WorldLayer2d(input.read<graphics::Vector2d<float>>("gravity"),
+                   input.read<float>("z_position"),
+                   input.read<float>("thickness"),
+                   input.read<float>("relative_position_in_slice"),
+                   globalNamespace),
+      NamedStoredObject(input),
+      _gravity(input.read<graphics::Vector2d<float>>("gravity")),
+      _zPosition(input.read<float>("z_position")),
+      _sceneThickness(input.read<float>("thickness")),
+      _relativeSlicePosition(input.read<float>("relative_position_in_slice"))
 {
-    auto objectStrings = filing::loadObjectsVector(input.read<std::string>("objects"));
-    auto cameraStrings = filing::loadObjectsVector(input.read<std::string>("cameras"));
+    auto objectStrings = filing::loadObjectsVector(input.updateJsonIO("objects"));
+    auto cameraStrings = filing::loadObjectsVector(input.updateJsonIO("cameras"));
     for (const auto &objString : objectStrings)
     {
         std::string objectClass = JsonIO(objString).read<std::string>("class_name");
-        if (objString == "WorldObject2d")
+        if (objectClass == "WorldObject2d")
         {
-            addWorldObject(game::factory::WorldObjecsFactory.produce(objectClass, objString, shared_from_this()));
+            std::shared_ptr<physics::WorldObject2d> object =
+                game::factory::WorldObjecsFactory.produce(objectClass,
+                                                          objString,
+                                                          *this);
+            addWorldObject(object);
         }
         else
         {
-            addObject(game::factory::GraphicalObjecsFactory.produce(objectClass, objString));
+            std::shared_ptr<graphics::GraphicalObject> object =
+                game::factory::GraphicalObjecsFactory.produce(objectClass,
+                                                              objString);
+            addObject(object);
         }
         // addWorldJoint(); // TODO
     }
     for (const auto &cameraString : cameraStrings)
     {
         std::string cameraType = JsonIO(cameraString).read<std::string>("class_name");
-        addCamera(game::factory::CamerasFactory.produce(cameraType, cameraString));
+        std::shared_ptr<graphics::Camera> camera = game::factory::CamerasFactory.produce(cameraType, cameraString);
+        addCamera(camera);
     }
 }
 
@@ -73,7 +87,7 @@ std::string Scene2d::dump()
     }
     JsonIO output{NamedStoredObject::dump()};
     output.write<graphics::Vector2d<float>>("gravity", _gravity);
-    output.write<float>("z", _zPosition);
+    output.write<float>("z_position", _zPosition);
     output.write<float>("thickness", _sceneThickness);
     output.write<float>("relative_position_in_slice", _relativeSlicePosition);
     return filing::mergeStrings({
@@ -85,6 +99,6 @@ std::string Scene2d::dump()
 
 float Scene2d::getDistance() const
 {
-    return _zPosition;
+    return _zPosition / _thickness;
 }
 } // namespace ample::filing

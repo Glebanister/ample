@@ -15,6 +15,7 @@ include_directories(../extern/imgui-filebrowser/)
 include_directories(../extern/rapidjson/include)
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(../core/include)
+include_directories(../extern/imnodes/)
 
 set(IMGUI_SOURCES
     ../extern/imgui/imgui.cpp
@@ -24,6 +25,7 @@ set(IMGUI_SOURCES
     ../extern/imgui_sdl/imgui_sdl.cpp
     ../extern/imgui/examples/imgui_impl_opengl3.cpp
     ../extern/imgui/examples/imgui_impl_sdl.cpp
+    ../extern/imnodes/imnodes.cpp
    )
 
 set(SOURCES
@@ -33,8 +35,36 @@ set(SOURCES
     src/Observer.cpp
     src/InterfaceUnit.cpp
     src/Editor.cpp
-    src/SliceManager.cpp
+    src/Browser.cpp
     src/TextureManager.cpp
+    src/StateMachineEditor.cpp
+    src/LevelEditor.cpp
+    src/ObjectConstructor.cpp
+    src/LevelBrowser.cpp
+    src/ObjectStorageGui.cpp
+    src/StateMachineBrowser.cpp
+    src/Utils.cpp
+
+    src/objects/GraphicalEdgeGui.cpp
+    src/objects/GraphicalPolygonGui.cpp
+    src/objects/GraphicalObjectGui.cpp
+    src/objects/GraphicalObject2dGui.cpp
+    src/objects/LevelGui.cpp
+    src/objects/SliceGui.cpp
+    src/objects/ObjectGui.cpp
+    src/objects/StateMachineGui.cpp
+    src/objects/WorldObjectGui.cpp
+    src/objects/TextureGui.cpp
+    src/objects/TimerTransitionGui.cpp
+    src/objects/CollisionTransitionGui.cpp
+    src/objects/KeyboardTransitionGui.cpp
+    src/objects/StateGui.cpp
+    src/objects/ActionGui.cpp
+    src/objects/TransitionGui.cpp
+    src/objects/GraphicalRotateActionGui.cpp
+    src/objects/PhysicalApplyForceActionGui.cpp
+    src/objects/FollowObjectActionGui.cpp
+    src/objects/CameraTranslateActionGui.cpp
     )
 
 add_executable(ample-gui ${SOURCES} ${IMGUI_SOURCES})

@@ -1,12 +1,12 @@
 #include <GL/gl.h>
-#include <stdexcept>
 #include <cassert>
 #include <iostream>
+#include <stdexcept>
 
-#include "WindowActivity.h"
 #include "Exception.h"
-#include "ShaderProcessor.h"
 #include "OpenGLEnvironment.h"
+#include "ShaderProcessor.h"
+#include "WindowActivity.h"
 
 namespace ample::window
 {
@@ -30,13 +30,17 @@ void WindowEventHandler::handleEvent(const SDL_Event &event)
     }
 }
 
-WindowActivity::WindowActivity(Window &window)
-    : _window(window),
-      _quitHandler(std::make_shared<QuitHandler>(*this)),
-      _windowEventHandler(std::make_shared<WindowEventHandler>(*this, _window))
+WindowActivity::WindowActivity(const std::string &name,
+                               const pixel_t &x,
+                               const pixel_t &y,
+                               const pixel_t &width,
+                               const pixel_t &height,
+                               const uint32_t &posFlags,
+                               const uint32_t &modeFlags)
+    : _window(name, x, y, width, height, posFlags, modeFlags)
 {
-    control::EventManager::instance().addEventHandler(SDL_QUIT, *_quitHandler);
-    control::EventManager::instance().addEventHandler(SDL_WINDOWEVENT, *_windowEventHandler);
+    control::EventManager::instance().addEventHandler(SDL_QUIT, std::make_shared<QuitHandler>(*this));
+    control::EventManager::instance().addEventHandler(SDL_WINDOWEVENT, std::make_shared<WindowEventHandler>(*this, _window));
     time::Clock::init();
 
     os::environment::OpenGLEnvironment::instance();

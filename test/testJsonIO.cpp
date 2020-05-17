@@ -1,3 +1,5 @@
+#include "gtest/gtest.h"
+
 #include "ample/Action.h"
 #include "ample/DistanceTransition.h"
 #include "ample/GraphicalObject2d.h"
@@ -8,7 +10,7 @@
 #include "ample/RegularPolygon.h"
 #include "ample/StateMachine.h"
 #include "ample/TimerTransition.h"
-#include "gtest/gtest.h"
+#include "ample/WorldObject2d.h"
 
 TEST(ObjectIO, GraphicalEdge)
 {
@@ -60,7 +62,8 @@ TEST(StateMachineIO, Empty)
     auto run = std::make_shared<ample::game::StateMachine::State>(sm, "run");
     sm.setStartState(run);
     auto smData = sm.dump();
-    auto sameStateMachine = ample::game::StateMachine(ample::filing::JsonIO{smData});
+    std::shared_ptr<ample::game::Namespace> names = std::make_shared<ample::game::Namespace>();
+    auto sameStateMachine = ample::game::StateMachine(ample::filing::JsonIO{smData}, names);
     auto sameData = sameStateMachine.dump();
     ASSERT_EQ(smData, sameData);
 }
@@ -76,7 +79,8 @@ TEST(StateMachineIO, WithOneTransition)
         idle,
         1000));
     auto smData = sm.dump();
-    auto sameStateMachine = ample::game::StateMachine(ample::filing::JsonIO{smData});
+    std::shared_ptr<ample::game::Namespace> names = std::make_shared<ample::game::Namespace>();
+    auto sameStateMachine = ample::game::StateMachine(ample::filing::JsonIO{smData}, names);
     auto sameData = sameStateMachine.dump();
     ASSERT_EQ(smData, sameData);
 }
@@ -131,7 +135,8 @@ TEST(StateMachineIO, MultipleTransitions)
         s5,
         10000));
     auto smData = sm.dump();
-    auto sameStateMachine = ample::game::StateMachine(ample::filing::JsonIO{smData});
+    std::shared_ptr<ample::game::Namespace> names = std::make_shared<ample::game::Namespace>();
+    auto sameStateMachine = ample::game::StateMachine(ample::filing::JsonIO{smData}, names);
     auto sameData = sameStateMachine.dump();
 
     ASSERT_EQ(smData, sameData);
@@ -151,21 +156,53 @@ TEST(StateMachineIO, Actions)
         1000.0f));
     run->addOnActiveAction(std::make_shared<ample::game::stateMachine::actions::GraphicalRotateAction>(
         "action1",
-        std::vector<std::string>{"name1, name2"},
+        std::vector<std::string>{"name1", "name2"},
         ample::graphics::Vector3d<float>{1.0f, 0.0f, 0.0f},
         1.0f));
     idle->addOnStartAction(std::make_shared<ample::game::stateMachine::actions::GraphicalTranslateAction>(
         "action3",
-        std::vector<std::string>{"hello, world"},
+        std::vector<std::string>{"hello", "world"},
         ample::graphics::Vector3d<float>{1.0f, 0.0f, 0.0f}));
     run->addOnStopAction(std::make_shared<ample::game::stateMachine::actions::GraphicalRotateAction>(
         "action300",
-        std::vector<std::string>{"name4, fff"},
+        std::vector<std::string>{"name4", "fff"},
         ample::graphics::Vector3d<float>{1.0f, 0.0f, 0.0f},
         100.0f));
     auto smData = sm.dump();
-    std::cout << smData << std::endl;
-    auto sameStateMachine = ample::game::StateMachine(ample::filing::JsonIO{smData});
+    std::shared_ptr<ample::game::Namespace> names = std::make_shared<ample::game::Namespace>();
+    auto sameStateMachine = ample::game::StateMachine(ample::filing::JsonIO{smData}, names);
     auto sameData = sameStateMachine.dump();
     ASSERT_EQ(smData, sameData);
+}
+
+TEST(WorldObjectIO, Test1)
+{
+    auto layer = ample::physics::WorldLayer2d({0.1f, 10.0f}, 12.0f, 11.0f, 0.6f, std::make_shared<ample::game::Namespace>());
+    auto obj1 = ample::physics::WorldObject2d("ObjectName",
+                                              layer,
+                                              ample::physics::BodyType::DYNAMIC_BODY,
+                                              ample::geometry::RegularPolygon<float>(10.0f, 4),
+                                              0.4f,
+                                              {12.0f, 33.0f},
+                                              {0.1f, 12.4f},
+                                              ample::graphics::normalsMode::VERTEX,
+                                              {11.0f, 12.0f},
+                                              99.0f,
+                                              {11.0f, -9.0f},
+                                              123.0f,
+                                              0.1f,
+                                              5.0f,
+                                              true,
+                                              false,
+                                              true,
+                                              false,
+                                              true,
+                                              11.0f,
+                                              {-0.1f, 1.0f},
+                                              100.0f,
+                                              2.0f);
+    auto data1 = obj1.dump();
+    auto obj2 = ample::physics::WorldObject2d(data1, layer);
+    auto data2 = obj2.dump();
+    ASSERT_EQ(data1, data2);
 }

@@ -27,7 +27,7 @@ enum mouseButton
     BUTTON_RIGHT = SDL_BUTTON_RIGHT,
 };
 
-enum keysym
+enum keysym : int
 {
     UNKNOWN = SDLK_UNKNOWN,
     RETURN = SDLK_RETURN,
