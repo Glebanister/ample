@@ -37,6 +37,7 @@ StateMachineGui::StateMachineGui(std::shared_ptr<filing::NamedObject> sm, std::s
         }
     }
     _links.emplace_back(-1, stateId[_stateMachine->getCurrentState()] * 2);
+    _stateMachine->setNamespace(selectedLevel->getNamespacePointer());
 }
 
 StateMachineGui::StateMachineGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *storage)
@@ -68,6 +69,7 @@ void StateMachineGui::onSubmitCreate()
         throw game::GameException("Level is not selected");
     }
     _stateMachine = _game2dEditor->createStateMachine(nameBuffer, selectedLevel);
+    _stateMachine->setNamespace(selectedLevel->getNamespacePointer());
 }
 
 void StateMachineGui::onEdit()
@@ -146,7 +148,9 @@ void StateMachineGui::onView()
         {
             _objectStorageGui->create(finalObjectClass::STATE, false, [&](std::shared_ptr<ObjectGui> stateGui) {
                 imnodes::SetNodeScreenSpacePos(_statesList.size(), ImGui::GetMousePos());
-                _statesList.push_back(std::dynamic_pointer_cast<StateGui>(stateGui)->getState());
+                auto state = std::dynamic_pointer_cast<StateGui>(stateGui)->getState();
+                _statesList.push_back(state);
+                state->setNamespace(_stateMachine->getNamespacePointer());
             });
             std::dynamic_pointer_cast<StateGui>(_objectStorageGui->getOnInputGui())->presetStateMachine(_stateMachine);
         }

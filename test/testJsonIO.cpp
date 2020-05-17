@@ -177,7 +177,7 @@ TEST(StateMachineIO, Actions)
 
 TEST(WorldObjectIO, Test1)
 {
-    auto layer = ample::physics::WorldLayer2d({0.1f, 10.0f}, 12.0f, 11.0f, 0.6f);
+    auto layer = ample::physics::WorldLayer2d({0.1f, 10.0f}, 12.0f, 11.0f, 0.6f, std::make_shared<ample::game::Namespace>());
     auto obj1 = ample::physics::WorldObject2d("ObjectName",
                                               layer,
                                               ample::physics::BodyType::DYNAMIC_BODY,

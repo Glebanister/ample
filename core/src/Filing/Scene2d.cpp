@@ -18,8 +18,9 @@ Scene2d::Scene2d(const std::string &name,
                  const ample::graphics::Vector2d<float> &gravity,
                  float z,
                  float thickness,
-                 float relativePositionInSlice)
-    : WorldLayer2d(gravity, z, thickness, relativePositionInSlice),
+                 float relativePositionInSlice,
+                 std::shared_ptr<game::Namespace> ns)
+    : WorldLayer2d(gravity, z, thickness, relativePositionInSlice, ns),
       NamedStoredObject(name, "Scene2d"),
       _gravity(gravity),
       _zPosition(z),
@@ -30,11 +31,16 @@ Scene2d::Scene2d(const std::string &name,
 
 Scene2d::Scene2d(const JsonIO &input,
                  std::shared_ptr<game::Namespace> globalNamespace)
-    : Scene2d(input.read<std::string>("name"),
-              input.read<graphics::Vector2d<float>>("gravity"),
-              input.read<float>("z_position"),
-              input.read<float>("thickness"),
-              input.read<float>("relative_position_in_slice"))
+    : WorldLayer2d(input.read<graphics::Vector2d<float>>("gravity"),
+                   input.read<float>("z_position"),
+                   input.read<float>("thickness"),
+                   input.read<float>("relative_position_in_slice"),
+                   globalNamespace),
+      NamedStoredObject(input),
+      _gravity(input.read<graphics::Vector2d<float>>("gravity")),
+      _zPosition(input.read<float>("z_position")),
+      _sceneThickness(input.read<float>("thickness")),
+      _relativeSlicePosition(input.read<float>("relative_position_in_slice"))
 {
     auto objectStrings = filing::loadObjectsVector(input.updateJsonIO("objects"));
     auto cameraStrings = filing::loadObjectsVector(input.updateJsonIO("cameras"));

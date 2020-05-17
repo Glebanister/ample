@@ -1,6 +1,6 @@
 #include "objects/FollowObjectActionGui.h"
-#include "Utils.h"
 #include "ObjectStorageGui.h"
+#include "Utils.h"
 
 namespace ample::gui
 {
@@ -10,8 +10,8 @@ FollowObjectActionGui::FollowObjectActionGui(std::shared_ptr<filing::NamedObject
     : ActionGui(obj, editor, storage),
       _followAction(std::dynamic_pointer_cast<game::stateMachine::actions::FollowObjectAction>(obj))
 {
-    std::memcpy(cameraName, _followAction->getCameraName().c_str(), sizeof(cameraName));
-    std::memcpy(objectName, _followAction->getObjectName().c_str(), sizeof(cameraName));
+    cameraName = _followAction->getCameraName();
+    objectName = _followAction->getObjectName();
     slowdown = _followAction->getSlowdown();
 }
 
@@ -24,8 +24,13 @@ FollowObjectActionGui::FollowObjectActionGui(std::shared_ptr<game::game2d::Game2
 void FollowObjectActionGui::onCreate()
 {
     ImGui::InputText("Name", nameBuffer, 255);
-    ImGui::InputText("Camera name", cameraName, 255);
-    ImGui::InputText("Object name", objectName, 255);
+    ASSERT(_state);
+    gui_utils::NamedObjectSelector("Camera",
+                                   cameraName,
+                                   _state->getNamespacePointer()->getAllNames());
+    gui_utils::NamedObjectSelector("Object",
+                                   objectName,
+                                   _state->getNamespacePointer()->getAllNames());
     gui_utils::InputCoordinates("Slowdown", slowdown.x, slowdown.y, slowdown.z, 0.2f);
 }
 
@@ -37,21 +42,19 @@ void FollowObjectActionGui::onSubmitCreate()
 
 void FollowObjectActionGui::onEdit()
 {
-    ImGui::InputText("Camera name", cameraName, 255);
-    ImGui::InputText("Object name", objectName, 255);
-    gui_utils::InputCoordinates("Slowdown", slowdown.x, slowdown.y, slowdown.z, 0.2f);
+    gui_utils::NamedObjectSelector("Camera",
+                                   cameraName,
+                                   _state->getNamespacePointer()->getAllNames());
+    gui_utils::NamedObjectSelector("Object",
+                                   objectName,
+                                   _state->getNamespacePointer()->getAllNames());
+    gui_utils::InputCoordinates("Slowdown", slowdown.x, slowdown.y, slowdown.z, 0.1f);
 }
 
 void FollowObjectActionGui::onSubmitEdit()
 {
-    if (cameraName)
-    {
-        _followAction->setCameraName(cameraName);
-    }
-    if (objectName)
-    {
-        _followAction->setObjectName(objectName);
-    }
+    _followAction->setCameraName(cameraName);
+    _followAction->setObjectName(objectName);
     _followAction->setSlowdown(slowdown);
 }
 
@@ -63,12 +66,12 @@ void FollowObjectActionGui::onView()
 void FollowObjectActionGui::onInspect()
 {
     ImGui::Text("Camera");
-    if (ImGui::Selectable(cameraName))
+    if (ImGui::Selectable(cameraName.c_str()))
     {
         _objectStorageGui->setFocus(cameraName);
     }
     ImGui::Text("Following object");
-    if (ImGui::Selectable(objectName))
+    if (ImGui::Selectable(objectName.c_str()))
     {
         _objectStorageGui->setFocus(objectName);
     }

@@ -11,6 +11,7 @@ StateGui::StateGui(std::shared_ptr<filing::NamedObject> state, std::shared_ptr<g
     : _game2dEditor(editor), _objectStorageGui(storage),
       _state(std::dynamic_pointer_cast<game::StateMachine::State>(state))
 {
+    _state->setNamespace(_state->getStateMachine().getNamespacePointer());
 }
 
 StateGui::StateGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *storage)
@@ -80,6 +81,8 @@ void StateGui::onEdit()
                 break;
             }
             actionGui->getAction()->getNamespacePointer()->setParentalNamespace(_state->getStateMachine().getNamespacePointer());
+            actionGui->setState(_state);
+            _state->setNamespace(_state->getStateMachine().getNamespacePointer());
         });
     }
 }
