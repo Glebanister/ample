@@ -28,10 +28,15 @@ enum class finalObjectClass
     STATE_MACHINE,
     STATE,
     TEXTURE,
+
     TIMER_TRANSITION,
     KEYBOARD_TRANSITION,
+    COLLISION_TRANSITION,
+
     GRAPHICAL_ROTATE_ACTION,
     PHYSICAL_APPLY_FORCE_ACTION,
+    FOLLOW_OBJECT_ACTION,
+    CAMERA_TRANSLATE_ACTION,
 };
 
 static std::map<std::string, ClassInfo> classIdByClassName{
@@ -41,10 +46,16 @@ static std::map<std::string, ClassInfo> classIdByClassName{
     {"StateMachine", {finalObjectClass::STATE_MACHINE}},
     {"State", {finalObjectClass::STATE, false}},
     {"Texture", {finalObjectClass::TEXTURE}},
+
     {"TimerTransition", {finalObjectClass::TIMER_TRANSITION, false, "Transition"}},
     {"KeyboardTransition", {finalObjectClass::KEYBOARD_TRANSITION, false, "Transition"}},
+    {"CollisionTransition", {finalObjectClass::COLLISION_TRANSITION, false, "Transition"}},
+
     {"GraphicalRotateAction", {finalObjectClass::GRAPHICAL_ROTATE_ACTION, false, "Action"}},
     {"PhysicalApplyForceAction", {finalObjectClass::PHYSICAL_APPLY_FORCE_ACTION, false, "Action"}},
+    {"PhysicalApplyForceAction", {finalObjectClass::PHYSICAL_APPLY_FORCE_ACTION, false, "Action"}},
+    {"FollowObjectAction", {finalObjectClass::FOLLOW_OBJECT_ACTION, false, "Action"}},
+    {"CameraTranslateAction", {finalObjectClass::CAMERA_TRANSLATE_ACTION, false, "Action"}},
 };
 
 class ObjectStorageGui

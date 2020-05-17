@@ -72,7 +72,44 @@ inline void CloseCurrentPopupOnSuccessButton(bool &success)
     }
 }
 
-void inputKeysym(const std::string &label, control::keysym &key);
+static std::unordered_map<std::string, control::KeyboardManager::scancodes> keysymByName{
+    {"a", control::KeyboardManager::scancodes::A},
+    {"b", control::KeyboardManager::scancodes::B},
+    {"c", control::KeyboardManager::scancodes::C},
+    {"d", control::KeyboardManager::scancodes::D},
+    {"e", control::KeyboardManager::scancodes::E},
+    {"f", control::KeyboardManager::scancodes::F},
+    {"g", control::KeyboardManager::scancodes::G},
+    {"h", control::KeyboardManager::scancodes::H},
+    {"i", control::KeyboardManager::scancodes::I},
+    {"j", control::KeyboardManager::scancodes::J},
+    {"k", control::KeyboardManager::scancodes::K},
+    {"l", control::KeyboardManager::scancodes::L},
+    {"m", control::KeyboardManager::scancodes::M},
+    {"n", control::KeyboardManager::scancodes::N},
+    {"o", control::KeyboardManager::scancodes::O},
+    {"p", control::KeyboardManager::scancodes::P},
+    {"q", control::KeyboardManager::scancodes::Q},
+    {"r", control::KeyboardManager::scancodes::R},
+    {"s", control::KeyboardManager::scancodes::S},
+    {"t", control::KeyboardManager::scancodes::T},
+    {"u", control::KeyboardManager::scancodes::U},
+    {"v", control::KeyboardManager::scancodes::V},
+    {"w", control::KeyboardManager::scancodes::W},
+    {"x", control::KeyboardManager::scancodes::X},
+    {"y", control::KeyboardManager::scancodes::Y},
+    {"z", control::KeyboardManager::scancodes::Z},
+    {"space", control::KeyboardManager::scancodes::C_SPACE},
+    {"enter", control::KeyboardManager::scancodes::C_ENTER},
+    {"lshift", control::KeyboardManager::scancodes::C_LSHIFT},
+    {"rshift", control::KeyboardManager::scancodes::C_RSHIFT},
+    {"lctrl", control::KeyboardManager::scancodes::C_LCTRL},
+    {"rctrl", control::KeyboardManager::scancodes::C_RCTRL},
+    {"lalt", control::KeyboardManager::scancodes::C_LALT},
+    {"ralt", control::KeyboardManager::scancodes::C_RALT},
+    {"tab", control::KeyboardManager::scancodes::C_TAB}};
+
+void inputKeysym(const std::string &label, std::string &keyname, control::keysym &keycode);
 
 template <typename T>
 void InputScalar(const std::string &label, T &value, T step);
@@ -87,6 +124,12 @@ template <typename T>
 void InputCoordinates(const std::string &label, T &valueX, T &valueY, T step, T min, T max);
 
 template <typename T>
+void InputCoordinates(const std::string &label, T &valueX, T &valueY, T &valueZ, T step);
+
+template <typename T>
+void InputCoordinates(const std::string &label, T &valueX, T &valueY, T &valueZ, T step, T min, T max);
+
+template <typename T>
 void NamedObjectSelector(const std::string &label, std::shared_ptr<T> &object, const std::vector<std::shared_ptr<T>> &list);
 
 template <typename T>
@@ -94,6 +137,9 @@ void NamedObjectSelector(const std::string &label, std::shared_ptr<T> &object, c
 
 template <typename T>
 void NamedObjectSelector(const std::string &label, std::shared_ptr<T> &object, const std::unordered_map<std::string, std::shared_ptr<T>> &list);
+
+template <typename T>
+void NamedObjectSelector(const std::string &label, std::string &objectName, const std::unordered_map<std::string, std::shared_ptr<T>> &list);
 
 inline void StringSelector(const std::string &label, std::string &string, const std::vector<std::string> &list)
 {

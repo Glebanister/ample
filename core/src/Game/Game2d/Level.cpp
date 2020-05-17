@@ -227,7 +227,8 @@ std::shared_ptr<filing::Scene2d> Level::createSlice(const size_t num, const std:
                                                               _defaultGravity,
                                                               num * _sliceThikness,
                                                               _sliceThikness,
-                                                              _physicsLayerPosition);
+                                                              _physicsLayerPosition,
+                                                              _levelNamespace);
     _sliceByDistance[num]->setVisibility(false);
     addBehavior(_sliceByDistance[num]);
     return _sliceByDistance[num];

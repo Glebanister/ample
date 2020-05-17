@@ -8,7 +8,7 @@ namespace ample::gui
 GraphicalRotateActionGui::GraphicalRotateActionGui(std::shared_ptr<filing::NamedObject> action,
                                                    std::shared_ptr<game::game2d::Game2dEditor> editor,
                                                    ObjectStorageGui *stor)
-    : ActionGui(action, editor, stor)
+    : ObjectGroupActionGui<graphics::GraphicalObject>(action, editor, stor)
 {
     _rotateAction = std::dynamic_pointer_cast<game::stateMachine::actions::GraphicalRotateAction>(action);
     angle = _rotateAction->getAngle();
@@ -16,7 +16,7 @@ GraphicalRotateActionGui::GraphicalRotateActionGui(std::shared_ptr<filing::Named
 }
 
 GraphicalRotateActionGui::GraphicalRotateActionGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *stor)
-    : ActionGui(editor, stor) {}
+    : ObjectGroupActionGui<graphics::GraphicalObject>(editor, stor) {}
 
 void GraphicalRotateActionGui::onCreate()
 {
@@ -34,11 +34,12 @@ void GraphicalRotateActionGui::onSubmitCreate()
                                                                                          axis,
                                                                                          angle);
     _baseActionPointer = _rotateAction; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    _groupAction = _rotateAction;
 }
 
 void GraphicalRotateActionGui::onEdit()
 {
-    ActionGui::onEdit();
+    ObjectGroupActionGui<graphics::GraphicalObject>::onEdit();
     gui_utils::InputScalar("Axis x", axis.x, 1.0f);
     gui_utils::InputScalar("Axis y", axis.y, 1.0f);
     gui_utils::InputScalar("Axis z", axis.z, 1.0f);
@@ -47,7 +48,7 @@ void GraphicalRotateActionGui::onEdit()
 
 void GraphicalRotateActionGui::onSubmitEdit()
 {
-    ActionGui::onSubmitEdit();
+    ObjectGroupActionGui<graphics::GraphicalObject>::onSubmitEdit();
     _rotateAction->setAngle(angle);
     _rotateAction->setAxis(axis);
 }
@@ -55,7 +56,7 @@ void GraphicalRotateActionGui::onSubmitEdit()
 void GraphicalRotateActionGui::onView() {}
 void GraphicalRotateActionGui::onInspect()
 {
-    ActionGui::onInspect();
+    ObjectGroupActionGui<graphics::GraphicalObject>::onInspect();
 }
 
 void GraphicalRotateActionGui::onPreview()

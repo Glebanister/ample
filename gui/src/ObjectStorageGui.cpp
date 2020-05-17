@@ -16,7 +16,8 @@ ObjectStorageGui::ObjectStorageGui(std::shared_ptr<game::game2d::Game2dEditor> e
             buildGuiAndAdd(slice);
             for (auto &object : slice->objects())
             {
-                buildGuiAndAdd(object);
+                auto objGui = std::dynamic_pointer_cast<WorldObjectGui>(buildGuiAndAdd(object));
+                objGui->setLevel(level);
                 if (object->texture())
                 {
                     if (!_guiByObjectName[object->texture()->name()])
@@ -50,10 +51,12 @@ ObjectStorageGui::ObjectStorageGui(std::shared_ptr<game::game2d::Game2dEditor> e
         for (auto &sm : level->stateMachines())
         {
             buildGuiAndAdd(sm);
+            // sm->setNamespace(level->getNamespacePointer());
             std::unordered_map<std::string, bool> used;
             std::function<void(std::shared_ptr<game::StateMachine::State>)> dfs =
                 [&](std::shared_ptr<game::StateMachine::State> curState) {
                     ASSERT(curState);
+                    // curState->setNamespace(sm->getNamespacePointer());
                     if (used[curState->name()])
                         return;
                     used[curState->name()] = true;
@@ -61,6 +64,7 @@ ObjectStorageGui::ObjectStorageGui(std::shared_ptr<game::game2d::Game2dEditor> e
                     {
                         auto gui = std::dynamic_pointer_cast<TransitionGui>(buildGuiAndAdd(transition));
                         gui->presetNextState(transition->getNextState());
+                        // transition->setNamespace(curState->getNamespacePointer());
                         gui->presetStateMachine(sm);
                         dfs(transition->getNextState());
                     }
@@ -69,7 +73,9 @@ ObjectStorageGui::ObjectStorageGui(std::shared_ptr<game::game2d::Game2dEditor> e
                     auto actionAdder = [&](std::vector<std::shared_ptr<game::Action>> &actions) {
                         std::for_each(actions.begin(), actions.end(),
                                       [&](auto &act) {
-                                          buildGuiAndAdd(act);
+                                          auto actionGui = std::dynamic_pointer_cast<ActionGui>(buildGuiAndAdd(act));
+                                        //   actionGui->setState(curState);
+                                        //   act->setNamespace(curState->getNamespacePointer());
                                       });
                     };
                     actionAdder(curState->getOnStartActions());

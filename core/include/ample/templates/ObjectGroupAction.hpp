@@ -29,7 +29,7 @@ void ObjectGroupAction<T>::updateObjectPointers()
 }
 
 template <typename T>
-std::vector<std::shared_ptr<T>> &ObjectGroupAction<T>::bodyPointers() noexcept
+std::vector<std::shared_ptr<T>> &ObjectGroupAction<T>::bodyPointers()
 {
     return _bodyPointers;
 }

@@ -2,12 +2,12 @@
 
 #include "ample/GraphicalRotateAction.h"
 
-#include "objects/ActionGui.h"
+#include "objects/ObjectGroupActionGui.h"
 
 namespace ample::gui
 {
 class ActionGui;
-class GraphicalRotateActionGui : public ActionGui
+class GraphicalRotateActionGui : public ObjectGroupActionGui<graphics::GraphicalObject>
 {
 public:
     GraphicalRotateActionGui(std::shared_ptr<filing::NamedObject>, std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *);

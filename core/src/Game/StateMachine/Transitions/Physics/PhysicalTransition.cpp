@@ -29,7 +29,16 @@ void PhysicalTransition::updateObjectPointers()
     }
 }
 
-void PhysicalTransition::onAwake()
+void PhysicalTransition::addObjectName(const std::string &nm)
+{
+    _bodyNames.push_back(nm);
+}
+std::vector<std::string> &PhysicalTransition::getBodyNames()
+{
+    return _bodyNames;
+}
+
+void PhysicalTransition::onStart()
 {
     updateObjectPointers();
     _pointersInitialized = true;

@@ -70,8 +70,48 @@ ClassInfo ClassSelector::popResult()
     return res;
 }
 
-void inputKeysym(const std::string &label, control::keysym &key)
+void inputKeysym(const std::string &label, std::string &keyname, control::keysym &keycode)
 {
-    ImGui::InputScalar(label.c_str(), ImGuiDataType_S16, &key);
+    StringSelector(label, keyname, {
+                                       "a",
+                                       "b",
+                                       "c",
+                                       "d",
+                                       "e",
+                                       "f",
+                                       "g",
+                                       "h",
+                                       "i",
+                                       "j",
+                                       "k",
+                                       "l",
+                                       "m",
+                                       "n",
+                                       "o",
+                                       "p",
+                                       "q",
+                                       "r",
+                                       "s",
+                                       "t",
+                                       "u",
+                                       "v",
+                                       "w",
+                                       "x",
+                                       "y",
+                                       "z",
+                                       "space",
+                                       "enter",
+                                       "lshift",
+                                       "rshift",
+                                       "lctrl",
+                                       "rctrl",
+                                       "lalt",
+                                       "ralt",
+                                       "tab",
+                                   });
+    if (keyname.length())
+    {
+        keycode = static_cast<control::keysym>(keysymByName[keyname]);
+    }
 }
 } // namespace ample::gui::gui_utils

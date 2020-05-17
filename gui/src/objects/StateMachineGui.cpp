@@ -37,6 +37,7 @@ StateMachineGui::StateMachineGui(std::shared_ptr<filing::NamedObject> sm, std::s
         }
     }
     _links.emplace_back(-1, stateId[_stateMachine->getCurrentState()] * 2);
+    // _stateMachine->setNamespace(selectedLevel->getNamespacePointer());
 }
 
 StateMachineGui::StateMachineGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *storage)
@@ -68,6 +69,7 @@ void StateMachineGui::onSubmitCreate()
         throw game::GameException("Level is not selected");
     }
     _stateMachine = _game2dEditor->createStateMachine(nameBuffer, selectedLevel);
+    _stateMachine->setNamespace(selectedLevel->getNamespacePointer());
 }
 
 void StateMachineGui::onEdit()
@@ -95,7 +97,12 @@ bool isRoot(int i)
 
 int getStateIdByLinkId(int i)
 {
-    return i / 2;
+    return i / 1000;
+}
+
+size_t getIndexPin(int index)
+{
+    return (index - (index / 1000) * 1000) / 2;
 }
 
 void StateMachineGui::onView()
@@ -119,12 +126,23 @@ void StateMachineGui::onView()
         ImGui::Text("%s", state->name().c_str());
         imnodes::EndNodeTitleBar();
 
-        imnodes::BeginInputAttribute(i * 2, imnodes::PinShape_CircleFilled);
-        ImGui::Text("inputs");
-        imnodes::EndAttribute();
+        for (size_t j = 0; j < _cntInPinStates[i]; ++j)
+        {
+            imnodes::BeginInputAttribute(i * 1000 + j * 2, imnodes::PinShape_CircleFilled);
+            ImGui::Text("input #%ld", j + 1);
+            imnodes::EndAttribute();
+        }
 
-        imnodes::BeginOutputAttribute(i * 2 + 1, imnodes::PinShape_TriangleFilled);
-        ImGui::Text("outputs");
+        std::vector<std::shared_ptr<game::StateMachine::Transition>> transitions = _statesList[i]->transitions();
+        for (size_t j = 0; j < _cntOutPinStates[i] - 1; ++j)
+        {
+            imnodes::BeginOutputAttribute(i * 1000 + j * 2 + 1, imnodes::PinShape_TriangleFilled);
+            ImGui::Text("%s", transitions[j]->name().c_str());
+            imnodes::EndAttribute();
+        }
+
+        imnodes::BeginOutputAttribute(i * 1000 + _cntOutPinStates[i] * 2 - 1, imnodes::PinShape_TriangleFilled);
+        ImGui::Text("output");
         imnodes::EndAttribute();
 
         imnodes::EndNode();
@@ -147,6 +165,8 @@ void StateMachineGui::onView()
             _objectStorageGui->create(finalObjectClass::STATE, false, [&](std::shared_ptr<ObjectGui> stateGui) {
                 imnodes::SetNodeScreenSpacePos(_statesList.size(), ImGui::GetMousePos());
                 _statesList.push_back(std::dynamic_pointer_cast<StateGui>(stateGui)->getState());
+                _cntOutPinStates.push_back(1);
+                _cntInPinStates.push_back(1);
             });
             std::dynamic_pointer_cast<StateGui>(_objectStorageGui->getOnInputGui())->presetStateMachine(_stateMachine);
         }
@@ -184,7 +204,11 @@ void StateMachineGui::onView()
         {
             stateIdFrom = getStateIdByLinkId(idFrom);
             stateIdTo = getStateIdByLinkId(idTo);
-            _transitionSelector.open();
+            if (getIndexPin(idFrom) == _cntOutPinStates[stateIdFrom] - 1 &&
+                getIndexPin(idTo) == _cntInPinStates[stateIdTo] - 1)
+            {
+                _transitionSelector.open();
+            }
         }
     }
     _transitionSelector.drawInterface();
@@ -193,6 +217,8 @@ void StateMachineGui::onView()
         _objectStorageGui->create(_transitionSelector.popResult().finalClass, false, [&](std::shared_ptr<ObjectGui> gui) {
             auto tr = std::dynamic_pointer_cast<TransitionGui>(gui)->getBaseTransition();
             _statesList[stateIdFrom]->addTransition(tr);
+            _cntOutPinStates[stateIdFrom]++;
+            _cntInPinStates[stateIdTo]++;
             _links.emplace_back(idFrom, idTo);
             tr->getNamespace().setParentalNamespace(_stateMachine->getNamespacePointer());
         });

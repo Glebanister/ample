@@ -16,15 +16,6 @@ CollisionTransition::CollisionTransition(const std::string &name,
                          bodyNames),
       _triggerStartIdx(triggerStartIdx)
 {
-    if (bodyNames.empty() || _triggerStartIdx == 0)
-    {
-        throw GameException("There isn't no trigger object");
-    }
-    if (bodyNames.size() < 2 || _triggerStartIdx >= bodyNames.size())
-    {
-        throw GameException("At least one trigger must be specified");
-    }
-
     std::copy(_bodyNames.begin() + _triggerStartIdx, _bodyNames.end(),
               std::inserter(_triggers, _triggers.end()));
 }
@@ -45,9 +36,26 @@ std::string CollisionTransition::dump()
     return result;
 }
 
+size_t CollisionTransition::getTriggerStartId() const noexcept
+{
+    return _triggerStartIdx;
+}
+void CollisionTransition::setTriggerStartId(size_t i) noexcept
+{
+    _triggerStartIdx = i;
+}
+
 bool CollisionTransition::listen()
 {
     ASSERT(_pointersInitialized);
+    if (_bodyNames.empty() || _triggerStartIdx == 0)
+    {
+        throw GameException("There isn't no trigger object");
+    }
+    if (_bodyNames.size() < 2 || _triggerStartIdx >= _bodyNames.size())
+    {
+        throw GameException("At least one trigger must be specified");
+    }
 
     for (size_t i = 0; i < _triggerStartIdx; ++i)
     {

@@ -19,6 +19,9 @@
 #include "objects/KeyboardTransitionGui.h"
 #include "objects/WorldObjectGui.h"
 #include "objects/PhysicalApplyForceActionGui.h"
+#include "objects/FollowObjectActionGui.h"
+#include "objects/CameraTranslateActionGui.h"
+#include "objects/CollisionTransitionGui.h"
 
 namespace ample::gui
 {
@@ -37,6 +40,9 @@ class StateGui;
 class ActionGui;
 class KeyboardTransitionGui;
 class PhysicalApplyForceActionGui;
+class FollowObjectActionGui;
+class CameraTranslateActionGui;
+class CollisionTransitionGui;
 } // namespace ample::gui
 
 namespace ample::gui
@@ -68,6 +74,9 @@ inline std::unique_ptr<ObjectGui> ObjectStorageGui::buildGui(finalObjectClass ob
     case finalObjectClass::TIMER_TRANSITION:
         result = std::make_unique<TimerTransitionGui>(args...);
         break;
+    case finalObjectClass::COLLISION_TRANSITION:
+        result = std::make_unique<CollisionTransitionGui>(args...);
+        break;
     case finalObjectClass::KEYBOARD_TRANSITION:
         result = std::make_unique<KeyboardTransitionGui>(args...);
         break;
@@ -76,6 +85,12 @@ inline std::unique_ptr<ObjectGui> ObjectStorageGui::buildGui(finalObjectClass ob
         break;
     case finalObjectClass::PHYSICAL_APPLY_FORCE_ACTION:
         result = std::make_unique<PhysicalApplyForceActionGui>(args...);
+        break;
+    case finalObjectClass::FOLLOW_OBJECT_ACTION:
+        result = std::make_unique<FollowObjectActionGui>(args...);
+        break;
+    case finalObjectClass::CAMERA_TRANSLATE_ACTION:
+        result = std::make_unique<CameraTranslateActionGui>(args...);
         break;
     default:
         ASSERT(false);

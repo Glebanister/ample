@@ -8,7 +8,7 @@ namespace ample::gui
 PhysicalApplyForceActionGui::PhysicalApplyForceActionGui(std::shared_ptr<filing::NamedObject> action,
                                                          std::shared_ptr<game::game2d::Game2dEditor> editor,
                                                          ObjectStorageGui *stor)
-    : ActionGui(action, editor, stor)
+    : ObjectGroupActionGui<physics::WorldObject2d>(action, editor, stor)
 {
     _action = std::dynamic_pointer_cast<game::stateMachine::actions::PhysicalApplyForceAction>(action);
     _force = _action->getForce();
@@ -16,7 +16,7 @@ PhysicalApplyForceActionGui::PhysicalApplyForceActionGui(std::shared_ptr<filing:
 }
 
 PhysicalApplyForceActionGui::PhysicalApplyForceActionGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *stor)
-    : ActionGui(editor, stor) {}
+    : ObjectGroupActionGui<physics::WorldObject2d>(editor, stor) {}
 
 void PhysicalApplyForceActionGui::onCreate()
 {
@@ -33,18 +33,19 @@ void PhysicalApplyForceActionGui::onSubmitCreate()
                                                                                       _point,
                                                                                       true);
     _baseActionPointer = _action; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    _groupAction = _action;
 }
 
 void PhysicalApplyForceActionGui::onEdit()
 {
-    ActionGui::onEdit();
+    ObjectGroupActionGui<physics::WorldObject2d>::onEdit();
     gui_utils::InputCoordinates("Force", _force.x, _force.y, 1.0f);
     gui_utils::InputCoordinates("Point", _point.x, _point.y, 1.0f);
 }
 
 void PhysicalApplyForceActionGui::onSubmitEdit()
 {
-    ActionGui::onSubmitEdit();
+    ObjectGroupActionGui<physics::WorldObject2d>::onSubmitEdit();
     _action->setForce(_force);
     _action->setPoint(_point);
 }
@@ -52,7 +53,7 @@ void PhysicalApplyForceActionGui::onSubmitEdit()
 void PhysicalApplyForceActionGui::onView() {}
 void PhysicalApplyForceActionGui::onInspect()
 {
-    ActionGui::onInspect();
+    ObjectGroupActionGui<physics::WorldObject2d>::onInspect();
 }
 
 void PhysicalApplyForceActionGui::onPreview()

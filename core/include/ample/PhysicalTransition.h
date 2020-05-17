@@ -17,7 +17,10 @@ public:
                        std::shared_ptr<StateMachine::State> nextState);
     std::string dump() override;
 
-    void onAwake() override;
+    void addObjectName(const std::string &);
+    std::vector<std::string> &getBodyNames();
+
+    void onStart() override;
 
 protected:
     std::vector<std::string> _bodyNames;

@@ -6,7 +6,7 @@ int main(int argc, char **argv)
 {
     cxxopts::Options options("ample-engine", "Ample project executor. Specify directory you want to run.");
     options.add_options()("p,path", "Specify project path", cxxopts::value<std::string>())("h,help", "Print usage");
-    std::string projectName = "examples/sample/";
+    std::string projectName = "examples/demo2/";
     // try
     // {
     //     auto result = options.parse(argc, argv);

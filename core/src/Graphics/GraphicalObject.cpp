@@ -25,7 +25,7 @@ GraphicalObject::GraphicalObject(const std::string &name,
       _rotated(rotated),
       _modelMatrixUniform(_modelMatrix, "model_matrix")
 {
-    _position = translated * rotated * scaled * glm::vec4{_position, 1};
+    _position = glm::vec3{translated * rotated * scaled * glm::vec4{_position, 1}};
 }
 
 void GraphicalObject::addSubObject(std::shared_ptr<GraphicalObject> object)
@@ -58,13 +58,13 @@ void GraphicalObject::translate(const glm::vec3 &vector) noexcept
 
 void GraphicalObject::setRotate(const glm::vec3 &axis, const float angle) noexcept
 {
-    _rotated = glm::rotate(glm::radians(angle), axis);
-    _angle = glm::radians(angle); // TODO: not expected result
+    _rotated = glm::rotate(angle, axis);
+    _angle = angle; // TODO: not expected result
 }
 void GraphicalObject::rotate(const glm::vec3 &axis, const float angle) noexcept
 {
-    _rotated = glm::rotate(_rotated, glm::radians(angle), axis);
-    _angle += glm::radians(angle);
+    _rotated = glm::rotate(_rotated, angle, axis);
+    _angle += angle;
 }
 
 void GraphicalObject::setScale(const glm::vec3 &coef) noexcept

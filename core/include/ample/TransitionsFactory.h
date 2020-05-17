@@ -7,6 +7,7 @@
 #include "PositionTransition.h"
 #include "StateMachine.h"
 #include "TimerTransition.h"
+#include "CollisionTransition.h"
 
 namespace ample::game::factory
 {
@@ -21,5 +22,6 @@ static decltype(TransitionsFactory)::Register<KeyboardTransition> KeyboardTransi
 static decltype(TransitionsFactory)::Register<TimerTransition> TimerTransitionRegister("TimerTransition");
 static decltype(TransitionsFactory)::Register<stateMachine::transitions::DistanceTransition> DistanceTransitionRegister("DistanceTransition");
 static decltype(TransitionsFactory)::Register<stateMachine::transitions::PositionTransition> PositionTransitionRegister("PositionTransition");
+static decltype(TransitionsFactory)::Register<stateMachine::transitions::CollisionTransition> CollisionTransitionRegister("CollisionTransition");
 } // namespace registers
 } // namespace ample::factory

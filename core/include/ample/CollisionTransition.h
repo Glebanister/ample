@@ -15,10 +15,10 @@ public:
                         size_t startTriggers);
     CollisionTransition(const filing::JsonIO &input,
                         std::shared_ptr<StateMachine::State> nextState);
-
     std::string dump() override;
-
     bool listen() override;
+    size_t getTriggerStartId() const noexcept;
+    void setTriggerStartId(size_t) noexcept;
 
 private:
     size_t _triggerStartIdx;

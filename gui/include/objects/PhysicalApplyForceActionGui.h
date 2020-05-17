@@ -2,12 +2,12 @@
 
 #include "ample/PhysicalApplyForceAction.h"
 
-#include "objects/ActionGui.h"
+#include "objects/ObjectGroupActionGui.h"
 
 namespace ample::gui
 {
 class ActionGui;
-class PhysicalApplyForceActionGui : public ActionGui
+class PhysicalApplyForceActionGui : public ObjectGroupActionGui<physics::WorldObject2d>
 {
 public:
     PhysicalApplyForceActionGui(std::shared_ptr<filing::NamedObject>, std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *);

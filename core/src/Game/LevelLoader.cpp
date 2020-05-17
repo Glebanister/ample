@@ -40,6 +40,7 @@ void LevelLoader::onStart()
     _level = std::make_unique<game2d::Level>(_levelPath);
     fillActionsNamespace(_level->globalNamespace());
     fillTransitionsNamespace(_level->globalNamespace());
+    _level->onStart();
 }
 
 void LevelLoader::onActive()
@@ -52,22 +53,26 @@ void LevelLoader::onActive()
 void LevelLoader::onStop()
 {
     Behavior::onStop();
-    for (auto &transition : transitions())
+    if (_level)
     {
-        transition->getNamespace().clear();
+        _level->onStop();
+        for (auto &transition : transitions())
+        {
+            transition->getNamespace().clear();
+        }
+        for (auto &action : getOnStartActions())
+        {
+            action->getNamespace().clear();
+        }
+        for (auto &action : getOnActiveActions())
+        {
+            action->getNamespace().clear();
+        }
+        for (auto &action : getOnStopActions())
+        {
+            action->getNamespace().clear();
+        }
+        _level.reset();
     }
-    for (auto &action : getOnStartActions())
-    {
-        action->getNamespace().clear();
-    }
-    for (auto &action : getOnActiveActions())
-    {
-        action->getNamespace().clear();
-    }
-    for (auto &action : getOnStopActions())
-    {
-        action->getNamespace().clear();
-    }
-    _level.reset();
 }
 } // namespace ample::game

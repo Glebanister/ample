@@ -70,6 +70,22 @@ inline void InputCoordinates(const std::string &label, T &valueX, T &valueY, T s
 }
 
 template <typename T>
+void InputCoordinates(const std::string &label, T &valueX, T &valueY, T &valueZ, T step)
+{
+    InputScalar(label + " x", valueX, step);
+    InputScalar(label + " y", valueY, step);
+    InputScalar(label + " z", valueZ, step);
+}
+
+template <typename T>
+void InputCoordinates(const std::string &label, T &valueX, T &valueY, T &valueZ, T step, T min, T max)
+{
+    InputScalar(label + " x", valueX, step, min, max);
+    InputScalar(label + " y", valueY, step, min, max);
+    InputScalar(label + " z", valueZ, step, min, max);
+}
+
+template <typename T>
 inline void NamedObjectSelector(const std::string &label, std::shared_ptr<T> &object, const std::vector<std::shared_ptr<T>> &list)
 {
     if (ImGui::Button(label.c_str()))
@@ -162,6 +178,39 @@ void NamedObjectSelector(const std::string &label, std::shared_ptr<T> &object, c
             if (ImGui::Selectable(id.c_str()))
             {
                 object = obj;
+            }
+        }
+        ImGui::EndPopup();
+    }
+}
+
+template <typename T>
+void NamedObjectSelector(const std::string &label, std::string &objectName, const std::unordered_map<std::string, std::shared_ptr<T>> &list)
+{
+    if (ImGui::Button(label.c_str()))
+    {
+        ImGui::OpenPopup((label + ".popup").c_str());
+    }
+    ImGui::SameLine();
+    if (objectName.length())
+    {
+        ImGui::Text("%s", objectName.c_str());
+    }
+    else
+    {
+        gui_utils::TextDisabled("[select]");
+    }
+    if (ImGui::BeginPopup((label + ".popup").c_str()))
+    {
+        if (list.empty())
+        {
+            gui_utils::TextDisabled("[empty]");
+        }
+        for (auto &[id, obj] : list)
+        {
+            if (ImGui::Selectable(id.c_str()))
+            {
+                objectName = obj->name();
             }
         }
         ImGui::EndPopup();

@@ -15,11 +15,13 @@ public:
             const ample::graphics::Vector2d<float> &gravity,
             float z,
             float thickness,
-            float relativePositionInSlice);
+            float relativePositionInSlice,
+            std::shared_ptr<game::Namespace> ns);
 
     Scene2d(const JsonIO &input, std::shared_ptr<game::Namespace> globalNamespace);
     std::string dump() override;
     float getDistance() const;
+    void setLevelNamespace(std::shared_ptr<game::Namespace>) noexcept;
 
 private:
     std::vector<std::shared_ptr<ample::graphics::GraphicalObject>> _objs;

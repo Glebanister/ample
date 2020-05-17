@@ -2,6 +2,7 @@
 
 #include "GraphicalObject2d.h"
 #include "Vector2d.h"
+#include "Circle.h"
 #include "WorldContact2d.h"
 #include "WorldLayer2d.h"
 #include "box2d/b2_body.h"
@@ -88,6 +89,7 @@ public:
     //void onPause() override;//TODO
 
     Fixture addFixture(const std::vector<ample::graphics::Vector2d<float>> &shape);
+    Fixture addFixture(const geometry::Circle &shape);
 
     void setSpeedX(float desiredVelX);
     void setSpeedY(float desiredVelY);
