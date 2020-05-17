@@ -6,27 +6,27 @@ int main(int argc, char **argv)
 {
     cxxopts::Options options("ample-engine", "Ample project executor. Specify directory you want to run.");
     options.add_options()("p,path", "Specify project path", cxxopts::value<std::string>())("h,help", "Print usage");
-    std::string projectName = "examples/demo2/";
-    // try
-    // {
-    //     auto result = options.parse(argc, argv);
-    //     if (result.count("help"))
-    //     {
-    //         std::cout << options.help() << std::endl;
-    //         return 0;
-    //     }
-    //     if (!result.count("path"))
-    //     {
-    //         std::cout << "path is required" << std::endl;
-    //         return 0;
-    //     }
-    //     projectName = result["path"].as<std::string>();
-    // }
-    // catch (const std::exception &e)
-    // {
-    //     std::cout << e.what() << std::endl;
-    //     return 0;
-    // }
+    std::string projectName = "";
+    try
+    {
+        auto result = options.parse(argc, argv);
+        if (result.count("help"))
+        {
+            std::cout << options.help() << std::endl;
+            return 0;
+        }
+        if (!result.count("path"))
+        {
+            std::cout << "path is required" << std::endl;
+            return 0;
+        }
+        projectName = result["path"].as<std::string>();
+    }
+    catch (const std::exception &e)
+    {
+        std::cout << e.what() << std::endl;
+        return 0;
+    }
 
     try
     {
