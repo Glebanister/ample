@@ -1,8 +1,8 @@
 #include <imgui.h>
 
+#include "ObjectStorageGui.h"
 #include "Utils.h"
 #include "objects/ActionGui.h"
-#include "ObjectStorageGui.h"
 
 namespace ample::gui
 {
@@ -15,6 +15,16 @@ ActionGui::ActionGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectS
     : _game2dEditor(editor),
       _objectStorageGui(storage)
 {
+}
+
+void ActionGui::setState(std::shared_ptr<game::StateMachine::State> state) noexcept
+{
+    _state = state;
+}
+
+std::shared_ptr<game::StateMachine::State> ActionGui::getState() const noexcept
+{
+    return _state;
 }
 
 std::shared_ptr<game::Action> ActionGui::getAction()

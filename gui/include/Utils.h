@@ -72,7 +72,7 @@ inline void CloseCurrentPopupOnSuccessButton(bool &success)
     }
 }
 
-void inputKeysym(const std::string &label, control::keysym &key);
+void inputKeysym(const std::string &label, std::string &keyname, control::keysym &keycode);
 
 template <typename T>
 void InputScalar(const std::string &label, T &value, T step);

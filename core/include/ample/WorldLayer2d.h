@@ -30,7 +30,8 @@ public:
     explicit WorldLayer2d(const ample::graphics::Vector2d<float> &gravity,
                           float z,
                           float thickness,
-                          float relativePositionInSlice);
+                          float relativePositionInSlice,
+                          std::shared_ptr<game::Namespace>);
     void setContactListener(ContactListener &listener);
     void addWorldObject(std::shared_ptr<WorldObject2d> obj);
 
