@@ -6,6 +6,7 @@ namespace ample::game::stateMachine::actions
 {
 class PhysicalSetMassAction : public PhysicalAction
 {
+public:
     PhysicalSetMassAction(const std::string &name,
                           const std::vector<std::string> &bodyNames,
                           float mass);

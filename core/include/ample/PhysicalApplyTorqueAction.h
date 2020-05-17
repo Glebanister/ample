@@ -6,6 +6,7 @@ namespace ample::game::stateMachine::actions
 {
 class PhysicalApplyTorqueAction : public PhysicalAction
 {
+public:
     PhysicalApplyTorqueAction(const std::string &name,
                               const std::vector<std::string> &bodyNames,
                               float torque,

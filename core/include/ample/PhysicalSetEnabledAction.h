@@ -6,6 +6,7 @@ namespace ample::game::stateMachine::actions
 {
 class PhysicalSetEnabledAction : public PhysicalAction
 {
+public:
     PhysicalSetEnabledAction(const std::string &name,
                              const std::vector<std::string> &bodyNames,
                              bool flag);

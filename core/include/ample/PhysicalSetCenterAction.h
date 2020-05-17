@@ -6,6 +6,7 @@ namespace ample::game::stateMachine::actions
 {
 class PhysicalSetCenterAction : public PhysicalAction
 {
+public:
     PhysicalSetCenterAction(const std::string &name,
                             const std::vector<std::string> &bodyNames,
                             const graphics::Vector2d<float> &center);

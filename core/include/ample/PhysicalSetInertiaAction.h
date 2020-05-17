@@ -6,6 +6,7 @@ namespace ample::game::stateMachine::actions
 {
 class PhysicalSetInertiaAction : public PhysicalAction
 {
+public:
     PhysicalSetInertiaAction(const std::string &name,
                              const std::vector<std::string> &bodyNames,
                              float inertia);

@@ -6,6 +6,7 @@ namespace ample::game::stateMachine::actions
 {
 class PhysicalLinearVelocityAction : public PhysicalAction
 {
+public:
     PhysicalLinearVelocityAction(const std::string &name,
                                  const std::vector<std::string> &bodyNames,
                                  const graphics::Vector2d<float> &linearVelocity);

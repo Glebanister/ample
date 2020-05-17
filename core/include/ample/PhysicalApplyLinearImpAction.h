@@ -6,6 +6,7 @@ namespace ample::game::stateMachine::actions
 {
 class PhysicalApplyLinearImpAction : public PhysicalAction
 {
+public:
     PhysicalApplyLinearImpAction(const std::string &name,
                                  const std::vector<std::string> &bodyNames,
                                  const graphics::Vector2d<float> &impulse,

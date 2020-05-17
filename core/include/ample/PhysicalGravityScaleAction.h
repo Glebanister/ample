@@ -6,6 +6,7 @@ namespace ample::game::stateMachine::actions
 {
 class PhysicalGravityScaleAction : public PhysicalAction
 {
+public:
     PhysicalGravityScaleAction(const std::string &name,
                                const std::vector<std::string> &bodyNames,
                                float scale);

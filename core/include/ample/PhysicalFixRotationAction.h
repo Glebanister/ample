@@ -6,6 +6,7 @@ namespace ample::game::stateMachine::actions
 {
 class PhysicalFixRotationAction : public PhysicalAction
 {
+public:
     PhysicalFixRotationAction(const std::string &name,
                               const std::vector<std::string> &bodyNames,
                               bool flag);
