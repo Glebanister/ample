@@ -49,6 +49,8 @@ private:
     std::vector<std::pair<int, int>> _links = {};
 
     std::vector<std::shared_ptr<game::StateMachine::State>> _statesList;
+    std::vector<size_t> _cntInPinStates;
+    std::vector<size_t> _cntOutPinStates;
     std::shared_ptr<game::StateMachine::State> _startState = nullptr;
     std::shared_ptr<game::StateMachine::State> _activeState = nullptr;
 };

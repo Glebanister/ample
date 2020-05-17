@@ -25,7 +25,7 @@ GraphicalObject::GraphicalObject(const std::string &name,
       _rotated(rotated),
       _modelMatrixUniform(_modelMatrix, "model_matrix")
 {
-    _position = translated * rotated * scaled * glm::vec4{_position, 1};
+    _position = glm::vec3{translated * rotated * scaled * glm::vec4{_position, 1}};
 }
 
 void GraphicalObject::addSubObject(std::shared_ptr<GraphicalObject> object)
