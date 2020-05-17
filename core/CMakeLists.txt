@@ -128,6 +128,9 @@ set(${CMAKE_PROJECT_NAME}_SOURCES
     src/Game/StateMachine/Actions/Physical/PhysicalLinearDampingAction.cpp
     src/Game/StateMachine/Actions/Physical/PhysicalSetAwakeAction.cpp
     src/Game/StateMachine/Actions/Physical/PhysicalSetEnabledAction.cpp
+    src/Game/StateMachine/Actions/Physical/PhysicalSetCenterAction.cpp
+    src/Game/StateMachine/Actions/Physical/PhysicalSetInertiaAction.cpp
+    src/Game/StateMachine/Actions/Physical/PhysicalSetMassAction.cpp
     src/Game/StateMachine/Action.cpp
     src/Game/Events/EventListener.cpp
     src/Game/Namespace.cpp
