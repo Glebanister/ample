@@ -33,6 +33,7 @@ void PhysicalApplyForceActionGui::onSubmitCreate()
                                                                                       _point,
                                                                                       true);
     _baseActionPointer = _action; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    _groupAction = _action;
 }
 
 void PhysicalApplyForceActionGui::onEdit()

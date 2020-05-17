@@ -34,6 +34,7 @@ void GraphicalRotateActionGui::onSubmitCreate()
                                                                                          axis,
                                                                                          angle);
     _baseActionPointer = _rotateAction; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    _groupAction = _rotateAction;
 }
 
 void GraphicalRotateActionGui::onEdit()

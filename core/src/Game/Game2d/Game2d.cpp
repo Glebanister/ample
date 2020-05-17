@@ -32,48 +32,5 @@ Game2d::Game2d(const std::string &name,
 void Game2d::onActive()
 {
     graphics::LayeredWindowActivity::onActive();
-
-    auto curLevel = std::dynamic_pointer_cast<LevelLoader>(_levelSwitchingController->getCurrentState());
-    auto _camera = curLevel->level().camera();
-    if (control::EventManager::instance().keyboard().isKeyDown(ample::control::keysym::KEY_d))
-    {
-        _camera->moveRight(1);
-    }
-    if (control::EventManager::instance().keyboard().isKeyDown(ample::control::keysym::KEY_a))
-    {
-        _camera->moveRight(-1);
-    }
-    if (control::EventManager::instance().keyboard().isKeyDown(ample::control::keysym::ARROW_UP))
-    {
-        _camera->rotateUp(1);
-    }
-    if (control::EventManager::instance().keyboard().isKeyDown(ample::control::keysym::ARROW_DOWN))
-    {
-        _camera->rotateUp(-1);
-    }
-    if (control::EventManager::instance().keyboard().isKeyDown(ample::control::keysym::KEY_w))
-    {
-        _camera->moveForward(1);
-    }
-    if (control::EventManager::instance().keyboard().isKeyDown(ample::control::keysym::KEY_s))
-    {
-        _camera->moveForward(-1);
-    }
-    if (control::EventManager::instance().keyboard().isKeyDown(ample::control::keysym::ARROW_LEFT))
-    {
-        _camera->rotateRight(1);
-    }
-    if (control::EventManager::instance().keyboard().isKeyDown(ample::control::keysym::ARROW_RIGHT))
-    {
-        _camera->rotateRight(-1);
-    }
-    if (control::EventManager::instance().keyboard().isKeyDown(ample::control::keysym::COMMA))
-    {
-        _camera->rotateForward(-1);
-    }
-    if (control::EventManager::instance().keyboard().isKeyDown(ample::control::keysym::PERIOD))
-    {
-        _camera->rotateForward(1);
-    }
 }
 } // namespace ample::game::game2d
