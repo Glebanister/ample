@@ -26,6 +26,8 @@ public:
 private:
     std::shared_ptr<game::stateMachine::actions::FollowObjectAction> _followAction;
     char nameBuffer[255] = {0};
+    char objectNameBuffer[255] = {0};
+    char cameraNameBuffer[255] = {0};
     std::string cameraName;
     std::string objectName;
     graphics::Vector3d<float> slowdown = {1.0f, 1.0f, 1.0f};

@@ -41,19 +41,19 @@ void Observer::updatePos()
         return;
     }
     _targetDistance += control::EventManager::instance().mouse().getWheelY() * 2.0f;
-    if (control::EventManager::instance().keyboard().isKeyDown(control::keysym::ARROW_LEFT))
+    if (control::EventManager::instance().keyboard().isKeyDown(static_cast<control::keysym>(control::KeyboardManager::scancodes::C_LEFT)))
     {
         _camera->translate({-1.0f, 0.0f, 0.0f});
     }
-    if (control::EventManager::instance().keyboard().isKeyDown(control::keysym::ARROW_RIGHT))
+    if (control::EventManager::instance().keyboard().isKeyDown(static_cast<control::keysym>(control::KeyboardManager::scancodes::C_RIGHT)))
     {
         _camera->translate({1.0f, 0.0f, 0.0f});
     }
-    if (control::EventManager::instance().keyboard().isKeyDown(control::keysym::ARROW_UP))
+    if (control::EventManager::instance().keyboard().isKeyDown(static_cast<control::keysym>(control::KeyboardManager::scancodes::C_UP)))
     {
         _camera->translate({0.0f, -1.0f, 0.0f});
     }
-    if (control::EventManager::instance().keyboard().isKeyDown(control::keysym::ARROW_DOWN))
+    if (control::EventManager::instance().keyboard().isKeyDown(static_cast<control::keysym>(control::KeyboardManager::scancodes::C_DOWN)))
     {
         _camera->translate({0.0f, 1.0f, 0.0f});
     }

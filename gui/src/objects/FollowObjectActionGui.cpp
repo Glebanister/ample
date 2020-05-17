@@ -13,6 +13,8 @@ FollowObjectActionGui::FollowObjectActionGui(std::shared_ptr<filing::NamedObject
     cameraName = _followAction->getCameraName();
     objectName = _followAction->getObjectName();
     slowdown = _followAction->getSlowdown();
+    std::memcpy(objectNameBuffer, objectName.c_str(), sizeof(objectNameBuffer));
+    std::memcpy(cameraNameBuffer, cameraName.c_str(), sizeof(cameraNameBuffer));
 }
 
 FollowObjectActionGui::FollowObjectActionGui(std::shared_ptr<game::game2d::Game2dEditor> editor,
@@ -24,13 +26,15 @@ FollowObjectActionGui::FollowObjectActionGui(std::shared_ptr<game::game2d::Game2
 void FollowObjectActionGui::onCreate()
 {
     ImGui::InputText("Name", nameBuffer, 255);
-    ASSERT(_state);
-    gui_utils::NamedObjectSelector("Camera",
-                                   cameraName,
-                                   _state->getNamespacePointer()->getAllNames());
-    gui_utils::NamedObjectSelector("Object",
-                                   objectName,
-                                   _state->getNamespacePointer()->getAllNames());
+    // ASSERT(_state);
+    ImGui::InputText("Camera name", cameraNameBuffer, 255);
+    ImGui::InputText("Object name", objectNameBuffer, 255);
+    // gui_utils::NamedObjectSelector("Camera",
+    //                                cameraName,
+    //                                _action->getNamespacePointer()->getAllNames());
+    // gui_utils::NamedObjectSelector("Object",
+    //                                objectName,
+    //                                _state->getNamespacePointer()->getAllNames());
     gui_utils::InputCoordinates("Slowdown", slowdown.x, slowdown.y, slowdown.z, 0.2f);
 }
 
@@ -42,19 +46,21 @@ void FollowObjectActionGui::onSubmitCreate()
 
 void FollowObjectActionGui::onEdit()
 {
-    gui_utils::NamedObjectSelector("Camera",
-                                   cameraName,
-                                   _state->getNamespacePointer()->getAllNames());
-    gui_utils::NamedObjectSelector("Object",
-                                   objectName,
-                                   _state->getNamespacePointer()->getAllNames());
+    // gui_utils::NamedObjectSelector("Camera",
+    //                                cameraName,
+    //                                _state->getNamespacePointer()->getAllNames());
+    // gui_utils::NamedObjectSelector("Object",
+    //                                objectName,
+    //                                _state->getNamespacePointer()->getAllNames());
+    ImGui::InputText("Camera name", cameraNameBuffer, 255);
+    ImGui::InputText("Object name", objectNameBuffer, 255);
     gui_utils::InputCoordinates("Slowdown", slowdown.x, slowdown.y, slowdown.z, 0.1f);
 }
 
 void FollowObjectActionGui::onSubmitEdit()
 {
-    _followAction->setCameraName(cameraName);
-    _followAction->setObjectName(objectName);
+    _followAction->setCameraName(cameraNameBuffer);
+    _followAction->setObjectName(objectNameBuffer);
     _followAction->setSlowdown(slowdown);
 }
 
