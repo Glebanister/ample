@@ -28,5 +28,6 @@ private:
     char nameBuffer[255] = {0};
     char cameraName[255] = {0};
     char objectName[255] = {0};
+    graphics::Vector3d<float> slowdown = {1.0f, 1.0f, 1.0f};
 };
 } // namespace ample::gui

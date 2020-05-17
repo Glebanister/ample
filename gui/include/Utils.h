@@ -87,6 +87,12 @@ template <typename T>
 void InputCoordinates(const std::string &label, T &valueX, T &valueY, T step, T min, T max);
 
 template <typename T>
+void InputCoordinates(const std::string &label, T &valueX, T &valueY, T &valueZ, T step);
+
+template <typename T>
+void InputCoordinates(const std::string &label, T &valueX, T &valueY, T &valueZ, T step, T min, T max);
+
+template <typename T>
 void NamedObjectSelector(const std::string &label, std::shared_ptr<T> &object, const std::vector<std::shared_ptr<T>> &list);
 
 template <typename T>

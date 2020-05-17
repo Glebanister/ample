@@ -12,6 +12,7 @@ FollowObjectActionGui::FollowObjectActionGui(std::shared_ptr<filing::NamedObject
 {
     std::memcpy(cameraName, _followAction->getCameraName().c_str(), sizeof(cameraName));
     std::memcpy(objectName, _followAction->getObjectName().c_str(), sizeof(cameraName));
+    slowdown = _followAction->getSlowdown();
 }
 
 FollowObjectActionGui::FollowObjectActionGui(std::shared_ptr<game::game2d::Game2dEditor> editor,
@@ -25,6 +26,7 @@ void FollowObjectActionGui::onCreate()
     ImGui::InputText("Name", nameBuffer, 255);
     ImGui::InputText("Camera name", cameraName, 255);
     ImGui::InputText("Object name", objectName, 255);
+    gui_utils::InputCoordinates("Slowdown", slowdown.x, slowdown.y, slowdown.z, 0.2f);
 }
 
 void FollowObjectActionGui::onSubmitCreate()
@@ -37,6 +39,7 @@ void FollowObjectActionGui::onEdit()
 {
     ImGui::InputText("Camera name", cameraName, 255);
     ImGui::InputText("Object name", objectName, 255);
+    gui_utils::InputCoordinates("Slowdown", slowdown.x, slowdown.y, slowdown.z, 0.2f);
 }
 
 void FollowObjectActionGui::onSubmitEdit()
@@ -49,6 +52,7 @@ void FollowObjectActionGui::onSubmitEdit()
     {
         _followAction->setObjectName(objectName);
     }
+    _followAction->setSlowdown(slowdown);
 }
 
 void FollowObjectActionGui::onView()
