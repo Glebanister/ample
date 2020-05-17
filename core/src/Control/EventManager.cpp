@@ -98,16 +98,15 @@ bool KeyboardManager::getPressedScancode() const noexcept
 
 void KeyboardManager::handleEvent(const SDL_Event &event)
 {
-    _keymapWasDown[event.key.keysym.sym] = event.type;
-    _keymapWasUp[event.key.keysym.sym] = event.type;
-    _keymapPressed[event.key.keysym.sym] = event.type;
-    _scancodePressed[event.key.keysym.scancode] = event.type;
+    _keymapWasDown[event.key.keysym.scancode] = event.type;
+    _keymapWasUp[event.key.keysym.scancode] = event.type;
+    _keymapPressed[event.key.keysym.scancode] = event.type;
     if (event.type == KEY_DOWN)
     {
         _char = event.key.keysym.sym;
     }
     _scancode = event.key.keysym.scancode;
-    for (auto &handler : _handlers[event.key.keysym.sym])
+    for (auto &handler : _handlers[event.key.keysym.scancode])
     {
         handler->handleEvent(event);
     }

@@ -54,7 +54,6 @@ Scene2d::Scene2d(const JsonIO &input,
                                                           objString,
                                                           *this);
             addWorldObject(object);
-            globalNamespace->addObject(object);
         }
         else
         {
@@ -62,7 +61,6 @@ Scene2d::Scene2d(const JsonIO &input,
                 game::factory::GraphicalObjecsFactory.produce(objectClass,
                                                               objString);
             addObject(object);
-            globalNamespace->addObject(object);
         }
         // addWorldJoint(); // TODO
     }
@@ -71,7 +69,6 @@ Scene2d::Scene2d(const JsonIO &input,
         std::string cameraType = JsonIO(cameraString).read<std::string>("class_name");
         std::shared_ptr<graphics::Camera> camera = game::factory::CamerasFactory.produce(cameraType, cameraString);
         addCamera(camera);
-        globalNamespace->addObject(camera);
     }
 }
 

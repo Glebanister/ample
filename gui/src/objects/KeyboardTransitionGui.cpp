@@ -25,7 +25,7 @@ KeyboardTransitionGui::KeyboardTransitionGui(std::shared_ptr<filing::NamedObject
       _transition(std::dynamic_pointer_cast<game::KeyboardTransition>(sm))
 {
     pressType = _transition->getPressType();
-    key = _transition->getKey();
+    keycode = _transition->getKey();
     pressTypeString = typeNameById[pressType];
 }
 
@@ -39,7 +39,7 @@ void KeyboardTransitionGui::onCreate()
     ImGui::InputText("Name", nameBuffer, 255);
     TransitionGui::onCreate();
     gui_utils::StringSelector("Press type", pressTypeString, {"down", "not down", "pressed", "released"});
-    gui_utils::inputKeysym("Trigger key", key);
+    gui_utils::inputKeysym("Trigger key", key, keycode);
 }
 
 void KeyboardTransitionGui::onSubmitCreate()
@@ -49,7 +49,7 @@ void KeyboardTransitionGui::onSubmitCreate()
         throw game::GameException("Next state is not set");
     }
     pressType = typeIdByName[pressTypeString];
-    _transition = std::make_shared<game::KeyboardTransition>(nameBuffer, _nextState, pressType, key);
+    _transition = std::make_shared<game::KeyboardTransition>(nameBuffer, _nextState, pressType, keycode);
     _baseTransition = _transition;
 }
 
@@ -57,13 +57,13 @@ void KeyboardTransitionGui::onEdit()
 {
     ASSERT(_transition);
     gui_utils::StringSelector("Press type", pressTypeString, {"down", "not down", "pressed", "released"});
-    gui_utils::inputKeysym("Trigger key", key);
+    gui_utils::inputKeysym("Trigger key", key, keycode);
 }
 
 void KeyboardTransitionGui::onSubmitEdit()
 {
     _transition->setPressType(typeIdByName[pressTypeString]);
-    _transition->setKey(key);
+    _transition->setKey(keycode);
 }
 
 void KeyboardTransitionGui::onView()
@@ -77,7 +77,7 @@ void KeyboardTransitionGui::onInspect()
 
 void KeyboardTransitionGui::onPreview()
 {
-    ImGui::Text("Key: %d", static_cast<int>(key));
+    ImGui::Text("Key: %s", key.c_str());
     ImGui::Text("Press type: %s", pressTypeString.c_str());
 }
 

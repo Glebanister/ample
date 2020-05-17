@@ -41,7 +41,7 @@ void ObjectGroupActionGui<T>::onEdit()
 {
     gui_utils::NamedObjectSelector("Add object to action",
                                    _selectedObjectToAdd,
-                                   _state->getNamespacePointer()->getAllNames());
+                                   _groupAction->getNamespacePointer()->getAllNames());
 }
 
 template <typename T>

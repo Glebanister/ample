@@ -37,7 +37,7 @@ StateMachineGui::StateMachineGui(std::shared_ptr<filing::NamedObject> sm, std::s
         }
     }
     _links.emplace_back(-1, stateId[_stateMachine->getCurrentState()] * 2);
-    _stateMachine->setNamespace(selectedLevel->getNamespacePointer());
+    // _stateMachine->setNamespace(selectedLevel->getNamespacePointer());
 }
 
 StateMachineGui::StateMachineGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *storage)

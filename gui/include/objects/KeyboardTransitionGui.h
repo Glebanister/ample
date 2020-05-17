@@ -33,8 +33,8 @@ private:
     std::shared_ptr<game::KeyboardTransition> _transition;
     char nameBuffer[255];
     game::KeyboardTransition::type pressType = game::KeyboardTransition::type::PRESSED;
-    control::keysym key = control::keysym::SPACE;
-
+    std::string key = "";
+    control::keysym keycode;
     std::string pressTypeString;
 };
 } // namespace ample::gui
