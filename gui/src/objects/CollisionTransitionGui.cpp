@@ -10,6 +10,7 @@ CollisionTransitionGui::CollisionTransitionGui(std::shared_ptr<filing::NamedObje
     : TransitionGui(sm, editor, storage),
       _transition(std::dynamic_pointer_cast<game::stateMachine::transitions::CollisionTransition>(sm))
 {
+    secondsId = _transition->getTriggerStartId();
 }
 
 CollisionTransitionGui::CollisionTransitionGui(std::shared_ptr<game::game2d::Game2dEditor> editor, ObjectStorageGui *storage)
@@ -28,23 +29,31 @@ void CollisionTransitionGui::onSubmitCreate()
     {
         throw game::GameException("Next state is not set");
     }
-    // _transition = std::make_shared<game::stateMachine::transitions::CollisionTransition>(nameBuffer, _nextState, milliseconds);
+    _transition = std::make_shared<game::stateMachine::transitions::CollisionTransition>(nameBuffer, _nextState, std::vector<std::string>{}, 0);
     _baseTransition = _transition;
 }
 
 void CollisionTransitionGui::onEdit()
 {
     ASSERT(_transition);
-    // gui_utils::InputScalar("Time, ms", milliseconds, 10, 0, INT32_MAX - 1);
+    gui_utils::NamedObjectSelector("Add object to action",
+                                   newCollidingObject,
+                                   _baseTransition->getNamespacePointer()->getAllNames());
+    ImGui::SliderInt("Collision blocks delimiter", &secondsId, 0, _transition->getBodyNames().size());
 }
 
 void CollisionTransitionGui::onSubmitEdit()
 {
-    // _transition->setTimeDelta(milliseconds);
+    if (newCollidingObject.length())
+    {
+        _transition->addObjectName(newCollidingObject);
+    }
+    _transition->setTriggerStartId(secondsId);
 }
 
 void CollisionTransitionGui::onView()
 {
+    TransitionGui::onView();
 }
 
 void CollisionTransitionGui::onInspect()
@@ -53,7 +62,16 @@ void CollisionTransitionGui::onInspect()
 
 void CollisionTransitionGui::onPreview()
 {
-    // ImGui::Text("Time, ms: %d", milliseconds);
+    ImGui::Text("%s", "Colliders:");
+    for (int i = 0; i < secondsId; ++i)
+    {
+        ImGui::Text("%s", _transition->getBodyNames()[i].c_str());
+    }
+    ImGui::Separator();
+    for (size_t i = secondsId; i < _transition->getBodyNames().size(); ++i)
+    {
+        ImGui::Text("%s", _transition->getBodyNames()[i].c_str());
+    }
 }
 
 std::string CollisionTransitionGui::name() const

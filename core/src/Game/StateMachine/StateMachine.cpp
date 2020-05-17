@@ -72,6 +72,10 @@ StateMachine &StateMachine::State::getStateMachine() noexcept
 void StateMachine::State::onStart()
 {
     activity::Behavior::onStart();
+    for (const auto &transit : _transitions)
+    {
+        transit->onStart();
+    }
     for (const auto &action : _onStartActions)
     {
         action->onActive();
@@ -81,6 +85,10 @@ void StateMachine::State::onStart()
 void StateMachine::State::onStop()
 {
     activity::Behavior::onStop();
+    for (const auto &transit : _transitions)
+    {
+        transit->onStop();
+    }
     for (const auto &action : _onStartActions)
     {
         action->onActive();
@@ -90,6 +98,10 @@ void StateMachine::State::onStop()
 void StateMachine::State::onActive()
 {
     activity::Behavior::onActive();
+    for (const auto &transit : _transitions)
+    {
+        transit->onActive();
+    }
     for (const auto &action : _onActiveActions)
     {
         action->onActive();
@@ -269,8 +281,8 @@ void StateMachine::onActive()
 
 void StateMachine::setStartState(std::shared_ptr<State> state)
 {
-    _currentState = state;
     _startState = state;
+    setCurrentState(state);
 }
 
 void StateMachine::setCurrentState(std::shared_ptr<State> state)

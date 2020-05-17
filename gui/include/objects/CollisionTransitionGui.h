@@ -35,5 +35,7 @@ public:
 private:
     std::shared_ptr<game::stateMachine::transitions::CollisionTransition> _transition;
     char nameBuffer[255];
+    int secondsId = 0;
+    std::string newCollidingObject = "";
 };
 } // namespace ample::gui

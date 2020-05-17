@@ -21,6 +21,7 @@
 #include "objects/PhysicalApplyForceActionGui.h"
 #include "objects/FollowObjectActionGui.h"
 #include "objects/CameraTranslateActionGui.h"
+#include "objects/CollisionTransitionGui.h"
 
 namespace ample::gui
 {
@@ -41,6 +42,7 @@ class KeyboardTransitionGui;
 class PhysicalApplyForceActionGui;
 class FollowObjectActionGui;
 class CameraTranslateActionGui;
+class CollisionTransitionGui;
 } // namespace ample::gui
 
 namespace ample::gui
@@ -71,6 +73,9 @@ inline std::unique_ptr<ObjectGui> ObjectStorageGui::buildGui(finalObjectClass ob
         break;
     case finalObjectClass::TIMER_TRANSITION:
         result = std::make_unique<TimerTransitionGui>(args...);
+        break;
+    case finalObjectClass::COLLISION_TRANSITION:
+        result = std::make_unique<CollisionTransitionGui>(args...);
         break;
     case finalObjectClass::KEYBOARD_TRANSITION:
         result = std::make_unique<KeyboardTransitionGui>(args...);
