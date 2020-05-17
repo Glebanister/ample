@@ -6,6 +6,7 @@ namespace ample::game::stateMachine::actions
 {
 class PhysicalAngularVelocityAction : public PhysicalAction
 {
+public:
     PhysicalAngularVelocityAction(const std::string &name,
                                   const std::vector<std::string> &bodyNames,
                                   float angularVelocity);
