@@ -14,7 +14,7 @@ language knowledge for start. So far works only on Linux, other platforms suppor
 ### Coming
 - More actions for state machines
 - 3D models uploading
-- C# binding
+- Python scripting
 - Windows support
 
 ![Level editor](resources/level_editor.png)
