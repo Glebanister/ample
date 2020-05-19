@@ -30,7 +30,6 @@ language knowledge for start. So far works only on Linux, other platforms suppor
 
 - Windows support
 
-
 ### Submodules and dependencies
 
 - OpenGL (libgl1-mesa-dev)
