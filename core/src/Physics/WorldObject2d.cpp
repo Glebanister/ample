@@ -331,7 +331,6 @@ void WorldObject2d::setStartAngle(float angle) noexcept
 {
     _startAngle = angle;
     setRotate({0.0f, 0.0f, 1.0f}, angle);
-    std::cout << getAxisAngle() << std::endl;
 }
 
 float WorldObject2d::getStartAngle() const noexcept
