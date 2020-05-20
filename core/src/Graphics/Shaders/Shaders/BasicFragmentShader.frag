@@ -34,5 +34,7 @@ void main() {
     // 2. The color/intensities of the light: light.intensities
     // 3. The texture and texture coord: texture(tex, fragTexCoord)
     vec4 surfaceColor = texture(tex, fragTexCoord);
+    if(surfaceColor.a < 0.01)
+        discard;
     finalColor = vec4(brightness * light.intensities * surfaceColor.rgb, surfaceColor.a);
 }
