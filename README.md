@@ -58,16 +58,28 @@ language knowledge for start. So far works only on Linux, other platforms suppor
 
 ### Install (Works on Ubuntu 18.04 for sure)
 
+Make sure `git`, `cmake` and `g++-9` are installed on your machine.
+
+First, install dependencies \
+`$ apt update` \
+`$ apt install libgl1-mesa-dev` \
+`$ apt install libglm-dev` \
+`$ apt install libsdl2-dev` \
+`$ apt install libdevil1c2` \
+`$ apt install libdevil-dev` \
+`$ apt install libglew2.0`
+
+And now build \
 `$ git clone --recursive https://github.com/Glebanister/ample` \
-`$ ./ci/travis/install-linux.sh`  - installs dependencies, requires apt. You may want to install them by yourself \
 `$ mkdir build && cd build` \
-`$ cmake .. -DCMAKE_CXX_COMPILER=g++-9` \
+`$ cmake ..` \
 `$ make -j4` or just make, if you have some time and don't want this process to disturb you
 
 If you have any problems with the construction of the project, please write about this in issue.
 
 ### Create your project with gui
 
+Make sure you executing it from `ample/` directory \
 `$ ./build/gui/ample-gui`
 
 ### Run project with executor
