@@ -56,7 +56,7 @@ language knowledge for start. So far works only on Linux, other platforms suppor
 
 ### Install (Works on Ubuntu 18.04 for sure)
 
-`$ git clone --recursive https://github.com/Glebanister/ample`
+`$ git clone --recursive https://github.com/Glebanister/ample` \
 `$ ./ci/travis/install-linux.sh`  - installs dependencies, requires apt. You may want to install them by yourself \
 `$ mkdir build && cd build` \
 `$ cmake .. -DCMAKE_CXX_COMPILER=g++-9` \
