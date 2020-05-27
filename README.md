@@ -34,6 +34,8 @@ language knowledge for start. So far works only on Linux, other platforms suppor
 
 - OpenGL (libgl1-mesa-dev)
 
+- GLM (libglm-dev)
+
 - SDL2 (libsdl2-dev)
 
 - DevIL (libdevil1c2 libdevil-dev)
